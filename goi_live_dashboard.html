@@ -916,7 +916,9 @@
     err.style.display = 'none';
 
     try {
-      const data = await applyForecastLock(await fetchData());
+      const EXCLUDE_DRIVERS = ['G.H'];
+      const data = (await applyForecastLock(await fetchData()))
+        .filter(d => !EXCLUDE_DRIVERS.includes(d.driver));
 
       renderKPI(data);
       renderBarChart(data);
