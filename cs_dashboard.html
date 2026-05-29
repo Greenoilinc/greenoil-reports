@@ -409,7 +409,9 @@
 
 <script>
 // ── CONFIG ──────────────────────────────────────
-const PROXY_URL      = '/.netlify/functions/api';
+const PROXY_URL = window.location.hostname.includes('netlify.app')
+  ? '/.netlify/functions/api'
+  : 'https://resilient-kheer-86342e.netlify.app/.netlify/functions/api';
 const REFRESH_MS     = 5 * 60 * 1000;
 
 // ── STATE ───────────────────────────────────────
@@ -938,7 +940,7 @@ async function loadAllTimeDowAvg() {
     const prevYear = new Date().getFullYear() - 1;
     const from = `${prevYear}0101`;
     const to   = `${prevYear}1231`;
-    const res  = await fetch(`/.netlify/functions/api?type=cs&from=${from}&to=${to}`);
+    const res  = await fetch(`${PROXY_URL}?type=cs&from=${from}&to=${to}`);
     const json = await res.json();
     const counts = [0,0,0,0,0,0,0];
     const occ    = [0,0,0,0,0,0,0];
