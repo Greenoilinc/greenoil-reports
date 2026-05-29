@@ -801,21 +801,24 @@
       parseFloat(b.achievement_pct||0) - parseFloat(a.achievement_pct||0)
     );
 
+    let rows = '';
     sorted.forEach(d => {
-      const pct = parseFloat(d.achievement_pct||0);
-      const fc  = parseFloat(d.forecast||0);
-      const ac  = parseFloat(d.actual||0);
-      const barW = Math.min(pct, 100);
+      const pct      = parseFloat(d.achievement_pct||0);
+      const fc       = parseFloat(d.forecast||0);
+      const ac       = parseFloat(d.actual||0);
+      const barW     = Math.min(pct, 100);
       const barColor = colorByPct(pct);
 
-      // Status: arrival 기준 (도착하면 Done, 미도착 actual>0이면 In Progress)
-      const hasArrival = d.arrival && d.arrival.trim() !== '';
-      let statusBadge = '';
-      if (hasArrival)      statusBadge = '<span class="status-badge status-done">✓ Done</span>';
-      else if (ac > 0)     statusBadge = '<span class="status-badge status-progress">⟳ In Progress</span>';
-      else                 statusBadge = '<span class="status-badge status-pending">— Pending</span>';
+      // arrival 값이 어떤 타입이든 안전하게 문자열 변환
+      const arrivalStr = (d.arrival != null && d.arrival !== false) ? String(d.arrival).trim() : '';
+      const hasArrival = arrivalStr !== '' && arrivalStr !== '00:00:00' && arrivalStr !== '0';
 
-      tbody.innerHTML += `
+      let statusBadge = '';
+      if (hasArrival)  statusBadge = '<span class="status-badge status-done">✓ Done</span>';
+      else if (ac > 0) statusBadge = '<span class="status-badge status-progress">⟳ In Progress</span>';
+      else             statusBadge = '<span class="status-badge status-pending">— Pending</span>';
+
+      rows += `
         <tr>
           <td><span class="driver-initial">${d.driver}</span></td>
           <td>
@@ -831,11 +834,12 @@
           <td class="mono" style="color:${barColor}">${ac.toLocaleString()}</td>
           <td class="mono" style="color:var(--text-mid)">${fc.toLocaleString()}</td>
           <td class="mono" style="color:var(--text-mid)">${d.departure || '-'}</td>
-          <td class="mono" style="color:${hasArrival ? 'var(--green)' : 'var(--text-mid)'}">${d.arrival || '-'}</td>
+          <td class="mono" style="color:${hasArrival ? 'var(--green)' : 'var(--text-mid)'}">${arrivalStr || '-'}</td>
           <td>${statusBadge}</td>
         </tr>
       `;
     });
+    tbody.innerHTML = rows;
   }
 
   // ── Forecast Lock (8AM snapshot — 서버 저장) ──────
