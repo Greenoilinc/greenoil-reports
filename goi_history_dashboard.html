@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOI History & Analytics</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+  :root{
+    --bg:#0d1117; --surface:#161b22; --surface2:#21262d; --border:#30363d;
+    --green:#3fb950; --orange:#f0883e; --red:#f85149; --blue:#58a6ff;
+    --yellow:#e3b341; --purple:#bc8cff; --text:#e6edf3; --text-mid:#8b949e; --text-dim:#484f58;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--text);min-height:100vh;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:58px;display:flex;align-items:center;gap:16px;}
+  .logo{font-size:15px;font-weight:800;color:var(--green);letter-spacing:.5px;}
+  .logo span{color:var(--text-mid);font-weight:400;}
+  .header-mid{flex:1;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .mbtn{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 12px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;}
+  .mbtn.active{background:var(--green);border-color:var(--green);color:#0d1117;font-weight:700;}
+  .range-label{font-size:12px;color:var(--text-mid);font-family:'DM Mono',monospace;}
+  main{padding:20px 24px;max-width:1600px;margin:0 auto;}
+  .kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;}
+  .kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;border-top:3px solid var(--blue);}
+  .kpi.green{border-top-color:var(--green);} .kpi.orange{border-top-color:var(--orange);}
+  .kpi.purple{border-top-color:var(--purple);} .kpi.yellow{border-top-color:var(--yellow);}
+  .kpi-label{font-size:11px;color:var(--text-mid);text-transform:uppercase;letter-spacing:.5px;}
+  .kpi-val{font-size:26px;font-weight:800;margin:6px 0 2px;font-family:'DM Mono',monospace;}
+  .kpi-sub{font-size:11px;color:var(--text-dim);}
+  .section{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:16px;overflow:hidden;}
+  .section-head{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+  .section-title{font-size:13px;font-weight:600;}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--green);}
+  .chart-wrap{padding:16px;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .grid2 .section{margin-bottom:0;}
+  table{width:100%;border-collapse:collapse;}
+  th{padding:8px 12px;color:var(--text-mid);font-size:11px;font-weight:500;text-align:left;border-bottom:1px solid var(--border);text-transform:uppercase;}
+  td{padding:8px 12px;font-size:12px;border-bottom:1px solid #21262d;}
+  .mono{font-family:'DM Mono',monospace;}
+  .bar-track{flex:1;background:var(--surface2);border-radius:3px;height:7px;}
+  .bar-fill{border-radius:3px;height:7px;}
+  .badge{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;}
+  .badge-active{background:#3fb95025;color:var(--green);}
+  .badge-former{background:#48505825;color:var(--text-dim);}
+  .loader{text-align:center;padding:60px;color:var(--text-mid);}
+  @media(max-width:900px){.kpi-row{grid-template-columns:repeat(2,1fr);}.grid2{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">GOI <span>· History & Analytics</span></div>
+  <div class="header-mid" id="monthBtns"></div>
+  <div class="range-label" id="rangeLabel">—</div>
+</header>
+<main>
+  <div id="loader" class="loader">데이터 로딩 중…</div>
+  <div id="content" style="display:none;">
+    <div class="kpi-row">
+      <div class="kpi green"><div class="kpi-label">총 실제 수거</div><div class="kpi-val" id="kActual">—</div><div class="kpi-sub">Litres collected</div></div>
+      <div class="kpi orange"><div class="kpi-label">총 타겟</div><div class="kpi-val" id="kTarget">—</div><div class="kpi-sub">Litres planned</div></div>
+      <div class="kpi"><div class="kpi-label">달성률</div><div class="kpi-val" id="kAch">—</div><div class="kpi-sub">vs target</div></div>
+      <div class="kpi purple"><div class="kpi-label">총 방문</div><div class="kpi-val" id="kVisits">—</div><div class="kpi-sub">visits</div></div>
+      <div class="kpi yellow"><div class="kpi-label">방문당 수거</div><div class="kpi-val" id="kPerVisit">—</div><div class="kpi-sub">L / visit</div></div>
+    </div>
+
+    <div class="section">
+      <div class="section-head"><div class="dot"></div><div class="section-title">📈 월별 타겟 vs 실제 수거량 (L)</div></div>
+      <div class="chart-wrap"><canvas id="chartMonthly" height="80"></canvas></div>
+    </div>
+
+    <div class="grid2" style="margin-bottom:16px;">
+      <div class="section">
+        <div class="section-head"><div class="dot"></div><div class="section-title">🎯 월별 달성률 추이 (%)</div></div>
+        <div class="chart-wrap"><canvas id="chartAch" height="150"></canvas></div>
+      </div>
+      <div class="section">
+        <div class="section-head"><div class="dot"></div><div class="section-title">🏢 회사 KPI — 계약 vs 하역목표 vs 실제</div></div>
+        <div class="chart-wrap"><canvas id="chartCompany" height="150"></canvas></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head"><div class="dot"></div><div class="section-title">🏆 드라이버 성과 (선택 기간)</div></div>
+      <div class="chart-wrap"><canvas id="chartDrivers" height="120"></canvas></div>
+    </div>
+
+    <div class="grid2" style="margin-bottom:16px;">
+      <div class="section">
+        <div class="section-head"><div class="dot"></div><div class="section-title">⚡ 드라이버 효율 & 성과 테이블</div></div>
+        <div style="max-height:420px;overflow-y:auto;">
+          <table id="driverTable"><thead><tr>
+            <th>드라이버</th><th>구역</th><th style="text-align:right">실제(L)</th><th style="text-align:right">달성률</th><th style="text-align:right">L/방문</th><th style="text-align:right">L/시간</th>
+          </tr></thead><tbody id="driverTableBody"></tbody></table>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-head"><div class="dot"></div><div class="section-title">📅 드라이버 재직 타임라인</div></div>
+        <div style="max-height:420px;overflow-y:auto;padding:8px 0;"><div id="timeline"></div></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+const C = { green:'#3fb950', orange:'#f0883e', red:'#f85149', blue:'#58a6ff', yellow:'#e3b341', purple:'#bc8cff', mid:'#8b949e', grid:'#21262d' };
+Chart.defaults.color = C.mid;
+Chart.defaults.font.family = "'DM Mono', monospace";
+Chart.defaults.font.size = 10;
+
+let DATA = null;
+let selMonths = null; // null = 전체
+let charts = {};
+
+function ymOf(date){ return date.slice(0,7); }
+function fmtK(n){ return n>=1000 ? (n/1000).toFixed(0)+'k' : n; }
+function nf(n){ return Math.round(n).toLocaleString(); }
+
+async function load(){
+  const res = await fetch('data/uco_history.json');
+  DATA = await res.json();
+  buildMonthBtns();
+  render();
+  document.getElementById('loader').style.display='none';
+  document.getElementById('content').style.display='block';
+}
+
+function allMonths(){
+  const set = new Set(DATA.daily.map(d=>ymOf(d.date)));
+  return [...set].sort();
+}
+
+function buildMonthBtns(){
+  const months = allMonths();
+  const wrap = document.getElementById('monthBtns');
+  const mk = (label, val, active) => {
+    const b = document.createElement('button');
+    b.className = 'mbtn'+(active?' active':'');
+    b.textContent = label;
+    b.onclick = ()=>{ selMonths = val; document.querySelectorAll('.mbtn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); render(); };
+    return b;
+  };
+  wrap.appendChild(mk('전체', null, true));
+  // 연도별 빠른 선택
+  const years = [...new Set(months.map(m=>m.slice(0,4)))].sort();
+  years.forEach(y=>{
+    wrap.appendChild(mk(y+'년', months.filter(m=>m.startsWith(y))));
+  });
+  // 최근 3개월
+  wrap.appendChild(mk('최근 3개월', months.slice(-3)));
+}
+
+function filteredDaily(){
+  if(!selMonths) return DATA.daily;
+  const s = new Set(selMonths);
+  return DATA.daily.filter(d=>s.has(ymOf(d.date)));
+}
+
+function render(){
+  const daily = filteredDaily();
+  const months = selMonths || allMonths();
+  document.getElementById('rangeLabel').textContent =
+    selMonths ? `${months[0]} ~ ${months[months.length-1]}` : `전체 (${DATA.date_range[0]} ~ ${DATA.date_range[1]})`;
+
+  renderKPI(daily);
+  renderMonthly();
+  renderAch();
+  renderCompany();
+  renderDrivers(daily);
+  renderDriverTable(daily);
+  renderTimeline();
+}
+
+function renderKPI(daily){
+  let t=0,a=0,v=0,h=0;
+  daily.forEach(d=>{ t+=d.target; a+=d.actual; v+=d.visits; h+=d.hours; });
+  document.getElementById('kActual').textContent = nf(a);
+  document.getElementById('kTarget').textContent = nf(t);
+  document.getElementById('kAch').textContent = t>0 ? (a/t*100).toFixed(1)+'%' : '—';
+  document.getElementById('kVisits').textContent = nf(v);
+  document.getElementById('kPerVisit').textContent = v>0 ? nf(a/v) : '—';
+}
+
+function monthlyAgg(){
+  const m = {};
+  DATA.daily.forEach(d=>{
+    const k = ymOf(d.date);
+    if(!m[k]) m[k]={target:0,actual:0};
+    m[k].target+=d.target; m[k].actual+=d.actual;
+  });
+  return m;
+}
+
+function renderMonthly(){
+  const m = monthlyAgg();
+  const labels = Object.keys(m).sort();
+  const ctx = document.getElementById('chartMonthly');
+  if(charts.monthly) charts.monthly.destroy();
+  charts.monthly = new Chart(ctx,{
+    type:'bar',
+    data:{labels,datasets:[
+      {label:'타겟',data:labels.map(l=>m[l].target),backgroundColor:C.blue+'40',borderColor:C.blue,borderWidth:1,borderRadius:3},
+      {type:'line',label:'실제',data:labels.map(l=>m[l].actual),borderColor:C.green,backgroundColor:C.green+'20',tension:0.3,pointRadius:3,borderWidth:2,fill:true},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{boxWidth:12}}},
+      scales:{x:{grid:{color:C.grid}},y:{grid:{color:C.grid},ticks:{callback:fmtK}}}}
+  });
+}
+
+function renderAch(){
+  const m = monthlyAgg();
+  const labels = Object.keys(m).sort();
+  const ctx = document.getElementById('chartAch');
+  if(charts.ach) charts.ach.destroy();
+  charts.ach = new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets:[{label:'달성률 %',data:labels.map(l=>m[l].target>0?(m[l].actual/m[l].target*100):0),
+      borderColor:C.orange,backgroundColor:C.orange+'20',tension:0.3,pointRadius:3,borderWidth:2,fill:true}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{grid:{color:C.grid}},y:{grid:{color:C.grid},ticks:{callback:v=>v+'%'}}}}
+  });
+}
+
+function renderCompany(){
+  const s = DATA.monthly_summary;
+  const m = monthlyAgg();
+  const labels = s.map(x=>x.ym);
+  const ctx = document.getElementById('chartCompany');
+  if(charts.company) charts.company.destroy();
+  charts.company = new Chart(ctx,{
+    type:'bar',
+    data:{labels,datasets:[
+      {label:'계약량',data:s.map(x=>x.contract),backgroundColor:C.purple+'50',borderColor:C.purple,borderWidth:1,borderRadius:3},
+      {label:'하역목표',data:s.map(x=>x.unloading),backgroundColor:C.yellow+'50',borderColor:C.yellow,borderWidth:1,borderRadius:3},
+      {type:'line',label:'실제 수거',data:labels.map(l=>m[l]?m[l].actual:null),borderColor:C.green,tension:0.3,pointRadius:3,borderWidth:2},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{boxWidth:12}}},
+      scales:{x:{grid:{color:C.grid}},y:{grid:{color:C.grid},ticks:{callback:fmtK}}}}
+  });
+}
+
+function driverAgg(daily){
+  const d = {};
+  daily.forEach(r=>{
+    const k = r.name;
+    if(!d[k]) d[k]={name:r.name,init:r.init,target:0,actual:0,visits:0,hours:0,regions:new Set()};
+    d[k].target+=r.target; d[k].actual+=r.actual; d[k].visits+=r.visits; d[k].hours+=r.hours;
+    if(r.region) d[k].regions.add(r.region);
+  });
+  return Object.values(d).sort((a,b)=>b.actual-a.actual);
+}
+
+function renderDrivers(daily){
+  const arr = driverAgg(daily);
+  const ctx = document.getElementById('chartDrivers');
+  if(charts.drivers) charts.drivers.destroy();
+  charts.drivers = new Chart(ctx,{
+    type:'bar',
+    data:{labels:arr.map(d=>d.init||d.name),datasets:[
+      {label:'실제(L)',data:arr.map(d=>d.actual),backgroundColor:C.green+'aa',borderColor:C.green,borderWidth:1,borderRadius:3},
+      {label:'타겟(L)',data:arr.map(d=>d.target),backgroundColor:C.blue+'40',borderColor:C.blue,borderWidth:1,borderRadius:3},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{boxWidth:12}}},
+      scales:{x:{grid:{color:C.grid}},y:{grid:{color:C.grid},ticks:{callback:fmtK}}}}
+  });
+}
+
+function renderDriverTable(daily){
+  const arr = driverAgg(daily);
+  const tbody = document.getElementById('driverTableBody');
+  tbody.innerHTML = arr.map(d=>{
+    const ach = d.target>0 ? (d.actual/d.target*100) : 0;
+    const achColor = ach>=100?C.green:ach>=85?C.orange:C.red;
+    const perVisit = d.visits>0 ? nf(d.actual/d.visits) : '—';
+    const perHour  = d.hours>0 ? nf(d.actual/d.hours) : '—';
+    return `<tr>
+      <td><b>${d.init||''}</b> <span style="color:var(--text-mid)">${d.name}</span></td>
+      <td style="color:var(--text-mid);font-size:11px">${[...d.regions].join(', ')||'—'}</td>
+      <td class="mono" style="text-align:right;color:${C.green}">${nf(d.actual)}</td>
+      <td class="mono" style="text-align:right;color:${achColor}">${ach.toFixed(1)}%</td>
+      <td class="mono" style="text-align:right;color:var(--text-mid)">${perVisit}</td>
+      <td class="mono" style="text-align:right;color:var(--text-mid)">${perHour}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderTimeline(){
+  const drivers = [...DATA.drivers].sort((a,b)=>a.first.localeCompare(b.first));
+  const minD = DATA.date_range[0], maxD = DATA.date_range[1];
+  const span = (new Date(maxD)-new Date(minD))/86400000;
+  const pos = d => ((new Date(d)-new Date(minD))/86400000/span*100);
+  document.getElementById('timeline').innerHTML = drivers.map(dr=>{
+    const left = pos(dr.first), width = Math.max(pos(dr.last)-left, 1.5);
+    const color = dr.active ? C.green : C.text_dim || '#484f58';
+    return `<div style="display:flex;align-items:center;gap:8px;padding:4px 12px;">
+      <div style="width:110px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+        <b>${dr.init||''}</b> ${dr.name}</div>
+      <div style="flex:1;position:relative;height:14px;background:var(--surface2);border-radius:3px;">
+        <div style="position:absolute;left:${left}%;width:${width}%;height:14px;border-radius:3px;background:${dr.active?C.green:'#484f58'};"></div>
+      </div>
+      <div>${dr.active?'<span class="badge badge-active">활성</span>':'<span class="badge badge-former">퇴사</span>'}</div>
+    </div>`;
+  }).join('');
+}
+
+load();
+</script>
+</body>
+</html>
