@@ -3,7 +3,7 @@ const https = require('https');
 exports.handler = async (event) => {
   const API_KEY  = 'GOI_DASHBOARD_2026_SECRET';
   const BASE_URL = 'mis.greenoilinc.com';
-  const path     = '/assets/api/v1/forecast_cache.php';
+  const path     = '/assets/api/v1/orders.php';
 
   // CORS preflight
   if (event.httpMethod === 'OPTIONS') {
@@ -19,7 +19,7 @@ exports.handler = async (event) => {
   }
 
   const date     = event.queryStringParameters?.date || '';
-  const fullPath = date ? `${path}?date=${date}` : path;
+  const fullPath = date ? `${path}?type=forecast&date=${date}` : `${path}?type=forecast`;
   const method   = event.httpMethod === 'POST' ? 'POST' : 'GET';
   const body     = event.body || '';
 
