@@ -3,7 +3,6 @@ const https = require('https');
 // ── 드라이버별 Google Chat Webhook URL ──────────────
 const DRIVER_WEBHOOKS = {
   'D.L': 'https://chat.googleapis.com/v1/spaces/AAQAkPHPSAw/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=eUeKH4MEyK12ZxrrlOUssf3U5a2-mSJwzQHexIn24lE',
-  'G.H': 'https://chat.googleapis.com/v1/spaces/AAQAB_EUzDQ/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=v8bqyk5n_0lpEqt6659cOP3qXtW_Ziudiekpdl03T6o',
   'H.K': 'https://chat.googleapis.com/v1/spaces/AAQAlHpMVPA/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=PlO2Wq_VVEpdKh27NJyXnMLEXCmZM9pzrhUF-VVvND4',
   'J.O': 'https://chat.googleapis.com/v1/spaces/AAQATEvnCMU/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=7BYlTNEhX7wo0BJS8Fv_0iCBDDhBYIbHuRBIfMo9zyk',
   'J.S': 'https://chat.googleapis.com/v1/spaces/AAQAsGnXv3Q/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=DJvSowPlh1FwRBcDoHGSG7wraDZ2eYyVQOctkgsxrJo',
