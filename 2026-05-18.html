@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Oil 주간 리포트 — 2026년 5월 11–17일</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0f1117; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.6; }
+
+  .top-bar { background: #1a1f2e; border-bottom: 1px solid #2d3748; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+  .back-btn { background: #2d3748; border: none; color: #a0aec0; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .back-btn:hover { background: #3d4a5c; color: #e2e8f0; }
+  .top-title { font-size: 13px; color: #718096; }
+  .pdf-btn { background: #2d3748; border: none; color: #a0aec0; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+  .pdf-btn:hover { background: #3d4a5c; }
+
+  .header { background: linear-gradient(135deg, #1a2744 0%, #1a3a2a 100%); padding: 24px 20px 20px; border-bottom: 1px solid #2d3748; }
+  .company { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #68d391; text-transform: uppercase; margin-bottom: 6px; }
+  .week-label { font-size: 20px; font-weight: 700; color: #f7fafc; }
+  .week-sub { font-size: 12px; color: #718096; margin-top: 4px; }
+
+  .risk-pills { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .pill { display: flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+  .pill-red   { background: rgba(252,129,129,.15); color: #fc8181; border: 1px solid rgba(252,129,129,.3); }
+  .pill-amber { background: rgba(246,173,85,.15);  color: #f6ad55; border: 1px solid rgba(246,173,85,.3); }
+  .pill-green { background: rgba(104,211,145,.15); color: #68d391; border: 1px solid rgba(104,211,145,.3); }
+
+  .content { max-width: 760px; margin: 0 auto; padding: 20px; }
+
+  .section { margin-bottom: 20px; background: #1a1f2e; border-radius: 10px; overflow: hidden; border: 1px solid #2d3748; }
+  .section-header { padding: 11px 16px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; border-bottom: 1px solid #2d3748; }
+  .section-body { padding: 4px 0; }
+
+  .summary-list { padding: 12px 16px; list-style: none; }
+  .summary-list li { color: #cbd5e0; margin-bottom: 6px; padding-left: 12px; font-size: 13px; position: relative; }
+  .summary-list li::before { content: '·'; position: absolute; left: 0; color: #4a5568; }
+  .summary-list li:last-child { margin-bottom: 0; }
+
+  .news-item { display: block; padding: 12px 16px; border-bottom: 1px solid #1e2535; text-decoration: none; color: inherit; }
+  .news-item:last-child { border-bottom: none; }
+  .news-item:hover { background: #1e2840; }
+  .tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; margin-bottom: 5px; letter-spacing: .5px; text-transform: uppercase; }
+  .tag-cfr      { background: #1a3a5c; color: #63b3ed; }
+  .tag-carbon   { background: #1a3a2a; color: #68d391; }
+  .tag-politics { background: #2d2060; color: #b794f4; }
+  .tag-prov     { background: #1a3a2a; color: #68d391; }
+  .tag-prov-politics { background: #2d3020; color: #d4e157; }
+  .tag-eu       { background: #1a2a4a; color: #76b5f9; }
+  .tag-us       { background: #3a1a1a; color: #fc8181; }
+  .tag-market   { background: #2a1a3a; color: #d6bcfa; }
+  .tag-trade    { background: #1a2a2a; color: #4fd1c5; }
+  .news-title { font-size: 13px; font-weight: 600; color: #e2e8f0; line-height: 1.4; }
+  .empty { padding: 16px; color: #4a5568; font-style: italic; font-size: 13px; }
+
+  .risk-section { padding: 12px 16px; border-bottom: 1px solid #1e2535; }
+  .risk-section:last-child { border-bottom: none; }
+  .risk-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .risk-label-red   { color: #fc8181; }
+  .risk-label-amber { color: #f6ad55; }
+  .risk-label-green { color: #68d391; }
+  .risk-entry { font-size: 12px; color: #a0aec0; margin-bottom: 5px; padding-left: 10px; border-left: 2px solid #2d3748; line-height: 1.5; }
+  .risk-entry:last-child { margin-bottom: 0; }
+
+  .source-row { display: flex; gap: 10px; padding: 10px 16px; border-bottom: 1px solid #1e2535; align-items: flex-start; }
+  .source-row:last-child { border-bottom: none; }
+  .src-num { min-width: 20px; height: 20px; background: #2d3748; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #718096; margin-top: 2px; flex-shrink: 0; }
+  .src-link { color: #63b3ed; text-decoration: none; font-size: 12px; font-weight: 500; line-height: 1.4; }
+  .src-link:hover { text-decoration: underline; }
+  .src-meta { font-size: 11px; color: #4a5568; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a class="back-btn" href="./index.html">← 인덱스</a>
+  <span class="top-title">Green Oil Intelligence</span>
+  <button class="pdf-btn" onclick="downloadPDF()">PDF 저장</button>
+</div>
+
+<div class="header">
+  <div class="company">🌿 Green Oil Inc. — UCO 시장 인텔리전스</div>
+  <div class="week-label">2026년 5월 11–17일 주</div>
+  <div class="week-sub">2026.05.18 기준</div>
+  <div class="risk-pills">
+    <div class="pill pill-red">🔴 위험 1</div>
+    <div class="pill pill-amber">🟡 주의 2</div>
+    <div class="pill pill-green">🟢 기회 2</div>
+  </div>
+</div>
+
+<div class="content">
+
+  <div class="section">
+    <div class="section-header" style="color:#a0aec0;">📋 이번 주 요약</div>
+    <div class="section-body">
+      <ul class="summary-list">
+        <li>Carney 총리, 5/14 국가 전력 전략 발표 — 2050년 전력망 2배 확장, 청정전기규정 가스 유연성 허용 예고</li>
+        <li>5/15 캐나다-앨버타 이행협정 체결 — 산업용 탄소가격 2030년 $115/t·2035년 $130/t 확정, 서해안 파이프라인 2027년 착공 목표</li>
+        <li>5/14 사스카추완 SaskPower 내부 문서 유출 — 석탄 연장 시 2040년 전기요금 95% 상승 추정, Moe 연방 전력 전략에 조건부 지지</li>
+        <li>CFR Canada Gazette 초안 이번 주도 미발표 — 1월 의견 수렴 마감 후 4개월째 미발표, 2026년 내 적용 가능성 재검토 필요</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header" style="color:#b794f4;">🏛️ 연방 정책</div>
+    <div class="section-body">
+      <a class="news-item" href="https://www.pm.gc.ca/en/news/news-releases/2026/05/14/prime-minister-carney-announces-forthcoming-national-electricity" target="_blank" rel="noopener">
+        <span class="tag tag-politics">연방 자유당</span>
+        <div class="news-title">Carney 총리, 5/14 국가 전력 전략 발표 — 전력망 2배 확장, 가스 발전 유연성 허용</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header" style="color:#d4e157;">🏔️ 주(州) 정치</div>
+    <div class="section-body">
+      <a class="news-item" href="https://www.pm.gc.ca/en/news/news-releases/2026/05/15/canada-and-alberta-strike-agreement-diversify-our-exports-reduce" target="_blank" rel="noopener">
+        <span class="tag tag-prov-politics">앨버타 UCP</span>
+        <div class="news-title">5/15 캐나다-앨버타 이행협정 체결 — 탄소가격 2040년 $140/t 확정, 서해안 파이프라인 10월 국익 지정 추진</div>
+      </a>
+      <a class="news-item" href="https://www.cjme.com/2026/05/14/sask-ndp-says-leaked-saskpower-document-shows-rates-will-double-due-to-coal-plan/" target="_blank" rel="noopener">
+        <span class="tag tag-prov-politics">사스카추완 Sask. Party</span>
+        <div class="news-title">5/14 유출 SaskPower 문서 — 석탄 연장 시 2040년 전기요금 95% 상승 추정; Moe, 연방 전력 전략에 조건부 지지</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header" style="color:#76b5f9;">🌍 수출 시장</div>
+    <div class="section-body">
+      <div class="empty">이번 주 관련 뉴스 없음</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header" style="color:#d6bcfa;">📈 UCO 시장</div>
+    <div class="section-body">
+      <div class="empty">이번 주 관련 뉴스 없음</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header" style="color:#e2e8f0;">⚠️ 리스크 레이더</div>
+    <div class="section-body">
+      <div class="risk-section">
+        <div class="risk-label risk-label-red">🔴 즉시 조치</div>
+        <div class="risk-entry">CFR Canada Gazette 초안 4개월째 미발표 — 1월 15일 의견 수렴 마감 후 게재 없음. Q2 내 발표 가능성 소진 중. 내부 예산·전략에서 CFR 국내산 크레딧 멀티플라이어 반영 시점을 2027년 초로 후퇴 조정하고, 현행 Biofuels Production Incentive($3.7억, 2026-27) 중심 수익 구조 유지 방안 즉시 검토 권장</div>
+      </div>
+      <div class="risk-section">
+        <div class="risk-label risk-label-amber">🟡 모니터링</div>
+        <div class="risk-entry">캐나다-앨버타 탄소가격 2040년 $140/t까지 단계 확정 → UCO 바이오연료 생산비용 증가 요인이나 동시에 탄소 크레딧 가치도 상승. 탄소가격 상승 시나리오를 반영한 중장기 원가·수익 시뮬레이션 업데이트 권장</div>
+        <div class="risk-entry">국가 전력 전략 청정전기규정 가스 유연성 확대 → 일부 주의 바이오연료 대비 천연가스 선호도 변화 가능성. 주별 CFR 이행 인센티브 환경 변화 모니터링 필요</div>
+      </div>
+      <div class="risk-section">
+        <div class="risk-label risk-label-green">🟢 기회</div>
+        <div class="risk-entry">캐나다-앨버타 이행협정으로 연방-앨버타 협력 기조 안정화 → CFR 개정 등 바이오연료 정책 추진 모멘텀 유지. 중장기 탄소가격 확정으로 UCO 기반 TIER 크레딧 거래 장기 계약 시 프리미엄 협상 가능</div>
+        <div class="risk-entry">국가 전력 전략 발표로 청정에너지 투자 가속화 → 바이오연료 수거·정제 인프라 투자세액공제(ITC) 수혜 범위 확인 권장</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header" style="color:#718096;">📎 출처</div>
+    <div class="section-body">
+      <div class="source-row">
+        <div class="src-num">1</div>
+        <div>
+          <a class="src-link" href="https://www.pm.gc.ca/en/news/news-releases/2026/05/14/prime-minister-carney-announces-forthcoming-national-electricity" target="_blank">Prime Minister Carney announces forthcoming National Electricity Strategy</a>
+          <div class="src-meta">Prime Minister of Canada · 2026-05-14</div>
+        </div>
+      </div>
+      <div class="source-row">
+        <div class="src-num">2</div>
+        <div>
+          <a class="src-link" href="https://www.pm.gc.ca/en/news/news-releases/2026/05/15/canada-and-alberta-strike-agreement-diversify-our-exports-reduce" target="_blank">Canada and Alberta strike agreement to diversify exports, reduce emissions, and build a stronger economy</a>
+          <div class="src-meta">Prime Minister of Canada · 2026-05-15</div>
+        </div>
+      </div>
+      <div class="source-row">
+        <div class="src-num">3</div>
+        <div>
+          <a class="src-link" href="https://www.cjme.com/2026/05/14/sask-ndp-says-leaked-saskpower-document-shows-rates-will-double-due-to-coal-plan/" target="_blank">Sask. NDP says leaked SaskPower document shows rates will double due to coal extension</a>
+          <div class="src-meta">980 CJME · 2026-05-14</div>
+        </div>
+      </div>
+      <div class="source-row">
+        <div class="src-num">4</div>
+        <div>
+          <a class="src-link" href="https://www.cjme.com/2026/05/14/national-electricity-strategy-doesn-t-surprise-sask-premier-offers-some-approval/" target="_blank">National Electricity Strategy doesn't surprise Sask. Premier, offers some approval</a>
+          <div class="src-meta">980 CJME · 2026-05-14</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+  const btn = document.querySelector('.pdf-btn');
+  btn.textContent = '생성 중...';
+  const opt = {
+    margin: [8,8,8,8],
+    filename: 'GreenOil-UCO-2026-05-18.pdf',
+    image: { type: 'jpeg', quality: 0.95 },
+    html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: 'avoid-all' }
+  };
+  html2pdf().set(opt).from(document.body).save().then(() => {
+    btn.textContent = 'PDF 저장';
+  });
+}
+</script>
+</body>
+</html>

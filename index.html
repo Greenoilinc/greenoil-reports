@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Oil Intelligence — 리포트 인덱스</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0f1117; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.6; }
+
+  .header { background: linear-gradient(135deg, #1a2744 0%, #1a3a2a 100%); padding: 28px 24px 22px; border-bottom: 1px solid #2d3748; }
+  .company { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #68d391; text-transform: uppercase; margin-bottom: 8px; }
+  .title { font-size: 22px; font-weight: 800; color: #f7fafc; }
+  .subtitle { font-size: 13px; color: #718096; margin-top: 4px; }
+
+  .content { max-width: 680px; margin: 0 auto; padding: 24px 20px; }
+
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #4a5568; margin-bottom: 10px; margin-top: 28px; padding-left: 2px; }
+  .section-label:first-of-type { margin-top: 0; }
+
+  .card { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 10px; overflow: hidden; margin-bottom: 8px; }
+
+  .report-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: pointer; transition: background .15s; text-decoration: none; color: inherit; }
+  .report-row:hover { background: #1e2840; }
+  .report-row + .report-row { border-top: 1px solid #1e2535; }
+
+  .row-left { display: flex; align-items: center; gap: 12px; }
+  .row-icon { font-size: 18px; min-width: 28px; text-align: center; }
+  .row-title { font-size: 13px; font-weight: 600; color: #e2e8f0; line-height: 1.3; }
+  .row-meta { font-size: 11px; color: #4a5568; margin-top: 2px; }
+
+  .badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
+  .badge-new    { background: rgba(104,211,145,.15); color: #68d391; border: 1px solid rgba(104,211,145,.3); }
+  .badge-legacy { background: rgba(113,128,150,.12); color: #718096; border: 1px solid rgba(113,128,150,.25); }
+  .badge-canola { background: rgba(246,173,85,.12);  color: #f6ad55; border: 1px solid rgba(246,173,85,.25); }
+
+  .arrow { color: #4a5568; font-size: 16px; }
+
+  .info-box { padding: 14px 16px; }
+  .info-box p { font-size: 12px; color: #718096; line-height: 1.7; }
+
+  .footer { text-align: center; padding: 36px 20px 24px; color: #2d3748; font-size: 11px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="company">🌿 Green Oil Inc.</div>
+  <div class="title">리포트 인덱스</div>
+  <div class="subtitle">UCO 시장 인텔리전스 · 캐나다/미국/EU 정책 모니터링</div>
+</div>
+
+<div class="content">
+
+  <div class="section-label">📋 주간 UCO 리포트</div>
+  <div class="card">
+    <!-- 매주 새 UCO 줄이 여기 바로 아래에 추가됩니다 -->
+    <a class="report-row" href="./uco/2026-05-25.html">
+      <div class="row-left">
+        <div class="row-icon">📄</div>
+        <div>
+          <div class="row-title">2026년 5월 18–24일 주간 리포트</div>
+          <div class="row-meta">2026.05.25 기준 · 앨버타 분리 투표 발표, Poilievre·Carney 단결 대응</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="badge badge-new">최신</span>
+        <span class="arrow">›</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="section-label">🌾 카놀라 리포트</div>
+  <div class="card">
+    <!-- 매주 새 카놀라 줄이 여기 바로 아래에 추가됩니다 -->
+    <a class="report-row" href="./canola/2026-05-25.html">
+      <div class="row-left">
+        <div class="row-icon">🌱</div>
+        <div>
+          <div class="row-title">2026년 5월 18–24일 카놀라 리포트</div>
+          <div class="row-meta">2026.05.25 기준 · ICE Jul26 $749–750, SK 파종 15%, Cargill Regina 개관</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="badge badge-new">최신</span>
+        <span class="arrow">›</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="section-label">📊 라이브 대시보드</div>
+  <div class="card">
+    <a class="report-row" href="./goi_live_dashboard.html">
+      <div class="row-left">
+        <div class="row-icon">🛢️</div>
+        <div>
+          <div class="row-title">오일 수거 대시보드</div>
+          <div class="row-meta">드라이버별 실시간 수거량 · Forecast vs Actual</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="badge badge-new">LIVE</span>
+        <span class="arrow">›</span>
+      </div>
+    </a>
+    <a class="report-row" href="./cs_dashboard.html">
+      <div class="row-left">
+        <div class="row-icon">📞</div>
+        <div>
+          <div class="row-title">CS 대시보드</div>
+          <div class="row-meta">고객 요청 현황 · 미처리 추적 · 고객 노트</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="badge badge-new">LIVE</span>
+        <span class="arrow">›</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="section-label">ℹ️ 사용 방법</div>
+  <div class="card">
+    <div class="info-box">
+      <p>
+        각 행을 클릭하면 해당 리포트로 바로 이동합니다.<br>
+        매주 새 주간 리포트가 이 폴더에 추가되고, 인덱스 상단에 링크도 추가됩니다.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">Green Oil Intelligence · 자동 업데이트</div>
+
+</body>
+</html>

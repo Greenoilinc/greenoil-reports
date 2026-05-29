@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Oil — 카놀라 공급 & 정책 인텔리전스</title>
+<style>
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+  background: #f5f2e8;
+  color: #2a200a;
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.report-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+.report-switch:hover { background: rgba(255,255,255,0.25); }
+.report-switch .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #4ade80; flex-shrink: 0;
+}
+
+.pdf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.pdf-btn:hover { background: rgba(255,255,255,0.22); }
+.pdf-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+@media print {
+  .week-nav, .report-switch, .pdf-btn, .nav-dots { display: none !important; }
+  .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: white; }
+  .container { padding: 0; }
+  .card, .section-card { break-inside: avoid; }
+  a { text-decoration: none; color: inherit; }
+}
+
+.header {
+  background: linear-gradient(135deg, #7a5c00 0%, #c49a00 100%);
+  color: white;
+  padding: 18px 24px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.header-left h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 7px; }
+.header-left .sub { font-size: 11px; opacity: 0.75; margin-top: 3px; letter-spacing: 0.3px; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.updated-badge { font-size: 10px; opacity: 0.65; }
+
+.week-nav {
+  background: white;
+  border-bottom: 1px solid #e8dfa8;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.nav-btn {
+  background: none;
+  border: 1px solid #d4b800;
+  border-radius: 8px;
+  padding: 5px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8a6800;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.nav-btn:hover:not(:disabled) { background: #fdf8e0; border-color: #c49a00; }
+.nav-btn:disabled { opacity: 0.3; cursor: default; }
+.nav-center { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+.nav-week-label { font-size: 14px; font-weight: 700; color: #2a200a; }
+.nav-week-sub { font-size: 10px; color: #999; }
+.nav-dots { display: flex; gap: 5px; margin-top: 4px; }
+.nav-dot { width: 6px; height: 6px; border-radius: 50%; background: #e8dfa8; cursor: pointer; transition: background 0.15s; }
+.nav-dot.active { background: #c49a00; }
+.nav-dot:hover { background: #d4b800; }
+
+.container { max-width: 920px; margin: 0 auto; padding: 18px 16px 32px; }
+
+.alert-bar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.pill {
+  display: flex; align-items: center; gap: 6px;
+  background: white; border-radius: 20px; padding: 5px 13px;
+  font-size: 11px; font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.pill.red   { border-left: 3px solid #e53e3e; color: #c53030; }
+.pill.amber { border-left: 3px solid #d69e2e; color: #975a16; }
+.pill.green { border-left: 3px solid #38a169; color: #22543d; }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.dot.red   { background: #e53e3e; }
+.dot.amber { background: #d69e2e; }
+.dot.green { background: #38a169; }
+
+.card { background: white; border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.card-header { display: flex; align-items: center; gap: 9px; margin-bottom: 13px; padding-bottom: 10px; border-bottom: 1px solid #f5edcc; }
+.card-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.icon-summary  { background: #fdf8e0; }
+.icon-canada   { background: #fff0f0; }
+.icon-prov     { background: #fff3e0; }
+.icon-price    { background: #fdf8e0; }
+.icon-crop     { background: #f0fdf0; }
+.icon-export   { background: #eef2ff; }
+.icon-risk     { background: #fff5f5; }
+.icon-sources  { background: #f5f5f5; }
+.card-title { font-size: 14px; font-weight: 700; color: #2a200a; }
+.card-title span { font-size: 10px; font-weight: 400; color: #888; margin-left: 5px; }
+
+.summary-list { list-style: none; }
+.summary-list li { padding: 7px 0 7px 18px; position: relative; border-bottom: 1px solid #f9f4e0; color: #3a2c0a; font-size: 13px; }
+.summary-list li:last-child { border-bottom: none; }
+.summary-list li::before { content: '▸'; position: absolute; left: 0; top: 8px; color: #c49a00; font-size: 10px; }
+
+.news-item { padding: 9px 0; border-bottom: 1px solid #f9f4e0; }
+.news-item:last-child { border-bottom: none; }
+.news-item.clickable { cursor: pointer; border-radius: 7px; padding: 9px 8px; margin: 0 -8px; transition: background 0.15s; }
+.news-item.clickable:hover { background: #fdf8e0; }
+.news-item.clickable .news-title::after { content: ' ↗'; font-size: 10px; color: #c49a00; opacity: 0.6; }
+a.news-item { text-decoration: none; color: inherit; display: block; }
+.tag { display: inline-block; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 3px; }
+.tag-cfr           { background: #e6f4ea; color: #137333; }
+.tag-carbon        { background: #e8f0fe; color: #1558d6; }
+.tag-prov          { background: #fce8e6; color: #c5221f; }
+.tag-politics      { background: #e8eaf6; color: #283593; }
+.tag-prov-politics { background: #fff3e0; color: #8a4500; }
+.tag-canola-price  { background: #fdf8e0; color: #7a5c00; }
+.tag-canola-crop   { background: #e8f5e9; color: #1b5e20; }
+.tag-canola-export { background: #e3f2fd; color: #0d47a1; }
+.tag-canola-policy { background: #fce4ec; color: #880e4f; }
+.tag-us            { background: #e8eaed; color: #3c4043; }
+.tag-eu            { background: #ede7f6; color: #5e35b1; }
+.tag-trade         { background: #fce4ec; color: #880e4f; }
+.news-title { font-size: 12px; font-weight: 600; color: #2a200a; margin-bottom: 2px; }
+.news-body  { font-size: 11px; color: #6b5c30; line-height: 1.5; }
+.src-ref { font-size: 9px; font-weight: 700; color: #c49a00; vertical-align: super; margin-left: 3px; opacity: 0.85; }
+
+.crop-bars { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.crop-bar-row { display: flex; flex-direction: column; gap: 3px; }
+.crop-bar-label { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; color: #4a3800; }
+.crop-bar-track { height: 8px; background: #f0e8c0; border-radius: 4px; overflow: hidden; position: relative; }
+.crop-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+.crop-bar-fill.slow { background: #e53e3e; }
+.crop-bar-fill.normal { background: #d69e2e; }
+.crop-bar-fill.avg { background: #c49a00; opacity: 0.3; position: absolute; top: 0; left: 0; }
+.crop-bar-meta { font-size: 10px; color: #999; }
+
+.risk-grid { display: flex; flex-direction: column; gap: 10px; }
+.risk-col { border-radius: 9px; padding: 12px 16px; }
+.risk-col.red   { background: #fff5f5; border: 1px solid #fed7d7; }
+.risk-col.amber { background: #fffbf0; border: 1px solid #fefcbf; }
+.risk-col.green { background: #f0fff4; border: 1px solid #c6f6d5; }
+.risk-col-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+.risk-col.red   .risk-col-title { color: #c53030; }
+.risk-col.amber .risk-col-title { color: #975a16; }
+.risk-col.green .risk-col-title { color: #22543d; }
+.risk-entry { font-size: 12px; color: #4a5568; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.05); line-height: 1.5; }
+.risk-entry:last-child { border-bottom: none; }
+
+.source-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f9f4e0; align-items: flex-start; }
+.source-row:last-child { border-bottom: none; }
+.src-num { width: 20px; height: 20px; flex-shrink: 0; background: #fdf0a0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #8a6800; margin-top: 1px; }
+.src-link { font-size: 12px; font-weight: 600; color: #7a5c00; text-decoration: none; }
+.src-link:hover { text-decoration: underline; }
+.src-meta { font-size: 10px; color: #aaa; margin-top: 1px; }
+
+.empty { background: #fdf8e8; border-radius: 7px; padding: 14px; text-align: center; color: #bbb; font-size: 12px; font-style: italic; }
+
+.report-content { transition: opacity 0.2s ease; }
+.report-content.fade { opacity: 0; }
+
+.footer { text-align: center; font-size: 10px; color: #bbb; padding: 8px 0 4px; letter-spacing: 0.2px; }
+</style>
+</head>
+<body>
+
+<div style="background:#1a1f2e;border-bottom:1px solid #2d3748;padding:10px 20px;position:sticky;top:0;z-index:200;"><a href="./index.html" style="background:#2d3748;border:none;color:#a0aec0;padding:6px 14px;border-radius:6px;font-size:13px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">← 인덱스</a></div>
+<div class="header">
+  <div class="header-left">
+    <h1>🌾 Green Oil Inc.</h1>
+    <div class="sub">카놀라 공급 & 정책 인텔리전스 리포트 · Canola Supply & Policy Intelligence</div>
+  </div>
+  <div class="header-right">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="pdf-btn" onclick="downloadPDF()">
+        <svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><rect x="6" y="13" width="12" height="8" rx="1"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/></svg>
+        <span id="pdfBtnLabel">PDF 저장</span>
+      </button>
+      <a class="report-switch" href="../index.html">
+        <span class="dot"></span>← 인덱스
+      </a>
+    </div>
+    <div class="updated-badge" id="updatedBadge">마지막 업데이트: —</div>
+  </div>
+</div>
+
+<div class="week-nav">
+  <button class="nav-btn" id="btnNewer" onclick="navigate(-1)" disabled>&#8592; 최신</button>
+  <div class="nav-center">
+    <div class="nav-week-label" id="navWeekLabel">—</div>
+    <div class="nav-week-sub" id="navWeekSub">—</div>
+    <div class="nav-dots" id="navDots"></div>
+  </div>
+  <button class="nav-btn" id="btnOlder" onclick="navigate(1)">이전 &#8594;</button>
+</div>
+
+<div class="container">
+  <div class="report-content" id="reportContent">
+
+    <div class="alert-bar">
+      <div class="pill red">  <div class="dot red"></div>  <span id="cntRed">—</span> 즉시 대응 필요</div>
+      <div class="pill amber"><div class="dot amber"></div><span id="cntAmber">—</span> 모니터링 필요</div>
+      <div class="pill green"><div class="dot green"></div><span id="cntGreen">—</span> 기회 요인</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-summary">📋</div>
+        <div class="card-title">이번 주 핵심 요약 <span>Executive Summary</span></div>
+      </div>
+      <ul class="summary-list" id="elSummary"></ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-risk">⚡</div>
+        <div class="card-title">리스크 &amp; 기회 레이더</div>
+      </div>
+      <div class="risk-grid">
+        <div class="risk-col red">
+          <div class="risk-col-title">🔴 즉시 대응</div>
+          <div id="elRed"></div>
+        </div>
+        <div class="risk-col amber">
+          <div class="risk-col-title">🟡 모니터링</div>
+          <div id="elAmber"></div>
+        </div>
+        <div class="risk-col green">
+          <div class="risk-col-title">🟢 기회 요인</div>
+          <div id="elGreen"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-price">🌾</div>
+        <div class="card-title">카놀라 시장 가격 &amp; 수급 <span>Price · Supply · Demand</span></div>
+      </div>
+      <div id="elCanolaMarket"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-crop">🌱</div>
+        <div class="card-title">작황 &amp; 파종 동향 <span>Crop Conditions — SK · MB · AB</span></div>
+      </div>
+      <div id="elCropConditions"></div>
+      <div class="crop-bars" id="elCropBars"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-export">🌍</div>
+        <div class="card-title">수출 채널 &amp; 정책 <span>China · EU · USA</span></div>
+      </div>
+      <div id="elExport"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-canada">🍁</div>
+        <div class="card-title">연방 정책 &amp; 정치 동향 <span>CFR · 바이오연료 인센티브 · 집권당</span></div>
+      </div>
+      <div id="elFederal"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-prov">🏛️</div>
+        <div class="card-title">주정부 정치 동향 <span>SK · MB · AB · ON · BC</span></div>
+      </div>
+      <div id="elProvincial"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-sources">🔗</div>
+        <div class="card-title">주요 출처 <span>Sources</span></div>
+      </div>
+      <div id="elSources"></div>
+    </div>
+
+    <div class="footer">Green Oil Inc. Internal Use Only &nbsp;·&nbsp; Powered by Claude AI &nbsp;·&nbsp; 매주 월요일 오전 자동 업데이트</div>
+  </div>
+</div>
+
+<script>
+const REPORT_HISTORY = /* HISTORY_START */
+[
+  {
+    "generatedAt": "2026-05-25T05:08:00-04:00",
+    "seeding_bars": [
+      { "label": "앨버타", "actual": 21, "avg": 32 },
+      { "label": "사스카추완", "actual": 29, "avg": 55 },
+      { "label": "매니토바", "actual": 37, "avg": 43 }
+    ],
+    "summary": [
+      "ICE 카놀라 Jul26 선물 $749–750 CAD/T 주간 강보합 — 파종 지연 우려가 하단을 지지하며 전주 대비 소폭 상승",
+      "사스카추완 카놀라 파종 15%(5/11–18 작황보고 기준, 평년 크게 하회) — 냉해·건조 지속으로 5/25 기준 전체 파종 진행률 29%에 그쳐",
+      "매니토바 기상 악화로 파종 지연 지속 — 5/25 기준 파종 37%로 5년 평균(43%) 하회, 이번 주 기온 상승 기대",
+      "Cargill Regina 신규 카놀라 가공 공장 개관 — Scott Moe 사스카추완 주지사 참석, 캐나다 국내 크러시 용량 확대의 이정표",
+      "앨버타 Smith 내각 개편: 농업·관개부 장관 교체 — 신임 장관의 정책 방향 및 카놀라 산업 지원 기조 모니터링 필요"
+    ],
+    "canola_market": [
+      {
+        "tag": "canola-price",
+        "tagLabel": "카놀라 가격",
+        "headline": "ICE Jul26 $749–750 CAD/T 주간 강보합 — 파종 지연 우려가 하단 지지, 전주 대비 소폭 상승",
+        "summary": "5월 21일 기준 ICE 카놀라 Jul26 선물 $749–750 CAD/T 범위 거래. 사스카추완·매니토바 파종 지연 우려가 지속적으로 가격 하단을 지지. 전주(5/18 기준 $738.10) 대비 약 $11–12 상승. 앨버타 파종 속도도 평균 하회하며 캐나다 서부 전반의 공급 불확실성이 선물 가격에 반영됨.",
+        "url": "https://www.producer.com/am-market-reports/am-market-report-may-21-2026/"
+      }
+    ],
+    "canola_crop": [
+      {
+        "tag": "canola-crop",
+        "tagLabel": "사스카추완 작황",
+        "headline": "사스카추완 5/11–18 작황보고: 카놀라 파종 15% — 5년 평균 크게 하회, 냉해·건조 지속",
+        "summary": "5월 21일 발표된 사스카추완 주정부 작황보고(5/11–18 기준): 카놀라 파종 진행률 약 15%로 5년 평균을 크게 하회. 냉해 및 건조한 기상 조건이 파종 시기를 지연시키고 있으며, 5월 하순 기온 상승 여부가 핵심 변수. 카놀라 예정 면적 1,220만 에이커. 파종 적기 내 작업 완료를 위한 기상 호전이 시급한 상황.",
+        "url": "https://ccgazette.ca/2026/05/21/crop-report-for-may-11-to-18-2026/"
+      },
+      {
+        "tag": "canola-crop",
+        "tagLabel": "매니토바 작황",
+        "headline": "매니토바 파종 기상 영향 지속 — 파종 37%로 5년 평균(43%) 하회, 이번 주 기온 상승 기대",
+        "summary": "5월 21일 CP24 보도: 매니토바 기상 악화로 봄 파종이 지연 지속. 파종 진행률 37%로 5년 평균(43%) 하회. 카놀라 파종 예정 면적 320만 에이커(+4.7% 증가 계획). 이번 주 기온 상승이 예보되어 진행 속도 개선 기대. 농업 전문가들은 아직 파종 적기 내이나 빠른 기상 호전이 필수적이라고 언급.",
+        "url": "https://www.cp24.com/news/canada/2026/05/21/weather-having-impact-on-spring-seeding-in-manitoba/"
+      }
+    ],
+    "canola_export": [],
+    "canada": [],
+    "provincial": [
+      {
+        "tag": "prov-politics",
+        "tagLabel": "사스카추완",
+        "headline": "Scott Moe 주지사, Cargill Regina 신규 카놀라 가공 공장 개관 행사 참석 — 국내 크러시 용량 확대 이정표",
+        "summary": "5월 22일 보도: 사스카추완 Scott Moe 주지사가 Cargill Regina 신규 카놀라 가공 공장 개관 행사에 참석. 해당 공장은 캐나다 국내 카놀라 크러시 용량을 대폭 확대하는 주요 시설로, 카놀라오일·밀 생산 증가를 통해 내수 수요 강화 및 수출 경쟁력 제고 기대. Green Oil 관점: 원료 카놀라씨 내수 수요 상승 구조 확인, 조달 경쟁 심화 대비 필요.",
+        "url": "https://www.620ckrm.com/2026/05/22/snowbirds-isc-new-canola-plant-all-major-topics-during-first-week-of-the-legislature-break/"
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "앨버타",
+        "headline": "Smith 앨버타 내각 개편: 농업·관개부 장관 교체 — 신임 장관 정책 방향 모니터링 필요",
+        "summary": "5월 21일 보도: Danielle Smith 앨버타 주지사가 내각 개편을 단행해 농업·관개부 장관을 교체. 신임 장관의 카놀라 산업 지원 기조 및 주정부 농업 정책 방향에 변화가 있을지 주시 필요. 앨버타는 캐나다 카놀라 3대 주요 생산지 중 하나로 주정부 정책이 생산 환경에 직접적 영향.",
+        "url": "https://everythinggp.com/2026/05/21/new-minister-of-agriculture-and-irrigation-named-during-alberta-cabinet-shuffle/"
+      }
+    ],
+    "risks": { "red": 1, "amber": 2, "green": 2 },
+    "sources": [
+      { "title": "AM Market Report — May 21, 2026", "outlet": "The Western Producer", "date": "2026-05-21", "url": "https://www.producer.com/am-market-reports/am-market-report-may-21-2026/" },
+      { "title": "Crop Report for May 11 to 18, 2026", "outlet": "CC Gazette / Saskatchewan Agriculture", "date": "2026-05-21", "url": "https://ccgazette.ca/2026/05/21/crop-report-for-may-11-to-18-2026/" },
+      { "title": "Weather having impact on spring seeding in Manitoba", "outlet": "CP24", "date": "2026-05-21", "url": "https://www.cp24.com/news/canada/2026/05/21/weather-having-impact-on-spring-seeding-in-manitoba/" },
+      { "title": "Snowbirds, ISC, New Canola Plant — All Major Topics During First Week of the Legislature Break", "outlet": "620 CKRM", "date": "2026-05-22", "url": "https://www.620ckrm.com/2026/05/22/snowbirds-isc-new-canola-plant-all-major-topics-during-first-week-of-the-legislature-break/" },
+      { "title": "New Minister of Agriculture and Irrigation Named During Alberta Cabinet Shuffle", "outlet": "EverythingGP", "date": "2026-05-21", "url": "https://everythinggp.com/2026/05/21/new-minister-of-agriculture-and-irrigation-named-during-alberta-cabinet-shuffle/" }
+    ]
+  },
+  {
+    "generatedAt": "2026-05-18T05:00:00-04:00",
+    "seeding_bars": [
+      { "label": "앨버타", "actual": 35, "avg": 28 },
+      { "label": "사스카추완", "actual": 16, "avg": 30 },
+      { "label": "매니토바", "actual": 13, "avg": 23 }
+    ],
+    "summary": [
+      "ICE 카놀라 Jul26 선물 주간 롤러코스터: 5/12 급락($743.40) 후 5/13 강한 반등($754.20) — 5/17 종가 $738.10 CAD/T, 호르무즈 긴장·사우이오일 강세가 하단 지지",
+      "USDA 5월 WASDE 발표(5/12): 2026/27 글로벌 유채씨 생산 96.89MMT 전망, 캐나다 수출 7.60MMT(전년 8.30MMT 대비 감소), 캐나다 crush 역대 최대 13MMT",
+      "매니토바 파종 13%(5년 평균 23% 하회), 사스카추완 16%(평균 미달) — 앨버타는 빠른 진행이나 토양수분 부족이 주요 우려",
+      "비료 위기 심화: 호르무즈 봉쇄로 질소비료 가격 +40%, 봄 파종 시즌 공급 압박 → 2026 수확량 하방 리스크 증대",
+      "미국 RFS 2026 바이오디젤 mandate 역대 최대(5.4B 갤런, +61%) + 캐나다 crush 용량 15MMT로 확대 → 가공·바이오연료 수요 구조적 상방 지지"
+    ],
+    "canola_market": [
+      {
+        "tag": "canola-price",
+        "tagLabel": "카놀라 가격",
+        "headline": "ICE Jul26 주간 롤러코스터: 5/12 급락 $743.40 → 5/13 반등 $754.20 → 5/17 종가 $738.10",
+        "summary": "5월 12일(월) Jul26 선물 $9.70 급락해 $743.40 마감 — 기술적 오버바이 부담·대형 순매수 포지션 조정이 원인. 5월 13일(화) $10.80 강한 반등해 $754.20 마감(Nov26 $763.90). 사우이오일·원유 강세와 호르무즈 해협 긴장 지속이 반등 지지. 5월 17일(일) 종가 $738.10 CAD/T(전일 대비 +0.29%). 최근 4주 +1.51%, 전년 동기 대비 +4.79%.",
+        "url": "https://www.producer.com/am-market-reports/am-market-report-may-13-2026/"
+      },
+      {
+        "tag": "canola-price",
+        "tagLabel": "USDA WASDE 5월",
+        "headline": "USDA 5월 WASDE(5/12): 2026/27 글로벌 유채씨 96.89MMT — 캐나다 수출 7.60MMT로 감소, crush 13MMT 역대 최대",
+        "summary": "5월 12일 발표된 2026/27 첫 공식 전망: 글로벌 유채씨 96.89MMT(전년 95.5MMT 대비 +1.4MMT). 주요 생산국: 캐나다 22MMT, EU 20.7MMT, 중국 16.2MMT, 인도 12.4MMT, 호주 6.2MMT. 캐나다 수출은 전년 8.30MMT에서 7.60MMT로 감소 전망. 반면 국내 crush는 13MMT 역대 최대 — Cargill Regina 신공장 포함 총 용량 15MMT로 확대.",
+        "url": "https://www.dtnpf.com/agriculture/web/ag/news/article/2026/05/12/usda-releases-may-crop-production"
+      }
+    ],
+    "canola_crop": [
+      {
+        "tag": "canola-crop",
+        "tagLabel": "매니토바 작황",
+        "headline": "매니토바 작황보고(5/13): 파종 13% — 5년 평균 23%·전년 33% 크게 하회, 카놀라 파종 이번 주 시작",
+        "summary": "5월 13일 발표된 매니토바 작황보고: 전체 파종 13%, 5년 평균(23%)·전년(33%) 크게 하회. 냉해·저강수 지속이나 기온 상승으로 서서히 개선 중. 카놀라 파종은 이번 주(5/11~)부터 본격 시작 예정. 표층 토양 건조 우려 병존. 예정면적 320만 에이커(+4.7%). 전문가들은 '아직 파종 적기 내'라고 하나 5월 하순까지 기상 호전이 핵심.",
+        "url": "https://farmnewsnow.com/2026/05/13/manitoba-farmers-make-early-seeding-progress-remain-behind-average/"
+      },
+      {
+        "tag": "canola-crop",
+        "tagLabel": "앨버타 작황",
+        "headline": "앨버타(5/11): 따뜻·건조 봄으로 파종 빠른 진행, 토양수분 부족이 최대 우려 — 카놀라 630만 에이커(+0.7%)",
+        "summary": "앨버타 2026 첫 작황보고(5/11 기준): 따뜻하고 건조한 조건으로 파종이 빠르게 진행. 남부·중부 선도, 북부·Peace 지역 지연. 하지만 표토 및 하층토 수분이 역사 평균 이하인 지역 광범위. 카놀라 예정 면적 630만 에이커(+0.7%). 5~6월 적절한 강수 여부가 수확량 결정의 핵심 변수.",
+        "url": "https://www.seed.ab.ca/alberta-farmers-off-to-fast-start-as-2026-seeding-accelerates/"
+      }
+    ],
+    "canola_export": [
+      {
+        "tag": "canola-export",
+        "tagLabel": "미국 바이오연료",
+        "headline": "미국 RFS 2026: 바이오매스 디젤 5.4B 갤런 역대 최대 mandate, 45Z 크레딧 2029년까지 연장 확정",
+        "summary": "미국 EPA 2026년 RFS 바이오매스 기반 디젤 혼합 의무량 5.4B 갤런(전년 대비 +61%). 45Z 세액공제 2029년까지 연장 확정으로 캐나다 카놀라오일이 유력한 공급원. 미국향 캐나다 카놀라오일 수출 역대 최대 8.5B 파운드 전망. 비북미산 UCO·동물성 지방은 45Z 크레딧 대상에서 제외 → 캐나다 카놀라오일 경쟁 우위 강화. 단, Green Oil 원료 조달 경쟁도 심화.",
+        "url": "https://igrownews.com/latest-wasde-report/"
+      },
+      {
+        "tag": "canola-export",
+        "tagLabel": "중국 수출",
+        "headline": "캐나다-중국 카놀라밀 관세 0% 지속(3/1~12/31) — 씨앗 총 14.9%(5.9% 반덤핑+9%) 유지",
+        "summary": "2026년 1월 합의에 따라 중국은 캐나다산 카놀라밀 관세를 3월 1일부터 12월 31일까지 0%로 인하. 카놀라씨앗에는 5.9% 반덤핑+기존 9% = 총 14.9% 적용 중. 중국은 캐나다 최대 카놀라 시장($4.9B, 2024). 관세 완화가 유지되는 동안 crush 후 meal 수출 채널이 가장 유리한 경로. 연말 이후 연장 여부 추이 지속 모니터링 필요.",
+        "url": "https://www.bnnbloomberg.ca/tariffs/2026/01/20/agriculture-minister-says-first-exports-of-canola-seed-and-beef-soon-going-to-china/"
+      }
+    ],
+    "canada": [
+      {
+        "tag": "canola-policy",
+        "tagLabel": "WASDE: 카놀라 수급 전망",
+        "headline": "USDA 5월 WASDE(5/12): 캐나다 카놀라 crush 역대 최대 13MMT — 수출은 7.60MMT로 감소, ending stocks 긴축",
+        "summary": "5월 12일 발표된 USDA 5월 WASDE: 캐나다 2026/27 카놀라 crush 역대 최대 13MMT 전망(Cargill Regina 신공장 포함, 총 용량 15MMT). 반면 수출은 전년 8.30MMT에서 7.60MMT로 감소 — 내수 가공 수요가 수출 물량을 흡수하는 구조. 비료 비용 부담(질소 +40%, 호르무즈 봉쇄 영향)으로 파종면적 축소 우려가 ending stocks 긴축을 심화. Green Oil 관점: 원료 조달 경쟁 심화 + 공급 물량 감소 이중 리스크.",
+        "url": "https://www.dtnpf.com/agriculture/web/ag/news/article/2026/05/12/usda-releases-may-crop-production"
+      },
+      {
+        "tag": "canola-policy",
+        "tagLabel": "WASDE: 글로벌 수급",
+        "headline": "USDA 5월 WASDE(5/12): 글로벌 유채씨 96.89MMT — 호주 19% 감소·우크라이나 3.8MMT 회복 전망",
+        "summary": "5월 12일 USDA 발표: 2026/27 글로벌 유채씨 생산 96.89MMT. 호주는 비료·디젤 공급 부족으로 전년 7.68MMT에서 6.2MMT로 19% 감소. 우크라이나는 전쟁에도 불구 3.8MMT로 회복 전망, EU는 역대 최대 수준 20.7MMT. 글로벌 공급은 증가하나 지역별 편차가 크고, 비료 가격 급등이 생산 비용을 전반적으로 압박. Green Oil 조달 전략상 공급처 다각화 검토 필요.",
+        "url": "https://www.dtnpf.com/agriculture/web/ag/news/article/2026/05/12/usda-releases-may-crop-production"
+      }
+    ],
+    "provincial": [
+      {
+        "tag": "canola-crop",
+        "tagLabel": "사스카추완 파종",
+        "headline": "사스카추완 파종 약 16% — 역사 평균 크게 하회, 카놀라·아마씨 7% 수준, 냉해·건조 지속",
+        "summary": "사스카추완 파종 약 16% — 전체 파종 역사 평균 크게 하회. 카놀라·오일씨드 약 7% 파종. 5월 11일까지 강수량 제한적. 지역별 편차 큰 편: 남서부 선도, 나머지 지역 저조. 카놀라 예정면적 1,220만 에이커(+0.5%). 파종 적기 내 작업 완료를 위한 기상 호전 필수. 사스카추완과 매니토바의 동시 지연이 2026 서부 카놀라 벨트 불확실성의 핵심.",
+        "url": "https://www.producer.com/news/saskatchewan-farmers-make-seeding-progress/"
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "매니토바 파종 지연",
+        "headline": "매니토바 파종 13%(5년 평균 23% 하회) — 기온 상승 중, 카놀라 파종 5/11 주부터 본격화",
+        "summary": "매니토바 작황보고(5/13): 파종 13%, 5년 평균(23%)·전년(33%) 크게 하회. 그러나 영하 기온 완화와 함께 개선 신호. 카놀라 파종은 이번 주부터 본격 시작 예정. 1번 도로 남쪽에서 빠른 진전. 전문가들: '아직 늦지 않았다' — 5월 하순까지 기상 호전이 중요. 예정 면적 320만 에이커(+4.7% 증가 계획).",
+        "url": "https://farmnewsnow.com/2026/05/13/manitoba-farmers-make-early-seeding-progress-remain-behind-average/"
+      }
+    ],
+    "risks": {
+      "red": [
+        "비료 위기 현실화: 질소비료 +40%(호르무즈 봉쇄), 봄 파종 시즌 공급 압박 → 2026 카놀라 작황 하방 리스크 구체화. 원료 조달 단가 상승 및 중장기 공급량 감소 대비 필요",
+        "사스카추완·매니토바 파종 동시 지연 지속 (5년 평균 대비 각각 절반 수준) — 5월 하순까지 기상 미회복 시 2026 수확량 감소 확실시. 원료 조달 계획 재검토 필요"
+      ],
+      "amber": [
+        "ICE 카놀라 선물 변동성 심화($743~$754 주간 롤러코스터) — USDA WASDE 캐나다 수출 감소 전망(7.60MMT)이 중기 하방 압력. 조달 계약 시점 신중 검토",
+        "호주 2026/27 카놀라 생산 19% 감소 전망(6.2MMT) — 디젤·질소비료 공급 부족 원인. 글로벌 공급 긴축에 기여, 대체 조달 채널 탐색 필요",
+        "앨버타 토양수분 부족 — 빠른 파종 시작에도 불구, 강수 부족 지속 시 수확량 타격 우려. 3대 생산주 동시 건조 리스크"
+      ],
+      "green": [
+        "미국 RFS 2026 바이오디젤 mandate 역대 최대(5.4B 갤런, +61%) + 45Z 크레딧 2029년 연장 → 캐나다 카놀라오일 수요 구조적·장기적 상방 지지",
+        "캐나다 crush 역대 최대 13MMT 전망(Cargill Regina 신공장) → 내수 가공 수요 급증, 원료 카놀라씨 가격 지지 구조 강화",
+        "중국-캐나다 카놀라밀 관세 0%(3/1~12/31) 지속 → meal 수출 채널 최적 활용 시기, 연말 이전 추가 협상 모니터링"
+      ]
+    },
+    "sources": [
+      { "title": "AM Market Report — May 13, 2026", "url": "https://www.producer.com/am-market-reports/am-market-report-may-13-2026/", "outlet": "The Western Producer", "date": "2026-05-13" },
+      { "title": "AM Market Report — May 12, 2026", "url": "https://www.producer.com/am-market-reports/am-market-report-may-12-2026/", "outlet": "The Western Producer", "date": "2026-05-12" },
+      { "title": "AM Market Report — May 11, 2026", "url": "https://www.producer.com/am-market-reports/am-market-report-may-11-2026/", "outlet": "The Western Producer", "date": "2026-05-11" },
+      { "title": "USDA Releases May Crop Production, WASDE Reports", "url": "https://www.dtnpf.com/agriculture/web/ag/news/article/2026/05/12/usda-releases-may-crop-production", "outlet": "DTN / Progressive Farmer", "date": "2026-05-12" },
+      { "title": "Manitoba farmers make early seeding progress, remain behind average", "url": "https://farmnewsnow.com/2026/05/13/manitoba-farmers-make-early-seeding-progress-remain-behind-average/", "outlet": "farmnewsNOW / Manitoba Agriculture", "date": "2026-05-13" },
+      { "title": "Alberta Farmers Off to Fast Start as 2026 Seeding Accelerates", "url": "https://www.seed.ab.ca/alberta-farmers-off-to-fast-start-as-2026-seeding-accelerates/", "outlet": "The Alberta Seed Guide", "date": "2026-05-11" },
+      { "title": "Canola price — May 17, 2026: $738.10 CAD/T (+4.79% YoY)", "url": "https://tradingeconomics.com/commodity/canola", "outlet": "Trading Economics", "date": "2026-05-17" },
+      { "title": "USDA Releases May Crop Production, WASDE Reports (canola/rapeseed detail)", "url": "https://www.dtnpf.com/agriculture/web/ag/news/article/2026/05/12/usda-releases-may-crop-production", "outlet": "DTN / Progressive Farmer", "date": "2026-05-12" }
+    ]
+  },
+  {
+    "generatedAt": "2026-05-11T08:07:00-04:00",
+    "seeding_bars": [
+      { "label": "사스카추완", "actual": 3, "avg": 12 },
+      { "label": "매니토바",   "actual": 2, "avg": 6  }
+    ],
+    "summary": [
+      "ICE 카놀라 선물 주간 -$17/T 하락 (Jul26: $756→$738) — 원유 시장 급락·식물유 동반 약세, 중동 긴장이 유일한 하방 지지",
+      "사스카추완 작황보고서(5/7, 4/28~5/4 기간): 파종 3% — 5년 평균(12%)·10년 평균(13%) 크게 하회. 냉해·침수·결빙 토양으로 대폭 지연",
+      "매니토바 2026 첫 작황보고(5/5): 파종 2% — 전년(8%)·5년 평균(6%) 하회. 두 핵심 생산주 동시 지연으로 2026 작황 불확실성 최고조",
+      "Carney 총리, 5/4 유럽정치공동체(EPC) 서밋 — EU·프랑스·이탈리아 등과 에너지·핵심광물 협력 논의, 대미 의존 다각화 기조 재확인",
+      "Moe 사스카추완, 5/5 청소년 소셜미디어 규제 의견수렴 착수 — 매니토바에 이어 두 번째 서부 핵심 주의 소셜미디어 규제 움직임"
+    ],
+    "canola_market": [
+      {
+        "tag": "canola-price", "tagLabel": "카놀라 가격",
+        "headline": "ICE 카놀라 Jul26 선물 주간 -$17/T 하락 ($756→$738) — 원유 급락·식물유 동반 약세",
+        "summary": "5월 4일 Jul26 선물 $756.30/T에서 출발해 5월 7일 $738.90/T까지 하락, 주간 -$17/T(-2.3%). 5월 6일 원유 시장 급락이 트리거로 작용하며 식물유 전반이 동반 하락. 4월 말 4개월 고점 $760 이상에서 되돌림. 중동 호르무즈 해협 긴장이 추가 하락의 유일한 완충재. 파종 지연으로 인한 공급 우려는 아직 가격에 충분히 반영되지 않은 상태.",
+        "url": "https://www.producer.com/am-market-reports/am-market-report-may-7-2026/"
+      }
+    ],
+    "canola_crop": [
+      {
+        "tag": "canola-crop", "tagLabel": "사스카추완 작황",
+        "headline": "사스카추완 작황보고서(5/7): 파종 3% — 5년 평균(12%)·10년 평균(13%) 크게 하회",
+        "summary": "5월 7일 발표 작황보고서(4/28~5/4 기간): 전체 파종 3%, 카놀라·겨자 오일씨드 3%, 아마 2%. 5년 평균(12%)·10년 평균(13%) 모두 크게 하회. 냉해, 결빙 토양, 침수 도로가 장애. 지역별: 남서부 7%, 남동부 5%, 나머지 지역 1% 이하. 2026 카놀라 예정 면적 1,220만 에이커 기준, 지연 장기화 시 수확량 감소 직결.",
+        "url": "https://www.saskatchewan.ca/government/news-and-media/2026/may/07/crop-report-for-the-period-april-28-to-may-4-2026"
+      },
+      {
+        "tag": "canola-crop", "tagLabel": "매니토바 작황",
+        "headline": "매니토바 2026 첫 작황보고(5/5): 파종 2% — 전년(8%)·5년 평균(6%) 하회, 카놀라 사실상 미착수",
+        "summary": "5월 5일 발표된 매니토바 2026년 첫 주간 작황보고: 파종 2%로 전년(8%)·5년 평균(6%) 하회. 영하 기온, 저강수량, 강풍으로 작업 난항. 1번 도로 남쪽에서 완두·봄밀 중심 제한 진행, 카놀라는 사실상 미착수. 예정 면적 320만 에이커(전년 대비 +4.7%). 사스카추완과 동시 지연으로 2026 서부 카놀라 벨트 작황 불확실성 최고조.",
+        "url": "https://www.620ckrm.com/2026/05/06/manitoba-issues-first-crop-report-of-the-year/"
+      }
+    ],
+    "canola_export": [],
+    "canada": [
+      {
+        "tag": "politics", "tagLabel": "연방 자유당",
+        "headline": "Carney 총리, 5/4 EPC 서밋 — EU·프랑스·이탈리아와 에너지·핵심광물 협력, 대미 다각화 기조 강화",
+        "summary": "5월 4일 아르메니아 예레반 제8회 유럽정치공동체(EPC) 서밋에 Carney 총리 참석. EU·프랑스·이탈리아·스페인·폴란드·우크라이나 정상과 양자 회담. 캐나다를 에너지·핵심광물·방위 분야 글로벌 투자 허브로 포지셔닝. 우크라이나 군사지원 $2.7억 발표. 비유럽권 최초 EPC 참석 사례. 대미 무역 의존 다각화 기조를 국제 외교로 구체화하는 행보.",
+        "url": "https://www.pm.gc.ca/en/news/news-releases/2026/05/04/prime-minister-carney-strengthens-trade-and-security-partnerships"
+      }
+    ],
+    "provincial": [
+      {
+        "tag": "prov-politics", "tagLabel": "사스카추완 Saskatchewan Party",
+        "headline": "Moe 정부, 5/5 청소년 소셜미디어 규제 의견수렴 착수 — 전 가구 엽서 설문 발송",
+        "summary": "사스카추완 주정부가 5월 5일 청소년 소셜미디어 이용 제한 관련 주민 의견수렴을 공식 착수. 전 가구 설문 엽서 우편 발송, 6월 30일까지 반환. Moe 총리, 연방 정부와의 협의 의사 표명. 카놀라·에너지 직접 이슈는 아니나, Moe Saskatchewan Party의 규제 추진 성향 및 정치적 방향성 파악에 참고. 농업 지원 정책 기조는 유지 중.",
+        "url": "https://www.saskatchewan.ca/government/news-and-media/2026/may/05/province-seeks-opinions-on-social-media-limits-for-youth"
+      },
+      {
+        "tag": "prov-politics", "tagLabel": "매니토바 NDP",
+        "headline": "Kinew 정부, 5/9 세입자 분기별 현금 지원금 지급 개시 — NDP 사회복지 확대 기조",
+        "summary": "매니토바 주정부가 5월 9일 세입자 대상 분기별 현금 지원금 지급 프로그램을 공식 개시. Kinew NDP 정부의 사회복지 지출 확대 기조의 일환. 카놀라·에너지 직접 정책 이슈는 아니나, NDP 재정 지출 기조가 향후 농업·환경 규제 예산 방향에 영향 가능. 파종 지연 관련 농업 긴급지원 발표는 이번 주 없음.",
+        "url": "https://www.chrisd.ca/2026/05/09/manitoba-renters-quarterly-government-cheques/"
+      }
+    ],
+    "risks": {
+      "red": [ "사스카추완·매니토바 동시 파종 지연 (5년 평균 대비 4~6배 격차) — 6월 초까지 기상 회복 없으면 2026 카놀라 수확량 감소 확실시. 원료 조달 단가 상승 리스크 대비 필요" ],
+      "amber": [
+        "카놀라 선물 주간 -$17/T 급락 — 단기 하락세. 원유 변동성이 추가 하락 압력 요인. 원료 조달 계약 시점 재검토 필요",
+        "수출 채널 이번 주 주요 뉴스 없음 — 중국 관세 합의(1월), 미국 RIN 유예(4월)는 기정 사실화. 실제 통관·물동량 데이터 확인 지속 필요"
+      ],
+      "green": [
+        "매니토바 카놀라 예정 재배면적 +4.7% — 파종 지연 해소 시 중장기 공급 원료 확보 기회. 원료 조달 장기 계약 논의 적기",
+        "Carney EU 에너지 협력 강화 — 대미 의존 완화, 카놀라 기반 바이오연료 EU 수출 채널 중장기 확대 가능성"
+      ]
+    },
+    "sources": [
+      { "title": "AM Market Report — May 7, 2026", "url": "https://www.producer.com/am-market-reports/am-market-report-may-7-2026/", "outlet": "The Western Producer", "date": "2026-05-07" },
+      { "title": "AM Market Report — May 4, 2026", "url": "https://www.producer.com/am-market-reports/am-market-report-may-4-2026/", "outlet": "The Western Producer", "date": "2026-05-04" },
+      { "title": "Crop Report for The Period April 28 to May 4, 2026", "url": "https://www.saskatchewan.ca/government/news-and-media/2026/may/07/crop-report-for-the-period-april-28-to-may-4-2026", "outlet": "Government of Saskatchewan", "date": "2026-05-07" },
+      { "title": "Manitoba issues first crop report of the year (2026)", "url": "https://www.620ckrm.com/2026/05/06/manitoba-issues-first-crop-report-of-the-year/", "outlet": "620 CKRM / Manitoba Agriculture", "date": "2026-05-06" },
+      { "title": "PM Carney strengthens trade and security partnerships with European nations", "url": "https://www.pm.gc.ca/en/news/news-releases/2026/05/04/prime-minister-carney-strengthens-trade-and-security-partnerships", "outlet": "Prime Minister of Canada", "date": "2026-05-04" },
+      { "title": "Province Seeks Opinions on Social Media Limits for Youth", "url": "https://www.saskatchewan.ca/government/news-and-media/2026/may/05/province-seeks-opinions-on-social-media-limits-for-youth", "outlet": "Government of Saskatchewan", "date": "2026-05-05" },
+      { "title": "Manitoba Renters to Start Getting Quarterly Cheques from the Government", "url": "https://www.chrisd.ca/2026/05/09/manitoba-renters-quarterly-government-cheques/", "outlet": "ChrisD.ca", "date": "2026-05-09" }
+    ]
+  }
+]
+/* HISTORY_END */;
+
+let currentIndex = 0;
+
+function weekRange(iso) {
+  const d = new Date(iso);
+  const sun = new Date(d); sun.setDate(d.getDate() - 1);
+  const mon = new Date(sun); mon.setDate(sun.getDate() - 6);
+  const fmt = (x) => x.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
+  const fmtFull = (x) => x.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+  return { label: `${fmt(mon)} ~ ${fmt(sun)} 주간`, sub: `${fmtFull(d)} 기준` };
+}
+
+function renderNewsItems(items, sources) {
+  if (!items || !items.length) return '<div class="empty">관련 뉴스 없음</div>';
+  return items.map(item => {
+    const refBadge = item.ref ? (Array.isArray(item.ref) ? item.ref : [item.ref]).map(n => `<sup class="src-ref">[${n}]</sup>`).join('') : '';
+    let url = item.url || null;
+    if (!url && item.ref && !Array.isArray(item.ref) && sources) { const src = sources[item.ref - 1]; if (src && src.url) url = src.url; }
+    const inner = `<span class="tag tag-${(item.tag||'canola-price')}">${item.tagLabel || ''}</span><div class="news-title">${item.headline}${refBadge}</div><div class="news-body">${item.summary}</div>`;
+    if (url) return `<a class="news-item clickable" href="${url}" target="_blank" rel="noopener noreferrer">${inner}</a>`;
+    return `<div class="news-item">${inner}</div>`;
+  }).join('');
+}
+
+function renderRiskItems(items) {
+  if (!items || !items.length) return '<div class="risk-entry" style="color:#bbb;font-style:italic;">해당 없음</div>';
+  return items.map(t => `<div class="risk-entry">${t}</div>`).join('');
+}
+
+function renderSources(sources) {
+  if (!sources || !sources.length) return '<div class="empty">출처 없음</div>';
+  return sources.map((s, i) => `<div class="source-row"><div class="src-num">${i + 1}</div><div><a class="src-link" href="${s.url}" target="_blank">${s.title}</a><div class="src-meta">${s.outlet}${s.date ? ' · ' + s.date : ''}</div></div></div>`).join('');
+}
+
+function renderCropBars(report) {
+  const bars = report.seeding_bars;
+  if (!bars || !bars.length) return '';
+  const wk = weekRange(report.generatedAt);
+  return `<div style="margin-top:12px;padding-top:12px;border-top:1px solid #f5edcc;"><div style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:0.7px;margin-bottom:10px;">파종 진행률 (${wk.sub})</div>${bars.map(b => { const pct = b.actual; const avg = b.avg; const color = pct >= avg ? '#38a169' : (pct >= avg * 0.6 ? '#d69e2e' : '#e53e3e'); return `<div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:#4a3800;margin-bottom:4px;"><span>${b.label}</span><span style="color:${color};font-weight:700;">${pct}% <span style="font-size:10px;color:#999;font-weight:400;">/ 평년 ${avg}%</span></span></div><div style="height:10px;background:#f0e8c0;border-radius:5px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;left:0;height:100%;width:${Math.min(avg,100)}%;background:#e8d870;border-radius:5px;opacity:0.4;"></div><div style="position:absolute;top:0;left:0;height:100%;width:${Math.min(pct,100)}%;background:${color};border-radius:5px;"></div></div></div>`; }).join('')}</div>`;
+}
+
+function renderWeek(index) {
+  const r = REPORT_HISTORY[index];
+  if (!r) return;
+  const content = document.getElementById('reportContent');
+  content.classList.add('fade');
+  setTimeout(() => {
+    const wk = weekRange(r.generatedAt);
+    document.getElementById('navWeekLabel').textContent = index === 0 ? '이번 주 · ' + wk.label : wk.label;
+    document.getElementById('navWeekSub').textContent = wk.sub;
+    document.getElementById('updatedBadge').textContent = `마지막 업데이트: ${wk.sub.replace(' 기준','')}`;
+    const dotsEl = document.getElementById('navDots');
+    dotsEl.innerHTML = REPORT_HISTORY.map((_, i) => `<div class="nav-dot${i === index ? ' active' : ''}" onclick="jumpTo(${i})" title="${weekRange(REPORT_HISTORY[i].generatedAt).label}"></div>`).join('');
+    document.getElementById('btnNewer').disabled = index === 0;
+    document.getElementById('btnOlder').disabled = index === REPORT_HISTORY.length - 1;
+    document.getElementById('cntRed').textContent   = (r.risks?.red   || []).length;
+    document.getElementById('cntAmber').textContent = (r.risks?.amber || []).length;
+    document.getElementById('cntGreen').textContent = (r.risks?.green || []).length;
+    document.getElementById('elSummary').innerHTML        = (r.summary || []).map(s => `<li>${s}</li>`).join('');
+    document.getElementById('elCanolaMarket').innerHTML   = renderNewsItems(r.canola_market, r.sources);
+    document.getElementById('elCropConditions').innerHTML = renderNewsItems(r.canola_crop, r.sources);
+    document.getElementById('elCropBars').innerHTML       = renderCropBars(r);
+    document.getElementById('elExport').innerHTML         = renderNewsItems(r.canola_export, r.sources);
+    document.getElementById('elFederal').innerHTML        = renderNewsItems(r.canada, r.sources);
+    document.getElementById('elProvincial').innerHTML     = renderNewsItems(r.provincial, r.sources);
+    document.getElementById('elRed').innerHTML            = renderRiskItems(r.risks?.red);
+    document.getElementById('elAmber').innerHTML          = renderRiskItems(r.risks?.amber);
+    document.getElementById('elGreen').innerHTML          = renderRiskItems(r.risks?.green);
+    document.getElementById('elSources').innerHTML        = renderSources(r.sources);
+    content.classList.remove('fade');
+  }, 180);
+}
+
+function navigate(delta) {
+  const next = currentIndex + delta;
+  if (next < 0 || next >= REPORT_HISTORY.length) return;
+  currentIndex = next;
+  renderWeek(currentIndex);
+}
+
+function jumpTo(index) { currentIndex = index; renderWeek(currentIndex); }
+
+renderWeek(0);
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+  const btn = document.getElementById('pdfBtnLabel');
+  if (typeof html2pdf === 'undefined') { alert('PDF 라이브러리 로딩 실패. 브라우저 인쇄(Ctrl+P)를 이용해 주세요.'); return; }
+  btn.textContent = '생성 중...';
+  const weekLabel = document.getElementById('navWeekLabel').textContent.trim();
+  const weekSub   = document.getElementById('navWeekSub').textContent.trim();
+  const filename  = 'GreenOil-Canola-' + weekLabel.replace(/\s/g, '') + '.pdf';
+  const opt = { margin:[8,8,8,8], filename, image:{type:'jpeg',quality:0.92}, html2canvas:{scale:2,useCORS:true,logging:false}, jsPDF:{unit:'mm',format:'a4',orientation:'portrait'} };
+  const el = document.getElementById('reportContent');
+  const header = document.createElement('div');
+  header.style.cssText = 'padding:10px 4px 14px;border-bottom:2px solid #c49a00;margin-bottom:16px;';
+  header.innerHTML = '<div style="font-size:11px;color:#888;margin-bottom:3px;">GreenOil Inc. — 카놀라 공급 인텔리전스 리포트</div><div style="font-size:18px;font-weight:700;color:#2a200a;">' + weekLabel + '</div><div style="font-size:11px;color:#666;margin-top:2px;">' + weekSub + '</div>';
+  el.insertBefore(header, el.firstChild);
+  html2pdf().set(opt).from(el).save().then(() => { btn.textContent = 'PDF 저장'; el.removeChild(header); }).catch((err) => { btn.textContent = 'PDF 저장'; if (el.contains(header)) el.removeChild(header); alert('PDF 생성 실패. 브라우저 인쇄(Ctrl+P → PDF 저장)를 이용해 주세요.'); });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Oil UCO — 2026년 2/9 – 2/15 주</title>
+<style>
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+  background: #f0f4f0;
+  color: #1c2e1c;
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── Report Switch Badge ── */
+.report-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.report-switch:hover { background: rgba(255,255,255,0.25); }
+.report-switch .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #fbbf24; flex-shrink: 0;
+}
+
+/* ── PDF Button ── */
+.pdf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.pdf-btn:hover { background: rgba(255,255,255,0.22); }
+.pdf-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Print styles ── */
+@media print {
+  .week-nav, .report-switch, .pdf-btn, .nav-dots { display: none !important; }
+  .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: white; }
+  .container { padding: 0; }
+  .card { break-inside: avoid; }
+  a { text-decoration: none; color: inherit; }
+}
+
+/* ── Header ── */
+.header {
+  background: linear-gradient(135deg, #1a5c1a 0%, #2e8b2e 100%);
+  color: white;
+  padding: 18px 24px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.header-left h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 7px; }
+.header-left .sub { font-size: 11px; opacity: 0.75; margin-top: 3px; letter-spacing: 0.3px; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.updated-badge { font-size: 10px; opacity: 0.65; }
+
+/* ── Week Navigator ── */
+.week-nav {
+  background: white;
+  border-bottom: 1px solid #e0e8e0;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.nav-btn {
+  background: none;
+  border: 1px solid #c8dcc8;
+  border-radius: 8px;
+  padding: 5px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #2e8b2e;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+.nav-btn:hover { background: #eaf4ea; border-color: #2e8b2e; }
+.nav-btn.disabled { opacity: 0.3; pointer-events: none; }
+.nav-center { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+.nav-week-label { font-size: 14px; font-weight: 700; color: #1c2e1c; }
+.nav-week-sub { font-size: 10px; color: #999; }
+.nav-dots { display: flex; gap: 5px; margin-top: 4px; flex-wrap: wrap; justify-content: center; }
+.nav-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #d0e4d0; cursor: pointer; transition: background 0.15s;
+  display: block; text-decoration: none;
+}
+.nav-dot.active { background: #2e8b2e; }
+.nav-dot:hover { background: #7cb87c; }
+
+/* ── Container ── */
+.container { max-width: 920px; margin: 0 auto; padding: 18px 16px 32px; }
+
+/* ── Alert bar ── */
+.alert-bar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.pill {
+  display: flex; align-items: center; gap: 6px;
+  background: white; border-radius: 20px; padding: 5px 13px;
+  font-size: 11px; font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.pill.red   { border-left: 3px solid #e53e3e; color: #c53030; }
+.pill.amber { border-left: 3px solid #d69e2e; color: #975a16; }
+.pill.green { border-left: 3px solid #38a169; color: #22543d; }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.dot.red   { background: #e53e3e; }
+.dot.amber { background: #d69e2e; }
+.dot.green { background: #38a169; }
+
+/* ── Card ── */
+.card { background: white; border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.card-header { display: flex; align-items: center; gap: 9px; margin-bottom: 13px; padding-bottom: 10px; border-bottom: 1px solid #eaf2ea; }
+.card-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.icon-summary { background: #edfaed; }
+.icon-canada  { background: #fff0f0; }
+.icon-export  { background: #eef2ff; }
+.icon-market  { background: #fff8ec; }
+.icon-risk    { background: #fff5f5; }
+.icon-sources { background: #f5f5f5; }
+.icon-prov    { background: #fff3e0; }
+.card-title { font-size: 14px; font-weight: 700; color: #1c2e1c; }
+.card-title span { font-size: 10px; font-weight: 400; color: #888; margin-left: 5px; }
+
+/* ── Two-col ── */
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+@media (max-width: 620px) { .row2 { grid-template-columns: 1fr; } }
+
+/* ── Summary ── */
+.summary-list { list-style: none; }
+.summary-list li { padding: 7px 0 7px 18px; position: relative; border-bottom: 1px solid #f4f4f4; color: #2d3e2d; font-size: 13px; }
+.summary-list li:last-child { border-bottom: none; }
+.summary-list li::before { content: '▸'; position: absolute; left: 0; top: 8px; color: #2e8b2e; font-size: 10px; }
+
+/* ── Sub-label ── */
+.sub-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: #999; margin-bottom: 9px; }
+
+/* ── News item ── */
+.news-item { padding: 9px 0; border-bottom: 1px solid #f4f4f4; }
+.news-item:last-child { border-bottom: none; }
+a.news-item { text-decoration: none; color: inherit; display: block; border-radius: 7px; padding: 9px 8px; margin: 0 -8px; transition: background 0.15s; }
+a.news-item:hover { background: #edf6ed; }
+a.news-item .news-title::after { content: ' ↗'; font-size: 10px; color: #2e8b2e; opacity: 0.6; }
+.tag { display: inline-block; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 3px; }
+.tag-cfr      { background: #e6f4ea; color: #137333; }
+.tag-carbon   { background: #e8f0fe; color: #1558d6; }
+.tag-prov     { background: #fce8e6; color: #c5221f; }
+.tag-prov-politics { background: #fce8e6; color: #c5221f; }
+.tag-eu       { background: #ede7f6; color: #5e35b1; }
+.tag-us       { background: #e8eaed; color: #3c4043; }
+.tag-market   { background: #fff3e0; color: #e65100; }
+.tag-cert     { background: #e0f7fa; color: #006064; }
+.tag-trade    { background: #fce4ec; color: #880e4f; }
+.tag-politics { background: #e8eaf6; color: #283593; }
+.news-title { font-size: 12px; font-weight: 600; color: #1c2e1c; margin-bottom: 2px; }
+.news-body  { font-size: 11px; color: #5a6e5a; line-height: 1.5; }
+
+/* ── Risk radar ── */
+.risk-grid { display: flex; flex-direction: column; gap: 10px; }
+.risk-col { border-radius: 9px; padding: 12px 16px; }
+.risk-col.red   { background: #fff5f5; border: 1px solid #fed7d7; }
+.risk-col.amber { background: #fffbf0; border: 1px solid #fefcbf; }
+.risk-col.green { background: #f0fff4; border: 1px solid #c6f6d5; }
+.risk-col-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+.risk-col.red   .risk-col-title { color: #c53030; }
+.risk-col.amber .risk-col-title { color: #975a16; }
+.risk-col.green .risk-col-title { color: #22543d; }
+.risk-entry { font-size: 12px; color: #4a5568; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.05); line-height: 1.5; }
+.risk-entry:last-child { border-bottom: none; }
+
+/* ── Sources ── */
+.source-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f4f4f4; align-items: flex-start; }
+.source-row:last-child { border-bottom: none; }
+.src-num { width: 20px; height: 20px; flex-shrink: 0; background: #eaf2ea; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #2e8b2e; margin-top: 1px; }
+.src-link { font-size: 12px; font-weight: 600; color: #1a6b3c; text-decoration: none; }
+.src-link:hover { text-decoration: underline; }
+.src-meta { font-size: 10px; color: #aaa; margin-top: 1px; }
+
+/* ── Empty ── */
+.empty { background: #f9f9f9; border-radius: 7px; padding: 14px; text-align: center; color: #bbb; font-size: 12px; font-style: italic; }
+
+/* ── Footer ── */
+.footer { text-align: center; font-size: 10px; color: #bbb; padding: 8px 0 4px; letter-spacing: 0.2px; }
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="header">
+  <div class="header-left">
+    <h1>🌿 Green Oil Inc.</h1>
+    <div class="sub">주간 정책 &amp; 시장 인텔리전스 리포트 · Weekly Intelligence Report</div>
+  </div>
+  <div class="header-right">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="pdf-btn" onclick="downloadPDF()">
+        <svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><rect x="6" y="13" width="12" height="8" rx="1"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/></svg>
+        <span id="pdfBtnLabel">PDF 저장</span>
+      </button>
+      <a class="report-switch" href="../index.html">&#8592; 인덱스</a>
+      <a class="report-switch" href="../canola/2026-05-18.html">
+        <span class="dot"></span>카놀라 리포트 →
+      </a>
+    </div>
+    <div class="updated-badge">마지막 업데이트: 2026.02.16</div>
+  </div>
+</div>
+
+<!-- ── Week Navigator ── -->
+<div class="week-nav">
+  <a class="nav-btn" href="./2026-02-23.html">&#8592; 최신</a>
+  <div class="nav-center">
+    <div class="nav-week-label">2026년 2/9 – 2/15 주</div>
+    <div class="nav-week-sub">2026.02.16 기준</div>
+    <div class="nav-dots">
+<a class="nav-dot" href="./2026-05-18.html" title=""></a>
+<a class="nav-dot" href="./2026-05-11.html" title=""></a>
+<a class="nav-dot" href="./2026-05-05.html" title=""></a>
+<a class="nav-dot" href="./2026-04-28.html" title=""></a>
+<a class="nav-dot" href="./2026-04-21.html" title=""></a>
+<a class="nav-dot" href="./2026-04-14.html" title=""></a>
+<a class="nav-dot" href="./2026-04-07.html" title=""></a>
+<a class="nav-dot" href="./2026-03-30.html" title=""></a>
+<a class="nav-dot" href="./2026-03-23.html" title=""></a>
+<a class="nav-dot" href="./2026-03-16.html" title=""></a>
+<a class="nav-dot" href="./2026-03-09.html" title=""></a>
+<a class="nav-dot" href="./2026-03-02.html" title=""></a>
+<a class="nav-dot" href="./2026-02-23.html" title=""></a>
+<a class="nav-dot active" href="./2026-02-16.html" title=""></a>
+<a class="nav-dot" href="./2026-02-09.html" title=""></a>
+<a class="nav-dot" href="./2026-02-02.html" title=""></a>
+<a class="nav-dot" href="./2026-01-26.html" title=""></a>
+<a class="nav-dot" href="./2026-01-19.html" title=""></a>
+<a class="nav-dot" href="./2026-01-12.html" title=""></a>
+<a class="nav-dot" href="./2026-01-05.html" title=""></a>
+    </div>
+  </div>
+  <a class="nav-btn" href="./2026-02-09.html">이전 &#8594;</a>
+</div>
+
+<div class="container">
+
+  <!-- Alert bar -->
+  <div class="alert-bar">
+    <div class="pill red">  <div class="dot red"></div>  <span>1</span> 관심 요망</div>
+    <div class="pill amber"><div class="dot amber"></div><span>2</span> 모니터링 필요</div>
+    <div class="pill green"><div class="dot green"></div><span>3</span> 기회 요인</div>
+  </div>
+
+  <!-- 1. Executive Summary -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-summary">📋</div>
+      <div class="card-title">이번 주 핵심 요약 <span>Executive Summary</span></div>
+    </div>
+    <ul class="summary-list"><li>중동 지정학적 긴장 에스컬레이션 — 에너지 시장 변동성 확대, UCO 원료 비용 다년 최고치 경신</li><li>독일, 바이오연료 사기 인증서 2년 소급 취소 가능 '신뢰 보호 조항' 시행 확정</li><li>EU 유럽 HVO 가격 2026년 내내 약세 없을 것 — Argus Media 전망</li><li>캐나다 연방 정책이 미국과의 경쟁력 격차 완전 해소에 충분치 않다는 업계 우려 지속</li><li>UCO SAF 원료 비용 상승 → 항공사 SAF 조달 비용 압박 → 가격 전가 논의 활발</li></ul>
+  </div>
+
+  <!-- 2. Risk Radar -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-risk">⚡</div>
+      <div class="card-title">리스크 &amp; 기회 레이더</div>
+    </div>
+    <div class="risk-grid">
+      <div class="risk-col red">
+          <div class="risk-col-title">🔴 관심 요망</div>
+          <div class="risk-entry">지정학적 리스크로 인한 에너지 시장 변동성 — UCO 레스토랑 수거 단가와 수출 단가 간 마진 압박 가능성 모니터링 필요</div>
+        </div>
+      <div class="risk-col amber">
+          <div class="risk-col-title">🟡 모니터링</div>
+          <div class="risk-entry">캐나다 연방-미국 바이오연료 경쟁력 격차 지속 — CFR 개정 효과 미흡 시 국내 생산 기반 약화 가능</div><div class="risk-entry">독일 소급 취소 조항 → 과거 아시아산 UCO와 혼합·거래한 이력 있을 경우 인증 리스크 검토</div>
+        </div>
+      <div class="risk-col green">
+          <div class="risk-col-title">🟢 기회 요인</div>
+          <div class="risk-entry">HVO 가격 강세 지속 전망 → UCO 원료 수출 단가 고공행진 유지</div><div class="risk-entry">SAF 항공사 조달 의무 강제 수요 → UCO 장기 공급 계약 체결 협상력 확보 기회</div><div class="risk-entry">독일 사기 인증서 소급 취소 → 캐나다산 정품 UCO 신뢰도 프리미엄 가시화</div>
+        </div>
+    </div>
+  </div>
+
+  <!-- 3. Federal Policy -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-canada">🍁</div>
+      <div class="card-title">연방 정책 동향 <span>Federal — CFR · 탄소세 · 집권당</span></div>
+    </div>
+    <div class="news-item"><span class="tag tag-cfr">CFR 개정</span><div class="news-title">FCC 보고서: 미국 정책이 캐나다 바이오연료 경쟁력 압박 — 추가 대응 필요</div><div class="news-body">캐나다 농업신용공사(FCC)가 미국의 45Z 세액공제 등 강력한 바이오연료 생산 지원이 캐나다 생산자의 비용 경쟁력을 압박한다는 분석 발간. 연방 $372M 인센티브가 격차를 일부 보완하나 완전한 패리티 달성에는 추가 정책 필요. CFR 크레딧 멀티플라이어 도입이 핵심 보완책.</div></div><div class="news-item"><span class="tag tag-carbon">탄소세</span><div class="news-title">캐나다 CFR 초안 발표 계속 지연 — 업계 불확실성 가중</div><div class="news-body">Canada Gazette Part I에 CFR 초안 발표가 계속 지연됨. 일부 업계는 ECCC가 의견 분석 및 법적 검토에 예상보다 긴 시간을 소요하고 있다고 언급. 발표 전까지 크레딧 멀티플라이어 실제 배율 미확정 상태.</div></div>
+  </div>
+
+  <!-- 4. Provincial Policy -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-prov">🏛️</div>
+      <div class="card-title">주정부 정책 동향 <span>Provincial — Ontario · BC · Alberta · 집권당</span></div>
+    </div>
+    <div class="news-item"><span class="tag tag-prov-politics">온타리오 PC당</span><div class="news-title">Ford 온타리오 주지사, 퀘벡 분리주의 당선 '재앙' 경고 — 캐나다 국가통합 리스크 쟁점화</div><div class="news-body">Ford 주지사가 10월 퀘벡 주 선거에서 분리주의 정당이 집권할 경우 캐나다 전체에 "재앙"이 될 것이라고 경고. Legault 퀘벡 주지사는 타 주의 내정 간섭을 거부. 퀘벡 정치 불안정은 연방 정책 공조(CFR 포함) 및 캐나다 내 원료 수급 계획에 중장기 불확실성 요인.</div></div><div class="news-item"><span class="tag tag-prov-politics">앨버타-BC 갈등</span><div class="news-title">BC-앨버타 파이프라인 협정 갈등 지속 — 주간 에너지 정책 긴장 에너지 공급망에 리스크</div><div class="news-body">BC와 앨버타 간 비투멘 파이프라인 협정 해석 갈등이 계속되며 양 주 에너지 협력 관계 경색. BC의 LCFS 강화 기조와 앨버타의 화석연료 우선 정책이 충돌하며 서부 캐나다 에너지 공급망에 불확실성 제공. 캐나다 서부 지역 바이오연료 공급망 관리 시 주 간 규제 차이 고려 필요.</div></div>
+  </div>
+
+  <!-- 5. Export Markets -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-export">🌍</div>
+      <div class="card-title">수출 시장 정책 <span>EU RED III · 미국 RFS / EPA</span></div>
+    </div>
+    <div class="news-item"><span class="tag tag-eu">EU RED III</span><div class="news-title">독일 사기 인증서 소급 취소 조항 시행 확정 — 2년 소급 효력</div><div class="news-body">독일 환경부가 '신뢰 보호 조항'을 최종 확정하여 사기로 발급된 바이오연료 인증서를 최대 2년 소급해 취소 가능. 중국·아시아발 가짜 UCO 인증서 집중 타깃. 캐나다산 정품 UCO 인증 유지의 중요성이 더욱 부각.</div></div><div class="news-item"><span class="tag tag-eu">EU RED III</span><div class="news-title">Argus: 유럽 HVO 가격 2026년 내내 강세 전망 — 원료 공급 부족 지속</div><div class="news-body">Argus Media가 유럽 HVO 가격이 2026년 전반에 걸쳐 하락하지 않을 것으로 전망. UCO 등 폐기물 원료 공급 부족, RED III 의무 강화, SAF 수요 증가가 복합적 가격 지지 요인. 바이어의 수입 UCO 확보 경쟁 지속 예상.</div></div>
+  </div>
+
+  <!-- 6. UCO Market -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-market">🛢️</div>
+      <div class="card-title">UCO 시장 &amp; 산업 동향 <span>Market Intelligence</span></div>
+    </div>
+    <div class="news-item"><span class="tag tag-market">UCO 가격</span><div class="news-title">지정학적 리스크 에스컬레이션 — UCO 포함 원료 가격 다년 최고치</div><div class="news-body">중동 분쟁 심화로 에너지·원료 시장 전반에 걸쳐 가격 급등. 대두유, UCO, 동물성 지방 등 바이오연료 원료 가격이 다년 최고치를 경신하는 국면. 공급업체로서는 유리하나, 정제 후 재판매하는 수익 구조에서는 매입 단가 상승 압박 동시 발생.</div></div><div class="news-item"><span class="tag tag-market">SAF 시장</span><div class="news-title">UCO 기반 SAF HEFA 온실가스 감축 70~90% — 항공사 수요 견조 지속</div><div class="news-body">UCO 기반 HEFA SAF의 온실가스 감축률 70~90%(화석 대비)로 항공사의 SAF 의무 충족에 가장 적합한 원료임이 재확인. 항공사 조달 비용 상승에도 불구하고 규제 의무로 인해 대체재 없음. UCO 장기 공급 계약 수요 증가.</div></div>
+  </div>
+
+  <!-- 7. Sources -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-sources">🔗</div>
+      <div class="card-title">주요 출처 <span>Sources</span></div>
+    </div>
+        <div class="source-row">
+      <div class="src-num">1</div>
+      <div>
+        <a class="src-link" href="https://www.argusmedia.com/en/news-and-insights/latest-market-news/2766252-viewpoint-european-hvo-prices-unlikely-to-ease-in-2026" target="_blank">Viewpoint: European HVO prices unlikely to ease in 2026</a>
+        <div class="src-meta">Argus Media · 2026-02</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">2</div>
+      <div>
+        <a class="src-link" href="https://www.fcc-fac.ca/en/knowledge/economics/us-policy-impacting-biofuel-potential-canada" target="_blank">U.S. policy impacting biofuel potential in Canada</a>
+        <div class="src-meta">FCC · 2026-02</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">3</div>
+      <div>
+        <a class="src-link" href="https://www.ofimagazine.com/news/germany-and-netherlands-consider-policy-shifts-that-could-reshape-european-biodiesel-demand" target="_blank">Germany and Netherlands consider policy shifts reshaping European biodiesel demand</a>
+        <div class="src-meta">OFI Magazine · 2026-02</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">4</div>
+      <div>
+        <a class="src-link" href="https://carboncredits.com/u-s-biofuel-market-2026-can-epa-policies-offset-war-driven-volatility/" target="_blank">U.S. Biofuel Market 2026: Can EPA Policies Offset War-Driven Volatility?</a>
+        <div class="src-meta">Carbon Credits · 2026-02</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Green Oil Inc. Internal Use Only &nbsp;·&nbsp; Powered by Claude AI &nbsp;·&nbsp; <a href="../index.html" style="color:#bbb;">← 인덱스</a></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+  const btn = document.getElementById('pdfBtnLabel');
+  btn.textContent = '생성 중...';
+  html2pdf().set({
+    margin: [8, 8, 8, 8],
+    filename: 'GreenOil-UCO-2026-02-16.pdf',
+    image: { type: 'jpeg', quality: 0.95 },
+    html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: 'avoid-all' }
+  }).from(document.body).save().then(() => { btn.textContent = 'PDF 저장'; });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOI CS Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg:        #0d1117;
+    --surface:   #161b22;
+    --surface2:  #21262d;
+    --border:    #30363d;
+    --green:     #3fb950;
+    --green-dim: #3fb95020;
+    --orange:    #f0883e;
+    --orange-dim:#f0883e20;
+    --red:       #f85149;
+    --red-dim:   #f8514920;
+    --blue:      #58a6ff;
+    --blue-dim:  #58a6ff20;
+    --yellow:    #e3b341;
+    --yellow-dim:#e3b34120;
+    --purple:    #bc8cff;
+    --purple-dim:#bc8cff20;
+    --text:      #e6edf3;
+    --text-mid:  #8b949e;
+    --text-dim:  #484f58;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); font-family:'Inter',sans-serif; color:var(--text); min-height:100vh; }
+
+  /* HEADER */
+  header {
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+    padding:0 24px;
+    height:58px;
+    display:flex; align-items:center; gap:16px;
+  }
+  .logo { font-size:15px; font-weight:800; color:var(--green); letter-spacing:.5px; }
+  .logo span { color:var(--text-mid); font-weight:400; }
+  .header-mid { flex:1; display:flex; align-items:center; gap:8px; }
+  .date-btn {
+    background:var(--surface2); border:1px solid var(--border);
+    color:var(--text); padding:5px 12px; border-radius:6px;
+    font-size:12px; font-weight:500; cursor:pointer;
+    transition:border-color .15s;
+  }
+  .date-btn:hover, .date-btn.active { border-color:var(--blue); color:var(--blue); }
+  .date-input-wrap { position:relative; }
+  .date-input-wrap input[type=date] {
+    position:absolute; opacity:0; width:100%; height:100%; top:0; left:0; cursor:pointer;
+  }
+  .live-badge {
+    margin-left:auto;
+    background:var(--green-dim); border:1px solid var(--green);
+    color:var(--green); font-size:10px; font-weight:700;
+    padding:3px 10px; border-radius:20px; letter-spacing:1px;
+    display:flex; align-items:center; gap:5px;
+  }
+  .live-dot { width:6px; height:6px; background:var(--green); border-radius:50%; animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  /* MAIN */
+  main { padding:20px 24px; max-width:1600px; margin:0 auto; }
+
+  /* KPI CARDS */
+  .kpi-row { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px; }
+  .kpi {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:10px; padding:16px 20px;
+  }
+  .kpi-label { font-size:11px; font-weight:600; color:var(--text-mid); text-transform:uppercase; letter-spacing:.8px; margin-bottom:8px; }
+  .kpi-value { font-size:32px; font-weight:800; line-height:1; margin-bottom:4px; }
+  .kpi-sub   { font-size:11px; color:var(--text-mid); }
+  .kpi.red    { border-color:var(--red);    background:var(--red-dim); }
+  .kpi.orange { border-color:var(--orange); background:var(--orange-dim); }
+  .kpi.green  { border-color:var(--green);  background:var(--green-dim); }
+  .kpi.blue   { border-color:var(--blue);   background:var(--blue-dim); }
+
+  /* TABS */
+  .tab-bar {
+    display:flex; gap:4px; border-bottom:1px solid var(--border);
+    margin-bottom:16px;
+  }
+  .tab-btn {
+    background:none; border:none; color:var(--text-mid);
+    font-size:13px; font-weight:500; padding:10px 16px;
+    cursor:pointer; border-bottom:2px solid transparent;
+    transition:all .15s; position:relative; bottom:-1px;
+  }
+  .tab-btn:hover { color:var(--text); }
+  .tab-btn.active { color:var(--blue); border-bottom-color:var(--blue); }
+  .tab-count {
+    background:var(--surface2); color:var(--text-mid);
+    font-size:10px; font-weight:700; padding:1px 6px;
+    border-radius:10px; margin-left:6px;
+  }
+  .tab-btn.active .tab-count { background:var(--blue-dim); color:var(--blue); }
+
+  .tab-panel { display:none; }
+  .tab-panel.active { display:block; }
+
+  /* TWO-COL LAYOUT */
+  .two-col { display:grid; grid-template-columns:1fr 340px; gap:16px; min-width:0; }
+  .two-col > div { min-width:0; overflow:hidden; }
+
+  /* SECTION */
+  .section {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:10px; overflow:hidden; margin-bottom:16px;
+  }
+  .section-head {
+    padding:12px 16px; border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .section-title { font-size:13px; font-weight:600; }
+  .section-meta  { font-size:11px; color:var(--text-mid); }
+
+  /* FILTER PILLS */
+  .filter-row { padding:10px 16px; border-bottom:1px solid var(--border); display:flex; gap:6px; }
+  .pill {
+    background:var(--surface2); border:1px solid var(--border);
+    color:var(--text-mid); font-size:11px; font-weight:600;
+    padding:3px 10px; border-radius:20px; cursor:pointer;
+  }
+  .pill.active { background:var(--blue-dim); border-color:var(--blue); color:var(--blue); }
+
+  /* TABLE */
+  .tbl-wrap { overflow-x:auto; max-height:420px; overflow-y:auto; }
+  table { width:100%; border-collapse:collapse; font-size:12px; }
+  th {
+    position:sticky; top:0; background:var(--surface2);
+    padding:8px 12px; text-align:left; font-weight:600;
+    font-size:11px; color:var(--text-mid); text-transform:uppercase;
+    letter-spacing:.5px; border-bottom:1px solid var(--border);
+    white-space:nowrap;
+  }
+  td { padding:8px 12px; border-bottom:1px solid var(--border); vertical-align:top; }
+  tr:last-child td { border-bottom:none; }
+  tr:hover td { background:var(--surface2); }
+
+  .badge {
+    display:inline-block; padding:1px 7px; border-radius:10px;
+    font-size:10px; font-weight:700; white-space:nowrap;
+  }
+  .badge-pending  { background:var(--orange-dim); color:var(--orange); border:1px solid var(--orange); }
+  .badge-done     { background:var(--green-dim);  color:var(--green);  border:1px solid var(--green); }
+  .badge-urgent   { background:var(--red-dim);    color:var(--red);    border:1px solid var(--red); }
+  .badge-note-a   { background:var(--blue-dim);   color:var(--blue);   border:1px solid var(--blue); }
+  .badge-note-d   { background:var(--purple-dim); color:var(--purple); border:1px solid var(--purple); }
+
+  .days-chip {
+    display:inline-block; padding:1px 6px; border-radius:6px;
+    font-size:10px; font-weight:700;
+  }
+  .days-chip.hot    { background:var(--red-dim);    color:var(--red); }
+  .days-chip.warm   { background:var(--orange-dim); color:var(--orange); }
+  .days-chip.cool   { background:var(--yellow-dim); color:var(--yellow); }
+  .days-chip.fresh  { background:var(--green-dim);  color:var(--green); }
+
+  .note-text { max-width:260px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--text-mid); }
+
+  /* DRIVER CHART */
+  .chart-wrap { padding:16px; }
+
+  /* LOADING / ERROR */
+  .state-box {
+    display:flex; flex-direction:column; align-items:center;
+    justify-content:center; min-height:200px; gap:8px; color:var(--text-dim);
+  }
+  .spinner {
+    width:24px; height:24px; border:2px solid var(--border);
+    border-top-color:var(--blue); border-radius:50%;
+    animation:spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  /* RESPONSIVE */
+  @media (max-width:1024px) {
+    .kpi-row { grid-template-columns:repeat(2,1fr); }
+    .two-col { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">GOI <span>CS Dashboard</span></div>
+  <div class="header-mid">
+    <button class="date-btn active" onclick="setToday()" id="btnToday">오늘</button>
+    <button class="date-btn" onclick="setRange(7)"  id="btn7">7일</button>
+    <button class="date-btn" onclick="setRange(30)" id="btn30">30일</button>
+    <button class="date-btn" onclick="setRange(90)" id="btn90">90일</button>
+    <button class="date-btn" onclick="setThisYear()" id="btnThisYear">올해</button>
+    <button class="date-btn" onclick="setLastYear()" id="btnLastYear">1년전</button>
+    <button class="date-btn" onclick="setAllTime()" id="btnAll">전체</button>
+    <button class="date-btn" id="btnCustom" onclick="document.getElementById('customDate').showPicker()">📅 날짜 선택</button>
+    <input type="date" id="customDate" onchange="setCustomDate(this.value)" style="position:absolute;visibility:hidden;width:0;height:0;">
+    <span id="rangeLabel" style="font-size:11px;color:var(--text-mid);margin-left:4px;"></span>
+  </div>
+  <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+  <span id="liveClock" style="font-size:13px;font-variant-numeric:tabular-nums;color:var(--text-mid);letter-spacing:.05em;min-width:56px;text-align:center;"></span>
+  <button onclick="loadData()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text-mid);padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;" onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-mid)'">↺ Refresh</button>
+</header>
+
+<!-- MAIN -->
+<main>
+
+  <!-- KPI CARDS -->
+  <div class="kpi-row">
+    <div class="kpi red">
+      <div class="kpi-label">미처리 요청</div>
+      <div class="kpi-value" id="kpiPending">—</div>
+      <div class="kpi-sub" id="kpiOldest">—</div>
+    </div>
+    <div class="kpi orange">
+      <div class="kpi-label">기간 내 신규</div>
+      <div class="kpi-value" id="kpiPeriod">—</div>
+      <div class="kpi-sub" id="kpiPeriodRange">—</div>
+    </div>
+    <div class="kpi green">
+      <div class="kpi-label">기간 내 완료</div>
+      <div class="kpi-value" id="kpiPeriodDone">—</div>
+      <div class="kpi-sub" id="kpiPeriodDoneRange">—</div>
+    </div>
+    <div class="kpi blue">
+      <div class="kpi-label">오늘 현황</div>
+      <div class="kpi-value" id="kpiToday">—</div>
+      <div class="kpi-sub">신규 / 완료 (Today)</div>
+    </div>
+  </div>
+
+  <!-- CHART: 일별 추이 (full width) -->
+  <div class="section" style="margin-bottom:16px">
+    <div class="section-head">
+      <div class="section-title">📈 일별 신규 vs 완료 추이</div>
+      <div class="section-meta" id="trendRangeLabel">—</div>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="chartDailyTrend" height="70"></canvas>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW 1: driver + staff (stacked) -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">🚗 드라이버별 통계</div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="chartDriverPending" height="160"></canvas>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">📞 접수자별 통계</div>
+        <div class="section-meta" id="staffRangeLabel">—</div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="chartStaff" height="160"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW 2: aging + area + day-of-week -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;align-items:start;">
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">⏳ 미처리 노화 분포</div>
+        <div class="section-meta" id="agingMeta">—</div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="chartAging" height="180"></canvas>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">📍 지역별 요청 분포</div>
+        <div class="section-meta" id="areaMeta">—</div>
+      </div>
+      <div id="areaTableWrap" style="margin-top:8px;"></div>
+    </div>
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">📅 요일별 패턴</div>
+        <div class="section-meta" id="dowMeta">—</div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="chartDow" height="180"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS (full width) -->
+  <div>
+
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="showTab('pending')" id="tabPending">
+          미처리 요청 <span class="tab-count" id="cntPending">0</span>
+        </button>
+        <button class="tab-btn" onclick="showTab('all')" id="tabAll">
+          전체 요청 <span class="tab-count" id="cntAll">0</span>
+        </button>
+        <button class="tab-btn" onclick="showTab('notes')" id="tabNotes">
+          고객 노트 <span class="tab-count" id="cntNotes">0</span>
+        </button>
+      </div>
+
+      <!-- TAB: PENDING -->
+      <div class="tab-panel active" id="panelPending">
+        <div class="section">
+          <div class="section-head">
+            <div class="section-title">⚠️ 미처리 요청 (최신 순)</div>
+            <div class="section-meta" id="pendingMeta">—</div>
+          </div>
+          <div class="tbl-wrap">
+            <table id="tblPending">
+              <thead>
+                <tr>
+                  <th>대기일</th>
+                  <th>요청일</th>
+                  <th>고객명</th>
+                  <th>계정</th>
+                  <th>지역</th>
+                  <th>접수자</th>
+                  <th>담당</th>
+                  <th>노트</th>
+                </tr>
+              </thead>
+              <tbody id="bodyPending"><tr><td colspan="8"><div class="state-box"><div class="spinner"></div></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: ALL REQUESTS -->
+      <div class="tab-panel" id="panelAll">
+        <div class="section">
+          <div class="section-head">
+            <div class="section-title">📋 전체 요청 내역</div>
+            <div class="section-meta" id="allMeta">—</div>
+          </div>
+          <div class="filter-row">
+            <span class="pill active" onclick="filterRequests('all',this)">전체</span>
+            <span class="pill" onclick="filterRequests('A',this)">미처리(A)</span>
+            <span class="pill" onclick="filterRequests('F',this)">완료(F)</span>
+          </div>
+          <div class="tbl-wrap">
+            <table id="tblAll">
+              <thead>
+                <tr>
+                  <th>요청일</th>
+                  <th>고객명</th>
+                  <th>계정</th>
+                  <th>지역</th>
+                  <th>접수자</th>
+                  <th>담당</th>
+                  <th>상태</th>
+                  <th>대기일</th>
+                  <th>노트</th>
+                </tr>
+              </thead>
+              <tbody id="bodyAll"><tr><td colspan="9"><div class="state-box"><div class="spinner"></div></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: NOTES -->
+      <div class="tab-panel" id="panelNotes">
+        <div class="section">
+          <div class="section-head">
+            <div class="section-title">📝 고객 노트</div>
+            <div class="section-meta" id="notesMeta">—</div>
+          </div>
+          <div class="filter-row">
+            <span class="pill active" onclick="filterNotes('all',this)">전체</span>
+            <span class="pill" onclick="filterNotes('A',this)">일반(A)</span>
+            <span class="pill" onclick="filterNotes('D',this)">드라이버(D)</span>
+          </div>
+          <div class="tbl-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>날짜</th>
+                  <th>고객명</th>
+                  <th>계정</th>
+                  <th>지역</th>
+                  <th>타입</th>
+                  <th>내용</th>
+                  <th>작성자</th>
+                </tr>
+              </thead>
+              <tbody id="bodyNotes"><tr><td colspan="7"><div class="state-box"><div class="spinner"></div></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /tabs -->
+
+</main>
+
+<script>
+// ── CONFIG ──────────────────────────────────────
+const PROXY_URL      = '/.netlify/functions/api';
+const REFRESH_MS     = 5 * 60 * 1000;
+
+// ── STATE ───────────────────────────────────────
+let allRequests = [];
+let allNotes    = [];
+let reqFilter   = 'all';
+let noteFilter  = 'all';
+let dateFrom    = fmt(new Date());
+let dateTo      = fmt(new Date());
+let chartDrv    = null;
+let chartStaff  = null;
+let chartTrend  = null;
+let chartAging  = null;
+let chartArea   = null;
+let chartDow      = null;
+let allTimeDowAvg = [0,0,0,0,0,0,0];
+let lastYearDrivers = [];
+let lastYearStaff   = [];
+
+// ── DATE HELPERS ────────────────────────────────
+function yearBack(yyyymmdd) {
+  return `${+yyyymmdd.slice(0,4) - 1}${yyyymmdd.slice(4)}`;
+}
+function toPrevYear(yyyymmdd) {
+  // 항상 전년도(현재 연도 -1) 같은 월/일로 고정
+  const prevYear = new Date().getFullYear() - 1;
+  return `${prevYear}${yyyymmdd.slice(4)}`;
+}
+function fmt(d) {
+  const dd = d instanceof Date ? d : new Date(d);
+  return dd.getFullYear().toString()
+    + String(dd.getMonth()+1).padStart(2,'0')
+    + String(dd.getDate()).padStart(2,'0');
+}
+function daysAgo(n) {
+  const d = new Date(); d.setDate(d.getDate() - n); return d;
+}
+function fmtDisplay(yyyymmdd) {
+  const s = String(yyyymmdd || '');
+  if (!s || s.length < 8) return s;
+  return `${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}`;
+}
+
+const ALL_BTNS = ['btnToday','btn7','btn30','btn90','btnThisYear','btnLastYear','btnAll','btnCustom'];
+function clearBtns() { ALL_BTNS.forEach(id => document.getElementById(id).classList.remove('active')); }
+
+function setToday() {
+  clearBtns();
+  document.getElementById('btnToday').classList.add('active');
+  dateFrom = fmt(new Date());
+  dateTo   = fmt(new Date());
+  document.getElementById('rangeLabel').textContent = `${fmtDisplay(dateFrom)} ~ ${fmtDisplay(dateTo)}`;
+  loadData();
+}
+function setRange(days) {
+  clearBtns();
+  document.getElementById('btn'+days).classList.add('active');
+  dateFrom = fmt(daysAgo(days));
+  dateTo   = fmt(new Date());
+  document.getElementById('rangeLabel').textContent = `${fmtDisplay(dateFrom)} ~ ${fmtDisplay(dateTo)}`;
+  loadData();
+}
+function setThisYear() {
+  clearBtns();
+  document.getElementById('btnThisYear').classList.add('active');
+  const y = new Date().getFullYear();
+  dateFrom = `${y}0101`;
+  dateTo   = fmt(new Date());
+  document.getElementById('rangeLabel').textContent = `${y}년 1월 1일 ~ ${fmtDisplay(dateTo)}`;
+  loadData();
+}
+function setLastYear() {
+  clearBtns();
+  document.getElementById('btnLastYear').classList.add('active');
+  const y = new Date().getFullYear() - 1;
+  dateFrom = `${y}0101`;
+  dateTo   = `${y}1231`;
+  document.getElementById('rangeLabel').textContent = `${y}년 1월 1일 ~ ${y}년 12월 31일`;
+  loadData();
+}
+function setAllTime() {
+  clearBtns();
+  document.getElementById('btnAll').classList.add('active');
+  dateFrom = '20100101';
+  dateTo   = fmt(new Date());
+  document.getElementById('rangeLabel').textContent = `전체 기간 ~ ${fmtDisplay(dateTo)}`;
+  loadData();
+}
+function setCustomDate(val) {
+  clearBtns();
+  document.getElementById('btnCustom').classList.add('active');
+  document.getElementById('btnCustom').textContent = `📅 ${val}`;
+  dateFrom = val.replace(/-/g,'');
+  dateTo   = fmt(new Date());
+  document.getElementById('rangeLabel').textContent = `${val} ~ ${fmtDisplay(dateTo)}`;
+  loadData();
+}
+
+// ── TAB ─────────────────────────────────────────
+function showTab(name) {
+  ['pending','all','notes'].forEach(n => {
+    document.getElementById('tab'+cap(n)).classList.toggle('active', n===name);
+    document.getElementById('panel'+cap(n)).classList.toggle('active', n===name);
+  });
+}
+function cap(s) { return s.charAt(0).toUpperCase()+s.slice(1); }
+
+// ── FILTER ──────────────────────────────────────
+function filterRequests(f, el) {
+  reqFilter = f;
+  document.querySelectorAll('#panelAll .filter-row .pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderAll();
+}
+function filterNotes(f, el) {
+  noteFilter = f;
+  document.querySelectorAll('#panelNotes .filter-row .pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderNotes();
+}
+
+// ── DAYS CHIP ───────────────────────────────────
+function daysChip(days) {
+  if (days === 0) return '';
+  const cls = days > 30 ? 'hot' : days > 14 ? 'warm' : days > 7 ? 'cool' : 'fresh';
+  return `<span class="days-chip ${cls}">${days}d</span>`;
+}
+
+// ── LOAD DATA ────────────────────────────────────
+async function loadData() {
+  try {
+    const lyFrom = yearBack(dateFrom);
+    const lyTo   = yearBack(dateTo);
+    const [res, lyRes] = await Promise.all([
+      fetch(`${PROXY_URL}?type=cs&date_from=${dateFrom}&date_to=${dateTo}`),
+      fetch(`${PROXY_URL}?type=cs&date_from=${lyFrom}&date_to=${lyTo}`),
+    ]);
+    const [json, lyJson] = await Promise.all([res.json(), lyRes.json()]);
+    if (!json.success) throw new Error(json.error || 'API error');
+    lastYearDrivers = lyJson.by_driver || [];
+    lastYearStaff   = lyJson.by_staff  || [];
+
+    // KPIs
+    const s = json.summary;
+    const rangeStr = `${fmtDisplay(dateFrom)} ~ ${fmtDisplay(dateTo)}`;
+    document.getElementById('kpiPending').textContent     = s.total_pending.toLocaleString();
+    document.getElementById('kpiOldest').textContent      = s.oldest_pending_date
+      ? `가장 오래된 미처리: ${s.oldest_pending_days}일 전 (${fmtDisplay(s.oldest_pending_date)})`
+      : '미처리 없음';
+    document.getElementById('kpiPeriod').textContent      = s.period_total.toLocaleString();
+    document.getElementById('kpiPeriodRange').textContent = rangeStr;
+    document.getElementById('kpiPeriodDone').textContent      = (s.period_completed ?? 0).toLocaleString();
+    document.getElementById('kpiPeriodDoneRange').textContent = rangeStr;
+    document.getElementById('kpiToday').textContent       = `${s.today_new} / ${s.today_completed}`;
+
+    // Store data
+    allRequests = json.requests    || [];
+    allNotes    = json.notes       || [];
+    const pending = json.all_pending || [];
+
+    // Tab counts
+    document.getElementById('cntPending').textContent = pending.length;
+    document.getElementById('cntAll').textContent     = allRequests.length;
+    document.getElementById('cntNotes').textContent   = allNotes.length;
+
+    // Render tables
+    renderPending(pending);
+    renderAll();
+    renderNotes();
+    renderDriverChart(json.by_driver || []);
+    renderStaff(json.by_staff || []);
+    renderDailyTrend(json.by_day || []);
+    renderAgingChart(pending);
+    renderAreaChart(json.by_area || []);
+    renderDayOfWeek(json.by_day || []);
+
+  } catch(e) {
+    console.error(e);
+    showError('bodyPending', 8, e.message);
+    showError('bodyAll', 9, e.message);
+    showError('bodyNotes', 7, e.message);
+  }
+}
+
+// ── RENDER: PENDING ─────────────────────────────
+function renderPending(rows) {
+  const total = rows.length;
+  const display = rows.slice(0, 500);
+  document.getElementById('pendingMeta').textContent =
+    total > 500 ? `${total.toLocaleString()}건 중 최신 500건 표시` : `${total}건`;
+  const tbody = document.getElementById('bodyPending');
+  if (!display.length) { tbody.innerHTML = emptyRow(8, '미처리 요청 없음 ✅'); return; }
+
+  tbody.innerHTML = display.map(r => `
+    <tr>
+      <td>${daysChip(r.days_pending)}</td>
+      <td style="white-space:nowrap;color:var(--text-mid)">${r.request_date_fmt}</td>
+      <td style="font-weight:500">${esc(r.customer_name)}</td>
+      <td style="color:var(--text-mid);font-family:'DM Mono',monospace;font-size:11px">${esc(r.account)}</td>
+      <td style="color:var(--text-mid)">${esc(r.area||r.city)}</td>
+      <td><span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--blue)">${esc(r.staff)||'—'}</span></td>
+      <td><span style="font-family:'DM Mono',monospace;font-size:11px">${esc(r.driver)||'—'}</span></td>
+      <td><span class="note-text">${esc(r.note)}</span></td>
+    </tr>`).join('');
+}
+
+// ── RENDER: ALL REQUESTS ────────────────────────
+function renderAll() {
+  const rows = reqFilter === 'all' ? allRequests
+    : allRequests.filter(r => r.status === reqFilter);
+  document.getElementById('allMeta').textContent = `${rows.length}건`;
+  const tbody = document.getElementById('bodyAll');
+  if (!rows.length) { tbody.innerHTML = emptyRow(9, '요청 데이터 없음'); return; }
+
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td style="white-space:nowrap;color:var(--text-mid)">${r.request_date_fmt}</td>
+      <td style="font-weight:500">${esc(r.customer_name)}</td>
+      <td style="color:var(--text-mid);font-family:'DM Mono',monospace;font-size:11px">${esc(r.account)}</td>
+      <td style="color:var(--text-mid)">${esc(r.area||r.city)}</td>
+      <td><span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--blue)">${esc(r.staff)||'—'}</span></td>
+      <td><span style="font-family:'DM Mono',monospace;font-size:11px">${esc(r.driver)||'—'}</span></td>
+      <td>${r.status==='A'
+        ? '<span class="badge badge-pending">미처리</span>'
+        : '<span class="badge badge-done">완료</span>'}</td>
+      <td>${r.days_pending ? daysChip(r.days_pending) : '—'}</td>
+      <td><span class="note-text">${esc(r.note)}</span></td>
+    </tr>`).join('');
+}
+
+// ── RENDER: STAFF STATS ──────────────────────────
+function renderStaff(rows) {
+  document.getElementById('staffRangeLabel').textContent =
+    `${fmtDisplay(dateFrom)} ~ ${fmtDisplay(dateTo)}`;
+
+  const ctx = document.getElementById('chartStaff').getContext('2d');
+  if (chartStaff) chartStaff.destroy();
+  if (!rows.length) return;
+
+  const labels    = rows.map(s => s.staff || '?');
+  const pending   = rows.map(s => +s.pending);
+  const completed = rows.map(s => +s.completed);
+
+  const lyMap  = {};
+  lastYearStaff.forEach(s => { lyMap[s.staff] = (+s.completed) + (+s.pending); });
+  const lyData = labels.map(name => lyMap[name] || 0);
+
+  chartStaff = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label:'완료',      data:completed, backgroundColor:'#3fb950aa', borderColor:'#3fb950', borderWidth:1, order:2 },
+        { label:'미처리',    data:pending,   backgroundColor:'#f85149aa', borderColor:'#f85149', borderWidth:1, order:2 },
+        { type:'line', label:'1년전 합계', data:lyData, borderColor:'#f0a43a', backgroundColor:'transparent', borderWidth:2, pointRadius:4, pointBackgroundColor:'#f0a43a', tension:0.3, order:1 },
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color:'#8b949e', font:{size:11}, boxWidth:12 } } },
+      scales: {
+        x: { stacked:true, ticks:{color:'#8b949e', font:{size:11}}, grid:{color:'#30363d'} },
+        y: { stacked:true, ticks:{color:'#8b949e', font:{size:10}}, grid:{color:'#30363d'}, beginAtZero:true },
+      }
+    }
+  });
+}
+
+// ── RENDER: NOTES ───────────────────────────────
+function renderNotes() {
+  const rows = noteFilter === 'all' ? allNotes
+    : allNotes.filter(n => n.type === noteFilter);
+  document.getElementById('notesMeta').textContent = `${rows.length}건`;
+  const tbody = document.getElementById('bodyNotes');
+  if (!rows.length) { tbody.innerHTML = emptyRow(7, '노트 없음'); return; }
+
+  tbody.innerHTML = rows.map(n => `
+    <tr>
+      <td style="white-space:nowrap;color:var(--text-mid)">${n.date_fmt}</td>
+      <td style="font-weight:500">${esc(n.customer_name)}</td>
+      <td style="color:var(--text-mid);font-family:'DM Mono',monospace;font-size:11px">${esc(n.account)}</td>
+      <td style="color:var(--text-mid)">${esc(n.area||n.city)}</td>
+      <td>${n.type==='A'
+        ? '<span class="badge badge-note-a">일반</span>'
+        : '<span class="badge badge-note-d">드라이버</span>'}</td>
+      <td><span class="note-text">${esc(n.note)}</span></td>
+      <td style="color:var(--text-mid);font-size:11px">${esc(n.author)}</td>
+    </tr>`).join('');
+}
+
+// ── RENDER: DRIVER CHART ─────────────────────────
+function renderDriverChart(drivers) {
+  const ctx = document.getElementById('chartDriverPending').getContext('2d');
+  if (chartDrv) chartDrv.destroy();
+
+  const filtered = drivers.slice(0, 16);
+  const labels   = filtered.map(d => d.driver || '?');
+  const pending  = filtered.map(d => +d.pending);
+  const completed= filtered.map(d => +d.completed);
+
+  const lyMap  = {};
+  lastYearDrivers.forEach(d => { lyMap[d.driver] = (+d.completed) + (+d.pending); });
+  const lyData = labels.map(name => lyMap[name] || 0);
+
+  chartDrv = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label:'완료',      data:completed, backgroundColor:'#3fb950aa', borderColor:'#3fb950', borderWidth:1, order:2 },
+        { label:'미처리',    data:pending,   backgroundColor:'#f85149aa', borderColor:'#f85149', borderWidth:1, order:2 },
+        { type:'line', label:'1년전 합계', data:lyData, borderColor:'#f0a43a', backgroundColor:'transparent', borderWidth:2, pointRadius:4, pointBackgroundColor:'#f0a43a', tension:0.3, order:1 },
+      ]
+    },
+    options: {
+      responsive:true,
+      plugins: { legend:{ labels:{ color:'#8b949e', font:{size:11}, boxWidth:12 } } },
+      scales: {
+        x:{ stacked:true, ticks:{color:'#8b949e',font:{size:10}}, grid:{color:'#30363d'} },
+        y:{ stacked:true, ticks:{color:'#8b949e',font:{size:10}}, grid:{color:'#30363d'}, beginAtZero:true },
+      }
+    }
+  });
+}
+
+// ── RENDER: DAILY TREND ──────────────────────────
+function renderDailyTrend(byDay) {
+  document.getElementById('trendRangeLabel').textContent =
+    `${fmtDisplay(dateFrom)} ~ ${fmtDisplay(dateTo)}`;
+  const ctx = document.getElementById('chartDailyTrend').getContext('2d');
+  if (chartTrend) chartTrend.destroy();
+  if (!byDay.length) return;
+
+  const labels    = byDay.map(d => fmtDisplay(d.date));
+  const totals    = byDay.map(d => +d.total);
+  const completed = byDay.map(d => +d.completed);
+
+  chartTrend = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label:'신규', data:totals,    borderColor:'#58a6ff', backgroundColor:'#58a6ff18', tension:0.3, fill:true, pointRadius:3, borderWidth:2 },
+        { label:'완료', data:completed, borderColor:'#3fb950', backgroundColor:'#3fb95018', tension:0.3, fill:true, pointRadius:3, borderWidth:2 },
+      ]
+    },
+    options: {
+      responsive:true,
+      plugins: { legend:{ labels:{ color:'#8b949e', font:{size:11} } } },
+      scales: {
+        x:{ ticks:{color:'#8b949e', font:{size:10}, maxTicksLimit:14}, grid:{color:'#30363d'} },
+        y:{ ticks:{color:'#8b949e', font:{size:10}}, grid:{color:'#30363d'}, beginAtZero:true },
+      }
+    }
+  });
+}
+
+// ── RENDER: AGING DONUT ──────────────────────────
+function getRangeDays() {
+  const from = new Date(+dateFrom.slice(0,4), +dateFrom.slice(4,6)-1, +dateFrom.slice(6,8));
+  const to   = new Date(+dateTo.slice(0,4),   +dateTo.slice(4,6)-1,   +dateTo.slice(6,8));
+  return Math.max(1, Math.round((to - from) / 86400000) + 1);
+}
+
+function renderAgingChart(allPending) {
+  const ctx = document.getElementById('chartAging').getContext('2d');
+  if (chartAging) chartAging.destroy();
+
+  const days = getRangeDays();
+  let data, labels, colors;
+
+  if (days > 730) {
+    // 전체 기간: 연도 단위 4구간
+    const b = [0, 0, 0, 0];
+    (allPending || []).forEach(r => {
+      const d = +r.days_pending;
+      if      (d <= 365)  b[0]++;
+      else if (d <= 730)  b[1]++;
+      else if (d <= 1095) b[2]++;
+      else                b[3]++;
+    });
+    labels = ['0-1년', '1-2년', '2-3년', '3년+'];
+    colors = ['#3fb950cc','#58a6ffcc','#f0a43acc','#f85149cc'];
+    data   = b;
+    document.getElementById('agingMeta').textContent = `총 ${(allPending||[]).length.toLocaleString()}건`;
+  } else {
+    // 선택 기간 내만 필터 → 3등분
+    const inRange = (allPending || []).filter(r => +r.days_pending <= days);
+    const t = Math.ceil(days / 3);
+    const b = [0, 0, 0];
+    inRange.forEach(r => {
+      const d = +r.days_pending;
+      if      (d <= t)     b[0]++;
+      else if (d <= t * 2) b[1]++;
+      else                 b[2]++;
+    });
+    labels = [`0-${t}일`, `${t+1}-${t*2}일`, `${t*2+1}-${days}일`];
+    colors = ['#3fb950cc','#58a6ffcc','#f0a43acc'];
+    data   = b;
+    document.getElementById('agingMeta').textContent = `${inRange.length.toLocaleString()}건`;
+  }
+
+  chartAging = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: colors,
+        borderColor: '#161b22', borderWidth: 2,
+      }]
+    },
+    options: {
+      responsive:true,
+      plugins: {
+        legend:{ position:'right', labels:{ color:'#8b949e', font:{size:11}, padding:10 } },
+      }
+    }
+  });
+}
+
+// ── RENDER: AREA TABLE ───────────────────────────
+function renderAreaChart(byArea) {
+  const wrap = document.getElementById('areaTableWrap');
+  if (!byArea.length) { wrap.innerHTML = ''; document.getElementById('areaMeta').textContent = '—'; return; }
+
+  const total = byArea.reduce((a,r)=>a+(+r.total),0);
+  document.getElementById('areaMeta').textContent = `${total.toLocaleString()}건`;
+
+  const rows = byArea.map(r => {
+    const cnt  = +r.total;
+    const pct  = total ? (cnt/total*100).toFixed(1) : '0.0';
+    const bar  = Math.round(cnt/total*100);
+    return `<tr>
+      <td style="padding:5px 8px;color:var(--text);font-size:12px;">${r.area||'기타'}</td>
+      <td style="padding:5px 8px;color:var(--blue);font-size:12px;text-align:right;white-space:nowrap;">${cnt.toLocaleString()}</td>
+      <td style="padding:5px 8px;min-width:90px;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div style="flex:1;background:var(--surface2);border-radius:3px;height:6px;">
+            <div style="width:${bar}%;background:var(--blue);border-radius:3px;height:6px;"></div>
+          </div>
+          <span style="color:var(--text-mid);font-size:11px;width:36px;text-align:right;">${pct}%</span>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+
+  wrap.innerHTML = `<table style="width:100%;border-collapse:collapse;">
+    <thead>
+      <tr style="border-bottom:1px solid var(--border);">
+        <th style="padding:4px 8px;color:var(--text-mid);font-size:11px;font-weight:500;text-align:left;">지역</th>
+        <th style="padding:4px 8px;color:var(--text-mid);font-size:11px;font-weight:500;text-align:right;">건수</th>
+        <th style="padding:4px 8px;color:var(--text-mid);font-size:11px;font-weight:500;">비율</th>
+      </tr>
+    </thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+// ── RENDER: DAY-OF-WEEK ──────────────────────────
+function renderDayOfWeek(byDay) {
+  const ctx = document.getElementById('chartDow').getContext('2d');
+  if (chartDow) chartDow.destroy();
+  if (!byDay.length) return;
+
+  const counts = [0,0,0,0,0,0,0];
+  const occ    = [0,0,0,0,0,0,0];
+  byDay.forEach(d => {
+    const s = String(d.date);
+    if (s.length === 8) {
+      const dt  = new Date(+s.slice(0,4), +s.slice(4,6)-1, +s.slice(6,8));
+      const dow = dt.getDay();
+      counts[dow] += +d.total;
+      occ[dow]++;
+    }
+  });
+  const avgs = counts.map((c,i) => occ[i] ? +(c/occ[i]).toFixed(1) : 0);
+  const days  = ['일','월','화','수','목','금','토'];
+  const overall = +(avgs.reduce((a,b)=>a+b,0) / avgs.filter(v=>v>0).length || 0).toFixed(1);
+  document.getElementById('dowMeta').textContent = `기간 일 평균 ${overall}건`;
+
+  chartDow = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: days,
+      datasets: [
+        {
+          type: 'bar',
+          label: '기간 평균',
+          data: avgs,
+          backgroundColor: avgs.map((_,i)=>(i===0||i===6)?'#f85149aa':'#58a6ffaa'),
+          borderColor:     avgs.map((_,i)=>(i===0||i===6)?'#f85149':'#58a6ff'),
+          borderWidth: 1,
+          order: 2,
+        },
+        {
+          type: 'line',
+          label: '전년도 평균',
+          data: allTimeDowAvg,
+          borderColor: '#f0a43a',
+          backgroundColor: 'transparent',
+          borderWidth: 2,
+          pointRadius: 4,
+          pointBackgroundColor: '#f0a43a',
+          tension: 0.3,
+          order: 1,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display:true, labels:{ color:'#8b949e', font:{size:11}, boxWidth:12 } },
+        tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.parsed.y}건` } }
+      },
+      scales: {
+        x:{ ticks:{color:'#8b949e', font:{size:13, weight:'600'}}, grid:{color:'#30363d'} },
+        y:{ ticks:{color:'#8b949e', font:{size:10}}, grid:{color:'#30363d'}, beginAtZero:true },
+      }
+    }
+  });
+}
+
+async function loadAllTimeDowAvg() {
+  try {
+    const prevYear = new Date().getFullYear() - 1;
+    const from = `${prevYear}0101`;
+    const to   = `${prevYear}1231`;
+    const res  = await fetch(`/.netlify/functions/api?type=cs&from=${from}&to=${to}`);
+    const json = await res.json();
+    const counts = [0,0,0,0,0,0,0];
+    const occ    = [0,0,0,0,0,0,0];
+    (json.by_day || []).forEach(d => {
+      const s = String(d.date);
+      if (s.length === 8) {
+        const dt  = new Date(+s.slice(0,4), +s.slice(4,6)-1, +s.slice(6,8));
+        const dow = dt.getDay();
+        counts[dow] += +d.total;
+        occ[dow]++;
+      }
+    });
+    allTimeDowAvg = counts.map((c,i) => occ[i] ? +(c/occ[i]).toFixed(1) : 0);
+  } catch(e) {
+    console.warn('전년도 요일 평균 로드 실패', e);
+  }
+}
+
+// ── UTILS ────────────────────────────────────────
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function emptyRow(cols, msg) {
+  return `<tr><td colspan="${cols}"><div class="state-box" style="min-height:80px">${msg}</div></td></tr>`;
+}
+function showError(bodyId, cols, msg) {
+  document.getElementById(bodyId).innerHTML = emptyRow(cols, `❌ ${msg}`);
+}
+
+// ── INIT ─────────────────────────────────────────
+document.getElementById('rangeLabel').textContent =
+  `${fmtDisplay(dateFrom)} ~ ${fmtDisplay(dateTo)}`;
+
+loadAllTimeDowAvg();
+loadData();
+setInterval(loadData, REFRESH_MS);
+
+(function tickClock() {
+  const now = new Date();
+  const hh = String(now.getHours()).padStart(2,'0');
+  const mm = String(now.getMinutes()).padStart(2,'0');
+  const ss = String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('liveClock').textContent = `${hh}:${mm}:${ss}`;
+  setTimeout(tickClock, 1000);
+})();
+</script>
+</body>
+</html>

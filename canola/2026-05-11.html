@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Oil 카놀라 — 2026년 5/4 – 5/10 주</title>
+<style>
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+  background: #f5f2e8;
+  color: #2a200a;
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.report-switch {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 20px; padding: 5px 12px;
+  font-size: 11px; font-weight: 600; color: #fff;
+  text-decoration: none; white-space: nowrap; transition: background 0.15s;
+}
+.report-switch:hover { background: rgba(255,255,255,0.25); }
+.report-switch .dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; flex-shrink: 0; }
+
+.pdf-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px; padding: 5px 12px;
+  font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.85);
+  cursor: pointer; font-family: inherit; transition: background 0.15s;
+}
+.pdf-btn:hover { background: rgba(255,255,255,0.22); }
+.pdf-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+@media print {
+  .week-nav, .report-switch, .pdf-btn, .nav-dots { display: none !important; }
+  .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: white; }
+  .container { padding: 0; }
+  .card { break-inside: avoid; }
+  a { text-decoration: none; color: inherit; }
+}
+
+.header {
+  background: linear-gradient(135deg, #7a5c00 0%, #c49a00 100%);
+  color: white; padding: 18px 24px 16px;
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+.header-left h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 7px; }
+.header-left .sub { font-size: 11px; opacity: 0.75; margin-top: 3px; letter-spacing: 0.3px; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.updated-badge { font-size: 10px; opacity: 0.65; }
+
+.week-nav {
+  background: white; border-bottom: 1px solid #e8dfa8;
+  padding: 10px 24px; display: flex; align-items: center;
+  justify-content: space-between; gap: 12px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.nav-btn {
+  background: none; border: 1px solid #d4b800;
+  border-radius: 8px; padding: 5px 13px;
+  font-size: 12px; font-weight: 600; color: #8a6800;
+  cursor: pointer; transition: all 0.15s;
+  display: inline-flex; align-items: center; gap: 5px;
+  text-decoration: none;
+}
+.nav-btn:hover { background: #fdf8e0; border-color: #c49a00; }
+.nav-btn.disabled { opacity: 0.3; pointer-events: none; }
+.nav-center { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+.nav-week-label { font-size: 14px; font-weight: 700; color: #2a200a; }
+.nav-week-sub { font-size: 10px; color: #999; }
+.nav-dots { display: flex; gap: 5px; margin-top: 4px; flex-wrap: wrap; justify-content: center; }
+.nav-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #e8dfa8; cursor: pointer; transition: background 0.15s;
+  display: block; text-decoration: none;
+}
+.nav-dot.active { background: #c49a00; }
+.nav-dot:hover { background: #d4b800; }
+
+.container { max-width: 920px; margin: 0 auto; padding: 18px 16px 32px; }
+
+.alert-bar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.pill {
+  display: flex; align-items: center; gap: 6px;
+  background: white; border-radius: 20px; padding: 5px 13px;
+  font-size: 11px; font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.pill.red   { border-left: 3px solid #e53e3e; color: #c53030; }
+.pill.amber { border-left: 3px solid #d69e2e; color: #975a16; }
+.pill.green { border-left: 3px solid #38a169; color: #22543d; }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.dot.red   { background: #e53e3e; }
+.dot.amber { background: #d69e2e; }
+.dot.green { background: #38a169; }
+
+.card { background: white; border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.card-header { display: flex; align-items: center; gap: 9px; margin-bottom: 13px; padding-bottom: 10px; border-bottom: 1px solid #f5edcc; }
+.card-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.icon-summary  { background: #fdf8e0; }
+.icon-canada   { background: #fff0f0; }
+.icon-prov     { background: #fff3e0; }
+.icon-price    { background: #fdf8e0; }
+.icon-crop     { background: #f0fdf0; }
+.icon-export   { background: #eef2ff; }
+.icon-risk     { background: #fff5f5; }
+.icon-sources  { background: #f5f5f5; }
+.card-title { font-size: 14px; font-weight: 700; color: #2a200a; }
+.card-title span { font-size: 10px; font-weight: 400; color: #888; margin-left: 5px; }
+
+.summary-list { list-style: none; }
+.summary-list li { padding: 7px 0 7px 18px; position: relative; border-bottom: 1px solid #f9f4e0; color: #3a2c0a; font-size: 13px; }
+.summary-list li:last-child { border-bottom: none; }
+.summary-list li::before { content: '▸'; position: absolute; left: 0; top: 8px; color: #c49a00; font-size: 10px; }
+
+.news-item { padding: 9px 0; border-bottom: 1px solid #f9f4e0; }
+.news-item:last-child { border-bottom: none; }
+a.news-item { text-decoration: none; color: inherit; display: block; border-radius: 7px; padding: 9px 8px; margin: 0 -8px; transition: background 0.15s; }
+a.news-item:hover { background: #fdf8e0; }
+a.news-item .news-title::after { content: ' ↗'; font-size: 10px; color: #c49a00; opacity: 0.6; }
+.tag { display: inline-block; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 3px; }
+.tag-cfr           { background: #e6f4ea; color: #137333; }
+.tag-carbon        { background: #e8f0fe; color: #1558d6; }
+.tag-prov          { background: #fce8e6; color: #c5221f; }
+.tag-politics      { background: #e8eaf6; color: #283593; }
+.tag-prov-politics { background: #fff3e0; color: #8a4500; }
+.tag-canola-price  { background: #fdf8e0; color: #7a5c00; }
+.tag-canola-crop   { background: #e8f5e9; color: #1b5e20; }
+.tag-canola-export { background: #e3f2fd; color: #0d47a1; }
+.tag-canola-policy { background: #fce4ec; color: #880e4f; }
+.tag-us            { background: #e8eaed; color: #3c4043; }
+.tag-eu            { background: #ede7f6; color: #5e35b1; }
+.tag-trade         { background: #fce4ec; color: #880e4f; }
+.news-title { font-size: 12px; font-weight: 600; color: #2a200a; margin-bottom: 2px; }
+.news-body  { font-size: 11px; color: #6b5c30; line-height: 1.5; }
+
+.risk-grid { display: flex; flex-direction: column; gap: 10px; }
+.risk-col { border-radius: 9px; padding: 12px 16px; }
+.risk-col.red   { background: #fff5f5; border: 1px solid #fed7d7; }
+.risk-col.amber { background: #fffbf0; border: 1px solid #fefcbf; }
+.risk-col.green { background: #f0fff4; border: 1px solid #c6f6d5; }
+.risk-col-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+.risk-col.red   .risk-col-title { color: #c53030; }
+.risk-col.amber .risk-col-title { color: #975a16; }
+.risk-col.green .risk-col-title { color: #22543d; }
+.risk-entry { font-size: 12px; color: #4a5568; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.05); line-height: 1.5; }
+.risk-entry:last-child { border-bottom: none; }
+
+.source-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f9f4e0; align-items: flex-start; }
+.source-row:last-child { border-bottom: none; }
+.src-num { width: 20px; height: 20px; flex-shrink: 0; background: #fdf0a0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #8a6800; margin-top: 1px; }
+.src-link { font-size: 12px; font-weight: 600; color: #7a5c00; text-decoration: none; }
+.src-link:hover { text-decoration: underline; }
+.src-meta { font-size: 10px; color: #aaa; margin-top: 1px; }
+
+.empty { background: #fdf8e8; border-radius: 7px; padding: 14px; text-align: center; color: #bbb; font-size: 12px; font-style: italic; }
+.footer { text-align: center; font-size: 10px; color: #bbb; padding: 8px 0 4px; letter-spacing: 0.2px; }
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="header">
+  <div class="header-left">
+    <h1>🌾 Green Oil Inc.</h1>
+    <div class="sub">카놀라 공급 &amp; 정책 인텔리전스 리포트 · Canola Supply &amp; Policy Intelligence</div>
+  </div>
+  <div class="header-right">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="pdf-btn" onclick="downloadPDF()">
+        <svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><rect x="6" y="13" width="12" height="8" rx="1"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/></svg>
+        <span id="pdfBtnLabel">PDF 저장</span>
+      </button>
+      <a class="report-switch" href="../index.html">&#8592; 인덱스</a>
+      <a class="report-switch" href="../uco/2026-05-18.html">
+        <span class="dot"></span>UCO 리포트 →
+      </a>
+    </div>
+    <div class="updated-badge">마지막 업데이트: 2026.05.11</div>
+  </div>
+</div>
+
+<!-- ── Week Navigator ── -->
+<div class="week-nav">
+  <a class="nav-btn" href="./2026-05-18.html">&#8592; 최신</a>
+  <div class="nav-center">
+    <div class="nav-week-label">2026년 5/4 – 5/10 주</div>
+    <div class="nav-week-sub">2026.05.11 기준</div>
+    <div class="nav-dots">
+<a class="nav-dot" href="./2026-05-18.html"></a>
+<a class="nav-dot  active" href="./2026-05-11.html"></a>
+    </div>
+  </div>
+  <a class="nav-btn disabled" href="#">이전 &#8594;</a>
+</div>
+
+<div class="container">
+
+  <!-- Alert bar -->
+  <div class="alert-bar">
+    <div class="pill red">  <div class="dot red"></div>  <span>1</span> 관심 요망</div>
+    <div class="pill amber"><div class="dot amber"></div><span>2</span> 모니터링 필요</div>
+    <div class="pill green"><div class="dot green"></div><span>2</span> 기회 요인</div>
+  </div>
+
+  <!-- 1. Executive Summary -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-summary">📋</div>
+      <div class="card-title">이번 주 핵심 요약 <span>Executive Summary</span></div>
+    </div>
+    <ul class="summary-list"><li>ICE 카놀라 선물 주간 -$17/T 하락 (Jul26: $756→$738) — 원유 시장 급락·식물유 동반 약세, 중동 긴장이 유일한 하방 지지</li><li>사스카추완 작황보고서(5/7, 4/28~5/4 기간): 파종 3% — 5년 평균(12%)·10년 평균(13%) 크게 하회. 냉해·침수·결빙 토양으로 대폭 지연</li><li>매니토바 2026 첫 작황보고(5/5): 파종 2% — 전년(8%)·5년 평균(6%) 하회. 두 핵심 생산주 동시 지연으로 2026 작황 불확실성 최고조</li><li>Carney 총리, 5/4 유럽정치공동체(EPC) 서밋 — EU·프랑스·이탈리아 등과 에너지·핵심광물 협력 논의, 대미 의존 다각화 기조 재확인</li><li>Moe 사스카추완, 5/5 청소년 소셜미디어 규제 의견수렴 착수 — 매니토바에 이어 두 번째 서부 핵심 주의 소셜미디어 규제 움직임</li></ul>
+  </div>
+
+  <!-- 2. Risk Radar -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-risk">⚡</div>
+      <div class="card-title">리스크 &amp; 기회 레이더</div>
+    </div>
+    <div class="risk-grid">
+      <div class="risk-col red">
+        <div class="risk-col-title">🔴 관심 요망</div>
+        <div class="risk-entry">사스카추완·매니토바 동시 파종 지연 (5년 평균 대비 4~6배 격차) — 6월 초까지 기상 회복 없으면 2026 카놀라 수확량 감소 확실시. 원료 조달 단가 상승 리스크 대비 필요</div>
+      </div>
+      <div class="risk-col amber">
+        <div class="risk-col-title">🟡 모니터링</div>
+        <div class="risk-entry">카놀라 선물 주간 -$17/T 급락 — 단기 하락세. 원유 변동성이 추가 하락 압력 요인. 원료 조달 계약 시점 재검토 필요</div><div class="risk-entry">수출 채널 이번 주 주요 뉴스 없음 — 중국 관세 합의(1월), 미국 RIN 유예(4월)는 기정 사실화. 실제 통관·물동량 데이터 확인 지속 필요</div>
+      </div>
+      <div class="risk-col green">
+        <div class="risk-col-title">🟢 기회 요인</div>
+        <div class="risk-entry">매니토바 카놀라 예정 재배면적 +4.7% — 파종 지연 해소 시 중장기 공급 원료 확보 기회. 원료 조달 장기 계약 논의 적기</div><div class="risk-entry">Carney EU 에너지 협력 강화 — 대미 의존 완화, 카놀라 기반 바이오연료 EU 수출 채널 중장기 확대 가능성</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Canola Market -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-price">🌾</div>
+      <div class="card-title">카놀라 시장 가격 &amp; 수급 <span>Price · Supply · Demand</span></div>
+    </div>
+    <a class="news-item" href="https://www.producer.com/am-market-reports/am-market-report-may-7-2026/" target="_blank" rel="noopener noreferrer"><span class="tag tag-canola-price">카놀라 가격</span><div class="news-title">ICE 카놀라 Jul26 선물 주간 -$17/T 하락 ($756→$738) — 원유 급락·식물유 동반 약세</div><div class="news-body">5월 4일 Jul26 선물 $756.30/T에서 출발해 5월 7일 $738.90/T까지 하락, 주간 -$17/T(-2.3%). 5월 6일 원유 시장 급락이 트리거로 작용하며 식물유 전반이 동반 하락. 4월 말 4개월 고점 $760 이상에서 되돌림. 중동 호르무즈 해협 긴장이 추가 하락의 유일한 완충재. 파종 지연으로 인한 공급 우려는 아직 가격에 충분히 반영되지 않은 상태.</div></a>
+  </div>
+
+  <!-- 4. Crop Conditions + Seeding Bars -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-crop">🌱</div>
+      <div class="card-title">작황 &amp; 파종 동향 <span>Crop Conditions — SK · MB · AB</span></div>
+    </div>
+    <a class="news-item" href="https://www.saskatchewan.ca/government/news-and-media/2026/may/07/crop-report-for-the-period-april-28-to-may-4-2026" target="_blank" rel="noopener noreferrer"><span class="tag tag-canola-crop">사스카추완 작황</span><div class="news-title">사스카추완 작황보고서(5/7): 파종 3% — 5년 평균(12%)·10년 평균(13%) 크게 하회</div><div class="news-body">5월 7일 발표 작황보고서(4/28~5/4 기간): 전체 파종 3%, 카놀라·겨자 오일씨드 3%, 아마 2%. 5년 평균(12%)·10년 평균(13%) 모두 크게 하회. 냉해, 결빙 토양, 침수 도로가 장애. 지역별: 남서부 7%, 남동부 5%, 나머지 지역 1% 이하. 2026 카놀라 예정 면적 1,220만 에이커 기준, 지연 장기화 시 수확량 감소 직결.</div></a><a class="news-item" href="https://www.620ckrm.com/2026/05/06/manitoba-issues-first-crop-report-of-the-year/" target="_blank" rel="noopener noreferrer"><span class="tag tag-canola-crop">매니토바 작황</span><div class="news-title">매니토바 2026 첫 작황보고(5/5): 파종 2% — 전년(8%)·5년 평균(6%) 하회, 카놀라 사실상 미착수</div><div class="news-body">5월 5일 발표된 매니토바 2026년 첫 주간 작황보고: 파종 2%로 전년(8%)·5년 평균(6%) 하회. 영하 기온, 저강수량, 강풍으로 작업 난항. 1번 도로 남쪽에서 완두·봄밀 중심 제한 진행, 카놀라는 사실상 미착수. 예정 면적 320만 에이커(전년 대비 +4.7%). 사스카추완과 동시 지연으로 2026 서부 카놀라 벨트 작황 불확실성 최고조.</div></a>
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid #f5edcc;">
+  <div style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:0.7px;margin-bottom:10px;">파종 진행률 (2026.05.11 기준)</div>
+    <div style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:#4a3800;margin-bottom:4px;">
+        <span>사스카추완</span>
+        <span style="color:#e53e3e;font-weight:700;">3% <span style="font-size:10px;color:#999;font-weight:400;">/ 평년 12%</span></span>
+      </div>
+      <div style="height:10px;background:#f0e8c0;border-radius:5px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;height:100%;width:12%;background:#e8d870;border-radius:5px;opacity:0.4;"></div>
+        <div style="position:absolute;top:0;left:0;height:100%;width:3%;background:#e53e3e;border-radius:5px;"></div>
+      </div>
+    </div>
+    <div style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:#4a3800;margin-bottom:4px;">
+        <span>매니토바</span>
+        <span style="color:#e53e3e;font-weight:700;">2% <span style="font-size:10px;color:#999;font-weight:400;">/ 평년 6%</span></span>
+      </div>
+      <div style="height:10px;background:#f0e8c0;border-radius:5px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;height:100%;width:6%;background:#e8d870;border-radius:5px;opacity:0.4;"></div>
+        <div style="position:absolute;top:0;left:0;height:100%;width:2%;background:#e53e3e;border-radius:5px;"></div>
+      </div>
+    </div>
+</div>
+  </div>
+
+  <!-- 5. Export Channels -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-export">🌍</div>
+      <div class="card-title">수출 채널 &amp; 정책 <span>China · EU · USA</span></div>
+    </div>
+    <div class="empty">관련 뉴스 없음</div>
+  </div>
+
+  <!-- 6. Federal Policy -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-canada">🍁</div>
+      <div class="card-title">연방 정책 &amp; 정치 동향 <span>CFR · 바이오연료 인센티브 · 집권당</span></div>
+    </div>
+    <a class="news-item" href="https://www.pm.gc.ca/en/news/news-releases/2026/05/04/prime-minister-carney-strengthens-trade-and-security-partnerships" target="_blank" rel="noopener noreferrer"><span class="tag tag-politics">연방 자유당</span><div class="news-title">Carney 총리, 5/4 EPC 서밋 — EU·프랑스·이탈리아와 에너지·핵심광물 협력, 대미 다각화 기조 강화</div><div class="news-body">5월 4일 아르메니아 예레반 제8회 유럽정치공동체(EPC) 서밋에 Carney 총리 참석. EU·프랑스·이탈리아·스페인·폴란드·우크라이나 정상과 양자 회담. 캐나다를 에너지·핵심광물·방위 분야 글로벌 투자 허브로 포지셔닝. 우크라이나 군사지원 $2.7억 발표. 비유럽권 최초 EPC 참석 사례. 대미 무역 의존 다각화 기조를 국제 외교로 구체화하는 행보.</div></a>
+  </div>
+
+  <!-- 7. Provincial -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-prov">🏛️</div>
+      <div class="card-title">주정부 정치 동향 <span>SK · MB · AB · ON · BC</span></div>
+    </div>
+    <a class="news-item" href="https://www.saskatchewan.ca/government/news-and-media/2026/may/05/province-seeks-opinions-on-social-media-limits-for-youth" target="_blank" rel="noopener noreferrer"><span class="tag tag-prov-politics">사스카추완 Saskatchewan Party</span><div class="news-title">Moe 정부, 5/5 청소년 소셜미디어 규제 의견수렴 착수 — 전 가구 엽서 설문 발송</div><div class="news-body">사스카추완 주정부가 5월 5일 청소년 소셜미디어 이용 제한 관련 주민 의견수렴을 공식 착수. 전 가구 설문 엽서 우편 발송, 6월 30일까지 반환. Moe 총리, 연방 정부와의 협의 의사 표명. 카놀라·에너지 직접 이슈는 아니나, Moe Saskatchewan Party의 규제 추진 성향 및 정치적 방향성 파악에 참고. 농업 지원 정책 기조는 유지 중.</div></a><a class="news-item" href="https://www.chrisd.ca/2026/05/09/manitoba-renters-quarterly-government-cheques/" target="_blank" rel="noopener noreferrer"><span class="tag tag-prov-politics">매니토바 NDP</span><div class="news-title">Kinew 정부, 5/9 세입자 분기별 현금 지원금 지급 개시 — NDP 사회복지 확대 기조</div><div class="news-body">매니토바 주정부가 5월 9일 세입자 대상 분기별 현금 지원금 지급 프로그램을 공식 개시. Kinew NDP 정부의 사회복지 지출 확대 기조의 일환. 카놀라·에너지 직접 정책 이슈는 아니나, NDP 재정 지출 기조가 향후 농업·환경 규제 예산 방향에 영향 가능. 파종 지연 관련 농업 긴급지원 발표는 이번 주 없음.</div></a>
+  </div>
+
+  <!-- 8. Sources -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-sources">🔗</div>
+      <div class="card-title">주요 출처 <span>Sources</span></div>
+    </div>
+        <div class="source-row">
+      <div class="src-num">1</div>
+      <div>
+        <a class="src-link" href="https://www.producer.com/am-market-reports/am-market-report-may-7-2026/" target="_blank">AM Market Report — May 7, 2026</a>
+        <div class="src-meta">The Western Producer · 2026-05-07</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">2</div>
+      <div>
+        <a class="src-link" href="https://www.producer.com/am-market-reports/am-market-report-may-4-2026/" target="_blank">AM Market Report — May 4, 2026</a>
+        <div class="src-meta">The Western Producer · 2026-05-04</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">3</div>
+      <div>
+        <a class="src-link" href="https://www.saskatchewan.ca/government/news-and-media/2026/may/07/crop-report-for-the-period-april-28-to-may-4-2026" target="_blank">Crop Report for The Period April 28 to May 4, 2026</a>
+        <div class="src-meta">Government of Saskatchewan · 2026-05-07</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">4</div>
+      <div>
+        <a class="src-link" href="https://www.620ckrm.com/2026/05/06/manitoba-issues-first-crop-report-of-the-year/" target="_blank">Manitoba issues first crop report of the year (2026)</a>
+        <div class="src-meta">620 CKRM / Manitoba Agriculture · 2026-05-06</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">5</div>
+      <div>
+        <a class="src-link" href="https://www.pm.gc.ca/en/news/news-releases/2026/05/04/prime-minister-carney-strengthens-trade-and-security-partnerships" target="_blank">PM Carney strengthens trade and security partnerships with European nations</a>
+        <div class="src-meta">Prime Minister of Canada · 2026-05-04</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">6</div>
+      <div>
+        <a class="src-link" href="https://www.saskatchewan.ca/government/news-and-media/2026/may/05/province-seeks-opinions-on-social-media-limits-for-youth" target="_blank">Province Seeks Opinions on Social Media Limits for Youth</a>
+        <div class="src-meta">Government of Saskatchewan · 2026-05-05</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">7</div>
+      <div>
+        <a class="src-link" href="https://www.chrisd.ca/2026/05/09/manitoba-renters-quarterly-government-cheques/" target="_blank">Manitoba Renters to Start Getting Quarterly Cheques from the Government</a>
+        <div class="src-meta">ChrisD.ca · 2026-05-09</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Green Oil Inc. Internal Use Only &nbsp;·&nbsp; Powered by Claude AI &nbsp;·&nbsp; <a href="../index.html" style="color:#bbb;">← 인덱스</a></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+  const btn = document.getElementById('pdfBtnLabel');
+  if (typeof html2pdf === 'undefined') { alert('PDF 라이브러리 로딩 실패. 브라우저 인쇄(Ctrl+P)를 이용해 주세요.'); return; }
+  btn.textContent = '생성 중...';
+  const opt = {
+    margin: [8, 8, 8, 8], filename: 'GreenOil-Canola-2026-05-11.pdf',
+    image: { type: 'jpeg', quality: 0.92 },
+    html2canvas: { scale: 2, useCORS: true, logging: false },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(document.body).save()
+    .then(() => { btn.textContent = 'PDF 저장'; })
+    .catch(() => { btn.textContent = 'PDF 저장'; alert('PDF 생성 실패. 브라우저 인쇄(Ctrl+P → PDF 저장)를 이용해 주세요.'); });
+}
+</script>
+</body>
+</html>

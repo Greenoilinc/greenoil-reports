@@ -1,0 +1,2643 @@
+<!DOCTYPE html>
+<script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Greenoil Weekly Report",
+  "schemaVersion": 1,
+  "description": "Green Oil Inc. 주간 정책 & 시장 인텔리전스 리포트 — 2026년 1월 5일부터 최신주까지 20주 히스토리 내비게이터 포함"
+}
+</script>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Oil Inc. — 주간 인텔리전스 리포트</title>
+<style>
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+  background: #f0f4f0;
+  color: #1c2e1c;
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── Report Switch Badge ── */
+.report-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+.report-switch:hover { background: rgba(255,255,255,0.25); }
+.report-switch .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #fbbf24; flex-shrink: 0;
+}
+
+/* ── PDF Button ── */
+.pdf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.pdf-btn:hover { background: rgba(255,255,255,0.22); }
+.pdf-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Print styles ── */
+@media print {
+  .week-nav, .report-switch, .pdf-btn, .nav-dots { display: none !important; }
+  .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: white; }
+  .container { padding: 0; }
+  .card, .section-card { break-inside: avoid; }
+  a { text-decoration: none; color: inherit; }
+}
+
+/* ── Header ── */
+.header {
+  background: linear-gradient(135deg, #1a5c1a 0%, #2e8b2e 100%);
+  color: white;
+  padding: 18px 24px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.header-left h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 7px; }
+.header-left .sub { font-size: 11px; opacity: 0.75; margin-top: 3px; letter-spacing: 0.3px; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.updated-badge { font-size: 10px; opacity: 0.65; }
+
+/* ── Week Navigator ── */
+.week-nav {
+  background: white;
+  border-bottom: 1px solid #e0e8e0;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.nav-btn {
+  background: none;
+  border: 1px solid #c8dcc8;
+  border-radius: 8px;
+  padding: 5px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #2e8b2e;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.nav-btn:hover:not(:disabled) { background: #eaf4ea; border-color: #2e8b2e; }
+.nav-btn:disabled { opacity: 0.3; cursor: default; }
+.nav-center { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+.nav-week-label { font-size: 14px; font-weight: 700; color: #1c2e1c; }
+.nav-week-sub { font-size: 10px; color: #999; }
+.nav-dots { display: flex; gap: 5px; margin-top: 4px; }
+.nav-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #d0e4d0; cursor: pointer; transition: background 0.15s;
+}
+.nav-dot.active { background: #2e8b2e; }
+.nav-dot:hover { background: #7cb87c; }
+.week-counter { font-size: 10px; color: #aaa; white-space: nowrap; }
+
+/* ── Container ── */
+.container { max-width: 920px; margin: 0 auto; padding: 18px 16px 32px; }
+
+/* ── Alert bar ── */
+.alert-bar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.pill {
+  display: flex; align-items: center; gap: 6px;
+  background: white; border-radius: 20px; padding: 5px 13px;
+  font-size: 11px; font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.pill.red   { border-left: 3px solid #e53e3e; color: #c53030; }
+.pill.amber { border-left: 3px solid #d69e2e; color: #975a16; }
+.pill.green { border-left: 3px solid #38a169; color: #22543d; }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.dot.red   { background: #e53e3e; }
+.dot.amber { background: #d69e2e; }
+.dot.green { background: #38a169; }
+
+/* ── Card ── */
+.card { background: white; border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.card-header { display: flex; align-items: center; gap: 9px; margin-bottom: 13px; padding-bottom: 10px; border-bottom: 1px solid #eaf2ea; }
+.card-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.icon-summary { background: #edfaed; }
+.icon-canada  { background: #fff0f0; }
+.icon-export  { background: #eef2ff; }
+.icon-market  { background: #fff8ec; }
+.icon-risk    { background: #fff5f5; }
+.icon-sources { background: #f5f5f5; }
+.icon-prov    { background: #fff3e0; }
+.card-title { font-size: 14px; font-weight: 700; color: #1c2e1c; }
+.card-title span { font-size: 10px; font-weight: 400; color: #888; margin-left: 5px; }
+
+/* ── Two-col ── */
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+@media (max-width: 620px) { .row2 { grid-template-columns: 1fr; } }
+
+/* ── Summary ── */
+.summary-list { list-style: none; }
+.summary-list li { padding: 7px 0 7px 18px; position: relative; border-bottom: 1px solid #f4f4f4; color: #2d3e2d; font-size: 13px; }
+.summary-list li:last-child { border-bottom: none; }
+.summary-list li::before { content: '▸'; position: absolute; left: 0; top: 8px; color: #2e8b2e; font-size: 10px; }
+
+/* ── Sub-label ── */
+.sub-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: #999; margin-bottom: 9px; }
+
+/* ── News item ── */
+.news-item { padding: 9px 0; border-bottom: 1px solid #f4f4f4; }
+.news-item:last-child { border-bottom: none; }
+.news-item.clickable { cursor: pointer; border-radius: 7px; padding: 9px 8px; margin: 0 -8px; transition: background 0.15s; }
+.news-item.clickable:hover { background: #edf6ed; }
+.news-item.clickable .news-title::after { content: ' ↗'; font-size: 10px; color: #2e8b2e; opacity: 0.6; }
+a.news-item { text-decoration: none; color: inherit; display: block; }
+.tag { display: inline-block; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 3px; }
+.tag-cfr    { background: #e6f4ea; color: #137333; }
+.tag-carbon { background: #e8f0fe; color: #1558d6; }
+.tag-prov   { background: #fce8e6; color: #c5221f; }
+.tag-eu     { background: #ede7f6; color: #5e35b1; }
+.tag-us     { background: #e8eaed; color: #3c4043; }
+.tag-market { background: #fff3e0; color: #e65100; }
+.tag-cert   { background: #e0f7fa; color: #006064; }
+.tag-trade  { background: #fce4ec; color: #880e4f; }
+.tag-politics { background: #e8eaf6; color: #283593; }
+.news-title { font-size: 12px; font-weight: 600; color: #1c2e1c; margin-bottom: 2px; }
+.news-body  { font-size: 11px; color: #5a6e5a; line-height: 1.5; }
+.src-ref { font-size: 9px; font-weight: 700; color: #2e8b2e; vertical-align: super; margin-left: 3px; opacity: 0.85; }
+
+/* ── Risk radar ── */
+.risk-grid { display: flex; flex-direction: column; gap: 10px; }
+.risk-col { border-radius: 9px; padding: 12px 16px; }
+.risk-col.red   { background: #fff5f5; border: 1px solid #fed7d7; }
+.risk-col.amber { background: #fffbf0; border: 1px solid #fefcbf; }
+.risk-col.green { background: #f0fff4; border: 1px solid #c6f6d5; }
+.risk-col-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+.risk-col.red   .risk-col-title { color: #c53030; }
+.risk-col.amber .risk-col-title { color: #975a16; }
+.risk-col.green .risk-col-title { color: #22543d; }
+.risk-entry { font-size: 12px; color: #4a5568; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.05); line-height: 1.5; }
+.risk-entry:last-child { border-bottom: none; }
+
+/* ── Sources ── */
+.source-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f4f4f4; align-items: flex-start; }
+.source-row:last-child { border-bottom: none; }
+.src-num { width: 20px; height: 20px; flex-shrink: 0; background: #eaf2ea; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #2e8b2e; margin-top: 1px; }
+.src-link { font-size: 12px; font-weight: 600; color: #1a6b3c; text-decoration: none; }
+.src-link:hover { text-decoration: underline; }
+.src-meta { font-size: 10px; color: #aaa; margin-top: 1px; }
+
+/* ── Empty ── */
+.empty { background: #f9f9f9; border-radius: 7px; padding: 14px; text-align: center; color: #bbb; font-size: 12px; font-style: italic; }
+
+/* ── Slide animation ── */
+.report-content { transition: opacity 0.2s ease; }
+.report-content.fade { opacity: 0; }
+
+/* ── Footer ── */
+.footer { text-align: center; font-size: 10px; color: #bbb; padding: 8px 0 4px; letter-spacing: 0.2px; }
+</style>
+</head>
+<body>
+<div style="background:#1a1f2e;border-bottom:1px solid #2d3748;padding:10px 20px;position:sticky;top:0;z-index:200;"><a href="./index.html" style="background:#2d3748;border:none;color:#a0aec0;padding:6px 14px;border-radius:6px;font-size:13px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">← 인덱스</a></div>
+
+<div class="header">
+  <div class="header-left">
+    <h1>🌿 Green Oil Inc.</h1>
+    <div class="sub">주간 정책 &amp; 시장 인텔리전스 리포트 · Weekly Intelligence Report</div>
+  </div>
+  <div class="header-right">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="pdf-btn" onclick="downloadPDF()">
+        <svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><rect x="6" y="13" width="12" height="8" rx="1"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/></svg>
+        <span id="pdfBtnLabel">PDF 저장</span>
+      </button>
+      <a class="report-switch" href="./greenoil-canola-report.html">
+        <span class="dot"></span>카놀라 리포트 →
+      </a>
+    </div>
+    <div class="updated-badge" id="updatedBadge">마지막 업데이트: —</div>
+  </div>
+</div>
+
+<!-- Week Navigator -->
+<div class="week-nav">
+  <button class="nav-btn" id="btnNewer" onclick="navigate(-1)" disabled>&#8592; 최신</button>
+  <div class="nav-center">
+    <div class="nav-week-label" id="navWeekLabel">—</div>
+    <div class="nav-week-sub" id="navWeekSub">—</div>
+    <div class="nav-dots" id="navDots"></div>
+  </div>
+  <button class="nav-btn" id="btnOlder" onclick="navigate(1)">이전 &#8594;</button>
+</div>
+
+<div class="container">
+  <div class="report-content" id="reportContent">
+
+    <!-- Status pills -->
+    <div class="alert-bar">
+      <div class="pill red">  <div class="dot red"></div>  <span id="cntRed">—</span> 즉시 대응 필요</div>
+      <div class="pill amber"><div class="dot amber"></div><span id="cntAmber">—</span> 모니터링 필요</div>
+      <div class="pill green"><div class="dot green"></div><span id="cntGreen">—</span> 기회 요인</div>
+    </div>
+
+    <!-- 1. Executive Summary -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-summary">📋</div>
+        <div class="card-title">이번 주 핵심 요약 <span>Executive Summary</span></div>
+      </div>
+      <ul class="summary-list" id="elSummary"></ul>
+    </div>
+
+    <!-- 2. Risk Radar -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-risk">⚡</div>
+        <div class="card-title">리스크 &amp; 기회 레이더</div>
+      </div>
+      <div class="risk-grid">
+        <div class="risk-col red">
+          <div class="risk-col-title">🔴 즉시 대응</div>
+          <div id="elRed"></div>
+        </div>
+        <div class="risk-col amber">
+          <div class="risk-col-title">🟡 모니터링</div>
+          <div id="elAmber"></div>
+        </div>
+        <div class="risk-col green">
+          <div class="risk-col-title">🟢 기회 요인</div>
+          <div id="elGreen"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Federal Policy -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-canada">🍁</div>
+        <div class="card-title">연방 정책 동향 <span>Federal — CFR · 탄소세 · 집권당</span></div>
+      </div>
+      <div id="elFederal"></div>
+    </div>
+
+    <!-- 4. Provincial Policy -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-prov">🏛️</div>
+        <div class="card-title">주정부 정책 동향 <span>Provincial — Ontario · BC · Alberta · 집권당</span></div>
+      </div>
+      <div id="elProvincial"></div>
+    </div>
+
+    <!-- 5. Export Markets -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-export">🌍</div>
+        <div class="card-title">수출 시장 정책 <span>EU RED III · 미국 RFS / EPA</span></div>
+      </div>
+      <div id="elExport"></div>
+    </div>
+
+    <!-- 6. UCO Market -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-market">🛢️</div>
+        <div class="card-title">UCO 시장 &amp; 산업 동향 <span>Market Intelligence</span></div>
+      </div>
+      <div id="elMarket"></div>
+    </div>
+
+    <!-- 7. Sources -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-sources">🔗</div>
+        <div class="card-title">주요 출처 <span>Sources</span></div>
+      </div>
+      <div id="elSources"></div>
+    </div>
+
+    <div class="footer">Green Oil Inc. Internal Use Only &nbsp;·&nbsp; Powered by Claude AI &nbsp;·&nbsp; 매주 월요일 오전 자동 업데이트</div>
+  </div>
+</div>
+
+<script>
+// ── REPORT HISTORY (newest first) ──────────────────────────
+const REPORT_HISTORY = /* HISTORY_START */
+[
+  {
+    "generatedAt": "2026-05-25T08:07:00-04:00",
+    "summary": [
+      "5/21 앨버타, 10월 19일 주민투표에 분리 찬반 투표 의향 묻는 질문 추가 발표 — Smith 주지사 캐나다 잔류 지지 표명에도 분리 운동 세력 강화·투자환경 불안 고조",
+      "5/22 Poilievre 보수당 대표, 서리 유세서 앨버타 분리독립 반대 선언 — Carney도 '앨버타는 캐나다에 필수'라며 분리 반대 입장 강화",
+      "5/15 Carney-Smith 서해안 파이프라인 협정 앨버타 내 혼재된 반응 — 경제계 일부 긍정적이나 분리주의 세력 강한 반발; BC Eby는 별도 우선순위 협상 요구(5/20)",
+      "이번 주 앨버타 분리 논란으로 캐나다 연방 에너지·기후 정책 불확실성 상승 — CFR 개정 일정 지연 위험 증가"
+    ],
+    "canada": [
+      {
+        "tag": "politics",
+        "tagLabel": "연방 자유당",
+        "headline": "5/22 Carney 총리, 앨버타 분리 투표 발표에 '앨버타는 캐나다에 필수' 강조",
+        "summary": "5월 22일 Carney 총리는 Smith 주지사의 주민투표 발표에 대해 '캐나다는 세계 최고의 나라이며 앨버타는 그 중심'이라며 분리를 단호히 반대한다는 입장을 밝혔다. 연방 정부는 Alberta 협정 이행에 집중하겠다고 강조. Carney 자유당 다수 정부는 Smith와의 에너지·탄소 협정을 통해 앨버타 설득을 이미 시작했으나, 분리 투표 발표로 추가적 정치적 부담 발생. Green Oil 관점에서 연방-앨버타 갈등 심화 시 CFR·바이오연료 정책 우선순위 후순위 밀릴 위험.",
+        "url": "https://time.com/article/2026/05/22/carney-canada-alberta-separation-vote-referendum-response/"
+      },
+      {
+        "tag": "politics",
+        "tagLabel": "연방 보수당",
+        "headline": "5/22 Poilievre, 앨버타 분리독립 반대 유세 선언 — '캐나다 단결 위해 매일 싸울 것'",
+        "summary": "5월 22일 BC주 서리에서 기자회견을 열고 '보수당은 캐나다를 사랑한다'며 앨버타 분리독립에 반대 입장을 분명히 했다. 앨버타 전역을 돌며 단결 캠페인을 벌이겠다고 선언. Harper 정부 시절 분리 운동이 전혀 없었다며 Carney 정부를 우회적으로 비판. 에너지 자원 개발·규제 완화를 통한 경제 회복으로 앨버타 잔류를 설득하겠다는 입장. 보수당의 CFR 폐지 공약 기조 변화 신호 없음.",
+        "url": "https://vicnews.com/2026/05/22/conservative-leader-pierre-poilievre-supports-a-united-canada/"
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "앨버타 UCP",
+        "headline": "5/21 Smith 주지사, 10월 주민투표에 분리 찬반 투표 의향 질문 추가 발표",
+        "summary": "5월 21일 저녁 Danielle Smith 주지사가 TV 연설을 통해 10월 19일 주민투표에 10번째 질문을 추가한다고 발표. 질문 내용: '앨버타는 캐나다 주로 남아야 하는가, 아니면 구속력 있는 분리 주민투표를 위한 법적 절차를 시작해야 하는가.' Smith 주지사는 캐나다 잔류 지지를 밝혔으나 분리 진영은 '캔 차기'라며 강하게 비판. Edmonton·Calgary 시장도 투자 위축 우려 표명. Green Oil 관점에서 앨버타 정치 불안은 서해안 파이프라인·CFR 정책 모멘텀 분산 위험.",
+        "url": "https://globalnews.ca/news/11859945/alberta-separation-referendum-reaction/"
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "앨버타 / BC",
+        "headline": "5/18 Carney-Smith 파이프라인 협정 혼재 반응 — 경제계 기대, 분리 세력 반발; BC Eby 별도 협상 요구(5/20)",
+        "summary": "5월 15일 서명된 캐나다-앨버타 이행협정에 대해 앨버타 내 혼재된 반응이 5/18 보도됐다. 에너지 업계 일부는 2027년 착공 목표에 기대감, 분리주의 그룹 Stay Free Alberta는 '탄소 양보만 하고 파이프라인 보장 없다'며 Smith 비판. 한편 5월 20일 BC주 Eby 주지사는 Carney와 별도로 BC 우선순위(파이프라인 노선·원주민 협의·경제 조건) 협상에 들어가겠다고 선언. Green Oil에는 파이프라인·탄소 협상의 복잡성이 CFR 개정 일정에 영향을 줄 수 있는 변수.",
+        "url": "https://www.bnnbloomberg.ca/business/politics/2026/05/18/mixed-reaction-in-alberta-after-carney-smith-sign-pipeline-agreement/"
+      }
+    ],
+    "export": [],
+    "market": [],
+    "risks": {
+      "red": [
+        "앨버타 분리 투표 발표(5/21) — 10월 19일 주민투표까지 약 5개월간 캐나다 연방 에너지·환경 정책 불확실성 극도 상승. Carney 정부의 CFR 개정 우선순위 후퇴 위험. Green Oil 수출 바이어 신규 계약 협상 시 '캐나다 정치 리스크' 반영 여부 즉시 점검 권장."
+      ],
+      "amber": [
+        "BC Eby-Carney 별도 협상 — 서해안 파이프라인 노선 및 원주민 협의 조건 불확실. 파이프라인 협상 장기화 시 연방의 에너지·기후 정책 자원 분산 우려. UCO 수출 서해안 물류 동향 지속 모니터링 권장.",
+        "앨버타 분리 투표 '투자 위축' 우려 — Calgary·Edmonton 시장도 명시적 경고. 앨버타 소재 UCO 수거 네트워크 파트너사 사업 계획 변화 여부 확인 권장."
+      ],
+      "green": [
+        "Carney-Poilievre 모두 앨버타 분리 반대 — 초당적 단결 기조가 실제 연방 협정 이행력 강화로 이어질 경우 파이프라인·탄소가격 체계 안정화 기반. 중장기 탄소 크레딧 계획 유지 가능.",
+        "앨버타-연방 이행협정 유지 기조 — Smith는 캐나다 잔류 지지, 탄소가격·파이프라인 로드맵 변경 없음 확인. UCO 바이오연료 TIER 크레딧 수익 기반 단기 유지."
+      ]
+    },
+    "sources": [
+      {
+        "title": "Alberta's referendum on a separation referendum elicits bewilderment, concern",
+        "url": "https://globalnews.ca/news/11859945/alberta-separation-referendum-reaction/",
+        "outlet": "Global News",
+        "date": "2026-05-21"
+      },
+      {
+        "title": "Conservative leader Pierre Poilievre supports a 'united Canada'",
+        "url": "https://vicnews.com/2026/05/22/conservative-leader-pierre-poilievre-supports-a-united-canada/",
+        "outlet": "Black Press Media",
+        "date": "2026-05-22"
+      },
+      {
+        "title": "Carney Says Alberta Is 'Essential' to Canada After Separation Vote Announcement",
+        "url": "https://time.com/article/2026/05/22/carney-canada-alberta-separation-vote-referendum-response/",
+        "outlet": "Time Magazine",
+        "date": "2026-05-22"
+      },
+      {
+        "title": "Mixed reaction in Alberta after Carney, Smith sign pipeline agreement",
+        "url": "https://www.bnnbloomberg.ca/business/politics/2026/05/18/mixed-reaction-in-alberta-after-carney-smith-sign-pipeline-agreement/",
+        "outlet": "BNN Bloomberg",
+        "date": "2026-05-18"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-05-18T08:07:00-04:00",
+    "summary": [
+      "Carney 총리, 5/14 국가 전력 전략 발표 — 2050년 전력망 2배 확장, 청정전기규정 가스 유연성 허용 예고",
+      "5/15 캐나다-앨버타 이행협정 체결 — 산업용 탄소가격 2030년 $115/t·2035년 $130/t 확정, 서해안 파이프라인 2027년 착공 목표",
+      "5/14 사스카추완 SaskPower 내부 문서 유출 — 석탄 연장 시 2040년 전기요금 95% 상승 추정, Moe 연방 전력 전략에 조건부 지지",
+      "CFR Canada Gazette 초안 이번 주도 미발표 — 1월 의견 수렴 마감 후 4개월째 미발표, 2026년 내 적용 가능성 재검토 필요"
+    ],
+    "canada": [
+      {
+        "tag": "politics",
+        "tagLabel": "연방 자유당",
+        "headline": "Carney 총리, 5/14 국가 전력 전략 발표 — 전력망 2배 확장, 가스 발전 유연성 허용",
+        "summary": "5월 14일 Carney 총리가 '캐나다 강국화: 전력화 국가 전략'을 공식 발표. 2050년까지 캐나다 전력망을 현재의 2배로 확장하고 총 $1조 이상 투자 필요. 핵심 방향은 수력·핵·풍력·태양열·지열 및 가스 발전을 포함한 전방위 에너지원 활용; 청정전기규정(CER) 조정으로 가스 발전에 추가 유연성 허용; 동서 송전망 연결 및 13만 명 신규 인력 양성. 바이오연료 관점에서 가스 유연성 확대는 일부 주의 청정연료 수요 우선순위에 영향을 줄 수 있어 모니터링 필요.",
+        "url": "https://www.pm.gc.ca/en/news/news-releases/2026/05/14/prime-minister-carney-announces-forthcoming-national-electricity"
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "앨버타 UCP",
+        "headline": "5/15 캐나다-앨버타 이행협정 체결 — 탄소가격 2040년 $140/t 확정, 서해안 파이프라인 10월 국익 지정 추진",
+        "summary": "5월 15일 캘거리에서 Carney 총리와 Smith 앨버타 주지사가 이행협정에 서명. 2025년 11월 MOU의 후속 이행 단계. 핵심 내용: 산업용 탄소가격(TIER) 2030년 $115/t, 2035년 $130/t, 2040년 $140/t 단계적 확정; 앨버타는 7월 1일까지 서해안 원유 파이프라인 제안서 제출, 연방은 10월 1일까지 국익 프로젝트 지정 추진; Pathways 탄소포집 프로젝트와 파이프라인은 상호 의존적 조건. Green Oil 관점에서 탄소가격 상승 확정은 UCO 바이오연료 탄소 크레딧 가치 상승 기반을 강화하며 연방-앨버타 협력 안정화로 CFR 개정 추진력 유지.",
+        "url": "https://www.pm.gc.ca/en/news/news-releases/2026/05/15/canada-and-alberta-strike-agreement-diversify-our-exports-reduce"
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "사스카추완 Sask. Party",
+        "headline": "5/14 유출 SaskPower 문서 — 석탄 연장 시 2040년 전기요금 95% 상승 추정; Moe, 연방 전력 전략에 조건부 지지",
+        "summary": "5월 14일 사스카추완 NDP가 SaskPower 감사위원회 유출 문서를 공개. 석탄발전 25년 연장 플랜 시 2030년 전기요금 20%, 2040년 95% 상승 추정치 포함. 문서는 연방 탄소규정 준수에 '극단적 재정 리스크'를 명시. 같은 날 Moe 주지사는 연방 전력 전략이 핵발전·주간 연계 등 사스카추완의 방향과 일치한다며 조건부 지지 표명. SaskPower CEO는 문서가 내부 시나리오 검토용이라고 해명. 사스카추완의 탄소규정 저항 기조는 CFR 이행 환경에 지속 영향.",
+        "url": "https://www.cjme.com/2026/05/14/sask-ndp-says-leaked-saskpower-document-shows-rates-will-double-due-to-coal-plan/"
+      }
+    ],
+    "export": [],
+    "market": [],
+    "risks": {
+      "red": [
+        "CFR Canada Gazette 초안 4개월째 미발표 — 1월 15일 의견 수렴 마감 후 게재 없음. Q2 내 발표 가능성 소진 중. 내부 예산·전략에서 CFR 국내산 크레딧 멀티플라이어 반영 시점을 2027년 초로 후퇴 조정하고, 현행 Biofuels Production Incentive($3.7억, 2026-27) 중심 수익 구조 유지 방안 즉시 검토 권장"
+      ],
+      "amber": [
+        "캐나다-앨버타 탄소가격 2040년 $140/t까지 단계 확정 → UCO 바이오연료 생산비용 증가 요인이나 동시에 탄소 크레딧 가치도 상승. 탄소가격 상승 시나리오를 반영한 중장기 원가·수익 시뮬레이션 업데이트 권장",
+        "국가 전력 전략 청정전기규정 가스 유연성 확대 → 일부 주의 바이오연료 대비 천연가스 선호도 변화 가능성. 주별 CFR 이행 인센티브 환경 변화 모니터링 필요"
+      ],
+      "green": [
+        "캐나다-앨버타 이행협정으로 연방-앨버타 협력 기조 안정화 → CFR 개정 등 바이오연료 정책 추진 모멘텀 유지. 중장기 탄소가격 확정으로 UCO 기반 TIER 크레딧 거래 장기 계약 시 프리미엄 협상 가능",
+        "국가 전력 전략 발표로 청정에너지 투자 가속화 → 바이오연료 수거·정제 인프라 투자세액공제(ITC) 수혜 범위 확인 권장"
+      ]
+    },
+    "sources": [
+      {
+        "title": "Prime Minister Carney announces forthcoming National Electricity Strategy",
+        "url": "https://www.pm.gc.ca/en/news/news-releases/2026/05/14/prime-minister-carney-announces-forthcoming-national-electricity",
+        "outlet": "Prime Minister of Canada",
+        "date": "2026-05-14"
+      },
+      {
+        "title": "Canada and Alberta strike agreement to diversify exports, reduce emissions, and build a stronger economy",
+        "url": "https://www.pm.gc.ca/en/news/news-releases/2026/05/15/canada-and-alberta-strike-agreement-diversify-our-exports-reduce",
+        "outlet": "Prime Minister of Canada",
+        "date": "2026-05-15"
+      },
+      {
+        "title": "Sask. NDP says leaked SaskPower document shows rates will double due to coal extension",
+        "url": "https://www.cjme.com/2026/05/14/sask-ndp-says-leaked-saskpower-document-shows-rates-will-double-due-to-coal-plan/",
+        "outlet": "980 CJME",
+        "date": "2026-05-14"
+      },
+      {
+        "title": "National Electricity Strategy doesn't surprise Sask. Premier, offers some approval",
+        "url": "https://www.cjme.com/2026/05/14/national-electricity-strategy-doesn-t-surprise-sask-premier-offers-some-approval/",
+        "outlet": "980 CJME",
+        "date": "2026-05-14"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-05-11T08:07:00-04:00",
+    "summary": [
+      "Carney 총리, 5/7 에너지 프로젝트 승인 가속화 신규 입법 예고 — 청정에너지·바이오연료 인프라 인허가 속도 개선 기대",
+      "ISCC EU, 5/11 재활용 탄소연료(RCF) 인증 업데이트 발표 — 폐타이어 열분해유 인증 범위 확대, 자체 개혁 신호",
+      "Carney 총리, 5/4 유럽정치공동체(EPC) 정상회의 — EU 무역·에너지 파트너십 강화, 캐나다 EU 수출 채널 안정화",
+      "Poilievre, 5/7 보수당 컨퍼런스서 대표직 유지 선언 — CFR 폐지 공약 야당 정책으로 지속 모니터링"
+    ],
+    "canada": [
+      {
+        "tag": "politics",
+        "tagLabel": "연방 자유당",
+        "headline": "Carney 총리, 5/7 에너지 프로젝트 승인 가속화 신규 입법 예고",
+        "summary": "5월 7일 Carney 총리가 에너지 프로젝트 승인 절차를 대폭 단축하는 신규 입법을 추진하겠다고 예고. CP24 보도. 현행 환경 평가 및 허가 절차의 지연 문제 해소가 목표. 청정에너지·LNG·바이오연료 시설 등 에너지 인프라 프로젝트 전반에 적용 전망. 바이오연료 생산 시설 신규 착공의 인허가 속도 개선 기대.",
+        "url": "https://www.cp24.com/news/canada/2026/05/07/pm-carney-planning-new-legislation-to-expedite-more-project-approvals/"
+      },
+      {
+        "tag": "politics",
+        "tagLabel": "연방 자유당",
+        "headline": "Carney 총리, 차기 총독 Louise Arbour 임명 발표 (5/5)",
+        "summary": "5월 5일 Carney 총리가 Louise Arbour 전 국제형사재판소 검사를 차기 총독으로 임명한다고 발표. Carney 다수 정부의 핵심 인사 권한 행사로 안정적 국정 운영 기반 재확인. 에너지·환경 정책 측면에서 자유당 기조 유지.",
+        "url": "https://www.pm.gc.ca/en/news/news-releases/2026/05/05/prime-minister-carney-announces-kings-approval-canadas-next-governor"
+      },
+      {
+        "tag": "politics",
+        "tagLabel": "연방 외교",
+        "headline": "Carney 총리, 5/4 유럽정치공동체(EPC) 정상회의 참석 — 캐나다 최초 비유럽 국가 정상 자격",
+        "summary": "Carney 총리가 5월 4일 아르메니아 예레반 EPC 정상회의에 참석. 비유럽 국가 정상으로는 캐나다가 최초. EU·프랑스·이탈리아·폴란드·스페인·우크라이나 정상과 양자 회담을 통해 무역·안보·에너지 파트너십 강화 합의. EU 수출 채널·인증 환경이 장기적으로 안정될 가능성 증가.",
+        "url": "https://www.pm.gc.ca/en/news/news-releases/2026/05/04/prime-minister-carney-strengthens-trade-and-security-partnerships"
+      },
+      {
+        "tag": "politics",
+        "tagLabel": "보수당",
+        "headline": "Poilievre, 5/7 보수당 컨퍼런스서 '계속 싸우겠다' 선언 — CFR 폐지 공약 야당 정책 유지",
+        "summary": "Poilievre 보수당 대표가 5월 7일 오타와 보수당 컨퍼런스에서 대표직 유지를 선언. CBC 보도. Carney를 '경제 무지', '관세 협상 실패자'로 규정하며 대중적 인기 타격에 집중하는 전략. 보수당의 CFR 폐지 공약은 여전히 당 공식 정책으로 다음 선거까지 모니터링 필요.",
+        "url": "https://www.cbc.ca/news/politics/poilievre-keep-fighting-9.7191406"
+      }
+    ],
+    "export": [
+      {
+        "tag": "cert",
+        "tagLabel": "ISCC EU",
+        "headline": "ISCC EU, 5/11 재활용 탄소연료(RCF) 인증 체계 업데이트 — 폐타이어 열분해유 인증 범위 확대",
+        "summary": "ISCC가 5월 11일 EU 재활용 탄소연료(RCF) 인증 체계 업데이트를 공식 발표. Recycling Magazine 보도. 폐타이어(ELT) 열분해유의 화석 성분을 RCF 원료로 인정하는 범위 확대. UCO 직접 관련은 아니나 ISCC가 자체 인증 기준을 적극 개혁하고 있다는 신호로, EU 수출 인증 안정성 회복 기대.",
+        "ref": 1
+      }
+    ],
+    "market": [
+      {
+        "tag": "market",
+        "tagLabel": "UCO 수급",
+        "headline": "SAF 원료 UCO 공급 부족 구조 지속 — 미국 수거 3.3B 파운드 vs. 수요 5.7B 파운드",
+        "summary": "IATA 글로벌 SAF 피드스탁 평가에 따르면 2024년 SAF 원료의 81%가 UCO. 미국 내 UCO 수거량(3.3B 파운드)이 수요(5.7B 파운드)의 58% 수준으로 구조적 갭 지속. HEFA 기반 SAF의 2030년 이후 확장성 제약 우려가 부각되며 대체 원료 다변화 논의 진행. 단기적으로 캐나다산 UCO의 공급 희소성 가치는 유지.",
+        "ref": 6
+      }
+    ],
+    "risks": {
+      "red": [
+        "ISCC EU 인증 정지 논의 미결 — RCF 업데이트로 일부 안정화됐으나 UCO 폐기물 바이오연료 인증에 대한 EU 결정 아직 공식 확정 안 됨. RSB 등 대안 인증 체계 검토 계속 유지"
+      ],
+      "amber": [
+        "EPA RFS 6월 15일 발효 D-35 — 미국 바이어들의 원료 확보 마감 압박 시작. 추가 물량 공급 가능 여부 및 단가 조건 협상 창이 좁아지고 있음",
+        "CFR 초안 게재 지연 지속 — Q2 내 발표 실패 시 2026년 내 멀티플라이어 효과 반영 불가, 예산 계획 수정 필요"
+      ],
+      "green": [
+        "ISCC EU RCF 업데이트로 인증 개혁 신호 확인 — EU 수출 인증 안정화 방향으로의 전환 가능성. 현 ISCC 인증 유지 전략의 방향성 재확인",
+        "RFS 발효 D-35 원료 확보 마감 압박 → 미국 바이어의 추가 물량 요청 가능성 증가. 공급 가능 물량 사전 파악 후 프리미엄 단가 협상 착수 권장"
+      ]
+    },
+    "sources": [
+      {
+        "title": "Weibold supports ISCC EU update — RCF certification for end-of-life tires",
+        "url": "https://www.recycling-magazine.com/2026/05/11/iscc-eu-rcf-certification/",
+        "outlet": "Recycling Magazine",
+        "date": "2026-05-11"
+      },
+      {
+        "title": "PM Carney planning new legislation to expedite more project approvals",
+        "url": "https://www.cp24.com/news/canada/2026/05/07/pm-carney-planning-new-legislation-to-expedite-more-project-approvals/",
+        "outlet": "CP24",
+        "date": "2026-05-07"
+      },
+      {
+        "title": "Prime Minister Carney announces King's approval of Canada's next Governor General",
+        "url": "https://www.pm.gc.ca/en/news/news-releases/2026/05/05/prime-minister-carney-announces-kings-approval-canadas-next-governor",
+        "outlet": "Prime Minister of Canada",
+        "date": "2026-05-05"
+      },
+      {
+        "title": "Prime Minister Carney strengthens trade and security partnerships at EPC Summit",
+        "url": "https://www.pm.gc.ca/en/news/news-releases/2026/05/04/prime-minister-carney-strengthens-trade-and-security-partnerships",
+        "outlet": "Prime Minister of Canada",
+        "date": "2026-05-04"
+      },
+      {
+        "title": "Poilievre vows to 'keep fighting' after Conservatives lose majority battle",
+        "url": "https://www.cbc.ca/news/politics/poilievre-keep-fighting-9.7191406",
+        "outlet": "CBC News",
+        "date": "2026-05-07"
+      },
+      {
+        "title": "Global Feedstock Assessment for SAF Production — Outlook to 2050",
+        "url": "https://www.iata.org/globalassets/iata/publications/sustainability/global-feedstock-assessment-for-saf-production-outlook-to-2050.pdf",
+        "outlet": "IATA",
+        "date": "2026-05"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-05-05T08:07:00-04:00",
+    "summary": [
+      "2026 봄 경제 업데이트 발표 (4/28) — 바이오연료 생산 인센티브 $3.7억 정상 집행 확인, 재정 건전성 예상보다 양호",
+      "Bill C-30 의회 1독회 (4/29) — 봄 경제 업데이트 이행 법안, 자유당 다수 의석으로 신속 처리 전망",
+      "Fastmarkets, 4/30 유럽 UCO FOB ARA 신규 가격 지수 출시 — 시장 투명성 강화로 수출 단가 협상 기준 변화",
+      "온타리오 여론조사: Ford PC 지지율 자유당에 역전 — 가을 선거 구도 조기 가시화"
+    ],
+    "canada": [
+      {
+        "tag": "politics",
+        "tagLabel": "연방 자유당",
+        "headline": "2026 봄 경제 업데이트 발표 (4/28) — 바이오연료 인센티브 $3.7억 집행 확인",
+        "summary": "4월 28일 Champagne 재무장관이 2026 봄 경제 업데이트를 발표. 에너지 섹터에서 바이오연료 생산 인센티브($3.7억, 2026-2027) 예산이 정상 집행 중임을 확인. 국부펀드 $250억·AI·양자컴퓨팅 투자 포함. 재정 건전성이 예상보다 양호해 청정에너지 정책 지속에 긍정적.",
+        "url": "https://www.canada.ca/en/department-finance/news/2026/04/government-of-canada-releases-2026-spring-economic-update-canada-strong-for-all.html"
+      },
+      {
+        "tag": "politics",
+        "tagLabel": "연방 자유당",
+        "headline": "Bill C-30 의회 1독회 통과 (4/29) — 봄 경제 업데이트 이행 법안",
+        "summary": "4월 29일 봄 경제 업데이트 이행을 위한 Bill C-30이 하원 1독회를 통과. 국부펀드·AI 투자·숙련기술 지원 등 주요 재정 조치의 법적 근거 마련. 자유당 다수 의석으로 신속 처리 전망. 에너지·청정연료 관련 예산 집행의 법적 기반 강화.",
+        "url": "https://www.parl.ca/DocumentViewer/en/45-1/bill/C-30/first-reading"
+      },
+      {
+        "tag": "politics",
+        "tagLabel": "연방 자유당",
+        "headline": "Carney 총리, 전국 숙련기술 인력 계획 'Team Canada Strong' 발표 (4/29)",
+        "summary": "4월 29일 Carney 총리가 숙련기술 인력 양성을 위한 전국 계획 'Team Canada Strong'을 발표. 용접·배관·전기·건설 분야 인력 확충이 목표. 청정에너지·바이오연료 시설 건설 및 운영 인력 공급에 중장기적 기여 예상. 자유당의 경제-에너지 전환 정책의 일환.",
+        "url": "https://www.pm.gc.ca/en/news/news-releases/2026/04/29/prime-minister-carney-announces-team-canada-strong-nationwide-plan"
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "온타리오 PC당",
+        "headline": "최신 여론조사: Ford PC 지지율 자유당에 역전 — 온타리오 가을 선거 구도 조기 가시화",
+        "summary": "4월 29일 발표된 여론조사에서 Ford PC 정부 지지율이 자유당에 역전된 것으로 나타남. Hashtag Investing 보도. 2026년 가을 온타리오 선거를 앞두고 야당 자유당이 에너지 비용·환경 정책을 대안으로 부각. Ford 정부의 캐나다산 바이오연료 함량 의무화 이행 중, 정권 교체 시 정책 방향 재검토 가능성 모니터링.",
+        "url": "https://www.hashtaginvesting.com/blog/ford-in-trouble-as-ontario-liberals-pull-ahead-of-pcs-in-new-poll"
+      }
+    ],
+    "export": [
+      {
+        "tag": "us",
+        "tagLabel": "미국 RFS",
+        "headline": "EPA RFS 2026-2027 6월 15일 발효 D-46 — 업계 원료 확보 계약 마감 압박",
+        "summary": "3월 27일 확정, 4월 1일 연방관보 게재된 RFS 2026-2027 최종 규정 발효까지 46일. 바이오매스 기반 디젤 9.07억 RIN 의무를 충족해야 하는 미국 정유사·블렌더들이 원료 확보 계약을 마무리 중. 캐나다산 UCO 공급자 입장에서 추가 물량 협상 적기.",
+        "ref": 6
+      },
+      {
+        "tag": "eu",
+        "tagLabel": "EU UCO",
+        "headline": "Fastmarkets, UCO FOB ARA 신규 가격 지수 출시 (4/30) — 유럽 수출 단가 투명성 제고",
+        "summary": "Fastmarkets가 암스테르담·로테르담·앤트워프·겐트 항구 기준 UCO FOB 가격 지수를 4월 30일 공식 출시. HVO(UCO), HVO(작물), HVO(수지), HVO(POME) 4개 카테고리. 유럽 수출 시 가격 협상의 기준점이 명확해져 바이어와의 계약 조건 재협상 시 활용 가능.",
+        "ref": 4
+      }
+    ],
+    "market": [
+      {
+        "tag": "market",
+        "tagLabel": "UCO 시장",
+        "headline": "UCO 글로벌 시장 2026년 86.3억 달러 추정 — SAF 수요 급증이 장기 성장 핵심 동인",
+        "summary": "글로벌 UCO 시장이 2025년 80.1억 달러에서 2026년 86.3억 달러로 성장 전망. SAF 원료 수요 급증이 핵심 동인. 공급 인프라가 수요 성장 속도를 따라가지 못하는 구조가 지속되며 캐나다산 수거 UCO의 희소성 프리미엄 상승.",
+        "ref": 5
+      },
+      {
+        "tag": "trade",
+        "tagLabel": "무역 동향",
+        "headline": "북미산 UCO 경쟁력 우위 지속 — OBBBA 45Z 북미산 한정으로 캐나다산 UCO 이중 보호",
+        "summary": "2025년 7월 발효된 미국 OBBBA가 45Z 연료 생산 세액공제 대상을 미국·멕시코·캐나다산 원료로 한정. 중국산 UCO 등 비북미산 원료가 불리해진 반면, 캐나다산 UCO는 세액공제 혜택 유지. 2028년 RIN 50% 삭감 이전까지 대미 수출 수익성 이중 보호.",
+        "ref": 7
+      }
+    ],
+    "risks": {
+      "red": [
+        "ISCC EU 인증 최종 결정 미결 — EU 수출 계약 시 인증 정지 시나리오 대비 조항 명시 필요. RSB 등 대안 인증 병행 취득 진행 상태 점검",
+        "ISCC 감사 강화 대비 내부 Audit Trail 점검 — 수거 식당별 UCO 수량 기록(ERP/수거 시스템)과 정제 수율 데이터 일치 여부 문서화, 바이어의 강화된 원산지 감사에 즉시 대응 가능한 체계 유지"
+      ],
+      "amber": [
+        "CFR 개정 초안 발표 지연 → Q2 내 게재 실패 시 2026년 멀티플라이어 수혜 불가. 발표 즉시 내용 검토 및 대응 방안 수립 체계 준비",
+        "EPA RFS 6월 15일 발효 임박 — 미국 바이어 원료 확보 계약 마감 압박, 공급 가능 물량 및 단가 조건 사전 협의 필요"
+      ],
+      "green": [
+        "북미 내 순수 로컬 UCO 프리미엄 상승 — OBBBA 45Z 북미산 한정 + 수입 UCO 규제 강화로 캐나다 로컬 수거 UCO 상대 가치 상승 중. 바이어와의 2026년 하반기 공급 단가 인상 협상을 지금 착수",
+        "온타리오주·BC주 국내산 함량 의무화 동시 시행 — 국내 UCO 기반 바이오연료 수요 구조적 증가, 국내 공급 물량 확대 및 단가 협상 기회",
+        "SAF 직접 공급 계약 가능성 탐색 — 품질 규격 분석 완료 시 바이어를 거치지 않는 직접 계약 구조로 마진 개선 가능"
+      ]
+    },
+    "sources": [
+      {
+        "title": "2026 Spring Economic Update: Canada Strong for All",
+        "url": "https://www.canada.ca/en/department-finance/news/2026/04/government-of-canada-releases-2026-spring-economic-update-canada-strong-for-all.html",
+        "outlet": "Government of Canada",
+        "date": "2026-04-28"
+      },
+      {
+        "title": "Bill C-30 — An Act to implement certain provisions of the 2026 spring economic update",
+        "url": "https://www.parl.ca/DocumentViewer/en/45-1/bill/C-30/first-reading",
+        "outlet": "Parliament of Canada",
+        "date": "2026-04-29"
+      },
+      {
+        "title": "Prime Minister Carney announces Team Canada Strong nationwide plan for skilled trades",
+        "url": "https://www.pm.gc.ca/en/news/news-releases/2026/04/29/prime-minister-carney-announces-team-canada-strong-nationwide-plan",
+        "outlet": "Prime Minister of Canada",
+        "date": "2026-04-29"
+      },
+      {
+        "title": "Fastmarkets launches used cooking oil FOB Amsterdam, Rotterdam, Antwerp, Ghent",
+        "url": "https://www.fastmarkets.com/insights/fastmarkets-launches-used-cooking-oil-fob-amsterdam-rotterdam-antwerp-ghent/",
+        "outlet": "Fastmarkets",
+        "date": "2026-04-30"
+      },
+      {
+        "title": "Ford in trouble as Ontario Liberals pull ahead of PCs in new poll",
+        "url": "https://www.hashtaginvesting.com/blog/ford-in-trouble-as-ontario-liberals-pull-ahead-of-pcs-in-new-poll",
+        "outlet": "Hashtag Investing",
+        "date": "2026-04-29"
+      },
+      {
+        "title": "Final Renewable Fuel Standards for 2026 and 2027",
+        "url": "https://www.epa.gov/renewable-fuel-standard/final-renewable-fuel-standards-2026-and-2027",
+        "outlet": "US EPA",
+        "date": "2026-03-27"
+      },
+      {
+        "title": "Fueling Biofuels: How Legislation and Tariffs Shape Lipid Feedstock Supply",
+        "url": "https://stillwaterassociates.com/fueling-biofuels-how-legislation-and-tariffs-shape-lipid-feedstock-supply/",
+        "outlet": "Stillwater Associates",
+        "date": "2026-04-28"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-04-28T08:00:00-04:00",
+    "summary": [
+      "자유당, 4/21 연방 하원 상임위 재편 완료 — CFR 개정·바이오연료 인센티브 법안 신속 처리 체제 가동",
+      "Carney 총리, 4/27 캐나다 최초 국부펀드 'Canada Strong Fund' ($250억) 발표 — 에너지 인프라 투자 포함",
+      "EPA RFS 2026-2027 최종 규정 6월 15일 발효 D-55 — 미국 바이어 원료 확보 계약 본격화",
+      "Fastmarkets, 4/30 유럽 UCO FOB ARA 신규 가격 지수 출시 예고 — 수출 단가 협상 기준 명확화",
+      "사스카추완 Moe, 4/21 Food·Fuel·Fertilizer 서밋 기조연설 — 연료 수출 다각화·무역 전략 강조",
+      "매니토바 Kinew, 4/26 캐나다 최초 청소년 소셜미디어 금지 발표 — NDP 정부 규제 성향 확인"
+    ],
+    "canada": [
+      {
+        "tag": "politics",
+        "tagLabel": "연방 자유당",
+        "headline": "자유당, 4/21 연방 하원 상임위 장악 — 에너지·환경 법안 신속 처리 체제 가동",
+        "summary": "4월 21일 CP24 보도에 따르면 자유당이 연방 하원 상임위원회 구성을 자유당 주도로 전면 재편. 다수 의석을 활용해 CFR 개정안, 바이오연료 인센티브 등 에너지·환경 법안의 의회 처리가 대폭 가속화될 전망. 보수당의 CFR 폐지 시도 제도적 차단.",
+        "url": "https://www.cp24.com/news/canada/2026/04/21/liberals-move-to-take-control-of-house-committees-now-that-theyve-secured-majority/"
+      },
+      {
+        "tag": "politics",
+        "tagLabel": "연방 자유당",
+        "headline": "Carney 총리, 4/27 캐나다 최초 국부펀드 'Canada Strong Fund' 발표 — 에너지·인프라 전략 투자",
+        "summary": "4월 27일 Carney 총리가 $250억 규모 캐나다 최초 국부펀드 'Canada Strong Fund'를 발표. 에너지·인프라·광업·농업·기술 분야 전략적 투자 목표. 국민도 직접 투자 참여 가능. 정부 주도 에너지 부문 투자 확대는 바이오연료 생산 인프라 신규 투자 기회와 연계 가능성 있음.",
+        "url": "https://www.pm.gc.ca/en/news/news-releases/2026/04/27/prime-minister-carney-announces-canada-strong-fund-canadas-first"
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "사스카추완 Saskatchewan Party",
+        "headline": "Moe 총리, 4/21 Food·Fuel·Fertilizer 서밋 기조연설 — 연료·비료 수출 다각화 전략 강조",
+        "summary": "4월 21-22일 사스카추완 상공회의소 주관 Food, Fuel, Fertilizer Global Summit에서 Moe 총리가 기조연설. 무역 다각화와 수출 시장 확대(중국·브라질·인도)를 핵심 전략으로 강조. 연료 수출 경쟁력 강화 및 인프라 확충이 의제에 포함. Green Oil 관점에서 사스카추완의 연료·바이오연료 수출 정책 방향을 직접 확인할 수 있는 이벤트. 무역 다각화는 대미 의존도를 줄이는 방향으로 캐나다 UCO 수출 지형 변화 가능성 시사.",
+        "url": "https://www.ctvnews.ca/regina/article/food-fuel-and-fertilizer-summit-focuses-on-success-of-sask-companies-abroad/"
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "매니토바 NDP",
+        "headline": "Kinew 총리, 4/26 캐나다 최초 청소년 소셜미디어·AI챗봇 금지 발표",
+        "summary": "4월 26일 매니토바 Kinew NDP 총리가 캐나다 최초로 16세 이하 청소년 대상 소셜미디어 및 AI 챗봇 사용 금지 법안을 추진하겠다고 발표. CBC·Global News 등 전국 언론 대대적 보도. 직접적인 연료 정책과는 무관하나 Kinew 정부의 적극적 규제 성향을 보여주는 신호로, 향후 환경·에너지 규제 방향에도 영향 가능. 매니토바는 카놀라 기반 바이오연료 공급망의 핵심 주로 모니터링 필요.",
+        "url": "https://www.cbc.ca/news/canada/manitoba/manitoba-social-media-age-restrictions-9.7177470"
+      }
+    ],
+    "export": [
+      {
+        "tag": "us",
+        "tagLabel": "미국 RFS",
+        "headline": "EPA RFS 2026-2027 최종 규정 발효 D-55 — 바이오디젤 9.07B RIN 의무량, 미국 바이어 원료 확보 경쟁",
+        "summary": "4월 1일 연방관보 게재된 RFS 최종 규정이 6월 15일 발효까지 55일. 2026년 바이오매스 기반 디젤 의무량 9.07억 RIN으로 역대 최고. 미국 내 UCO 공급 부족(수거 3.3B vs. 수요 5.7B 파운드) 구조에서 캐나다산 UCO 수입 수요 증가 확실.",
+        "ref": 3
+      },
+      {
+        "tag": "eu",
+        "tagLabel": "EU UCO",
+        "headline": "Fastmarkets, 4/30 유럽 UCO FOB ARA 신규 가격 지수 출시 — 수출 단가 협상 기준점 명확화",
+        "summary": "Fastmarkets가 암스테르담·로테르담·앤트워프·겐트 항구 기준 UCO FOB 가격 지수를 4월 30일부로 신규 출시 예고. HVO(UCO), HVO(작물), HVO(수지), HVO(POME) 4개 카테고리 포함. 유럽 수출 시 가격 협상의 객관적 기준점이 마련돼 바이어와의 계약 조건 재협상에 활용 가능.",
+        "ref": 4
+      }
+    ],
+    "market": [
+      {
+        "tag": "cert",
+        "tagLabel": "인증",
+        "headline": "ISCC, 중국 감사 강화 착수 — 고급 바이오연료 사기 의혹 대응, 캐나다산 UCO 신뢰도 차별화 기회",
+        "summary": "ISCC가 중국 내 고급 바이오연료(어드밴스드 바이오연료) 사기 의혹에 대응해 현지 감사를 대폭 강화 중. QC Intel 보도. 감사 미실시 UCO 수거지점 비중이 91%에 달하는 문제를 해소하기 위한 조치. 체계적인 수거 기록과 ISCC 인증을 유지하는 캐나다산 UCO의 신뢰도가 상대적으로 부각될 전망.",
+        "ref": 6
+      },
+      {
+        "tag": "trade",
+        "tagLabel": "무역 분석",
+        "headline": "미국 정책이 캐나다 바이오연료 산업 경쟁력에 미치는 영향 — FCC 보고서",
+        "summary": "FCC(Farm Credit Canada)가 미국의 45Z 세액공제 등 강력한 바이오연료 생산 지원이 캐나다 생산자의 비용 경쟁력을 압박한다는 분석을 발표. 연방 정부의 $3.7억 인센티브가 이 격차를 일부 보완하나, 장기적으로 추가 정책 대응이 필요하다는 전망.",
+        "ref": 7
+      }
+    ],
+    "risks": {
+      "red": [
+        "Fastmarkets UCO ARA 가격 지수 출시(4/30)로 유럽 바이어의 단가 협상력 강화 — 기존 계약 조건 재검토 및 대응 전략 수립 즉시 필요",
+        "BC주 캐나다산 의무화(디젤 8% + 가솔린 5%) 이행 현황 점검 — 공급망 변화 및 단가 협상에 미치는 실질 영향 모니터링"
+      ],
+      "amber": [
+        "EPA RFS 규정 6월 15일 발효 — 미국 바이오디젤 생산 60% 증가 의무로 캐나다산 UCO 대미 수출 수요 증가 예상, 물량 확보 전략 검토",
+        "ECCC 수입 UCO 심층 평가 결과 발표 시기 미정 — CFR 개정 방향에 직접 영향, 분기별 업데이트 모니터링 필요",
+        "미국 정책(45Z 세액공제)에 의한 캐나다-미국 바이오연료 경쟁력 격차 — 연방 추가 대응 정책 여부 주시"
+      ],
+      "green": [
+        "BC주 캐나다산 의무화(디젤 8%+가솔린 5%) + 연방 CFR 개정 동시 이행 — 캐나다 국내 UCO 수요 구조적 증가 확인",
+        "Fastmarkets ARA 가격 지수 활용 — 유럽 수출 시 객관적 벤치마크로 바이어와의 협상에서 투명성·신뢰도 제고 가능",
+        "ISCC 중국 감사 강화로 캐나다산 UCO 신뢰도 상대적 부각 — 프리미엄 단가 정당화 근거 확보"
+      ]
+    },
+    "sources": [
+      {
+        "title": "Liberals move to take control of House committees now that they've secured majority",
+        "url": "https://www.cp24.com/news/canada/2026/04/21/liberals-move-to-take-control-of-house-committees-now-that-theyve-secured-majority/",
+        "outlet": "CP24",
+        "date": "2026-04-21"
+      },
+      {
+        "title": "Prime Minister Carney announces Canada Strong Fund — Canada's first sovereign wealth fund",
+        "url": "https://www.pm.gc.ca/en/news/news-releases/2026/04/27/prime-minister-carney-announces-canada-strong-fund-canadas-first",
+        "outlet": "Prime Minister of Canada",
+        "date": "2026-04-27"
+      },
+      {
+        "title": "Renewable Fuel Standard: Standards for 2026 and 2027 — Federal Register",
+        "url": "https://www.federalregister.gov/documents/2026/04/01/2026-06275/renewable-fuel-standard-rfs-program-standards-for-2026-and-2027-partial-waiver-of-2025-cellulosic",
+        "outlet": "Federal Register / US EPA",
+        "date": "2026-04-01"
+      },
+      {
+        "title": "Fastmarkets launches used cooking oil FOB Amsterdam, Rotterdam, Antwerp, Ghent",
+        "url": "https://www.fastmarkets.com/insights/fastmarkets-launches-used-cooking-oil-fob-amsterdam-rotterdam-antwerp-ghent/",
+        "outlet": "Fastmarkets",
+        "date": "2026-04-30"
+      },
+      {
+        "title": "EPA Boosts Biofuel Mandates in Final Renewable Fuel Standard Rule for 2026-2027",
+        "url": "https://www.hklaw.com/en/insights/publications/2026/04/epa-boosts-biofuel-mandates-in-final-renewable-fuel-standard-rule",
+        "outlet": "Holland & Knight",
+        "date": "2026-04-02"
+      },
+      {
+        "title": "ISCC ramps up China audits amid alleged advanced biofuel fraud",
+        "url": "https://www.qcintel.com/biofuels/article/iscc-ramps-up-china-audits-amid-alleged-advanced-biofuel-fraud-13274.html",
+        "outlet": "QC Intel",
+        "date": "2026-04"
+      },
+      {
+        "title": "U.S. policy impacting biofuel potential in Canada",
+        "url": "https://www.fcc-fac.ca/en/knowledge/economics/us-policy-impacting-biofuel-potential-canada",
+        "outlet": "FCC — Farm Credit Canada",
+        "date": "2026-04"
+      },
+      {
+        "title": "Food, Fuel and Fertilizer Summit focuses on success of Sask. companies abroad",
+        "url": "https://www.ctvnews.ca/regina/article/food-fuel-and-fertilizer-summit-focuses-on-success-of-sask-companies-abroad/",
+        "outlet": "CTV News Regina",
+        "date": "2026-04-21"
+      },
+      {
+        "title": "Manitoba to ban social media, AI chatbots for youth — a first in Canada",
+        "url": "https://www.cbc.ca/news/canada/manitoba/manitoba-social-media-age-restrictions-9.7177470",
+        "outlet": "CBC News Manitoba",
+        "date": "2026-04-26"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-04-21T08:00:00-04:00",
+    "summary": [
+      "Carney 총리, 4/14 연방 휘발유·디젤 소비세 한시 면제 발표 — 4/20부터 9/7까지, $24억 이상 세금 경감",
+      "4/13 보궐선거 자유당 전승 → Carney 다수 정부 공식 출범, CFR·바이오연료 정책 안정성 확보",
+      "Advanced Biofuels Canada: 연방 소비세 면제는 바이오연료의 연료비 안정 기여를 입증",
+      "USDA 캐나다 유지종자 연간 보고서: 캐나다 UCO 공급 수출 여력 확인"
+    ],
+    "canada": [
+      {
+        "tag": "politics",
+        "tagLabel": "연방 자유당",
+        "headline": "Carney 총리, 4/14 연방 연료 소비세 한시 면제 발표 — 휘발유 10¢/L, 디젤 4¢/L 절감",
+        "summary": "4월 14일 Carney 총리가 연방 휘발유 소비세 10센트/L, 디젤 4센트/L를 4월 20일부터 9월 7일까지 한시 면제하는 조치를 발표. 총 $24억 이상 세금 경감 예상. 중동 분쟁 관련 국제 유가 압박 대응. CBC·CTV 등 주요 언론 대대적 보도.",
+        "url": "https://www.pm.gc.ca/en/news/news-releases/2026/04/14/prime-minister-carney-suspends-federal-fuel-excise-tax-gasoline-and"
+      },
+      {
+        "tag": "politics",
+        "tagLabel": "연방 자유당",
+        "headline": "4/13 보궐선거 자유당 전승 — Carney 다수 정부 공식 출범 (174석/343석)",
+        "summary": "4월 13일 보궐선거 자유당 전승으로 Carney 총리가 다수 정부 체제를 공식 가동. CTV News 보도. 연방 하원 과반 확보로 CFR 개정안 및 바이오연료 생산 인센티브 관련 입법 처리가 대폭 가속화될 전망. 정책 연속성 리스크 대폭 감소.",
+        "url": "https://www.ctvnews.ca/politics/article/pm-mark-carneys-liberals-win-majority-government-after-byelection-victory/"
+      },
+      {
+        "tag": "cfr",
+        "tagLabel": "바이오연료업계",
+        "headline": "Advanced Biofuels Canada, 연방 소비세 면제에 성명 — 바이오연료가 연료비 안정화에 기여",
+        "summary": "Advanced Biofuels Canada가 Carney 총리의 연방 연료 소비세 한시 면제 발표에 대해 성명 발표. 바이오연료가 소비자의 연료 비용을 낮추는 데 실질적으로 기여하고 있음을 강조. UCO 기반 바이오연료의 국내 연료 안정화 역할 재부각.",
+        "url": "https://advancedbiofuels.ca/abfc-association-comments-on-prime-minister-federal-fuel-excise-tax-suspension/"
+      },
+      {
+        "tag": "cfr",
+        "tagLabel": "UCO 공급",
+        "headline": "USDA, 캐나다 유지종자 연간 보고서 발간 — 캐나다 UCO 바이오연료 활용·수출 여력 분석",
+        "summary": "USDA 해외농업서비스(FAS)가 2026년 4월 캐나다 유지종자 연간 보고서를 발간. 캐나다 바이오연료 산업의 UCO 활용 현황, 공급 구조, 정책 환경을 종합 분석. 캐나다 UCO 공급이 국내 수요를 초과해 수출 여력이 있음을 확인. 대미·대EU 수출 계약 협상 시 근거 자료로 활용 가능.",
+        "url": "https://www.fas.usda.gov/data/gain-report/2026/04/Oilseeds%20and%20Products%20Annual_Ottawa_Canada_CA2026-0008.pdf"
+      }
+    ],
+    "export": [
+      {
+        "tag": "eu",
+        "tagLabel": "EU SAF",
+        "headline": "Argus Media: EU SAF 시장 공급·수요 지역별 불균형 지속 — UCO 원료 수요 차별화",
+        "summary": "Argus Media가 EU SAF 시장에서 지역별 공급 과잉·부족 불균형이 지속된다고 분석. ReFuelEU Aviation 2년차 이행으로 항공사 UCO 기반 SAF 조달이 증가하나 공급 확보 경쟁도 심화. 북유럽과 지중해 국가 간 UCO 이중계산 정책 차이로 수출 대상국별 크레딧 가치 차등.",
+        "ref": 6
+      }
+    ],
+    "market": [
+      {
+        "tag": "market",
+        "tagLabel": "UCO 수급",
+        "headline": "Clean Fuels Alliance: 미국 UCO 공급 부족 구조 지속 — 수거 대비 수요 갭 확대",
+        "summary": "Clean Fuels Alliance America가 글로벌 UCO 공급 전망을 발표. 미국 내 UCO 수거량이 바이오연료 수요의 절반 수준에 불과해 구조적 공급 부족 지속. 이 공급 갭이 캐나다산 UCO의 대미 수출 수요를 지속적으로 지지. 2028년 수입 원료 RIN 삭감 전까지 대미 수출 확대의 전략적 적기.",
+        "ref": 7
+      }
+    ],
+    "risks": {
+      "red": [
+        "미국 중국산 UCO 대량 수입 → 단기적으로 캐나다산 UCO 경쟁 심화, 수출 단가 압박 가능성"
+      ],
+      "amber": [
+        "2028년 수입 원료 RIN 50% 삭감 대비 — 대미 수출 수익성 시뮬레이션 및 EU 수출 비중 확대 전략 검토",
+        "ECCC UCO 컴플라이언스 평가 결과 대기 — 결과에 따라 캐나다 내 UCO 원료 기준 강화 가능"
+      ],
+      "green": [
+        "RFS 6월 발효 → 미국 UCO 수요 의무화 → 대미 수출 물량 확대 단기 기회",
+        "캐나다산 UCO 'Made in North America' 2028년 이후 RIN 프리미엄 선제 포지셔닝",
+        "USDA 보고서로 캐나다 UCO 수출 역량 확인 → 해외 바이어와의 공급 계약 협상 근거 확보"
+      ]
+    },
+    "sources": [
+      {
+        "title": "Prime Minister Carney suspends the federal fuel excise tax on gasoline and diesel",
+        "url": "https://www.pm.gc.ca/en/news/news-releases/2026/04/14/prime-minister-carney-suspends-federal-fuel-excise-tax-gasoline-and",
+        "outlet": "Prime Minister of Canada",
+        "date": "2026-04-14"
+      },
+      {
+        "title": "Carney temporarily suspending federal fuel excise tax on gas, diesel and aviation fuel",
+        "url": "https://www.cbc.ca/news/politics/carney-fuel-excise-tax-affordability-9.7162911",
+        "outlet": "CBC News",
+        "date": "2026-04-14"
+      },
+      {
+        "title": "PM Mark Carney's Liberals win majority government after byelection victory",
+        "url": "https://www.ctvnews.ca/politics/article/pm-mark-carneys-liberals-win-majority-government-after-byelection-victory/",
+        "outlet": "CTV News",
+        "date": "2026-04-14"
+      },
+      {
+        "title": "Advanced Biofuels Canada Comments on PM Carney's Temporary Suspension of the Federal Fuel Excise Tax",
+        "url": "https://advancedbiofuels.ca/abfc-association-comments-on-prime-minister-federal-fuel-excise-tax-suspension/",
+        "outlet": "Advanced Biofuels Canada",
+        "date": "2026-04-14"
+      },
+      {
+        "title": "Oilseeds and Products Annual — Canada",
+        "url": "https://www.fas.usda.gov/data/gain-report/2026/04/Oilseeds%20and%20Products%20Annual_Ottawa_Canada_CA2026-0008.pdf",
+        "outlet": "USDA FAS",
+        "date": "2026-04"
+      },
+      {
+        "title": "Viewpoint: SAF market length puzzle persists",
+        "url": "https://www.argusmedia.com/en/news-and-insights/latest-market-news/2771924-viewpoint-saf-market-length-puzzle-persists",
+        "outlet": "Argus Media",
+        "date": "2026-04"
+      },
+      {
+        "title": "Clean Fuels releases outlook on global supplies of UCO for biodiesel and renewable diesel",
+        "url": "https://cleanfuels.org/clean-fuels-releases-outlook-on-global-supplies-of-used-cooking-oil-for-biodiesel-and-renewable-diesel-production/",
+        "outlet": "Clean Fuels Alliance America",
+        "date": "2026-04"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-04-14T08:00:00-04:00",
+    "summary": [
+      "4/13 연방 보궐선거 자유당 전승 — Carney 소수→다수 정부 전환, CFR·바이오연료 법안 처리 가속 전망",
+      "Tank Transport: EPA RFS Set 2 12개 핵심 조항 분석 — 수입 원료 RIN 유예가 캐나다 수출업체에 최대 호재",
+      "Holland & Knight: RFS 최종 규정 법적 함의 심층 분석 발간",
+      "ClearBlue Markets: ECCC CFR 개정 검토 착수 — 바이오연료 인센티브와 연계 방향 분석"
+    ],
+    "canada": [
+      {
+        "tag": "politics",
+        "tagLabel": "연방 자유당",
+        "headline": "4/13 연방 보궐선거 자유당 3석 전승 — Carney 다수 정부 전환 (174/343석)",
+        "summary": "4월 13일 온타리오 2개·퀘벡 1개 보궐선거에서 자유당이 전승, 의석 174석으로 343석 하원 과반 확보. Global News 보도. Carney가 소수 정부 운영의 제약에서 벗어나 다수 정부 체제로 공식 전환. CFR 개정안, 바이오연료 인센티브 등 에너지 법안의 의회 처리 속도가 대폭 빨라질 전망. 보수당 Poilievre의 CFR 폐지 시도 현실적으로 어려워짐.",
+        "url": "https://globalnews.ca/news/11798684/federal-byelections-2026/"
+      }
+    ],
+    "export": [
+      {
+        "tag": "us",
+        "tagLabel": "미국 RFS",
+        "headline": "Holland & Knight: RFS 2026-2027 최종 규정 법적 분석 — 생산자 의무 60% 증가",
+        "summary": "로펌 Holland & Knight가 EPA의 RFS 최종 규정 심층 법적 분석을 발간. BBD 9.07억 RIN(2026), 9.20억 RIN(2027) 의무량 확정. 수입 원료 RIN 50% 삭감 조항은 2028년으로 유예. eRIN(재생전기) 자격 연료에서 제거. 캐나다 수출업체는 2028년까지 현재 RIN 가치를 100% 유지할 수 있어 단기 수익성 확보.",
+        "ref": 3
+      }
+    ],
+    "market": [
+      {
+        "tag": "trade",
+        "tagLabel": "무역 동향",
+        "headline": "Tank Transport: EPA RFS Set 2 12개 핵심 조항 분석 — 수입 원료 2028년 유예가 최대 호재",
+        "summary": "Tank Transport 분석에 따르면 RFS Set 2의 12개 핵심 조항 중 수입 원료 RIN 50% 삭감 2028년 유예가 캐나다 수출업체에 가장 유리한 조항. eRIN 제거로 일부 RFS 의무가 UCO 기반 연료로 전환. 6월 15일 발효 전까지 미국 바이어와의 원료 확보 계약이 활발하게 진행될 전망.",
+        "ref": 2
+      }
+    ],
+    "risks": {
+      "red": [
+        "eRIN 제거 → 일부 미국 컴플라이언스 수요가 UCO 기반 연료로 전환, 공급 경쟁 추가 심화 가능"
+      ],
+      "amber": [
+        "CFR 초안 Q2 게재 기대 → 실제 발표 지연 시 2026년 내 시행 불가, 수익 계획 재수립 필요",
+        "EU 지중해 vs. 북유럽 이중계산 격차 → 수출 계약 시 대상국별 크레딧 가치 명시 필수"
+      ],
+      "green": [
+        "RFS 2028년 유예 → 현재 대미 수출 수익성 유지 + 2028년 대응 전략 수립 시간 확보",
+        "봄 수거 시즌 → 수거 단가 협상력 강화 시점, 레스토랑 계약 갱신 적기",
+        "CFR 크레딧 $320+ 안정 → 국내 정제 제품 수익성 기반 유지"
+      ]
+    },
+    "sources": [
+      {
+        "title": "Federal byelections 2026 — Liberal sweep gives Carney majority",
+        "url": "https://globalnews.ca/news/11798684/federal-byelections-2026/",
+        "outlet": "Global News",
+        "date": "2026-04-13"
+      },
+      {
+        "title": "EPA RFS Mixed Outlook, Powerful 12-Point Set Two Final Rule Update",
+        "url": "https://tanktransport.com/2026/04/epa-renewable-fuel-standards/",
+        "outlet": "Tank Transport",
+        "date": "2026-04-11"
+      },
+      {
+        "title": "ECCC Launches Targeted CFR Review Aligned with Canada's New Biofuel Production Incentive",
+        "url": "https://www.clearbluemarkets.com/knowledge-base/eccc-launches-targeted-cfr-review-aligned-with-canadas-new-biofuel-production-incentive",
+        "outlet": "ClearBlue Markets",
+        "date": "2026-04"
+      },
+      {
+        "title": "EPA Boosts Biofuel Mandates in Final RFS Rule for 2026-2027",
+        "url": "https://www.hklaw.com/en/insights/publications/2026/04/epa-boosts-biofuel-mandates-in-final-renewable-fuel-standard-rule",
+        "outlet": "Holland & Knight",
+        "date": "2026-04-02"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-04-07T08:00:00-04:00",
+    "summary": [
+      "미국 EPA, 4월 1일 연방관보에 RFS 2026-2027 최종 규정 공식 게재 — 바이오디젤 의무량 역대 최고 수준 확정",
+      "바이오매스 기반 디젤 9.07억 RIN(2026) / 9.20억 RIN(2027) — 전년 대비 60% 증가 의무화",
+      "수입 원료 RIN 50% 삭감 2028년 유예 확정 — 캐나다산 UCO 대미 수출 수익성 단기 보호",
+      "EcoEngineers: 2025 캐나다 CFR 시장 총정리 발간 — 2026년 CFR 개정·UCO 수급·ISCC 인증 전망"
+    ],
+    "canada": [
+      {
+        "tag": "cfr",
+        "tagLabel": "CFR 시장",
+        "headline": "EcoEngineers: 2025 캐나다 청정연료 시장 총정리 — 2026년 CFR·ISCC·UCO 전망 제시",
+        "summary": "3월 31일 EcoEngineers가 2025년 캐나다 청정연료 시장을 총정리하고 2026년 주요 변수를 분석한 보고서를 발간. CFR 크레딧 가격 강세, ISCC EU 인증 불확실성, UCO 공급 타이트 지속 등 핵심 이슈 정리. 캐나다 CFR 개정 방향과 바이오연료 생산 인센티브 활용 전략 수립에 직접 활용 가능.",
+        "url": "https://www.ecoengineers.us/insights/canadas-clean-fuels-market-what-2025-clarified-and-what-2026-will-test/"
+      }
+    ],
+    "export": [
+      {
+        "tag": "us",
+        "tagLabel": "미국 RFS",
+        "headline": "EPA RFS 2026-2027 최종 규정 연방관보 게재 (4월 1일) — 6월 15일 발효",
+        "summary": "EPA가 RFS 20주년 'Set 2' 최종 규정을 4월 1일 연방관보에 게재. 2026년 바이오매스 기반 디젤(BBD) 9.07억 RIN, 2027년 9.20억 RIN으로 역대 최고 의무량 확정. 수입 원료 RIN 50% 삭감은 2028년으로 유예. 재생전기(eRIN) 자격 폐지. 미국 내 UCO 구조적 공급 부족(수거 3.3B vs. 수요 5.7B 파운드)으로 캐나다산 수입 수요 증가 예상.",
+        "ref": 1
+      },
+      {
+        "tag": "us",
+        "tagLabel": "미국 RFS 분석",
+        "headline": "Holland & Knight: RFS 최종 규정 법적 분석 — eRIN 제외·수입 원료 유예의 시장 함의",
+        "summary": "로펌 Holland & Knight가 EPA RFS 최종 규정 심층 분석 발간. eRIN 제거로 일부 RFS 의무가 UCO 기반 연료로 전환되며 수요 증가. 2028년 수입 원료 RIN 50% 삭감 유예로 캐나다산 UCO의 대미 수출 수익성이 단기 보호됨. 6월 15일 발효, 일부 조항은 4월 28일 선행 발효.",
+        "ref": 3
+      }
+    ],
+    "market": [],
+    "risks": {
+      "red": [
+        "EU 국가들 ISCC 정지 공식 제안 → 캐나다산 UCO EU 수출 인증 위기 현실화, 대안 인증 체계(RSB 등) 긴급 검토 필요"
+      ],
+      "amber": [
+        "RFS 60% 생산 증가 의무 → 미국 내 원료 부족 심화로 수입 경쟁 증가, 캐나다산 UCO 확보 경쟁에 노출",
+        "eRIN 제거 → 일부 RFS 의무 준수 수요가 UCO 기반 연료로 전환, 수급 추가 타이트"
+      ],
+      "green": [
+        "RFS 역대 최고 의무량 → 캐나다산 UCO 수입 수요 구조적 증가, 대미 수출 단가 협상력 강화",
+        "CFR 크레딧 CAD $320+ 안정 → 국내 정제 사업 수익 기반 견고",
+        "ISCC 정지 위기 → 대안 인증 선제 확보 시 EU 시장에서 경쟁 감소 효과"
+      ]
+    },
+    "sources": [
+      {
+        "title": "Renewable Fuel Standard: Standards for 2026 and 2027 — Federal Register",
+        "url": "https://www.federalregister.gov/documents/2026/04/01/2026-06275/renewable-fuel-standard-rfs-program-standards-for-2026-and-2027-partial-waiver-of-2025-cellulosic",
+        "outlet": "Federal Register / US EPA",
+        "date": "2026-04-01"
+      },
+      {
+        "title": "EPA Finalizes Historic New Renewable Fuel Standards",
+        "url": "https://www.epa.gov/newsreleases/epa-finalizes-historic-new-renewable-fuel-standards-strengthen-american-energy",
+        "outlet": "US EPA",
+        "date": "2026-04-01"
+      },
+      {
+        "title": "Canada's Clean Fuels Market: What 2025 Clarified And What 2026 Will Test",
+        "url": "https://www.ecoengineers.us/insights/canadas-clean-fuels-market-what-2025-clarified-and-what-2026-will-test/",
+        "outlet": "EcoEngineers",
+        "date": "2026-03-31"
+      },
+      {
+        "title": "EPA Boosts Biofuel Mandates in Final Renewable Fuel Standard Rule for 2026-2027",
+        "url": "https://www.hklaw.com/en/insights/publications/2026/04/epa-boosts-biofuel-mandates-in-final-renewable-fuel-standard-rule",
+        "outlet": "Holland & Knight",
+        "date": "2026-04-02"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-03-30T08:00:00-04:00",
+    "summary": [
+      "ISCC, EU 위원회 논의 공식 업데이트 발표 — 정지 루머 부인, 자체 개혁 방안 준비 중",
+      "SAFETY4SEA: EU의 ISCC 인증 정지 가능성에 ISCC 공식 대응",
+      "시장 불확실성 고조 — 인증 위기 소문으로 UCO 기반 바이오연료 거래 일시 관망세",
+      "캐나다 ECCC, 수입 UCO 원산지 리스크 평가 결과 Q2 내 발표 전망",
+      "EPA RFS 최종 규정 4월 1일 연방관보 게재 임박 — 업계 최종 내용 확인 대기 중"
+    ],
+    "canada": [
+      {
+        "tag": "cfr",
+        "tagLabel": "CFR",
+        "headline": "캐나다 CFR 개정 진행 상황 — ECCC, 수입 UCO 리스크 평가 연계 검토 중",
+        "summary": "ECCC의 CFR 개정 초안 작성이 수입 UCO 컴플라이언스 리스크 평가 결과와 연계해 진행 중. 두 작업이 함께 마무리될 경우 CFR 개정에 UCO 원산지 관련 조항이 포함될 가능성. 평가 결과 Q2 내 발표 전망."
+      },
+      {
+        "tag": "carbon",
+        "tagLabel": "탄소세",
+        "headline": "EU ISCC 위기 캐나다 수출에 직접 영향 — 대안 인증 체계 사전 검토 권고",
+        "summary": "EU의 ISCC 인증 정지 논의가 캐나다산 UCO EU 수출에 직접 영향을 미칠 수 있어 전문가들이 RSB, REDCERT 등 대안 인증 체계 사전 검토를 권고. 인증 전환에 수개월이 걸릴 수 있어 조기 대응이 필수."
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "앨버타 UCP",
+        "headline": "앨버타, 이민·헌법 개혁 주민투표 가을 개최 공식 발표 — 상원 폐지·이민 제한 안건 포함",
+        "summary": "Smith 앨버타 주지사가 2026년 가을 이민·헌법 관련 주민투표를 공식 발표. ①연방 상원 폐지 ②연방 이민정책 주 자체 통제 ③주 임명 판사 등 연방 권한 이양 요구 안건 포함. 주민투표 결과가 구속력을 갖지 않더라도 연방-앨버타 갈등을 제도화하는 의미. CFR 등 연방 에너지 정책에 대한 앨버타의 법적 도전 가능성도 상존."
+      },
+      {
+        "tag": "politics",
+        "tagLabel": "연방 보궐선거",
+        "headline": "연방 보궐선거 D-2주 — 자유당 다수 달성 시 의회 운영 방식 전면 전환 예고",
+        "summary": "4월 13일 예정된 3개 선거구(온타리오 University-Rosedale, Scarborough Southwest / 퀘벡 Terrebonne) 보궐선거를 앞두고 자유당이 선거 운동에 총력. 전승 시 Carney 소수 정부가 다수 정부로 전환돼 CFR 개정 등 에너지 법안 처리가 가속화될 전망. 보수당은 의회 영향력 유지를 위한 전략적 선거 운동 중."
+      }
+    ],
+    "export": [
+      {
+        "tag": "cert",
+        "tagLabel": "ISCC 인증",
+        "headline": "ISCC, EU 폐기물 바이오연료 인증 관련 공식 업데이트 발표 — 정지 루머 부인",
+        "summary": "ISCC가 iscc-system.org에 공식 업데이트 게재. EU 위원회와의 논의 사실은 인정하되 2.5년 정지 루머를 공식 부인. 자체적인 감사 강화 및 인증 기준 개선 방안 준비 중임을 밝힘. 그러나 시장 불안은 완전히 해소되지 않은 상태."
+      },
+      {
+        "tag": "eu",
+        "tagLabel": "EU RED III",
+        "headline": "EU 인증 위기 속 UCO 거래 관망세 — 수출 계약 체결 지연 현상 일부 보고",
+        "summary": "ISCC 정지 가능성 소문으로 유럽 UCO 바이오연료 거래 일부에서 관망세. 바이어들이 인증 결과를 기다리며 계약 체결을 늦추는 현상 보고. 불확실성이 해소되면 수요가 빠르게 회복될 것으로 예상."
+      }
+    ],
+    "market": [
+      {
+        "tag": "market",
+        "tagLabel": "UCO 시장",
+        "headline": "ISCC 인증 불확실성으로 UCO 시장 단기 변동성 — 기본 수요는 견고",
+        "summary": "ISCC 논란으로 단기 거래 변동성이 발생했으나, 의무 규제에 기반한 UCO 기본 수요는 변하지 않음. 인증 문제 해결 후 시장이 빠르게 정상화될 것으로 예상. 장기 계약 바이어들의 공급 확보 움직임 오히려 강화."
+      },
+      {
+        "tag": "us",
+        "tagLabel": "미국 RFS",
+        "headline": "EPA RFS 최종 규정 4월 1일 연방관보 게재 임박 — 업계 최종 내용 확인 대기",
+        "summary": "4월 1일 연방관보 게재가 예정된 EPA RFS 최종 규정에 업계가 주목. 수입 원료 RIN 삭감 유예 확인, BBD 최종 의무량 수치 확인이 핵심 관심사. 게재와 동시에 시장 반응이 나타날 전망."
+      }
+    ],
+    "risks": {
+      "red": [
+        "ISCC 정지 공식 제안 제출 여부 확인 긴급 필요 — EU 수출 계속 가능 여부 판단 및 대안 인증 착수"
+      ],
+      "amber": [
+        "EU 바이어의 계약 관망세 — 단기 수출 계약 체결 지연으로 매출 영향 가능성 모니터링",
+        "캐나다 CFR 초안 발표 UCO 원산지 조항 포함 여부 — ECCC 평가 결과 동시 발표 시 긴급 검토 필요"
+      ],
+      "green": [
+        "ISCC 위기 해소 후 관망 수요 일시 급증 가능 — 공급 계약 선제 준비 유리",
+        "대안 인증(RSB 등) 선제 취득 시 경쟁사 대비 EU 시장 진입 유리",
+        "RFS 최종 규정 임박 → 미국 수요 확정 후 대미 수출 계약 협상 최적 시점"
+      ]
+    },
+    "sources": [
+      {
+        "title": "Update on ISCC EU Certifications for Waste-Based Biofuels",
+        "url": "https://iscc-system.org/update-on-the-recent-discussions-around-iscc-eu-certifications-forwaste-based-biofuels/",
+        "outlet": "ISCC System",
+        "date": "2026-03-30"
+      },
+      {
+        "title": "ISCC responds to potential EU suspension of its certification",
+        "url": "https://safety4sea.com/iscc-responds-to-potential-eu-suspension-of-its-certification/",
+        "outlet": "SAFETY4SEA",
+        "date": "2026-03"
+      },
+      {
+        "title": "ISCC aware of EU talks on certification recognition",
+        "url": "https://www.argusmedia.com/en/news-and-insights/latest-market-news/2672664-iscc-aware-of-eu-talks-on-certification-recognition",
+        "outlet": "Argus Media",
+        "date": "2026-03"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-03-23T08:00:00-04:00",
+    "summary": [
+      "3월 26일 EU 위원회, 바이오연료 인증 위원회 긴급 소집 — 중국산 바이오디젤 사기 문제 공식 논의",
+      "ISCC 2.5년 정지안 위원회에서 제안 — 투표 없이 논의 종료, 결정 미루어짐",
+      "EU 데이터: 2023년 가짜 UCO 1/3 확인, POME 180만 톤 허위 인증 입증",
+      "시장 충격: UCO 관련 바이오연료 거래 관망 분위기 확산",
+      "캐나다 바이오연료 산업, EU 인증 사태 파장 예의 주시"
+    ],
+    "canada": [
+      {
+        "tag": "cfr",
+        "tagLabel": "CFR",
+        "headline": "EU ISCC 사태 — 캐나다 UCO 수출 인증 위기 현실화 우려",
+        "summary": "EU의 ISCC 정지 논의가 캐나다 바이오연료 업계에 직접적 경고 신호로 작용. 캐나다산 UCO도 ISCC 인증 체계를 통해 EU에 수출되고 있어 인증 정지 시 즉각적인 수출 차단 가능성. ECCC도 관련 동향을 주시하며 국내 UCO 인증 기준 강화 방안 검토 시작."
+      },
+      {
+        "tag": "carbon",
+        "tagLabel": "UCO 규제",
+        "headline": "캐나다 내 UCO 사기 방지 대응 강화 — CFR 개정에 원산지 추적 조항 포함 유력",
+        "summary": "EU의 UCO 사기 규모(1/3 가짜, POME 180만 톤 허위) 확인 이후 캐나다 ECCC도 국내 CFR 개정에 원산지 추적 및 인증 강화 조항을 포함하는 방향으로 기울고 있음. 국내 수거 기반 캐나다산 UCO의 투명한 체계가 경쟁 우위 요소."
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "BC NDP",
+        "headline": "BC, 3/18부 계절제 시간변경제 영구 폐지 — Eby 지지율 전년比 16%p 하락 속 소규모 정책 성과",
+        "summary": "BC Eby NDP 정부가 3월 18일부로 계절제 시간변경제(Daylight Saving)를 영구 폐지. 소규모 정책 성과이지만 Eby 지지율이 전년 동기 대비 16%p 하락한 상황에서 민심 관리 차원의 발표. 10월 퀘벡 선거와 별개로 BC는 2025년 연임한 NDP가 집권 중이며 LCFS 강화 기조는 유지. 앨버타-BC 갈등 속에서도 BC의 청정연료 정책 기조는 안정적."
+      }
+    ],
+    "export": [
+      {
+        "tag": "cert",
+        "tagLabel": "ISCC 인증",
+        "headline": "EU 위원회 3월 26일 회의: ISCC 2.5년 정지안 제안, 투표 없이 마감",
+        "summary": "3월 26일 브뤼셀에서 열린 EU 바이오연료 지속가능성 위원회에서 ISCC 인증 2.5년 정지안이 공식 제안됨. 중국산 바이오디젤 사기 사례가 발단. 회의에서 투표 없이 논의만 이루어졌으며, EC가 추가 검토 후 결정하기로. 시장 충격은 즉각적으로 나타남."
+      },
+      {
+        "tag": "eu",
+        "tagLabel": "EU RED III",
+        "headline": "EU 데이터: 2023년 수입 UCO 1/3이 가짜 — 버진 팜오일 혼입, POME 180만 톤 허위 인증",
+        "summary": "EU 위원회가 공개한 데이터에 따르면 2023년 EU로 수입된 UCO의 3분의 1이 버진 팜오일로 대체된 가짜로 추정. 동시에 180만 톤의 POME이 허위 ISCC 인증으로 EU에 진입. 이 데이터가 인증 정지 논의를 촉발한 핵심 근거."
+      }
+    ],
+    "market": [
+      {
+        "tag": "cert",
+        "tagLabel": "인증",
+        "headline": "UCO 인증 위기 — 시장 관망 확산, 선물 계약 일시 지연",
+        "summary": "ISCC 위기 소문으로 UCO 관련 바이오연료 선물 계약과 수출 거래에 관망세 확산. 바이어들이 인증 결과 대기. 단기 가격 변동성 확대됐으나 의무 규제 기반 기본 수요는 유지. 현물 거래로 대체하는 움직임도 일부 포착."
+      },
+      {
+        "tag": "market",
+        "tagLabel": "UCO 시장",
+        "headline": "ISCC 위기 불구 UCO 기본 수요 견고 — 인증 해소 후 거래 폭발 전망",
+        "summary": "EU의 ReFuelEU Aviation, FuelEU Maritime 의무 규제로 UCO 기본 수요는 불변. 인증 위기는 공급 경로의 문제로, 수요 자체는 오히려 증가 추세. 인증 문제가 해소되면 관망했던 수요가 단기에 집중될 것으로 예상."
+      }
+    ],
+    "risks": {
+      "red": [
+        "ISCC 2.5년 정지 가능성 — EU 전체 수출 중단 시나리오 비상 대책 즉시 수립 필요",
+        "캐나다산 UCO도 ISCC 인증 기반 수출 — 대안 인증(RSB, REDCERT 등) 전환 준비 즉시 착수"
+      ],
+      "amber": [
+        "EU 바이어 관망 확산 → 단기 수출 계약 지연, Q2 매출 영향 가능성",
+        "캐나다 ECCC UCO 원산지 규제 강화 방향 → 수거 계약 및 인증 체계 재점검"
+      ],
+      "green": [
+        "가짜 UCO 퇴출로 실제 캐나다산 물량 희소성 증가 → 프리미엄 가격 정당화",
+        "인증 위기 해소 후 관망 수요 집중 → 공급 준비 시 단기 매출 급증 기회",
+        "ECCC UCO 규제 강화 → 수입 가짜 UCO 차단, 캐나다 국내 수거 원료 입지 강화"
+      ]
+    },
+    "sources": [
+      {
+        "title": "EU Scrutinizes Fraud in Certification of Biofuels",
+        "url": "https://maritime-executive.com/article/eu-scrutinizes-fraud-in-certification-of-biofuels",
+        "outlet": "Maritime Executive",
+        "date": "2026-03-26"
+      },
+      {
+        "title": "Biofuel fraud: What it means for EU RED III, US RFS, and global sustainability claims",
+        "url": "https://www.circularise.com/blogs/biofuel-fraud",
+        "outlet": "Circularise",
+        "date": "2026-03"
+      },
+      {
+        "title": "Used Cooking Oil: The Certified Unknown",
+        "url": "https://www.transportenvironment.org/articles/uco",
+        "outlet": "Transport & Environment",
+        "date": "2026-03"
+      },
+      {
+        "title": "How Biofuels Scams Have Undermined A Flagship EU Climate Policy",
+        "url": "https://www.occrp.org/en/investigation/how-biofuels-scams-have-undermined-a-flagship-eu-climate-policy",
+        "outlet": "OCCRP",
+        "date": "2026-03"
+      },
+      {
+        "title": "Biofuels Fraud is Happening Right Now. Can We Stop It?",
+        "url": "https://www.resourcewise.com/blog/biofuels-fraud-is-happening-right-now.-can-we-stop-it",
+        "outlet": "ResourceWise",
+        "date": "2026-03"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-03-16T08:00:00-04:00",
+    "summary": [
+      "Carbon Credits: 미국 바이오연료 시장, EPA 정책이 전쟁 유발 변동성 상쇄 가능한가",
+      "ISCC, 중국 감사 강화 착수 — 어드밴스드 바이오연료 사기 의혹 대응",
+      "BC주 가솔린 5% 캐나다산 의무화 2026년 1월 발효 후 2개월 — 디젤 8%는 2025년 4월 이미 시행 중",
+      "미국, 중국산 UCO 수입 계속 증가 — SAF 수요 급증 견인",
+      "EU UCO 캡(4.29%) — 작물 기반 바이오디젤로의 일부 수요 전환 가속화"
+    ],
+    "canada": [
+      {
+        "tag": "prov",
+        "tagLabel": "BC주",
+        "headline": "BC주 캐나다산 의무화 이행 현황 — 디젤 8%(2025년 4월~), 가솔린 5%(2026년 1월~) 병행 시행",
+        "summary": "BC주 저탄소연료표준 개정에 따라 디젤 캐나다산 8% 의무화는 2025년 4월 1일부터, 가솔린 캐나다산 5% 의무화는 2026년 1월 1일부터 각각 시행 중. 연방 CFR 개정과 함께 캐나다 국내 UCO 처리 수요 구조적 증가 추세 지속. Green Oil의 BC주 공급 물량 확대 협상 기회 유지."
+      },
+      {
+        "tag": "cfr",
+        "tagLabel": "CFR",
+        "headline": "캐나다 청정 연료 시장 2026년 핵심 테스트 — EcoEngineers 분석 발간",
+        "summary": "EcoEngineers가 '2025년이 밝혀준 것과 2026년이 테스트할 것' 분석 발간. 캐나다 청정 연료 정책의 투자 매력도, CFR 개정 영향, 국내 생산 기반 강화 여부를 핵심 과제로 지목. 불확실성 속에서도 국내 정제 사업의 수익성은 유지되고 있음."
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "앨버타 UCP",
+        "headline": "앨버타, 선거구 획정 독립기구 제한 법안(Bill 32) 의회 발의 — 집권당 유리한 선거구 재편 논란",
+        "summary": "앨버타 Smith 정부가 독립적 선거구획정위원회의 89석 권고안을 무력화하고 91석으로 확대하며 MLA 주도 재편을 허용하는 Bill 32를 발의. 민주주의 후퇴 비판을 받고 있으나 UCP 과반으로 통과 예상. Smith 정부의 권위적 행보가 지속되면 연방-앨버타 갈등 심화 및 연방 에너지 정책(CFR) 앨버타 적용에 추가 마찰 우려."
+      }
+    ],
+    "export": [
+      {
+        "tag": "eu",
+        "tagLabel": "EU RED III",
+        "headline": "EU UCO 캡(4.29%) 작동 — 작물 기반 바이오디젤 수요 전환 가속",
+        "summary": "RED III 하에서 UCO 등 Annex IX B 원료 캡(4.29%)이 본격 작동하면서 일부 컴플라이언스 수요가 작물 기반 바이오디젤로 전환되는 현상 가속. 그러나 높은 온실가스 감축률로 UCO의 캡 한도 내 수요는 반드시 충족됨. 수출 물량 최적화 필요."
+      },
+      {
+        "tag": "us",
+        "tagLabel": "미국 RFS",
+        "headline": "미국 바이오연료 시장, 전쟁 유발 변동성 속 EPA 정책 효과 주목",
+        "summary": "Carbon Credits 분석에 따르면 중동 분쟁 관련 에너지 가격 변동성이 미국 바이오연료 시장을 불안정하게 만들고 있으나, EPA의 높은 RFS 의무량이 수요 하방을 지지. UCO 수급 불안 속에서도 의무 기반 수요는 견고."
+      }
+    ],
+    "market": [
+      {
+        "tag": "cert",
+        "tagLabel": "인증",
+        "headline": "ISCC, 중국 감사 강화 착수 — 어드밴스드 바이오연료 사기 의혹 집중 조사",
+        "summary": "QC Intel 보도에 따르면 ISCC가 중국 내 어드밴스드 바이오연료 사기 의혹에 대응해 현지 감사를 대폭 강화. 기존 91% 감사 미실시 문제 해소 목적. 감사 결과에 따라 일부 중국 UCO 공급이 인증 취소될 가능성. 캐나다산 UCO 대체 수요 발생 시나리오 대비."
+      },
+      {
+        "tag": "trade",
+        "tagLabel": "무역 동향",
+        "headline": "미국 중국산 UCO 수입 증가 지속 — SAF 수요 급증이 주요 견인",
+        "summary": "미국이 SAF 생산 급증과 RFS 의무 충족을 위해 중국산 UCO 수입을 계속 늘리고 있음. 동시에 캐나다산 UCO도 '북미 원산지' 프리미엄으로 미국 내 선호도 상승. 2028년 수입 원료 RIN 삭감 이전에 캐나다산 물량 선점 기회."
+      }
+    ],
+    "risks": {
+      "red": [
+        "ISCC 중국 감사 강화 → 사기 인증 취소 시 시장 혼란, 캐나다산 UCO 대체 수요 급증에 대비 필요"
+      ],
+      "amber": [
+        "전쟁 유발 에너지 변동성 → UCO 원료 조달 비용 불안정, 단가 예측 어려움 지속",
+        "EU UCO 캡 수요 전환 → 수출 물량 캡 한도 내 최적화, 초과분 처리 방안 검토"
+      ],
+      "green": [
+        "BC주 캐나다산 의무화(디젤 8% + 가솔린 5%) 병행 시행 → 국내 캐나다산 UCO 기반 바이오디젤 수요 구조적 증가, 공급 물량 확대 협상",
+        "ISCC 중국 감사 → 사기 UCO 퇴출 → 캐나다산 정품 희소성 증가, 수출 단가 강세",
+        "미국 SAF 수요 급증 → 캐나다산 UCO 수출 장기 수요 기반 강화"
+      ]
+    },
+    "sources": [
+      {
+        "title": "U.S. Biofuel Market 2026: Can EPA Policies Offset War-Driven Volatility?",
+        "url": "https://carboncredits.com/u-s-biofuel-market-2026-can-epa-policies-offset-war-driven-volatility/",
+        "outlet": "Carbon Credits",
+        "date": "2026-03"
+      },
+      {
+        "title": "ISCC ramps up China audits amid alleged advanced biofuel fraud",
+        "url": "https://www.qcintel.com/biofuels/article/iscc-ramps-up-china-audits-amid-alleged-advanced-biofuel-fraud-13274.html",
+        "outlet": "QC Intel",
+        "date": "2026-03"
+      },
+      {
+        "title": "Canada's Clean Fuels Market: What 2025 Clarified And What 2026 Will Test",
+        "url": "https://www.ecoengineers.us/insights/canadas-clean-fuels-market-what-2025-clarified-and-what-2026-will-test/",
+        "outlet": "EcoEngineers",
+        "date": "2026-03"
+      },
+      {
+        "title": "B.C. will strengthen biofuel industry with Canadian-content requirements",
+        "url": "https://news.gov.bc.ca/releases/2025ECS0008-000147",
+        "outlet": "BC Government",
+        "date": "2026-03"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-03-09T08:00:00-05:00",
+    "summary": [
+      "Argus: RED III 이행으로 폐기물 원료 수요 증가 — UCO 바이오연료 생산 24% 비중 확인",
+      "Argus: EU 바이오디젤 2026년 작물 기반 수요 반등 전망 — UCO 캡 효과",
+      "SAF 시장 '길이 퍼즐' 지속 — 지역별 공급 불균형 구조 고착화",
+      "캐나다 CFR 초안 발표 대기 중 — Canada Gazette 게재 시기 Q2로 전망",
+      "UCO 공급 부족 고착화 — 수거 인프라가 수요 성장 속도를 따라가지 못함"
+    ],
+    "canada": [
+      {
+        "tag": "cfr",
+        "tagLabel": "CFR 개정",
+        "headline": "캐나다 CFR 개정 초안 발표 대기 — 멀티플라이어 vs 함량 요건 최종 결정 임박",
+        "summary": "업계가 Canada Gazette Part I 게재를 Q2 2026으로 기대하는 가운데 ECCC가 법무부 검토를 마무리 중인 것으로 전해짐. 크레딧 멀티플라이어(BBD 1.4x) 방식으로의 결정이 유력하다는 관측이 우세. 확정 후 60일 추가 의견 수렴."
+      },
+      {
+        "tag": "prov",
+        "tagLabel": "생산 인센티브",
+        "headline": "바이오연료 생산 인센티브 Q1 성과 점검 — 국내 생산 안정화 효과 확인 중",
+        "summary": "1월 발효 후 2개월이 지난 시점에서 NRCan이 바이오연료 생산 인센티브 초기 성과를 점검 중. 국내 바이오디젤·재생 디젤 생산이 안정화되고 있다는 긍정적 신호. UCO 처리 수요 유지에 기여."
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "주간 에너지 갈등",
+        "headline": "온타리오·BC·퀘벡 전기차 의무판매 기준 갈등 공론화 — 주간 에너지 정책 불일치 심화",
+        "summary": "온타리오, BC, 퀘벡 3개 주가 전기차 의무판매 비율 기준을 놓고 갈등을 공식화. BC와 퀘벡은 강화된 연방 기준 지지, 온타리오 Ford 정부는 자동차 산업 보호를 명분으로 완화 입장. 주간 에너지 정책 불일치는 연방 CFR 및 바이오연료 표준의 통일된 적용에도 장기적 불확실성 요소. 주 정책 분열이 심화될수록 국내 UCO 수급 계획 리스크 관리 중요."
+      }
+    ],
+    "export": [
+      {
+        "tag": "eu",
+        "tagLabel": "EU RED III",
+        "headline": "Argus: RED III로 EU 폐기물 원료 수요 증가 — UCO 24% 비중 유지",
+        "summary": "Argus Media 분석에 따르면 RED III 이행 가속화로 Annex IX A·B 폐기물 원료 수요가 2024년 900만 톤에서 추가 증가. UCO가 전체 바이오연료 생산의 24% 비중을 차지하며 핵심 원료 지위 유지. 이중계산 폐지에도 절대 수요량 증가 구조."
+      },
+      {
+        "tag": "eu",
+        "tagLabel": "EU RED III",
+        "headline": "Argus: EU 작물 기반 바이오디젤 2026년 수요 반등 — UCO 캡 초과분 대체",
+        "summary": "Argus가 UCO 등 Annex IX B 캡(4.29%)으로 인해 초과 컴플라이언스 수요가 작물 기반 바이오디젤로 전환된다고 분석. 독일·네덜란드 이중계산 폐지 + UCO 캡으로 UCO 대비 작물 기반 경쟁력 상승. 지중해 국가에서는 여전히 UCO 이중계산 유지."
+      }
+    ],
+    "market": [
+      {
+        "tag": "market",
+        "tagLabel": "SAF 시장",
+        "headline": "SAF 시장 지역별 공급 불균형 고착화 — 유럽 일부 과잉, 북미 부족",
+        "summary": "Argus Media가 SAF 시장 '길이 퍼즐'이 지속된다고 분석. 유럽 일부 지역에서는 SAF 생산 능력이 단기 컴플라이언스 수요를 초과하는 반면, 북미는 구조적 부족. 캐나다 기반 UCO 공급은 북미 부족 해소에 전략적으로 포지셔닝 유리."
+      },
+      {
+        "tag": "market",
+        "tagLabel": "UCO 수거",
+        "headline": "UCO 수거 인프라 성장 한계 — 수요 증가 속도 따라가지 못하는 구조",
+        "summary": "글로벌 UCO 수거 인프라가 SAF·RD 수요 증가 속도를 따라가지 못하고 있음. 미국 수거량(3.3B 파운드)과 수요(5.7B 파운드)의 구조적 갭이 해소 기미 없음. 수거 인프라 투자가 장기 경쟁력의 핵심으로 부상."
+      }
+    ],
+    "risks": {
+      "red": [
+        "UCO 수거 인프라 한계 — 수요 급증에 수거 물량 확대가 따라가지 못할 경우 레스토랑 수거 단가 협상 압박 증가"
+      ],
+      "amber": [
+        "EU 작물 기반 바이오디젤 대체 수요 증가 → UCO 캡 한도 내 물량 확보 경쟁 심화",
+        "캐나다 CFR 초안 발표 Q2 지연 시 → 2026년 내 멀티플라이어 효과 체감 불가"
+      ],
+      "green": [
+        "RED III 폐기물 원료 수요 절대량 증가 → UCO 수출 물량 확대 구조적 기회",
+        "북미 SAF 공급 부족 → 캐나다산 UCO의 SAF 원료 포지셔닝 유리",
+        "유럽 지중해 국가 이중계산 유지 → 이탈리아·스페인 등 수출 단가 프리미엄 활용"
+      ]
+    },
+    "sources": [
+      {
+        "title": "Viewpoint: Waste feedstock demand grows with RED III",
+        "url": "https://www.argusmedia.com/en/news-and-insights/latest-market-news/2771903-viewpoint-waste-feedstock-demand-grows-with-red-iii",
+        "outlet": "Argus Media",
+        "date": "2026-03"
+      },
+      {
+        "title": "Viewpoint: EU crop biodiesel demand set to rise in 2026",
+        "url": "https://www.argusmedia.com/en/news-and-insights/latest-market-news/2769092-viewpoint-eu-crop-biodiesel-demand-set-to-rise-in-2026",
+        "outlet": "Argus Media",
+        "date": "2026-03"
+      },
+      {
+        "title": "Viewpoint: SAF market length puzzle persists",
+        "url": "https://www.argusmedia.com/en/news-and-insights/latest-market-news/2771924-viewpoint-saf-market-length-puzzle-persists",
+        "outlet": "Argus Media",
+        "date": "2026-03"
+      },
+      {
+        "title": "UCO Market 2026: SAF Feedstock Economics, Supply Risk & Policy Outlook",
+        "url": "https://energy-solutions.co/articles/sub/used-cooking-oil-uco-market-saf-feedstock",
+        "outlet": "Energy Solutions",
+        "date": "2026-03"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-03-02T08:00:00-05:00",
+    "summary": [
+      "EcoEngineers: '2025년 명확해진 것, 2026년이 테스트할 것' — 캐나다 청정 연료 시장 전망 발간",
+      "S&P Global: EU 바이오디젤 시장 규제 환경·원료 역학이 2026 결정 요인",
+      "UCO 공급 갭(미국 3.3B vs. 5.7B 파운드) 해소 기미 없음 — 장기 구조적 부족 고착",
+      "캐나다 CFR Canada Gazette 게재 여전히 대기 — Q2 2026 전망으로 전환",
+      "EU ISCC 위기 전조 — 중국 감사 미실시 91% 문제 업계 보고서에서 경고 시작"
+    ],
+    "canada": [
+      {
+        "tag": "cfr",
+        "tagLabel": "CFR",
+        "headline": "EcoEngineers: 2026년 캐나다 청정 연료 정책 투자 매력도 테스트 — 불확실성 지속",
+        "summary": "EcoEngineers가 캐나다 청정 연료 시장 연간 전망을 발간. CFR 개정 방향, 바이오연료 생산 인센티브 효과, 국내 생산 기반 강화 여부가 2026년 핵심 테스트 항목으로 제시. 정책 불확실성에도 불구하고 기존 CFR 크레딧 수익은 안정적."
+      },
+      {
+        "tag": "prov",
+        "tagLabel": "생산 인센티브",
+        "headline": "BC주 바이오연료 캐나다산 함량 의무화 3월 확인 — 연방 정책 선행 지표 역할",
+        "summary": "BC주 디젤 캐나다산 8% 의무(2025년 4월 발효)가 순조롭게 이행되면서 연방 CFR 개정의 실행 가능성을 입증하는 선행 지표로 평가. 2026년 1월 발효된 가솔린 5% 의무까지 더해져 BC주 내 캐나다산 UCO 수요 구조적 증가 추세."
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "퀘벡 CAQ",
+        "headline": "퀘벡 CAQ, 차기 대표 선출 경쟁 시작 — 10월 선거 앞두고 정치 지형 유동적",
+        "summary": "퀘벡 CAQ가 Legault 사임 후 신임 대표 선출 절차에 돌입. 10월 주 선거를 앞두고 PQ(분리주의 정당) 지지율 상승세가 두드러지며 퀘벡 정치 구도가 급변 중. 새 지도부 성향에 따라 퀘벡의 탄소시장·바이오연료 정책 방향 변화 가능성. 퀘벡 소재 바이어 및 파트너사와의 계약 시 정치 연속성 리스크 조항 검토 권장."
+      },
+      {
+        "tag": "politics",
+        "tagLabel": "연방 자유당",
+        "headline": "자유당, 3개 선거구 보궐선거 통한 의회 다수 확보 공세 본격화",
+        "summary": "자유당이 온타리오 2개, 퀘벡 1개 등 총 3개 선거구 보궐선거 캠페인을 공식 가동. 보궐선거 전승 시 소수 정부에서 다수 정부로 전환, 의회 주도권 확보 및 CFR·에너지 법안 통과 속도 향상 기대. 보수당도 전력 투구 — 선거 결과가 자유당 정책 추진력에 직접 영향."
+      }
+    ],
+    "export": [
+      {
+        "tag": "eu",
+        "tagLabel": "EU 시장",
+        "headline": "S&P Global: EU 바이오디젤 시장 규제·원료 역학이 2026 형성 — UCO 포지셔닝 핵심",
+        "summary": "S&P Global의 2026 EU 바이오디젤 시장 전망에서 RED III 이행 속도, 이중계산 폐지 범위, 원료별 경쟁력이 시장을 결정한다고 분석. UCO 기반 HVO가 높은 온실가스 감축률로 프리미엄 지위를 유지하나, 포지셔닝과 인증이 관건."
+      },
+      {
+        "tag": "eu",
+        "tagLabel": "EU 인증",
+        "headline": "ISCC 위기 전조 — 중국 UCO 수거지점 91% 감사 미실시 문제 업계 경고",
+        "summary": "업계 보고서들이 중국·말레이시아·인도네시아산 ISCC 인증 UCO 수거지점의 91%가 감사를 받지 않았다는 사실을 경고하기 시작. EU가 이 데이터를 바탕으로 강경 대응을 준비 중이라는 신호. 캐나다산 UCO 인증 신뢰도 차별화의 중요성 부각."
+      }
+    ],
+    "market": [
+      {
+        "tag": "market",
+        "tagLabel": "UCO 공급",
+        "headline": "미국 UCO 구조적 공급 부족 고착 — 수거 3.3B 파운드 vs. 수요 5.7B 파운드",
+        "summary": "Clean Fuels Alliance America의 분석에 따르면 미국 내 UCO 수거 인프라(3.3B 파운드)가 업계 수요(5.7B 파운드)의 58%에 불과. 이 구조적 갭이 2026년에도 지속되며 캐나다산 UCO 수입 수요를 지지. 공급 부족이 심화될수록 캐나다 수거 물량의 협상력 증가."
+      },
+      {
+        "tag": "market",
+        "tagLabel": "UCO 가격",
+        "headline": "UCO 가격 구조적 강세 기반 확인 — 규제·공급 부족 복합 지지",
+        "summary": "규제 의무(RFS, RED III)와 구조적 공급 부족이 복합적으로 UCO 가격을 지지하는 환경 확인. Fastmarkets 분석에 따르면 SAF 원료 수요가 장기 가격 지지의 핵심 요인. 750~1,250 USD/t 범위가 2026년 내내 유지될 가능성 높음."
+      }
+    ],
+    "risks": {
+      "red": [
+        "ISCC 감사 미실시 91% 문제 → EU 강경 대응 예고, 캐나다 수출 인증 체계 조기 점검 필요"
+      ],
+      "amber": [
+        "CFR 초안 발표 계속 지연 → 업계 투자 계획 수립 어려움, 불확실성 장기화",
+        "미국 UCO 공급 갭 → 수입 경쟁 심화, 캐나다산 수취 단가 상승 vs. 물량 확보 부담"
+      ],
+      "green": [
+        "구조적 공급 부족 고착 → 장기 공급 계약 시 가격 협상력 강화",
+        "EU UCO 프리미엄 지위 유지 → 인증 유지 시 고단가 수출 지속",
+        "SAF 원료 수요 장기 가격 지지 → 수익성 안정적 확보 환경 유지"
+      ]
+    },
+    "sources": [
+      {
+        "title": "Canada's Clean Fuels Market: What 2025 Clarified And What 2026 Will Test",
+        "url": "https://www.ecoengineers.us/insights/canadas-clean-fuels-market-what-2025-clarified-and-what-2026-will-test/",
+        "outlet": "EcoEngineers",
+        "date": "2026-03-01"
+      },
+      {
+        "title": "COMMODITIES 2026: European biodiesel market shaped by regulatory landscape",
+        "url": "https://www.spglobal.com/energy/en/news-research/latest-news/agriculture/121525-commodities-2026-european-biodiesel-market-to-be-shaped-by-regulatory-landscape-feedstock-dynamics",
+        "outlet": "S&P Global",
+        "date": "2026-03"
+      },
+      {
+        "title": "Clean Fuels releases outlook on global supplies of UCO",
+        "url": "https://cleanfuels.org/clean-fuels-releases-outlook-on-global-supplies-of-used-cooking-oil-for-biodiesel-and-renewable-diesel-production/",
+        "outlet": "Clean Fuels Alliance America",
+        "date": "2026-03"
+      },
+      {
+        "title": "Used Cooking Oil: The Certified Unknown",
+        "url": "https://www.transportenvironment.org/articles/uco",
+        "outlet": "Transport & Environment",
+        "date": "2026-03"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-02-23T08:00:00-05:00",
+    "summary": [
+      "UCO 원료 시장 2월 26일 기준 추가 강세 — 컴플라이언스 낙관론과 에너지 시장 강세가 매수세 견인",
+      "S&P Global: 프랑스·독일 이중계산 폐지 → 재생 디젤(RD) 및 THG 시장 강세 영향 분석",
+      "캐나다 CFR 초안 발표 지연 — Canada Gazette Part I 게재 예상 시기 불명확",
+      "지정학적 긴장 고조로 인한 에너지 시장 변동성 UCO 공급망 리스크 요인으로 부각"
+    ],
+    "canada": [
+      {
+        "tag": "cfr",
+        "tagLabel": "CFR 개정",
+        "headline": "CFR 초안 발표 Canada Gazette 게재 지연 — ECCC 의견 검토 중",
+        "summary": "1월 마감 후 ECCC가 제출된 의견을 검토 중이나 Canada Gazette Part I 게재 시기가 구체화되지 않음. 업계는 Q1 2026 내 초안 발표를 기대했으나 Q2 이후로 늦어질 가능성도 제기. 불확실성 속에 바이오연료 생산 인센티브 활용에 집중하는 전략 유효."
+      },
+      {
+        "tag": "carbon",
+        "tagLabel": "탄소세",
+        "headline": "연방 환경부 바이오연료 GHG 규정 명확화(2025년 11월 발표) — 컴플라이언스 예측 가능성 향상 지속",
+        "summary": "연방 환경부가 2025년 11월 발표한 바이오연료 관련 온실가스 규정 명확화 조치가 2026년 Q1에도 생산자들의 컴플라이언스 계획 수립에 긍정적으로 작용 중. CFR 크레딧 시장에서 규칙 명확성이 가격 안정 요인으로 작용. (원본 발표: 2025년 11월)"
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "퀘벡 CAQ",
+        "headline": "퀘벡 Legault 주지사 사임 — 10월 선거 앞두고 CAQ 지도부 공백, 주 정책 연속성 불확실",
+        "summary": "퀘벡 Legault 주지사가 10월 주 선거를 몇 달 앞두고 사임을 발표. CAQ는 신임 대표 선출 경쟁에 돌입하며 주 에너지 정책(탄소시장, 바이오연료 의무) 방향이 일시적으로 불확실해짐. 분리주의 정당(PQ)의 부상 가능성이 점쳐지며 퀘벡 내 연방 정책 협조 체계 약화 리스크 존재."
+      }
+    ],
+    "export": [
+      {
+        "tag": "eu",
+        "tagLabel": "EU RED III",
+        "headline": "S&P Global: 프랑스·독일 이중계산 폐지 → RD·THG 강세 — UCO 원료 수요 재편",
+        "summary": "S&P Global이 프랑스와 독일의 이중계산 폐지가 재생 디젤(RD)과 독일 THG 시장에 강세 영향을 줄 것으로 분석. HVO(UCO 기반) 수요는 물리적으로 증가하지만, UCO 단위당 크레딧 가치가 하락해 단가 재조정 불가피. 지중해 시장의 이중계산 유지가 가격 분기점 형성."
+      },
+      {
+        "tag": "eu",
+        "tagLabel": "EU RED III",
+        "headline": "Argus: 2026년 EU 폐기물 원료 수요 RED III 이후 증가 — 전체 9MT 시장 성장",
+        "summary": "Argus Media 분석에 따르면 RED III 이행으로 Annex IX A·B 폐기물 원료 총수요가 2024년 900만 톤 수준에서 추가 성장 전망. UCO가 전체 바이오연료 생산의 24% 비중 차지. 이중계산 폐지에도 불구하고 절대 수요량은 증가하는 구조."
+      }
+    ],
+    "market": [
+      {
+        "tag": "market",
+        "tagLabel": "UCO 가격",
+        "headline": "UCO 원료 시장 2월 26일 강세 — 컴플라이언스 낙관론·에너지 강세가 주도",
+        "summary": "2월 26일 UCO 원료 시장이 컴플라이언스 최적화 기대와 에너지 시장 강세를 배경으로 추가 상승. 수요자들의 적극적인 매수세로 가격 지지. 레스토랑 수거 공급이 계절적 회복 시작 단계로 공급 증가 제한적."
+      },
+      {
+        "tag": "market",
+        "tagLabel": "UCO 수거",
+        "headline": "아시아 UCO 수거 스타트업 투자 증가 추세 — 현지 소비 경쟁 심화 우려",
+        "summary": "인도네시아·싱가포르 등 아시아 UCO 수거 스타트업들이 투자 유치를 통해 수거 네트워크 확장에 나서고 있음. 이 추세가 장기화될 경우 아시아산 UCO의 글로벌 수출 물량이 줄어들고 현지 소비로 흡수될 가능성. 캐나다산 UCO의 상대적 희소성 가치 상승 시나리오에 기여."
+      }
+    ],
+    "risks": {
+      "red": [
+        "CFR 초안 발표 지연 → 국내산 우대 조항 시행 시기 불확실, Green Oil 정제 제품 수익성 계획 수립 지연"
+      ],
+      "amber": [
+        "지정학적 리스크(중동 분쟁) → 에너지 시장 변동성 → UCO 원료·수출 단가 예측 어려움",
+        "아시아 UCO 수거망 확대 → 장기적으로 아시아산 공급 증가로 글로벌 가격 압박 가능성"
+      ],
+      "green": [
+        "S&P Global 분석대로 RD·HVO 수요 강세 지속 → UCO 기반 HVO 원료 수요 구조적 증가",
+        "EU 폐기물 원료 절대 수요량 증가(이중계산 폐지에도 불구) → 수출 물량 확대 기회 유효",
+        "UCO 시장 강세 지속 → 레스토랑 수거 단가 협상력 강화 및 마진 개선 환경"
+      ]
+    },
+    "sources": [
+      {
+        "title": "France, Germany are set to halt double-counting on biofuels; bullish impact seen on RD, THG",
+        "url": "https://www.spglobal.com/energy/en/news-research/latest-news/agriculture/061225-france-germany-are-set-to-halt-double-counting-on-biofuels-bullish-impact-seen-on-rd-thg",
+        "outlet": "S&P Global",
+        "date": "2026-02"
+      },
+      {
+        "title": "Viewpoint: Waste feedstock demand grows with RED III",
+        "url": "https://www.argusmedia.com/en/news-and-insights/latest-market-news/2771903-viewpoint-waste-feedstock-demand-grows-with-red-iii",
+        "outlet": "Argus Media",
+        "date": "2026-02"
+      },
+      {
+        "title": "Clarity on greenhouse gas regulations",
+        "url": "https://www.canada.ca/en/environment-climate-change/news/2025/11/clarity-on-greenhouse-gas-regulations.html",
+        "outlet": "Canada.ca",
+        "date": "2026-02"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-02-16T08:00:00-05:00",
+    "summary": [
+      "중동 지정학적 긴장 에스컬레이션 — 에너지 시장 변동성 확대, UCO 원료 비용 다년 최고치 경신",
+      "독일, 바이오연료 사기 인증서 2년 소급 취소 가능 '신뢰 보호 조항' 시행 확정",
+      "EU 유럽 HVO 가격 2026년 내내 약세 없을 것 — Argus Media 전망",
+      "캐나다 연방 정책이 미국과의 경쟁력 격차 완전 해소에 충분치 않다는 업계 우려 지속",
+      "UCO SAF 원료 비용 상승 → 항공사 SAF 조달 비용 압박 → 가격 전가 논의 활발"
+    ],
+    "canada": [
+      {
+        "tag": "cfr",
+        "tagLabel": "CFR 개정",
+        "headline": "FCC 보고서: 미국 정책이 캐나다 바이오연료 경쟁력 압박 — 추가 대응 필요",
+        "summary": "캐나다 농업신용공사(FCC)가 미국의 45Z 세액공제 등 강력한 바이오연료 생산 지원이 캐나다 생산자의 비용 경쟁력을 압박한다는 분석 발간. 연방 $372M 인센티브가 격차를 일부 보완하나 완전한 패리티 달성에는 추가 정책 필요. CFR 크레딧 멀티플라이어 도입이 핵심 보완책."
+      },
+      {
+        "tag": "carbon",
+        "tagLabel": "탄소세",
+        "headline": "캐나다 CFR 초안 발표 계속 지연 — 업계 불확실성 가중",
+        "summary": "Canada Gazette Part I에 CFR 초안 발표가 계속 지연됨. 일부 업계는 ECCC가 의견 분석 및 법적 검토에 예상보다 긴 시간을 소요하고 있다고 언급. 발표 전까지 크레딧 멀티플라이어 실제 배율 미확정 상태."
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "온타리오 PC당",
+        "headline": "Ford 온타리오 주지사, 퀘벡 분리주의 당선 '재앙' 경고 — 캐나다 국가통합 리스크 쟁점화",
+        "summary": "Ford 주지사가 10월 퀘벡 주 선거에서 분리주의 정당이 집권할 경우 캐나다 전체에 \"재앙\"이 될 것이라고 경고. Legault 퀘벡 주지사는 타 주의 내정 간섭을 거부. 퀘벡 정치 불안정은 연방 정책 공조(CFR 포함) 및 캐나다 내 원료 수급 계획에 중장기 불확실성 요인."
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "앨버타-BC 갈등",
+        "headline": "BC-앨버타 파이프라인 협정 갈등 지속 — 주간 에너지 정책 긴장 에너지 공급망에 리스크",
+        "summary": "BC와 앨버타 간 비투멘 파이프라인 협정 해석 갈등이 계속되며 양 주 에너지 협력 관계 경색. BC의 LCFS 강화 기조와 앨버타의 화석연료 우선 정책이 충돌하며 서부 캐나다 에너지 공급망에 불확실성 제공. 캐나다 서부 지역 바이오연료 공급망 관리 시 주 간 규제 차이 고려 필요."
+      }
+    ],
+    "export": [
+      {
+        "tag": "eu",
+        "tagLabel": "EU RED III",
+        "headline": "독일 사기 인증서 소급 취소 조항 시행 확정 — 2년 소급 효력",
+        "summary": "독일 환경부가 '신뢰 보호 조항'을 최종 확정하여 사기로 발급된 바이오연료 인증서를 최대 2년 소급해 취소 가능. 중국·아시아발 가짜 UCO 인증서 집중 타깃. 캐나다산 정품 UCO 인증 유지의 중요성이 더욱 부각."
+      },
+      {
+        "tag": "eu",
+        "tagLabel": "EU RED III",
+        "headline": "Argus: 유럽 HVO 가격 2026년 내내 강세 전망 — 원료 공급 부족 지속",
+        "summary": "Argus Media가 유럽 HVO 가격이 2026년 전반에 걸쳐 하락하지 않을 것으로 전망. UCO 등 폐기물 원료 공급 부족, RED III 의무 강화, SAF 수요 증가가 복합적 가격 지지 요인. 바이어의 수입 UCO 확보 경쟁 지속 예상."
+      }
+    ],
+    "market": [
+      {
+        "tag": "market",
+        "tagLabel": "UCO 가격",
+        "headline": "지정학적 리스크 에스컬레이션 — UCO 포함 원료 가격 다년 최고치",
+        "summary": "중동 분쟁 심화로 에너지·원료 시장 전반에 걸쳐 가격 급등. 대두유, UCO, 동물성 지방 등 바이오연료 원료 가격이 다년 최고치를 경신하는 국면. 공급업체로서는 유리하나, 정제 후 재판매하는 수익 구조에서는 매입 단가 상승 압박 동시 발생."
+      },
+      {
+        "tag": "market",
+        "tagLabel": "SAF 시장",
+        "headline": "UCO 기반 SAF HEFA 온실가스 감축 70~90% — 항공사 수요 견조 지속",
+        "summary": "UCO 기반 HEFA SAF의 온실가스 감축률 70~90%(화석 대비)로 항공사의 SAF 의무 충족에 가장 적합한 원료임이 재확인. 항공사 조달 비용 상승에도 불구하고 규제 의무로 인해 대체재 없음. UCO 장기 공급 계약 수요 증가."
+      }
+    ],
+    "risks": {
+      "red": [
+        "지정학적 리스크로 인한 에너지 시장 변동성 — UCO 레스토랑 수거 단가와 수출 단가 간 마진 압박 가능성 모니터링 필요"
+      ],
+      "amber": [
+        "캐나다 연방-미국 바이오연료 경쟁력 격차 지속 — CFR 개정 효과 미흡 시 국내 생산 기반 약화 가능",
+        "독일 소급 취소 조항 → 과거 아시아산 UCO와 혼합·거래한 이력 있을 경우 인증 리스크 검토"
+      ],
+      "green": [
+        "HVO 가격 강세 지속 전망 → UCO 원료 수출 단가 고공행진 유지",
+        "SAF 항공사 조달 의무 강제 수요 → UCO 장기 공급 계약 체결 협상력 확보 기회",
+        "독일 사기 인증서 소급 취소 → 캐나다산 정품 UCO 신뢰도 프리미엄 가시화"
+      ]
+    },
+    "sources": [
+      {
+        "title": "Viewpoint: European HVO prices unlikely to ease in 2026",
+        "url": "https://www.argusmedia.com/en/news-and-insights/latest-market-news/2766252-viewpoint-european-hvo-prices-unlikely-to-ease-in-2026",
+        "outlet": "Argus Media",
+        "date": "2026-02"
+      },
+      {
+        "title": "U.S. policy impacting biofuel potential in Canada",
+        "url": "https://www.fcc-fac.ca/en/knowledge/economics/us-policy-impacting-biofuel-potential-canada",
+        "outlet": "FCC",
+        "date": "2026-02"
+      },
+      {
+        "title": "Germany and Netherlands consider policy shifts reshaping European biodiesel demand",
+        "url": "https://www.ofimagazine.com/news/germany-and-netherlands-consider-policy-shifts-that-could-reshape-european-biodiesel-demand",
+        "outlet": "OFI Magazine",
+        "date": "2026-02"
+      },
+      {
+        "title": "U.S. Biofuel Market 2026: Can EPA Policies Offset War-Driven Volatility?",
+        "url": "https://carboncredits.com/u-s-biofuel-market-2026-can-epa-policies-offset-war-driven-volatility/",
+        "outlet": "Carbon Credits",
+        "date": "2026-02"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-02-09T08:00:00-05:00",
+    "summary": [
+      "캐나다 CFR 초안 Canada Gazette 게재 임박 — 업계 대기 모드, Q1 이내 발표 전망",
+      "네덜란드 RED III 초안 발표 — UCOME 해운 부문 화석연료 취급, 교통 부문 39% 재생에너지 목표 설정",
+      "Argus: EU 에탄올 2026년 의무 지지 — 폐기물 UCO 캡으로 에탄올 대체 수요 증가",
+      "SAF 시장 '길이 퍼즐' 지속 — 일부 지역 생산 과잉, 다른 지역 공급 부족 구조 심화",
+      "미국, 중국산 UCO 수입 증가세 — RFS 의무 충족용 공급 부족 심각"
+    ],
+    "canada": [
+      {
+        "tag": "cfr",
+        "tagLabel": "CFR 개정",
+        "headline": "CFR 초안 Canada Gazette Part I 게재 임박 — 크레딧 멀티플라이어 배율 확정 관심",
+        "summary": "1월 의견수렴 종료 후 ECCC가 초안 작성 마무리 단계로 알려짐. Canada Gazette Part I 게재 시 60일간 추가 의견 수렴 후 최종 확정. 크레딧 멀티플라이어(BBD 1.4x 유력)와 국내 함량 요건 중 어떤 안으로 갈 것인지가 핵심 관심사."
+      },
+      {
+        "tag": "prov",
+        "tagLabel": "주정부",
+        "headline": "BC주 바이오연료 캐나다산 함량 의무화 — 가솔린 5% 적용(1월 1일), 디젤 8% 시행(4월 1일)",
+        "summary": "BC주가 2025년 2월 도입한 저탄소연료표준 개정에 따라 디젤 캐나다산 8% 의무는 2025년 4월 1일부터, 가솔린 캐나다산 5% 의무는 2026년 1월 1일부터 각각 발효. 연방 CFR 개정 방향과 일치하며 캐나다 국내 UCO 수요 구조적 증가의 선행 사례로 부각."
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "앨버타 UCP",
+        "headline": "앨버타 Smith, BC Eby's '반역' 발언 반박 — 분리주의 옹호로 연방-주 갈등 격화",
+        "summary": "BC Eby 주지사가 앨버타 분리주의 세력의 외부 접촉을 \"반역\"으로 규정하자, Smith 주지사가 이를 강력 반박하며 분리주의 세력을 옹호하는 발언. 연방-앨버타 관계 긴장이 고조되며 연방 에너지 정책(CFR 포함)에 대한 앨버타의 저항이 더욱 강화될 전망. Alberta는 자체 에너지 규정 우선 기조를 유지하며 연방 CFR 이행에 협조적이지 않은 상태."
+      }
+    ],
+    "export": [
+      {
+        "tag": "eu",
+        "tagLabel": "EU RED III",
+        "headline": "네덜란드 RED III 초안: UCOME 해운 화석연료 취급 확정, 운송 39% 재생에너지 목표",
+        "summary": "네덜란드가 RED III 이행 초안을 공개. 운송 부문 재생에너지 목표를 39%로 설정하고 UCOME을 해운 부문 연료로 공급 시 화석연료로 분류. UCO 기반 바이오연료의 해운 부문 수익성 저하, 도로 운송 부문 집중 전략 필요."
+      },
+      {
+        "tag": "eu",
+        "tagLabel": "EU RED III",
+        "headline": "Argus: EU 에탄올 2026년 의무 지지 — UCO 캡으로 에탄올 수요 반사 이익",
+        "summary": "Argus가 RED III하에서 UCO 등 Annex IX B 원료 캡이 에탄올 등 Annex IX A 원료로 수요를 전환시킨다고 분석. UCO 캡(4.29%)을 초과한 의무 충족 부분은 에탄올 등으로 대체. 수출 포트폴리오 다변화 검토 기회."
+      }
+    ],
+    "market": [
+      {
+        "tag": "market",
+        "tagLabel": "SAF 시장",
+        "headline": "Argus: SAF 시장 '길이 퍼즐' 지속 — 지역별 공급 과잉·부족 불균형",
+        "summary": "일부 지역에서는 SAF 생산 능력이 컴플라이언스 수요를 초과하는 반면, 다른 지역은 여전히 공급 부족. 이 불균형이 UCO 원료 가격을 지지. 캐나다산 UCO는 북미 공급망 강점으로 수요자들이 선호하는 원료로 유지."
+      },
+      {
+        "tag": "trade",
+        "tagLabel": "무역 동향",
+        "headline": "미국, 중국산 UCO 수입 증가 — RFS 의무 충족 위한 공급 부족 심각",
+        "summary": "미국 업계가 RFS 2026 의무 충족을 위해 중국산 UCO 수입을 늘리고 있음. 동시에 EPA의 수입 원료 RIN 가치 50% 삭감 조항(2028년 시행 예정)이 대안 공급처 확보 압박으로 작용. 캐나다산 UCO가 '북미 원산지' 프리미엄 수혜 가능."
+      }
+    ],
+    "risks": {
+      "red": [
+        "네덜란드 UCOME 해운 화석연료 취급 확정 — 유럽 해운향 UCO 수출 계약 시 크레딧 가치 없음 주의"
+      ],
+      "amber": [
+        "SAF 지역별 공급 불균형 → 수출 대상 지역 및 계약 구조 최적화 필요",
+        "캐나다 CFR 초안 게재 지연 → 크레딧 수익 예측 어려움, 단기 계약 위주 운영 고려"
+      ],
+      "green": [
+        "미국 RFS 2026 의무 충족용 캐나다산 UCO 수요 증가 — 대미 수출 계약 확대 협상 시점",
+        "BC주 국내 함량 의무화 → 캐나다 국내 UCO 수요 구조적 증가 선행 확인",
+        "EU UCO 캡 초과분 → 에탄올 대체지만 UCO 자체 수요는 캡 한도까지 보장"
+      ]
+    },
+    "sources": [
+      {
+        "title": "Netherlands publishes RED III biofuels draft",
+        "url": "https://www.argusmedia.com/en/news-and-insights/latest-market-news/2702749-netherlands-publishes-red-iii-biofuels-draft",
+        "outlet": "Argus Media",
+        "date": "2026-02"
+      },
+      {
+        "title": "Viewpoint: EU ethanol supported by mandates in 2026",
+        "url": "https://www.argusmedia.com/en/news-and-insights/latest-market-news/2767258-viewpoint-eu-ethanol-supported-by-mandates-in-2026",
+        "outlet": "Argus Media",
+        "date": "2026-02"
+      },
+      {
+        "title": "Viewpoint: SAF market length puzzle persists",
+        "url": "https://www.argusmedia.com/en/news-and-insights/latest-market-news/2771924-viewpoint-saf-market-length-puzzle-persists",
+        "outlet": "Argus Media",
+        "date": "2026-02"
+      },
+      {
+        "title": "2026 Dutch Fuel Law: Voluntary Insetting Update",
+        "url": "https://normecverifavia.com/news/understanding-the-dutch-fuel-transition-obligation-what-it-means-for-voluntary-insetting/",
+        "outlet": "Normec Verifavia",
+        "date": "2026-02"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-02-02T08:00:00-05:00",
+    "summary": [
+      "캐나다 ECCC, CFR 의견서 검토 중 — Canada Gazette 초안 발표 Q1 2026 전망",
+      "Quatra, 영국 Lifecycle Oils 인수 — 유럽 UCO 수거망 통합 가속화",
+      "Argus: 유럽 HVO 가격 2026년 완화 없을 것 — 원료 부족·RED III 의무 강화 복합 요인",
+      "COMMODITIES 2026: S&P Global, EU 바이오디젤 시장이 규제 환경과 원료 역학에 의해 결정될 것 전망",
+      "캐나다 북미 UCO 시장 강세 기조 유지 — 규제 프레임워크와 재생에너지 투자 확대가 수요 지지"
+    ],
+    "canada": [
+      {
+        "tag": "cfr",
+        "tagLabel": "CFR 개정",
+        "headline": "ECCC, CFR 의견서 검토 마무리 단계 — Canada Gazette Part I 게재 준비 중",
+        "summary": "1월 15일 마감된 공개의견 수렴 결과를 ECCC가 검토 중. 총 수십 건의 의견서가 접수된 것으로 알려졌으며, 크레딧 멀티플라이어 지지가 다수 의견. 법무부 검토 후 Canada Gazette Part I 게재 예정. 최종 규정은 게재 후 60일 추가 의견 수렴 후 확정."
+      },
+      {
+        "tag": "prov",
+        "tagLabel": "생산 인센티브",
+        "headline": "바이오연료 생산 인센티브 첫 달 운영 — 신청 절차 및 검증 요건 명확화",
+        "summary": "1월 발효된 $372M 인센티브의 첫 달 신청이 마무리되는 시점. NRCan이 신청 요건 및 검증 절차에 대한 업계 문의에 대응 중. 북미 원료 사용 및 캐나다 내 판매 우선 조건이 핵심 자격 요건으로 확인됨."
+      },
+      {
+        "tag": "politics",
+        "tagLabel": "보수당",
+        "headline": "보수당 전당대회(1/29-31): Poilievre 87% 지지로 대표직 유지 — CFR 폐지 공약 재천명",
+        "summary": "캘거리 보수당 전당대회에서 Poilievre가 87% 찬성으로 당 대표직을 유지. 대회에서 CFR 폐지 및 탄소세 즉각 철폐 공약이 재천명됨. 현재 소수 정부 체제에서 CFR은 유지되고 있으나, 다음 연방 선거에서 보수당 집권 시 UCO 크레딧 수익 구조에 근본적 변화 가능성. 보수당의 재집권 시나리오에 대한 비즈니스 연속성 플랜 필요."
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "주총리 회의",
+        "headline": "캐나다 주총리 회의 개최 — Carney와 연방-주 에너지·주권 의제 논의",
+        "summary": "Carney 총리와 각 주지사들이 오타와에서 首相·주지사 회의를 개최. 연방-주 에너지 정책 조율 및 캐나다 경제 주권 강화 방안이 핵심 의제. 앨버타 Smith와 BC Eby 간 파이프라인·분리주의 갈등이 회의 배경으로 부각. 연방-주 관계 안정화가 CFR 등 연방 청정연료 정책의 원활한 이행에 영향."
+      }
+    ],
+    "export": [
+      {
+        "tag": "eu",
+        "tagLabel": "EU 시장",
+        "headline": "S&P Global: 2026 EU 바이오디젤 규제와 원료 역학이 시장 결정 — UCO 포지셔닝 중요",
+        "summary": "S&P Global이 2026년 유럽 바이오디젤 시장이 RED III 이행, 이중계산 폐지, 원료 공급 역학 등 규제 변수에 의해 형성될 것이라고 분석. 원료별 경쟁 포지셔닝이 수익성을 좌우함. UCO 기반 HVO가 높은 온실가스 감축률로 프리미엄 지위 유지."
+      },
+      {
+        "tag": "eu",
+        "tagLabel": "EU 시장",
+        "headline": "Quatra, 영국 Lifecycle Oils 인수 — 유럽 UCO 수거 통합 가속",
+        "summary": "유럽 최대 UCO 수거 기업 중 하나인 Quatra가 영국 Lifecycle Oils를 인수하며 영국 시장 입지 확대. 유럽 UCO 수거망 통합이 가속화되는 추세로, 대형 플레이어들의 원료 확보 경쟁 심화. 캐나다 UCO 수출 바이어 풀에도 영향 가능."
+      }
+    ],
+    "market": [
+      {
+        "tag": "market",
+        "tagLabel": "UCO 가격",
+        "headline": "북미 UCO 시장 Q1 2026 강세 기조 — 규제 지지·SAF 수요 복합 요인",
+        "summary": "캐나다·미국 UCO 시장이 Q1 2026 강세 기조를 유지. RFS 의무 이행, 캐나다 바이오연료 인센티브, SAF 원료 수요가 복합적으로 가격을 지지. 레스토랑 공급량은 겨울 계절성으로 소폭 감소하나 구조적 수요 초과."
+      },
+      {
+        "tag": "market",
+        "tagLabel": "UCO 수거",
+        "headline": "유럽 UCO 수거 기업 통합 가속 — 대형 플레이어 시장 지배력 강화",
+        "summary": "Quatra의 Lifecycle Oils 인수로 유럽 UCO 수거 시장의 통합이 가속. 수거 네트워크 규모의 경제가 강화되는 추세. 캐나다 시장도 중장기적으로 유사한 통합 압력이 발생할 수 있어 수거 파트너십 및 계약 구조 선제 검토 권장."
+      }
+    ],
+    "risks": {
+      "red": [
+        "유럽 UCO 수거 통합(Quatra 등 대형화) → 장기적으로 수출 바이어 협상력 강화, Green Oil 단가 협상에 불리"
+      ],
+      "amber": [
+        "CFR 초안 발표 지연 → 국내산 우대 정책 시행 시기 불확실, 사업 계획 수립 어려움",
+        "EU 바이오디젤 원료 역학 변화 → 수출 포트폴리오 최적화 지속 검토 필요"
+      ],
+      "green": [
+        "HVO 가격 2026년 내내 강세 전망 → 수출 수익성 안정적 확보",
+        "SAF 수요 강제 성장 → UCO 원료 장기 공급 계약 체결 시 안정적 수익 확보 가능",
+        "S&P Global: 원료 포지셔닝이 수익성 결정 → 캐나다산 UCO의 추적 가능성·인증 차별화가 핵심 경쟁력"
+      ]
+    },
+    "sources": [
+      {
+        "title": "COMMODITIES 2026: European biodiesel market shaped by regulatory landscape, feedstock dynamics",
+        "url": "https://www.spglobal.com/energy/en/news-research/latest-news/agriculture/121525-commodities-2026-european-biodiesel-market-to-be-shaped-by-regulatory-landscape-feedstock-dynamics",
+        "outlet": "S&P Global",
+        "date": "2026-02"
+      },
+      {
+        "title": "Quatra expands UK footprint with strategic acquisition of Lifecycle Oils",
+        "url": "https://biofuels-news.com/news/quatra-expands-uk-footprint-with-strategic-acquisition-of-lifecycle-oils/",
+        "outlet": "Biofuels International",
+        "date": "2026-02"
+      },
+      {
+        "title": "Viewpoint: European HVO prices unlikely to ease in 2026",
+        "url": "https://www.argusmedia.com/en/news-and-insights/latest-market-news/2766252-viewpoint-european-hvo-prices-unlikely-to-ease-in-2026",
+        "outlet": "Argus Media",
+        "date": "2026-02"
+      },
+      {
+        "title": "Canada's Clean Fuels Market: What 2025 Clarified And What 2026 Will Test",
+        "url": "https://www.ecoengineers.us/insights/canadas-clean-fuels-market-what-2025-clarified-and-what-2026-will-test/",
+        "outlet": "EcoEngineers",
+        "date": "2026-02"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-01-26T08:00:00-05:00",
+    "summary": [
+      "캐나다 CFR 공개의견 마감 후 업계 반발 표면화 — Waste Dive, '보호무역주의 정책' 우려 집중 보도",
+      "RNG 연합 등, 미·캐 바이오연료 자유무역 제한 조항에 공식 반대 서한 제출",
+      "카놀라 협의회, CFR 개정을 통한 국내산 원료 수요 확대 촉구 — 캐나다산 UCO에 우호적 환경 형성 중",
+      "EU, 수입 UCO 규정 강화 분석 본격화 — ResourceWise, 캐나다 수출 시장에 미치는 함의 보고서 발간",
+      "CFR 크레딧 수입산 의존도 73% 확인 — 이 수치가 개정 추진력의 핵심 근거로 부상"
+    ],
+    "canada": [
+      {
+        "tag": "cfr",
+        "tagLabel": "CFR 개정",
+        "headline": "CFR 의견수렴 종료 후 업계 분열 — 보호무역 vs. 자유무역 논쟁 격화",
+        "summary": "Waste Dive가 '캐나다, 보호무역적 바이오연료 정책 검토…업계 반발'을 집중 보도. 최소 국내 함량 요건에는 반대하되, 크레딧 멀티플라이어(1.4x)는 지지하는 분위기가 다수 의견으로 수렴되는 양상."
+      },
+      {
+        "tag": "cfr",
+        "tagLabel": "CFR 통계",
+        "headline": "2024년 CFR 크레딧 73% 수입산에서 발생 — ECCC 개정 필요성 입증 핵심 수치",
+        "summary": "환경부 자료에 따르면 2024년 저탄소 연료 공급으로 발생한 CFR 크레딧의 73%가 수입산. 에탄올 수입 비중은 61%에 달해, 국내 생산 인센티브 도입의 정책적 정당성이 확인됨. Green Oil의 캐나다산 UCO 정제 제품에 장기적으로 유리한 구조."
+      },
+      {
+        "tag": "prov",
+        "tagLabel": "카놀라 협의회",
+        "headline": "카놀라 협의회, CFR 개정 통해 국내 바이오디젤 수요 창출 촉구",
+        "summary": "캐나다 카놀라 협의회가 CFR 최소 국내 함량 요건 도입을 공식 지지하는 성명 발표. UCO와 직접 경쟁하는 카놀라 오일 진영의 움직임이나, 국내산 원료 전반에 대한 선호도를 높이는 방향으로 해석 가능."
+      },
+      {
+        "tag": "politics",
+        "tagLabel": "연방 자유당",
+        "headline": "Carney 총리, 다보스 WEF 연설 — \"중견국 경제 재편\" 촉구, 귀국 후 지지율 60% 급상승",
+        "summary": "Carney 총리가 세계경제포럼(Davos)에서 미국·중국 양강 구도에 대한 중견국 자율성 강화를 촉구하며 국제적 주목을 받음. 연설 후 귀국하자 국내 지지율이 52%에서 60%로 8%p 급상승 — 자유당 대표 취임 이후 최고치. 자유당-보수당 격차 확대로 소수 정부 안정성 강화, CFR 및 바이오연료 정책 연속성 리스크 단기 완화."
+      }
+    ],
+    "export": [
+      {
+        "tag": "eu",
+        "tagLabel": "EU 수입 규제",
+        "headline": "EU 수입 UCO 규제 강화 영향 분석 — 캐나다산 고품질 UCO에 기회 요인",
+        "summary": "ResourceWise가 EU의 신규 UCO 수입 규제(Regulation 2025/2181)의 시장 영향 분석 보고서 발간. 완전한 원산지 추적 서류와 혼합 금지 규정이 아시아산 저품질 UCO를 사실상 차단하는 효과를 낼 것으로 전망. 캐나다산 정품 UCO 수출에 프리미엄 형성 가능성."
+      },
+      {
+        "tag": "eu",
+        "tagLabel": "EU RED III",
+        "headline": "독일 RED III 이행 개시 — UCO 이중계산 폐지 본격화",
+        "summary": "독일이 1월 1일부터 RED III 이행으로 UCO 이중계산을 공식 폐지. 단기적으로 UCO 수요 구조가 변화하나, 높은 온실가스 감축률(70~90%)로 인한 UCO의 본질적 수요는 유지됨. 지중해 국가들은 이중계산 유지 중."
+      }
+    ],
+    "market": [
+      {
+        "tag": "market",
+        "tagLabel": "UCO 가격",
+        "headline": "UCO 국제 가격 750–1,250 USD/t 강세 지속 — Q1 2026 낙관적 전망",
+        "summary": "2026년 1분기 UCO 가격이 지역별 공급 규율, 하방 산업 수요, SAF 시장 성장으로 강세 유지. 인도 Q4 2025 가격 1,100~1,135 USD/t 기록. Q1 2026는 PFAD 유입 경쟁에도 불구하고 안정적 상승세 전망."
+      },
+      {
+        "tag": "trade",
+        "tagLabel": "무역 동향",
+        "headline": "미국, 순수입국 전환 이후 캐나다산 UCO 수요 증가 추세",
+        "summary": "미국이 2021년 이후 UCO 순수입국으로 전환되며 캐나다산 UCO에 대한 수요가 구조적으로 증가. SAF 원료로서 UCO 수요가 기존 바이오디젤 수요에 더해지는 이중 수요 구조가 형성되고 있어 공급자 협상력 강화."
+      }
+    ],
+    "risks": {
+      "red": [
+        "CFR 최소 국내 함량 요건 도입 시 수입 UCO 원료 활용에 제약 발생 가능 — Green Oil 수거 원료의 '캐나다산' 자격 요건 명확화 필요"
+      ],
+      "amber": [
+        "카놀라 진영과 UCO 진영의 CFR 개정 방향 경쟁 — 카놀라 유리 조항 삽입 시 UCO 경쟁력 저하 우려",
+        "EU 독일 이중계산 폐지로 단기 UCO 수출 단가 조정 가능성 — 수출 계약 조건 재검토 권장"
+      ],
+      "green": [
+        "CFR 크레딧 73% 수입 의존 통계 → 국내산 우대 정책 도입 확실성 높아짐 — 캐나다산 UCO 처리업체 수혜 강화",
+        "EU 신규 수입 규제로 아시아산 UCO 차단 → 캐나다산 프리미엄 확대 기회",
+        "미국 구조적 UCO 순수입국 전환 → 대미 수출 물량 확대 지속 가능"
+      ]
+    },
+    "sources": [
+      {
+        "title": "Canada explores protectionist biofuel policies, prompting industry pushback",
+        "url": "https://www.wastedive.com/news/canada-cfr-amendment-comments-rng-coalition/811811/",
+        "outlet": "Waste Dive",
+        "date": "2026-01"
+      },
+      {
+        "title": "Canola industry urges action through targeted amendments to Clean Fuel Regulations",
+        "url": "https://www.canolacouncil.org/news/canola-industry-urges-action-to-drive-domestic-demand-through-targeted-amendments-to-the-clean-fuel-regulations-cfr/",
+        "outlet": "Canola Council of Canada",
+        "date": "2026-01"
+      },
+      {
+        "title": "EU Tightens Rules on UCO Imports: Implications for the Biofuels Market",
+        "url": "https://www.resourcewise.com/blog/eu-tightens-rules-on-uco-imports-implications-for-the-biofuels-market",
+        "outlet": "ResourceWise",
+        "date": "2026-01"
+      },
+      {
+        "title": "Unlocking the Future of Canada's Clean Fuel Market",
+        "url": "https://www.ccarbon.info/article/unlocking-the-future-of-canadas-clean-fuel-market-policy-shifts-market-insights-and-near-term-projections/",
+        "outlet": "CCarbon",
+        "date": "2026-01"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-01-19T08:00:00-05:00",
+    "summary": [
+      "RFA, CFR 개정 의견서 공식 제출 — 크레딧 멀티플라이어 지지, 최소 국내 함량 요건 및 수입 디스카운트 반대 명시",
+      "ECCC, 수입 UCO 포함 저탄소 원료 컴플라이언스 리스크 심층 평가 착수 공식 발표",
+      "RNG 연합, 미·캐 바이오연료 무역 제한 조항에 공식 반대 성명",
+      "EU 독일, RED III 이행 시작 — 1월 1일부터 UCO 이중계산 폐지 효력 발생",
+      "캐나다 바이오연료 개정안 다양한 법률·산업 전문가 분석 쏟아져"
+    ],
+    "canada": [
+      {
+        "tag": "cfr",
+        "tagLabel": "CFR 개정",
+        "headline": "RFA, CFR 개정 의견서 제출 — 크레딧 멀티플라이어(BBD 1.4x) 지지, 수입 제한 반대",
+        "summary": "미국 재생연료협회(RFA)가 1월 15일 마감에 맞춰 의견서를 제출. 바이오디젤·재생 디젤에 1.4배 크레딧 멀티플라이어 도입 지지. 최소 국내 함량 의무화와 수입 연료 크레딧 할인은 시장 효율을 해친다며 반대. 미국 에탄올 수입 비중(61%)이 감소할 경우 캐나다 CFR 수급에 영향 우려."
+      },
+      {
+        "tag": "carbon",
+        "tagLabel": "UCO 규제",
+        "headline": "ECCC, 수입 UCO 컴플라이언스 리스크 심층 평가 공식 착수",
+        "summary": "환경부가 수입 저탄소 연료 원료(UCO 포함)의 인증·추적·공급망 데이터 관리 요건에 대한 심층 평가를 공식 시작. 다른 관할권의 모범 사례 검토 포함. Green Oil의 국내 수거 원료가 이 평가에서 신뢰성 높은 원료로 인정받을 가능성 있음."
+      },
+      {
+        "tag": "politics",
+        "tagLabel": "보수당",
+        "headline": "Poilievre, Carney의 캐나다-중국 '전략적 파트너십' 강력 비판 — 안보 위협 규정",
+        "summary": "Poilievre 보수당 대표가 Carney 정부의 캐나다-중국 전략적 파트너십을 \"국가 안보 위협\"으로 규정하며 전면 비판. 중국산 UCO에 대한 규제 강화 요구가 보수당 입장에 포함돼 있어, 보수당 집권 시 대중 UCO 수입 규제가 강화될 가능성. 현재 자유당과 보수당 지지율 41% vs. 38%로 초접전 유지 중."
+      }
+    ],
+    "export": [
+      {
+        "tag": "eu",
+        "tagLabel": "EU RED III",
+        "headline": "독일 RED III 이행 — UCO 이중계산 1월 1일부로 공식 폐지",
+        "summary": "독일 에너지부의 법 개정이 1월 1일 발효되어 UCO 이중계산이 공식 종료. '신뢰 보호 조항'도 함께 도입되어 사기 인증서를 2년 소급 취소할 수 있게 됨. 단기적으로 독일 UCO 수요 구조 변화, 작물 기반 바이오디젤 수요 상대적 증가 예상."
+      },
+      {
+        "tag": "eu",
+        "tagLabel": "EU RED III",
+        "headline": "네덜란드, RED III 바이오연료 초안 발표 — UCOME 해운 부문 화석연료 취급",
+        "summary": "네덜란드 배출청(NEa)이 RED III 전환 초안을 공개. UCOME(UCO 기반 메틸에스테르)을 해운 부문 연료로 공급 시 화석연료로 간주하는 조항 포함. 네덜란드 해운 향 UCO 수출 시 크레딧 가치 상실 위험."
+      }
+    ],
+    "market": [
+      {
+        "tag": "market",
+        "tagLabel": "UCO 전망",
+        "headline": "2026년 5대 바이오연료 시장 인사이트 발표 — UCO 공급 부족 심화 핵심 변수",
+        "summary": "ResourceWise가 2026년 바이오연료 5대 인사이트 발간. UCO 공급 부족, 아시아 국가들의 자국 SAF 생산 개시로 인한 수출 감소, 미국 EPA 정책 불확실성 등을 핵심 변수로 지목. 공급 부족이 지속될수록 Green Oil의 수거 원료 희소성 가치 증가."
+      },
+      {
+        "tag": "cert",
+        "tagLabel": "인증",
+        "headline": "EU, 수입 UCO 원산지 추적 강화 — ISCC 감사 기준 미충족 사례 집중 점검",
+        "summary": "EU가 아시아산 UCO 수거지점의 91%가 감사를 받지 않은 문제에 대한 대응 방안을 검토 중. ISCC 인증의 신뢰성 논란이 수면 위로 올라오기 시작하며 캐나다산 UCO의 추적 가능성(traceability) 중요성 부각."
+      }
+    ],
+    "risks": {
+      "red": [
+        "네덜란드 해운 부문 UCOME 화석연료 취급 조항 — 유럽 해운향 수출 전략 즉시 재검토 필요"
+      ],
+      "amber": [
+        "독일 UCO 이중계산 폐지 본격화 — 독일향 단가 재산정 및 지중해 국가 수출 대안 검토 필요",
+        "ECCC 수입 UCO 평가 결과에 따라 캐나다 내 UCO 원료 인증 기준 강화 가능성"
+      ],
+      "green": [
+        "ECCC 공식 심층 평가 — 캐나다산 UCO 원료의 투명한 추적 체계 구축 시 정책적 우대 가능성",
+        "독일 이중계산 폐지 → 작물 기반 수요 전환으로 UCO 가격 프리미엄 유지 가능",
+        "미국 재생연료협회의 크레딧 멀티플라이어 지지 → 국내산 UCO 기반 연료에 추가 인센티브 기대"
+      ]
+    },
+    "sources": [
+      {
+        "title": "RFA Comments on Proposed Amendments to Canada's Clean Fuel Regulations",
+        "url": "https://ethanolrfa.org/media-and-news/category/news-releases/article/2026/01/rfa-comments-on-proposed-amendments-to-canada-s-clean-fuel-regulations",
+        "outlet": "Renewable Fuels Association",
+        "date": "2026-01-15"
+      },
+      {
+        "title": "RFA Comments on Canada Clean Fuel Proposal",
+        "url": "https://energy.agwired.com/2026/01/16/rfa-comments-on-canada-clean-fuel-proposal/",
+        "outlet": "AgWired Energy",
+        "date": "2026-01-16"
+      },
+      {
+        "title": "New policy shifts in Germany and Netherlands may reshape EU biodiesel demand",
+        "url": "https://vespertool.com/news/new-policy-shifts-in-de-and-nl-may-reshape-eu-biodiesel-demand/",
+        "outlet": "Vesper Tool",
+        "date": "2026-01"
+      },
+      {
+        "title": "Top 5 Insights for the 2026 Biofuels Market",
+        "url": "https://www.resourcewise.com/blog/top-5-insights-for-the-2026-biofuels-market",
+        "outlet": "ResourceWise",
+        "date": "2026-01"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-01-12T08:00:00-05:00",
+    "summary": [
+      "CFR 공개의견 수렴 마감 D-3 — 업계 최종 의견 제출 러시, 1월 15일 마감",
+      "Dentons, CFR 개정 잠재적 영향 분석 발표 — 국내산 연료 크레딧 멀티플라이어 BBD 1.4x·에탄올 1.14x 구조 상세 설명",
+      "독일 RED III 이행 개시(1월 1일) 후 EU 바이오연료 시장 변화 가시화 — 작물 기반 수요 상대적 증가",
+      "UCO 가격 Q1 2026 안정적 강세 유지 — 750~1,250 USD/t 범위",
+      "캐나다 바이오연료 생산 인센티브 출범 2주 — 업계 적용 신청 절차 문의 증가"
+    ],
+    "canada": [
+      {
+        "tag": "cfr",
+        "tagLabel": "CFR 개정",
+        "headline": "Dentons, CFR 잠재적 개정 상세 분석 발표 — 두 가지 옵션 법적 함의 설명",
+        "summary": "로펌 Dentons가 1월 7일 발간한 분석에서 CFR 개정 두 가지 안의 법적·운영적 영향을 상세히 분석. 크레딧 멀티플라이어(BBD 1.4x, 에탄올 1.14x)가 미국 45Z 세액공제와의 경쟁력 격차를 해소하기 위한 최소 수준이라고 설명. 산업계 의견 제출 가이드로 활용됨."
+      },
+      {
+        "tag": "prov",
+        "tagLabel": "생산 인센티브",
+        "headline": "바이오연료 생산 인센티브 출범 2주 — 업계 신청 절차 안내 및 적격 요건 명확화",
+        "summary": "1월 1일 발효된 $372M 생산 인센티브에 대한 업계 신청이 시작됨. 리터당 16센트(첫 1.7억L) 및 10센트(다음 1.3억L) 지원 구조. 시설당 3억L 상한 적용. 캐나다산 북미 원료 사용 및 캐나다 내 연료 판매 우선 요건이 핵심 적격 조건."
+      },
+      {
+        "tag": "politics",
+        "tagLabel": "연방 자유당",
+        "headline": "Carney 정부, 의회 첫 법안으로 '식료품·필수품 혜택' 추진 — 생계비 직접 지원",
+        "summary": "Carney 자유당 정부가 의회 복귀 후 첫 번째 주요 법안으로 \"Canada Groceries and Essentials Benefit\"을 추진. 소비자 물가 부담 직접 완화가 목표로, 지지율 40%대 유지 중인 자유당이 생활비 이슈를 선점하려는 전략. 보수당은 재정 건전성 우선을 앞세워 반대 입장. UCO 수거 산업에 직접 영향은 제한적이나 소비 심리 개선이 식당 UCO 발생량에 간접 영향 가능."
+      },
+      {
+        "tag": "prov-politics",
+        "tagLabel": "온타리오 PC당",
+        "headline": "Ford 온타리오 PC 정부, 2026년 에너지 비용 절감 의제 재확인 — 국내산 바이오연료 우선 기조 유지",
+        "summary": "Ford 주지사가 2026년 신년 의정 방향으로 에너지 비용 절감과 국내 산업 보호를 재차 강조. 2025년 8월 확정된 캐나다산 함량 의무화(디젤 75%·가솔린 64%) 이행을 차질 없이 진행 중임을 확인. 주 내 UCO 기반 바이오연료 수요 확대 정책 기조 연속성 유지, 정책 리스크 낮음."
+      }
+    ],
+    "export": [
+      {
+        "tag": "eu",
+        "tagLabel": "EU RED III",
+        "headline": "독일 RED III 발효 후 EU 바이오연료 수요 구조 변화 — 작물 기반 수요 반등 전망",
+        "summary": "Argus Media가 '2026년 EU 작물 기반 바이오디젤 수요 상승 전망' 발간. 독일·네덜란드 UCO 이중계산 폐지로 의무 충족 단위당 물리적 공급량 증가 필요, 비용 경쟁력 있는 작물 기반이 부분 대체. 그러나 UCO의 높은 온실가스 감축률로 프리미엄 지위는 유지됨."
+      },
+      {
+        "tag": "eu",
+        "tagLabel": "EU 인증",
+        "headline": "EU, 수입 UCO 원산지 증빙 요건 강화 발효 — 전체 공급망 서류 의무화",
+        "summary": "EC 규정 2025/2181이 발효되어 수입 UCO는 승인된 시설에서의 최초 수거부터 납품까지 완전한 체인오브커스터디 서류를 의무적으로 제출해야 함. 아시아산 가짜 UCO(버진 팜오일 혼입) 차단이 주요 목적. 캐나다산 UCO는 투명한 수거 체계 덕분에 대응 용이."
+      }
+    ],
+    "market": [
+      {
+        "tag": "market",
+        "tagLabel": "UCO 가격",
+        "headline": "UCO Q4 2025 가격 강세 마감 — Q1 2026 낙관적 기조 유지",
+        "summary": "Fastmarkets 분석에 따르면 Q4 2025 글로벌 UCO 수출 가격이 4~6% 상승하며 마감. 동남아시아 항구의 겨울철 수거량 감소와 바이오연료 수출 의무가 가격 지지. Q1 2026은 지역 공급 규율과 PFAD 유입 경쟁 속에서도 강세 유지 전망."
+      },
+      {
+        "tag": "market",
+        "tagLabel": "SAF 시장",
+        "headline": "중국, SAF 자국 생산 시작 — Zhejiang Jiaao·Blue Whale Bioenergy UCO 기반 SAF 가동",
+        "summary": "중국 기업들이 자국 SAF 생산을 시작하며 기존 수출 UCO 물량이 자국 수요로 흡수되기 시작. 중국발 UCO 수출 물량 감소 우려. 캐나다 레스토랑 수거 UCO의 상대적 가치 상승 요인."
+      }
+    ],
+    "risks": {
+      "red": [
+        "CFR 최소 국내 함량 요건 도입 시 수입 UCO 원료에 불이익 → Green Oil 수거 원료의 캐나다산 자격 사전 확인 필요"
+      ],
+      "amber": [
+        "중국 UCO 자국 소비 증가 → 글로벌 UCO 공급 타이트화, 수거 경쟁 심화 가능성",
+        "EU 서류 의무화 대응을 위한 수거→수출 전 과정 추적 시스템 구축 필요"
+      ],
+      "green": [
+        "바이오연료 생산 인센티브 적격 요건 확인 후 Green Oil 정제 제품 신청 시 리터당 최대 16센트 수혜 가능",
+        "EU 원산지 서류 강화 → 캐나다산 투명 UCO 수출 프리미엄 형성 기회"
+      ]
+    },
+    "sources": [
+      {
+        "title": "Potential Amendments to the Federal Clean Fuel Regulations",
+        "url": "https://www.dentons.com/en/insights/alerts/2026/january/7/potential-amendments-to-the-federal-clean-fuel-regulations",
+        "outlet": "Dentons",
+        "date": "2026-01-07"
+      },
+      {
+        "title": "Viewpoint: EU crop biodiesel demand set to rise in 2026",
+        "url": "https://www.argusmedia.com/en/news-and-insights/latest-market-news/2769092-viewpoint-eu-crop-biodiesel-demand-set-to-rise-in-2026",
+        "outlet": "Argus Media",
+        "date": "2026-01"
+      },
+      {
+        "title": "Used cooking oil (UCO) price forecast: SAF cornerstone feedstock",
+        "url": "https://www.fastmarkets.com/insights/used-cooking-oil-forecast-a-cornerstone-feedstock-for-sustainable-aviation-fuel/",
+        "outlet": "Fastmarkets",
+        "date": "2026-01"
+      },
+      {
+        "title": "Biofuels Production Incentive",
+        "url": "https://natural-resources.canada.ca/energy-sources/clean-fuels/biofuels-production-incentive",
+        "outlet": "Natural Resources Canada",
+        "date": "2026-01"
+      }
+    ]
+  },
+  {
+    "generatedAt": "2026-01-05T08:00:00-05:00",
+    "summary": [
+      "캐나다 바이오연료 생산 인센티브 1월 1일 공식 발효 — $372M, 리터당 최대 16센트 지원",
+      "온타리오주 캐나다산 바이오연료 의무화(디젤 75%, 가솔린 64%) 2026 준수기간 개시 — 2025년 12월 이월 적용 개정으로 공급업체 2026년 준수 의무",
+      "CFR 공개의견 수렴 중 (마감 1월 15일) — ECCC 국내산 우대 개정안 두 가지 안 검토 중",
+      "EU, 수입 UCO 원산지 추적 강화 규정(Regulation 2025/2181) 발효 — 전체 체인오브커스터디 서류 의무화",
+      "2026년 바이오연료 시장 전망: UCO 공급 부족 지속, SAF 수요 급증이 핵심 변수",
+      "UCO 국제 가격 2025 연말 강세 이어 2026 상반기도 750~1,250 USD/t 범위 유지 전망"
+    ],
+    "canada": [
+      {
+        "tag": "prov",
+        "tagLabel": "생산 인센티브",
+        "headline": "바이오연료 생산 인센티브 1월 1일 공식 발효 — 2년간 $372M 지원",
+        "summary": "총리 Carney가 9월 발표한 바이오연료 생산 인센티브가 1월 1일부로 발효. 바이오디젤·재생 디젤 생산자에게 첫 1.7억L는 리터당 16센트, 이후 1.3억L는 10센트 지원. 2026~2027년 운영, 시설당 3억L 상한. 미국 45Z 세액공제와의 경쟁력 격차를 일부 해소하는 정책."
+      },
+      {
+        "tag": "prov",
+        "tagLabel": "온타리오주",
+        "headline": "온타리오주 국내산 바이오연료 함량 의무화 2026 준수기간 개시 — 디젤 75%, 가솔린 64% (ERO 025-1418)",
+        "summary": "온타리오주가 2025년 8월 7일 확정한 Cleaner Transportation Fuels 규정에 따라 디젤 내 재생연료의 75%, 가솔린 내 재생연료의 64%를 캐나다산으로 의무화. 2025년 12월 16일 공급업체 기존 비국내산 계약 이행 사정을 고려해 2025년 준수 의무를 2026년으로 이월 허용 개정(ERO 025-1418) 발효. 이에 따라 2026년 준수기간에 2025+2026 물량을 합산 적용. BC주(가솔린 5% 2026년 1월, 디젤 8% 2025년 4월 기시행) 이행과 맞물려 캐나다산 UCO 기반 바이오연료 국내 수요 구조적 증가 확인."
+      },
+      {
+        "tag": "cfr",
+        "tagLabel": "CFR 개정",
+        "headline": "CFR 개정 공개의견 수렴 중 — 마감 1월 15일, 핵심 두 가지 안 검토",
+        "summary": "ECCC가 2025년 12월 개시한 CFR 개정 공개의견 수렴이 1월 15일 마감. ①최소 국내 함량 의무화(가솔린·디젤 내 캐나다산 비율 고정) ②크레딧 멀티플라이어(국내산 BBD 1.4x, 에탄올 1.14x) 두 가지 안을 검토 중. Green Oil이 정제하는 캐나다산 UCO는 두 안 모두에서 수혜 가능성."
+      },
+      {
+        "tag": "politics",
+        "tagLabel": "연방 자유당",
+        "headline": "Carney 자유당 정부, 신년 의회 복귀 — 물가·에너지 2026년 핵심 의제 선언",
+        "summary": "Carney 총리가 이끄는 자유당 소수 정부가 새해 의회 복귀와 함께 물가 안정 및 에너지 전환을 2026년 최우선 과제로 선언. 연방 바이오연료 생산 인센티브($372M) 집행 상황 점검, CFR 개정 일정 구체화가 1분기 핵심 의회 의제. 보수당(Poilievre)의 CFR 폐지 공약에 맞서 자유당은 크레딧 멀티플라이어 방식 지지 기조 유지."
+      }
+    ],
+    "export": [
+      {
+        "tag": "eu",
+        "tagLabel": "EU 인증",
+        "headline": "EU Regulation 2025/2181 발효 — 수입 UCO 전체 공급망 원산지 서류 의무화",
+        "summary": "EU가 신규 수입 UCO 규정을 시행. 수출국 승인 시설 출처 증명과 최초 수거부터 납품까지 완전한 체인오브커스터디 서류 필수. 혼합 금지(2023년 규정) 집행 강화. 아시아산 가짜 UCO(버진 팜오일 혼입) 사실상 차단 목적."
+      },
+      {
+        "tag": "us",
+        "tagLabel": "미국 RFS",
+        "headline": "미국 RFS 2026년 의무량 최고 수준 예고 — EPA, 2026 규정 수립 진행 중",
+        "summary": "EPA가 2026년 RFS 의무량 확정 작업 진행 중. 바이오매스 기반 디젤(BBD) 의무량이 역대 최고 수준으로 설정될 전망. 수입 UCO RIN 가치 삭감 조항은 아직 계류 중으로 대미 수출 수익성 단기 유지."
+      }
+    ],
+    "market": [
+      {
+        "tag": "market",
+        "tagLabel": "2026 전망",
+        "headline": "2026 UCO 시장 전망: 공급 3.3B 파운드 vs. 미국 수요 5.7B 파운드 — 구조적 부족",
+        "summary": "Fastmarkets는 2024년 미국 UCO 수거량을 33억 파운드로 추정했으나 업계 수요는 57억 파운드. 이 공급 부족이 2026년에도 지속될 전망. 캐나다산 UCO의 구조적 희소성이 가격 프리미엄과 수출 경쟁력을 동시에 지지."
+      },
+      {
+        "tag": "market",
+        "tagLabel": "UCO 시장",
+        "headline": "2026 UCO 시장 규모 84.7억 달러 추정 — 연 7.3% 성장 지속",
+        "summary": "시장조사에 따르면 2026년 글로벌 UCO 시장 규모 84.7억 달러, 2033년 138.6억 달러로 성장 전망. 북미가 45.2% 점유율로 선도, 아시아태평양이 29.5%로 가장 빠른 성장세. SAF 전환 수요가 장기 성장 핵심 동인."
+      }
+    ],
+    "risks": {
+      "red": [
+        "EU 신규 수입 규제 대응 — 현재 수거~수출 과정의 서류 체계가 EU 요건 충족 여부 즉시 점검 필요"
+      ],
+      "amber": [
+        "CFR 개정 공개의견 마감(1/15) 후 초안 발표 시기 불확실 — Canada Gazette 게재 모니터링 필요",
+        "바이오연료 생산 인센티브 적격 요건 상세 검토 — Green Oil 정제 공정 해당 여부 법무·세무 검토 권장"
+      ],
+      "green": [
+        "생산 인센티브 발효 → 캐나다 바이오디젤 생산 안정화로 국내 UCO 처리 수요 유지",
+        "EU 규정 강화로 아시아산 경쟁 감소 → 캐나다산 수출 프리미엄 기반 마련",
+        "구조적 UCO 공급 부족(미국 3.3B vs. 5.7B 파운드) → 2026 내내 높은 수취 단가 유지 가능"
+      ]
+    },
+    "sources": [
+      {
+        "title": "Canada Introduces New Biofuel Production Incentive",
+        "url": "https://advancedbiofuelsusa.info/canada-introduces-new-biofuel-production-incentive-in-response-to-trade-disruptions-tariffs",
+        "outlet": "Advanced BioFuels USA",
+        "date": "2026-01-01"
+      },
+      {
+        "title": "Advanced Biofuels Canada Welcomes Federal Biofuels Production Incentive",
+        "url": "https://advancedbiofuels.ca/cleanbc-2025-2/",
+        "outlet": "Advanced Biofuels Canada",
+        "date": "2026-01"
+      },
+      {
+        "title": "Ottawa's biofuels subsidies come into force",
+        "url": "https://www.theglobeandmail.com/business/economy/article-ottawas-biofuels-subsidies-competitive-us/",
+        "outlet": "The Globe and Mail",
+        "date": "2026-01"
+      },
+      {
+        "title": "Discussion paper: targeted amendments to Clean Fuel Regulations",
+        "url": "https://www.canada.ca/en/environment-climate-change/corporate/transparency/consultations/share-view-ideas-targeted-amendments-clean-fuel-regulations/discussion-paper.html",
+        "outlet": "Canada.ca / ECCC",
+        "date": "2025-12"
+      },
+      {
+        "title": "ERO 025-1418: Ontario Cleaner Transportation Fuels — Compliance Flexibility for Domestic Content (Dec 16 2025)",
+        "url": "https://ero.ontario.ca/notice/025-1418",
+        "outlet": "Environmental Registry of Ontario",
+        "date": "2025-12-16"
+      },
+      {
+        "title": "UCO Market 2026: SAF Feedstock Economics, Supply Risk & Policy Outlook",
+        "url": "https://energy-solutions.co/articles/sub/used-cooking-oil-uco-market-saf-feedstock",
+        "outlet": "Energy Solutions",
+        "date": "2026-01"
+      }
+    ]
+  }
+]
+/* HISTORY_END */;
+
+// ── State ─────────────────────────────────────────────────
+let currentIndex = 0;
+
+// ── Helpers ───────────────────────────────────────────────
+function fmt(d) { return `${d.getMonth()+1}/${d.getDate()}`; }
+
+function weekRange(dateStr) {
+  const d = new Date(dateStr);
+  // 리포트는 월요일 발행 → 그 주의 마지막날(일요일) 다음날이 기준일
+  // 따라서 커버 기간 = 기준일 전날(일요일) ~ 6일 전(월요일)
+  const sun = new Date(d); sun.setDate(d.getDate() - 1);
+  const mon = new Date(sun); mon.setDate(sun.getDate() - 6);
+  return {
+    label: `${mon.getFullYear()}년 ${fmt(mon)} – ${fmt(sun)} 주`,
+    sub: `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} 기준`
+  };
+}
+
+function renderNewsItems(items, sources) {
+  if (!items || !items.length) return '<div class="empty">관련 뉴스 없음</div>';
+  return items.map(item => {
+    const refBadge = item.ref
+      ? (Array.isArray(item.ref) ? item.ref : [item.ref])
+          .map(n => `<sup class="src-ref">[${n}]</sup>`).join('')
+      : '';
+
+    // Resolve URL: use item.url directly, or look up from single ref → sources
+    let url = item.url || null;
+    if (!url && item.ref && !Array.isArray(item.ref) && sources) {
+      const src = sources[item.ref - 1];
+      if (src && src.url) url = src.url;
+    }
+
+    const inner = `
+      <span class="tag tag-${item.tag || 'market'}">${item.tagLabel || ''}</span>
+      <div class="news-title">${item.headline}${refBadge}</div>
+      <div class="news-body">${item.summary}</div>`;
+
+    if (url) {
+      return `<a class="news-item clickable" href="${url}" target="_blank" rel="noopener noreferrer">${inner}</a>`;
+    }
+    return `<div class="news-item">${inner}</div>`;
+  }).join('');
+}
+
+function renderRiskItems(items) {
+  if (!items || !items.length) return '<div class="risk-entry" style="color:#bbb;font-style:italic;">해당 없음</div>';
+  return items.map(t => `<div class="risk-entry">${t}</div>`).join('');
+}
+
+function renderSources(sources) {
+  if (!sources || !sources.length) return '<div class="empty">출처 없음</div>';
+  return sources.map((s, i) => `
+    <div class="source-row">
+      <div class="src-num">${i + 1}</div>
+      <div>
+        <a class="src-link" href="${s.url}" target="_blank">${s.title}</a>
+        <div class="src-meta">${s.outlet}${s.date ? ' · ' + s.date : ''}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ── Render a specific week ────────────────────────────────
+function renderWeek(index) {
+  const r = REPORT_HISTORY[index];
+  if (!r) return;
+
+  const content = document.getElementById('reportContent');
+  content.classList.add('fade');
+
+  setTimeout(() => {
+    // Nav labels
+    const wk = weekRange(r.generatedAt);
+    document.getElementById('navWeekLabel').textContent = index === 0 ? '이번 주 · ' + wk.label : wk.label;
+    document.getElementById('navWeekSub').textContent = wk.sub;
+    document.getElementById('updatedBadge').textContent = `마지막 업데이트: ${wk.sub.replace(' 기준','')}`;
+
+    // Dots
+    const dotsEl = document.getElementById('navDots');
+    dotsEl.innerHTML = REPORT_HISTORY.map((_, i) =>
+      `<div class="nav-dot${i === index ? ' active' : ''}" onclick="jumpTo(${i})" title="${weekRange(REPORT_HISTORY[i].generatedAt).label}"></div>`
+    ).join('');
+
+    // Nav buttons
+    document.getElementById('btnNewer').disabled = index === 0;
+    document.getElementById('btnOlder').disabled = index === REPORT_HISTORY.length - 1;
+
+    // Pills
+    const redLen   = (r.risks?.red   || []).length;
+    const amberLen = (r.risks?.amber || []).length;
+    const greenLen = (r.risks?.green || []).length;
+    document.getElementById('cntRed').textContent   = redLen;
+    document.getElementById('cntAmber').textContent = amberLen;
+    document.getElementById('cntGreen').textContent = greenLen;
+
+    // Content
+    document.getElementById('elSummary').innerHTML = (r.summary || []).map(s => `<li>${s}</li>`).join('');
+    // Split canada into federal (cfr/carbon) and provincial (prov)
+    const fedItems  = (r.canada || []).filter(i => i.tag === 'cfr' || i.tag === 'carbon' || i.tag === 'politics');
+    const provItems = (r.canada || []).filter(i => i.tag === 'prov' || i.tag === 'prov-politics');
+    document.getElementById('elFederal').innerHTML   = renderNewsItems(fedItems, r.sources);
+    document.getElementById('elProvincial').innerHTML = renderNewsItems(provItems, r.sources);
+    document.getElementById('elExport').innerHTML  = renderNewsItems(r.export, r.sources);
+    document.getElementById('elMarket').innerHTML  = renderNewsItems(r.market, r.sources);
+    document.getElementById('elRed').innerHTML     = renderRiskItems(r.risks?.red);
+    document.getElementById('elAmber').innerHTML   = renderRiskItems(r.risks?.amber);
+    document.getElementById('elGreen').innerHTML   = renderRiskItems(r.risks?.green);
+    document.getElementById('elSources').innerHTML = renderSources(r.sources);
+
+    content.classList.remove('fade');
+  }, 180);
+}
+
+// ── Navigation ────────────────────────────────────────────
+function navigate(delta) {
+  const next = currentIndex + delta;
+  if (next < 0 || next >= REPORT_HISTORY.length) return;
+  currentIndex = next;
+  renderWeek(currentIndex);
+}
+
+function jumpTo(index) {
+  currentIndex = index;
+  renderWeek(currentIndex);
+}
+
+// ── Init ──────────────────────────────────────────────────
+renderWeek(0);
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+  const btn = document.getElementById('pdfBtnLabel');
+  btn.textContent = '생성 중...';
+
+  const weekLabel = document.getElementById('navWeekLabel').textContent.trim();
+  const filename = 'GreenOil-UCO-' + weekLabel.replace(/\s/g, '') + '.pdf';
+
+  const opt = {
+    margin:       [8, 8, 8, 8],
+    filename:     filename,
+    image:        { type: 'jpeg', quality: 0.95 },
+    html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak:    { mode: 'avoid-all' }
+  };
+
+  const el = document.getElementById('reportContent');
+  html2pdf().set(opt).from(el).save().then(() => {
+    btn.textContent = 'PDF 저장';
+  });
+}
+</script>
+</body>
+</html>
