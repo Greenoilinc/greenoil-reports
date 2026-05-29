@@ -841,12 +841,14 @@
   // ── Forecast Lock (8AM snapshot — 서버 저장) ──────
   function applySnapshot(rawData, snapshot) {
     return rawData.map(d => {
-      const lockedFc = snapshot[d.driver] !== undefined
+      const lockedFc  = snapshot[d.driver] !== undefined
         ? snapshot[d.driver]
         : Math.min(parseFloat(d.forecast || 0), 5000);
-      const ac  = parseFloat(d.actual || 0);
-      const pct = lockedFc > 0 ? (ac / lockedFc * 100).toFixed(1) : '0.0';
-      return { ...d, forecast: lockedFc, achievement_pct: pct };
+      const ac        = parseFloat(d.actual || 0);
+      const pct       = lockedFc > 0 ? (ac / lockedFc * 100).toFixed(1) : '0.0';
+      const remaining = Math.max(lockedFc - ac, 0);
+      const status    = ac <= 0 ? 'Pending' : ac >= lockedFc ? 'Done' : 'In Progress';
+      return { ...d, forecast: lockedFc, achievement_pct: pct, remaining, status };
     });
   }
 
