@@ -547,6 +547,9 @@
   const API_URL = window.location.hostname.includes('netlify.app')
     ? '/proxy'
     : 'https://resilient-kheer-86342e.netlify.app/.netlify/functions/api';
+  const FORECAST_URL = window.location.hostname.includes('netlify.app')
+    ? '/.netlify/functions/forecast'
+    : 'https://resilient-kheer-86342e.netlify.app/.netlify/functions/forecast';
   const API_KEY = ""; // Netlify Function에서 처리
   const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
@@ -835,35 +838,8 @@
     });
   }
 
-  // ── Forecast Lock (8AM snapshot) ─────────────────
-  function applyForecastLock(rawData) {
-    // 오늘 보기일 때만 적용 (Yesterday/날짜선택은 그대로)
-    if (selectedDate !== null) return rawData;
-
-    const now        = new Date();
-    const todayStr   = toYYYYMMDD(now);
-    const storageKey = `goi_fc_${todayStr}`;
-
-    if (now.getHours() < 8) {
-      // 8시 이전: 저장된 스냅샷 삭제, API 값 그대로
-      try { localStorage.removeItem(storageKey); } catch(e) {}
-      return rawData;
-    }
-
-    // 8시 이후: 스냅샷 확인
-    let snapshot = null;
-    try { snapshot = JSON.parse(localStorage.getItem(storageKey)); } catch(e) {}
-
-    if (!snapshot) {
-      // 첫 로드 → 현재 forecast를 스냅샷으로 저장 (max 5000)
-      snapshot = {};
-      rawData.forEach(d => {
-        snapshot[d.driver] = Math.min(parseFloat(d.forecast || 0), 5000);
-      });
-      try { localStorage.setItem(storageKey, JSON.stringify(snapshot)); } catch(e) {}
-    }
-
-    // 스냅샷 forecast로 교체 + achievement_pct 재계산
+  // ── Forecast Lock (8AM snapshot — 서버 저장) ──────
+  function applySnapshot(rawData, snapshot) {
     return rawData.map(d => {
       const lockedFc = snapshot[d.driver] !== undefined
         ? snapshot[d.driver]
@@ -874,13 +850,67 @@
     });
   }
 
+  async function applyForecastLock(rawData) {
+    // 오늘 보기일 때만 적용 (Yesterday/날짜선택은 그대로)
+    if (selectedDate !== null) return rawData;
+
+    const now      = new Date();
+    const todayStr = toYYYYMMDD(now);
+
+    if (now.getHours() < 8) {
+      // 8시 이전: 캐시 불필요, API 값 그대로
+      return rawData;
+    }
+
+    // 8시 이후: 서버 캐시 확인
+    try {
+      const res  = await fetch(`${FORECAST_URL}?date=${todayStr}`);
+      const json = await res.json();
+
+      if (json.success && json.data) {
+        // 서버에 이미 저장된 snapshot 사용
+        return applySnapshot(rawData, json.data);
+      }
+
+      // 서버에 없음 → 지금 API 값으로 snapshot 생성 후 저장
+      const snapshot = {};
+      rawData.forEach(d => {
+        snapshot[d.driver] = Math.min(parseFloat(d.forecast || 0), 5000);
+      });
+
+      // 서버에 저장 (fire & forget)
+      fetch(`${FORECAST_URL}?date=${todayStr}`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(snapshot),
+      }).catch(e => console.warn('Forecast 저장 실패:', e));
+
+      return applySnapshot(rawData, snapshot);
+
+    } catch(e) {
+      // 서버 오류 시 localStorage로 폴백
+      console.warn('서버 캐시 오류, localStorage 폴백:', e);
+      const storageKey = `goi_fc_${todayStr}`;
+      let snapshot = null;
+      try { snapshot = JSON.parse(localStorage.getItem(storageKey)); } catch(_) {}
+      if (!snapshot) {
+        snapshot = {};
+        rawData.forEach(d => {
+          snapshot[d.driver] = Math.min(parseFloat(d.forecast || 0), 5000);
+        });
+        try { localStorage.setItem(storageKey, JSON.stringify(snapshot)); } catch(_) {}
+      }
+      return applySnapshot(rawData, snapshot);
+    }
+  }
+
   // ── Main load ──
   async function loadData() {
     const err = document.getElementById('errBanner');
     err.style.display = 'none';
 
     try {
-      const data = applyForecastLock(await fetchData());
+      const data = await applyForecastLock(await fetchData());
 
       renderKPI(data);
       renderBarChart(data);
