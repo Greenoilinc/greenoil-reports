@@ -523,6 +523,7 @@
             <th>Actual</th>
             <th>Forecast</th>
             <th>Departure</th>
+            <th>Arrival</th>
             <th>Status</th>
           </tr>
         </thead>
@@ -807,10 +808,12 @@
       const barW = Math.min(pct, 100);
       const barColor = colorByPct(pct);
 
+      // Status: arrival 기준 (도착하면 Done, 미도착 actual>0이면 In Progress)
+      const hasArrival = d.arrival && d.arrival.trim() !== '';
       let statusBadge = '';
-      if (d.status === 'Done')        statusBadge = '<span class="status-badge status-done">✓ Done</span>';
-      else if (d.status === 'In Progress') statusBadge = '<span class="status-badge status-progress">⟳ In Progress</span>';
-      else                             statusBadge = '<span class="status-badge status-pending">— Pending</span>';
+      if (hasArrival)      statusBadge = '<span class="status-badge status-done">✓ Done</span>';
+      else if (ac > 0)     statusBadge = '<span class="status-badge status-progress">⟳ In Progress</span>';
+      else                 statusBadge = '<span class="status-badge status-pending">— Pending</span>';
 
       tbody.innerHTML += `
         <tr>
@@ -828,6 +831,7 @@
           <td class="mono" style="color:${barColor}">${ac.toLocaleString()}</td>
           <td class="mono" style="color:var(--text-mid)">${fc.toLocaleString()}</td>
           <td class="mono" style="color:var(--text-mid)">${d.departure || '-'}</td>
+          <td class="mono" style="color:${hasArrival ? 'var(--green)' : 'var(--text-mid)'}">${d.arrival || '-'}</td>
           <td>${statusBadge}</td>
         </tr>
       `;
