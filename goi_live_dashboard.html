@@ -544,7 +544,9 @@
 </main>
 
 <script>
-  const API_URL = "/proxy";
+  const API_URL = window.location.hostname.includes('netlify.app')
+    ? '/proxy'
+    : 'https://resilient-kheer-86342e.netlify.app/.netlify/functions/api';
   const API_KEY = ""; // Netlify Function에서 처리
   const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
