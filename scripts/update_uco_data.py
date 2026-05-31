@@ -164,22 +164,28 @@ def update_json(json_data, dates, mis_daily, locked_targets):
     return json_data
 
 # ── 5단계: Google Sheets 월별 탭 업데이트 ────────────────────────
-def update_google_sheets(dates, mis_daily, locked_targets):
-    # Service Account 인증
+def _get_sheets_client():
     sa_key_path = os.environ.get('GOOGLE_SA_KEY_PATH')
     if not sa_key_path or not os.path.exists(sa_key_path):
         print("  ⚠️  GOOGLE_SA_KEY_PATH 없음, Sheets 업데이트 건너뜀")
-        return
-
+        return None, None
     creds = Credentials.from_service_account_file(sa_key_path,
         scopes=['https://www.googleapis.com/auth/spreadsheets',
                 'https://www.googleapis.com/auth/drive'])
     gc = gspread.authorize(creds)
     sh = gc.open_by_key(SHEET_ID)
+    return gc, sh
 
-    # 업데이트할 월 목록
+def update_google_sheets_month(year, mon, mis_daily, locked_targets):
+    gc, sh = _get_sheets_client()
+    if not sh: return
+    tab_name = f"{str(year)[2:]}년 {mon}월 (AUTO)"
+    _update_month_tab(sh, tab_name, year, mon, mis_daily, locked_targets)
+
+def update_google_sheets(dates, mis_daily, locked_targets):
+    gc, sh = _get_sheets_client()
+    if not sh: return
     months = sorted(set((d.year, d.month) for d in dates))
-
     for year, mon in months:
         tab_name = f"{str(year)[2:]}년 {mon}월 (AUTO)"
         _update_month_tab(sh, tab_name, year, mon, mis_daily, locked_targets)
@@ -381,9 +387,39 @@ def main():
         json.dump(json_data, f, ensure_ascii=False, separators=(',',':'))
     print(f"  저장 완료: {JSON_PATH}")
 
-    # Google Sheets 업데이트
+    # Google Sheets 업데이트 — 업데이트된 월 전체 데이터를 JSON에서 읽어서 사용
     print("\n[4] Google Sheets 업데이트...")
-    update_google_sheets(dates, mis_daily, locked_targets)
+    # 업데이트 대상 월 목록
+    months = sorted(set((datetime.strptime(d.strftime('%Y-%m-%d'), '%Y-%m-%d').year,
+                         datetime.strptime(d.strftime('%Y-%m-%d'), '%Y-%m-%d').month)
+                        for d in dates))
+
+    for year, mon in months:
+        # 해당 월 전체 데이터를 uco_history.json에서 구성
+        ym_prefix = f"{year}-{mon:02d}"
+        month_records = [r for r in json_data['daily'] if r['date'].startswith(ym_prefix)]
+
+        # daily 딕셔너리로 변환 (date, name) → record
+        full_mis = {}
+        full_locked = {}
+        for r in month_records:
+            key = (r['date'], r['name'])
+            full_mis[key] = {
+                'init':     r.get('init', ''),
+                'region':   r.get('region', ''),
+                'actual':   r.get('actual', 0),
+                'stops':    r.get('visits', 0),
+                'hours':    r.get('hours'),
+                'forecast': r.get('target', 0),
+            }
+            # target이 잠금값인지 여부: locked_targets에 있으면 잠금값
+            if key in locked_targets:
+                full_locked[key] = locked_targets[key]
+            else:
+                # JSON에 저장된 target을 그대로 사용 (이미 잠금값 반영됨)
+                full_locked[key] = r.get('target', 0)
+
+        update_google_sheets_month(year, mon, full_mis, full_locked)
 
     print(f"\n{'='*50}")
     print("✅ 전체 업데이트 완료!")
