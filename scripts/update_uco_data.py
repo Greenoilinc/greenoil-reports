@@ -166,14 +166,12 @@ def update_json(json_data, dates, mis_daily, locked_targets):
 # ── 5단계: Google Sheets 월별 탭 업데이트 ────────────────────────
 def update_google_sheets(dates, mis_daily, locked_targets):
     # Service Account 인증
-    sa_json = os.environ.get('GOOGLE_SERVICE_ACCOUNT_JSON')
-    if not sa_json:
-        print("  ⚠️  GOOGLE_SERVICE_ACCOUNT_JSON 환경변수 없음, Sheets 업데이트 건너뜀")
+    sa_key_path = os.environ.get('GOOGLE_SA_KEY_PATH')
+    if not sa_key_path or not os.path.exists(sa_key_path):
+        print("  ⚠️  GOOGLE_SA_KEY_PATH 없음, Sheets 업데이트 건너뜀")
         return
 
-    import json as json_mod
-    sa_info = json_mod.loads(sa_json)
-    creds = Credentials.from_service_account_info(sa_info,
+    creds = Credentials.from_service_account_file(sa_key_path,
         scopes=['https://www.googleapis.com/auth/spreadsheets',
                 'https://www.googleapis.com/auth/drive'])
     gc = gspread.authorize(creds)
