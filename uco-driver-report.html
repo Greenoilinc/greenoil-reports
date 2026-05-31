@@ -661,27 +661,23 @@ function renderExcelTable(records, ym) {
   // 날짜 목록 (정렬)
   const dates = [...new Set(records.map(r => r.date))].sort();
 
-  // 주차 구분 (월요일 기준)
-  function getWeek(dateStr) {
-    const d = new Date(dateStr);
-    const first = new Date(yr, mo - 1, 1);
-    // 첫날부터 첫 월요일까지 = week1
-    let w = 1;
-    const firstMon = new Date(first);
-    while (firstMon.getDay() !== 1) firstMon.setDate(firstMon.getDate() + 1);
-    if (d < firstMon) return 1;
-    const diff = Math.floor((d - firstMon) / (7 * 86400000));
-    return diff + 2;
+  // 주차 구분: 월요일이 나오면 새 주 시작 (timezone 안전하게 T12:00 사용)
+  function buildWeeks(dates) {
+    const weeks = [];
+    let current = [];
+    for (const ds of dates) {
+      const day = new Date(ds + 'T12:00:00').getDay(); // 0=Sun,1=Mon
+      if (day === 1 && current.length > 0) {
+        weeks.push(current);
+        current = [];
+      }
+      current.push(ds);
+    }
+    if (current.length > 0) weeks.push(current);
+    return weeks;
   }
 
-  // 주차별 날짜 그룹
-  const weekMap = {};
-  for (const ds of dates) {
-    const w = getWeek(ds);
-    if (!weekMap[w]) weekMap[w] = [];
-    weekMap[w].push(ds);
-  }
-  const weeks = Object.entries(weekMap).sort((a,b) => +a[0] - +b[0]);
+  const weeks = buildWeeks(dates).map((w, i) => [String(i+1), w]);
 
   // 드라이버별 날짜별 데이터
   const dataMap = {};
@@ -761,27 +757,30 @@ function renderExcelTable(records, ym) {
     const ach = mTgt > 0 ? (mAct/mTgt*100).toFixed(1) : '—';
     const achColor = mAct >= mTgt ? 'var(--blue)' : 'var(--red)';
 
+    const driverLabel = `<div style="font-weight:700;font-size:12px">${driver}</div><div style="font-size:10px;color:var(--text-mid);font-family:Inter,sans-serif">${region}</div>`;
+    const emptyLabel = `<div style="visibility:hidden">·</div>`;
+
     tbody.innerHTML += `
-      <tr class="driver-header">
-        <td class="sticky sticky-0" rowspan="4">
-          <div style="font-weight:700">${driver}</div>
-          <div style="font-size:10px;color:var(--text-mid);font-family:Inter,sans-serif">${region}</div>
-        </td>
+      <tr class="driver-header row-target">
+        <td class="sticky sticky-0">${driverLabel}</td>
         <td class="sticky sticky-1 row-label">Target (L)</td>
         ${rows.target.join('')}
         <td class="total-col">${fmt(mTgt)}</td>
       </tr>
       <tr class="row-actual">
+        <td class="sticky sticky-0" style="background:var(--surface2);border-top:none">${emptyLabel}</td>
         <td class="sticky sticky-1 row-label">실제 수거 (L)</td>
         ${rows.actual.join('')}
         <td class="total-col ${mExceed?'exceed':''}">${fmt(mAct)}<br><span style="font-size:10px;color:${achColor}">${ach}%</span></td>
       </tr>
       <tr class="row-visits">
+        <td class="sticky sticky-0" style="background:var(--surface2);border-top:none">${emptyLabel}</td>
         <td class="sticky sticky-1 row-label">방문 수</td>
         ${rows.visits.join('')}
         <td class="total-col">${mVis}</td>
       </tr>
       <tr class="row-hours">
+        <td class="sticky sticky-0" style="background:var(--surface2);border-top:none">${emptyLabel}</td>
         <td class="sticky sticky-1 row-label">근무 시간</td>
         ${rows.hours.join('')}
         <td class="total-col">${mHrs.toFixed(1)}h</td>
@@ -807,19 +806,22 @@ function renderExcelTable(records, ym) {
   }
   const gAch = grandTgt>0?(grandAct/grandTgt*100).toFixed(1):'—';
 
+  const totEmpty = `<div style="visibility:hidden">·</div>`;
   tbody.innerHTML += `
     <tr class="row-total-header">
-      <td class="sticky sticky-0" rowspan="3" style="font-weight:800;font-size:13px">TOTAL</td>
+      <td class="sticky sticky-0" style="font-weight:800;font-size:13px;color:var(--orange)">TOTAL</td>
       <td class="sticky sticky-1">Target (L)</td>
       ${totTgt}
       <td class="total-col">${fmt(grandTgt)}</td>
     </tr>
     <tr class="row-total">
+      <td class="sticky sticky-0" style="background:#1a130a;border-top:none">${totEmpty}</td>
       <td class="sticky sticky-1">실제 수거 (L)</td>
       ${totAct}
       <td class="total-col">${fmt(grandAct)}<br><span style="font-size:10px">${gAch}%</span></td>
     </tr>
     <tr class="row-total">
+      <td class="sticky sticky-0" style="background:#1a130a;border-top:none">${totEmpty}</td>
       <td class="sticky sticky-1">방문 수</td>
       ${totVis}
       <td class="total-col">${grandVis}</td>
