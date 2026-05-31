@@ -156,6 +156,52 @@ def get_sheets_client():
     gc = gspread.authorize(creds)
     return gc.open_by_key(SHEET_ID)
 
+def apply_conditional_format(ws):
+    """실제 수거양 > 타겟이면 파란색 조건부 서식"""
+    import re
+    data = ws.get_all_values()
+    header = data[10]
+    date_cols = [ci for ci, cell in enumerate(header) if re.match(r'^\d+/\d+$', cell)]
+    if not date_cols: return
+
+    first_col, last_col = min(date_cols) + 1, max(date_cols) + 1
+    SKIP = {'Install 및 Extra', 'TOTAL', '총 수거양'}
+    actual_rows = [ri+12 for ri, row in enumerate(data[11:])
+                   if len(row) > 2 and row[2].strip() == '실제 수거양'
+                   and (not row[1].strip() or row[1].strip() not in SKIP)]
+
+    sheet_id = ws.id
+    reqs = []
+
+    # 기존 조건부 서식 삭제
+    meta = ws.spreadsheet.fetch_sheet_metadata()
+    for s in meta.get('sheets', []):
+        if s['properties']['sheetId'] == sheet_id:
+            cf_count = len(s.get('conditionalFormats', []))
+            for i in range(cf_count - 1, -1, -1):
+                reqs.append({"deleteConditionalFormatRule": {"sheetId": sheet_id, "index": i}})
+            break
+
+    for actual_row in actual_rows:
+        target_row = actual_row - 1
+        fc = gspread.utils.rowcol_to_a1(actual_row, first_col)[:-len(str(actual_row))]
+        reqs.append({"addConditionalFormatRule": {"rule": {
+            "ranges": [{"sheetId": sheet_id,
+                        "startRowIndex": actual_row-1, "endRowIndex": actual_row,
+                        "startColumnIndex": first_col-1, "endColumnIndex": last_col}],
+            "booleanRule": {
+                "condition": {"type": "CUSTOM_FORMULA",
+                              "values": [{"userEnteredValue": f"={fc}{actual_row}>{fc}{target_row}"}]},
+                "format": {
+                    "backgroundColor": {"red": 0.678, "green": 0.847, "blue": 0.902},
+                    "textFormat": {"foregroundColor": {"red": 0.067, "green": 0.306, "blue": 0.569}, "bold": True}
+                }
+            }
+        }, "index": 0}})
+
+    if reqs:
+        ws.spreadsheet.batch_update({"requests": reqs})
+
 def fill_empty_cells(sh, tab_name, mis_daily, locked_targets):
     """기존 탭에서 빈 셀만 API 데이터로 채우기 (수동 입력값 보존)"""
     try:
@@ -258,6 +304,7 @@ def fill_empty_cells(sh, tab_name, mis_daily, locked_targets):
         ws.update(gspread.utils.rowcol_to_a1(r, c), [[v]])
         time.sleep(0.2)
     print(f"  '{tab_name}': {len(updates)}개 셀 채움 ✅")
+    apply_conditional_format(ws)
 
 def update_sheets_fill(json_data, dates):
     """업데이트된 월의 기존 탭에 빈 셀 채우기"""
