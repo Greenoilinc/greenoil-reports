@@ -856,9 +856,40 @@
     });
   }
 
+  // ── History 타겟 (과거 날짜용, uco_history.json) ──
+  let HISTORY = null;
+  async function loadHistory() {
+    if (HISTORY) return HISTORY;
+    try {
+      const res = await fetch('data/uco_history.json');
+      const json = await res.json();
+      // { 'YYYYMMDD': { 'J.O': target, ... } } 형태로 인덱싱
+      const byDate = {};
+      json.daily.forEach(r => {
+        if (!r.init) return;
+        const key = r.date.replace(/-/g, '');
+        if (!byDate[key]) byDate[key] = {};
+        byDate[key][r.init] = r.target;
+      });
+      HISTORY = byDate;
+    } catch(e) {
+      console.warn('History 로드 실패:', e);
+      HISTORY = {};
+    }
+    return HISTORY;
+  }
+
   async function applyForecastLock(rawData) {
-    // 오늘 보기일 때만 적용 (Yesterday/날짜선택은 그대로)
-    if (selectedDate !== null) return rawData;
+    // 과거 날짜(Yesterday/날짜선택): uco_history.json의 확정 타겟 적용
+    if (selectedDate !== null) {
+      const hist = await loadHistory();
+      const snapshot = hist[selectedDate];
+      if (snapshot && Object.keys(snapshot).length) {
+        return applySnapshot(rawData, snapshot);
+      }
+      // 히스토리에 없는 날짜면 raw 그대로 (예: 2025-02 누락분)
+      return rawData;
+    }
 
     const now      = new Date();
     const todayStr = toYYYYMMDD(now);
