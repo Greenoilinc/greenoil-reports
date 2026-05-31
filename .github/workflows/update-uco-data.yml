@@ -1,0 +1,47 @@
+name: UCO Daily Data Update
+
+on:
+  schedule:
+    # 매일 오후 8시 30분 (UTC 03:30 = EST 23:30 전날 = KST 12:30)
+    # 캐나다 Eastern Time 기준 매일 밤 11:30 → 하루 데이터 완료 후
+    - cron: '30 3 * * 1-6'  # 월~토 (일요일 제외)
+  workflow_dispatch:         # 수동 실행 버튼
+    inputs:
+      date_from:
+        description: '시작 날짜 (YYYY-MM-DD, 비워두면 자동)'
+        required: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install requests gspread google-auth gspread-formatting
+
+      - name: Run update script
+        env:
+          MIS_API_KEY: ${{ secrets.MIS_API_KEY }}
+          GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: |
+          python scripts/update_uco_data.py
+
+      - name: Commit & Push JSON
+        run: |
+          git config user.name  "uco-report-bot"
+          git config user.email "uco-report-bot@greenoil-reports.iam.gserviceaccount.com"
+          git add data/uco_history.json
+          git diff --staged --quiet || git commit -m "auto: UCO data update $(date +'%Y-%m-%d')"
+          git push
