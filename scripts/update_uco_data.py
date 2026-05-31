@@ -176,6 +176,33 @@ def _get_sheets_client():
     sh = gc.open_by_key(SHEET_ID)
     return gc, sh
 
+def _rebuild_current_month_sheet(json_data):
+    """JSON 데이터로 현재 월 시트 전체 재구성"""
+    today = date.today()
+    year, mon = today.year, today.month
+    ym_prefix = f"{year}-{mon:02d}"
+    month_records = [r for r in json_data['daily'] if r['date'].startswith(ym_prefix)]
+    if not month_records:
+        # 이번 달 데이터 없으면 전월 확인
+        prev = date(today.year, today.month, 1) - timedelta(days=1)
+        ym_prefix = f"{prev.year}-{prev.month:02d}"
+        year, mon = prev.year, prev.month
+        month_records = [r for r in json_data['daily'] if r['date'].startswith(ym_prefix)]
+
+    full_mis = {}
+    full_locked = {}
+    for r in month_records:
+        key = (r['date'], r['name'])
+        full_mis[key] = {
+            'init': r.get('init', ''), 'region': r.get('region', ''),
+            'actual': r.get('actual', 0), 'stops': r.get('visits', 0),
+            'hours': r.get('hours'), 'forecast': r.get('target', 0),
+        }
+        full_locked[key] = r.get('target', 0)
+
+    print(f"  {ym_prefix} 시트 재구성: {len(month_records)}건")
+    update_google_sheets_month(year, mon, full_mis, full_locked)
+
 def update_google_sheets_month(year, mon, mis_daily, locked_targets):
     gc, sh = _get_sheets_client()
     if not sh: return
@@ -368,7 +395,8 @@ def main():
     # 업데이트할 날짜 계산
     dates = get_update_dates(json_data)
     if not dates:
-        print("✅ 이미 최신 상태입니다.")
+        print("✅ JSON은 최신 상태입니다. Google Sheets만 업데이트합니다.")
+        _rebuild_current_month_sheet(json_data)
         return
 
     print(f"\n업데이트 날짜: {dates[0]} ~ {dates[-1]} ({len(dates)}일)")
@@ -389,36 +417,22 @@ def main():
 
     # Google Sheets 업데이트 — 업데이트된 월 전체 데이터를 JSON에서 읽어서 사용
     print("\n[4] Google Sheets 업데이트...")
-    # 업데이트 대상 월 목록
-    months = sorted(set((datetime.strptime(d.strftime('%Y-%m-%d'), '%Y-%m-%d').year,
-                         datetime.strptime(d.strftime('%Y-%m-%d'), '%Y-%m-%d').month)
-                        for d in dates))
+    months = sorted(set((d.year, d.month) for d in dates))
 
     for year, mon in months:
-        # 해당 월 전체 데이터를 uco_history.json에서 구성
         ym_prefix = f"{year}-{mon:02d}"
         month_records = [r for r in json_data['daily'] if r['date'].startswith(ym_prefix)]
-
-        # daily 딕셔너리로 변환 (date, name) → record
         full_mis = {}
         full_locked = {}
         for r in month_records:
             key = (r['date'], r['name'])
             full_mis[key] = {
-                'init':     r.get('init', ''),
-                'region':   r.get('region', ''),
-                'actual':   r.get('actual', 0),
-                'stops':    r.get('visits', 0),
-                'hours':    r.get('hours'),
-                'forecast': r.get('target', 0),
+                'init': r.get('init', ''), 'region': r.get('region', ''),
+                'actual': r.get('actual', 0), 'stops': r.get('visits', 0),
+                'hours': r.get('hours'), 'forecast': r.get('target', 0),
             }
-            # target이 잠금값인지 여부: locked_targets에 있으면 잠금값
-            if key in locked_targets:
-                full_locked[key] = locked_targets[key]
-            else:
-                # JSON에 저장된 target을 그대로 사용 (이미 잠금값 반영됨)
-                full_locked[key] = r.get('target', 0)
-
+            full_locked[key] = locked_targets.get(key, r.get('target', 0))
+        print(f"  {ym_prefix} 시트 재구성: {len(month_records)}건")
         update_google_sheets_month(year, mon, full_mis, full_locked)
 
     print(f"\n{'='*50}")
