@@ -253,16 +253,10 @@ def fill_empty_cells(sh, tab_name, mis_daily, locked_targets):
         print(f"  '{tab_name}': 채울 빈 셀 없음")
         return
 
-    # batch update
-    body = {
-        'valueInputOption': 'USER_ENTERED',
-        'data': [
-            {'range': gspread.utils.rowcol_to_a1(r, c),
-             'values': [[v]]}
-            for r, c, v in updates
-        ]
-    }
-    ws.spreadsheet.values_batch_update(body)
+    # 셀별 업데이트 (batch_update 대신 안정적인 방식)
+    for r, c, v in updates:
+        ws.update(gspread.utils.rowcol_to_a1(r, c), [[v]])
+        time.sleep(0.2)
     print(f"  '{tab_name}': {len(updates)}개 셀 채움 ✅")
 
 def update_sheets_fill(json_data, dates):
