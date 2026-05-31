@@ -524,7 +524,7 @@
             <th>Forecast</th>
             <th>Departure</th>
             <th>Arrival</th>
-            <th>Status</th>
+            <th>Visits</th>
           </tr>
         </thead>
         <tbody id="driverTableBody"></tbody>
@@ -813,10 +813,9 @@
       const arrivalStr = (d.arrival != null && d.arrival !== false) ? String(d.arrival).trim() : '';
       const hasArrival = arrivalStr !== '' && arrivalStr !== '00:00:00' && arrivalStr !== '0';
 
-      let statusBadge = '';
-      if (hasArrival)  statusBadge = '<span class="status-badge status-done">✓ Done</span>';
-      else if (ac > 0) statusBadge = '<span class="status-badge status-progress">⟳ In Progress</span>';
-      else             statusBadge = '<span class="status-badge status-pending">— Pending</span>';
+      const doneStops  = parseInt(d.completed_stops || 0);
+      const totalStops = parseInt(d.total_stops || 0);
+      const visitsStr  = totalStops > 0 ? `${doneStops}/${totalStops}` : '-';
 
       rows += `
         <tr>
@@ -835,7 +834,7 @@
           <td class="mono" style="color:var(--text-mid)">${fc.toLocaleString()}</td>
           <td class="mono" style="color:var(--text-mid)">${d.departure || '-'}</td>
           <td class="mono" style="color:${hasArrival ? 'var(--green)' : 'var(--text-mid)'}">${arrivalStr || '-'}</td>
-          <td>${statusBadge}</td>
+          <td class="mono" style="color:var(--text-mid)">${visitsStr}</td>
         </tr>
       `;
     });
