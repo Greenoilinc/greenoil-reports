@@ -323,6 +323,109 @@ td:nth-child(2) { text-align: left; font-family: 'Inter', sans-serif; color: var
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* ── EXCEL TABLE ── */
+.excel-wrap {
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 32px;
+}
+.excel-table {
+  border-collapse: collapse;
+  font-size: 12px;
+  font-family: 'DM Mono', monospace;
+  white-space: nowrap;
+  min-width: 100%;
+}
+.excel-table th, .excel-table td {
+  border: 1px solid var(--border);
+  padding: 5px 8px;
+  text-align: right;
+}
+/* 고정 왼쪽 컬럼 */
+.excel-table th.sticky,
+.excel-table td.sticky {
+  position: sticky;
+  background: var(--surface2);
+  z-index: 2;
+  text-align: left;
+}
+.excel-table th.sticky-0, .excel-table td.sticky-0 { left: 0;    min-width: 110px; max-width: 110px; font-family:'Inter',sans-serif; }
+.excel-table th.sticky-1, .excel-table td.sticky-1 { left: 110px; min-width: 80px; max-width: 80px; color: var(--text-mid); font-family:'Inter',sans-serif; font-size:11px; }
+
+/* 헤더 */
+.excel-table thead tr.row-header th {
+  background: #1c2128;
+  color: var(--text-mid);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  padding: 8px;
+}
+.excel-table thead tr.row-header th.week-total {
+  background: #1f2937;
+  color: var(--blue);
+}
+.excel-table thead tr.row-header th.total-col {
+  background: #2d1f0e;
+  color: var(--orange);
+}
+
+/* 드라이버 헤더 행 */
+.excel-table tr.driver-header td.sticky-0 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--text);
+  background: #1c2128;
+  border-top: 2px solid var(--border);
+}
+.excel-table tr.driver-header td {
+  background: #1c2128;
+  border-top: 2px solid var(--border);
+}
+
+/* 데이터 행 */
+.excel-table tr.row-target td      { background: #0d1f38; }
+.excel-table tr.row-actual td      { background: #0d1117; }
+.excel-table tr.row-visits td      { background: #0d1117; }
+.excel-table tr.row-hours td       { background: #0d1117; color: var(--text-mid); }
+.excel-table tr.row-target td.sticky  { background: #0d1f38; }
+.excel-table tr.row-actual td.sticky  { background: #0d1117; }
+.excel-table tr.row-visits td.sticky  { background: #0d1117; }
+.excel-table tr.row-hours td.sticky   { background: #0d1117; }
+
+/* 타겟 초과 셀 */
+.excel-table td.exceed {
+  color: var(--blue-bright);
+  font-weight: 700;
+}
+/* Week Total */
+.excel-table td.week-total {
+  background: #1a2535 !important;
+  color: var(--blue);
+  font-weight: 700;
+}
+/* Grand Total */
+.excel-table td.total-col {
+  background: #2d1f0e !important;
+  color: var(--orange);
+  font-weight: 700;
+}
+/* TOTAL 행 */
+.excel-table tr.row-total-header td {
+  background: #1c2128;
+  border-top: 2px solid var(--orange);
+  font-weight: 700;
+  color: var(--orange);
+}
+.excel-table tr.row-total td {
+  background: #1a130a;
+  color: var(--orange);
+}
+.excel-table tr.row-total td.sticky { background: #1a130a; }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
   .summary-grid { grid-template-columns: repeat(3, 1fr); }
@@ -408,6 +511,7 @@ td:nth-child(2) { text-align: left; font-family: 'Inter', sans-serif; color: var
 
     <!-- 드라이버 테이블 -->
     <div class="section-title">드라이버별 월간 실적</div>
+
     <div class="table-wrap">
       <table>
         <thead>
@@ -424,6 +528,15 @@ td:nth-child(2) { text-align: left; font-family: 'Inter', sans-serif; color: var
           </tr>
         </thead>
         <tbody id="driverTable"></tbody>
+      </table>
+    </div>
+
+    <!-- 엑셀 형식 테이블 -->
+    <div class="section-title">일별 상세 (엑셀 형식)</div>
+    <div class="excel-wrap">
+      <table class="excel-table">
+        <thead id="excelHead"></thead>
+        <tbody id="excelBody"></tbody>
       </table>
     </div>
 
@@ -531,12 +644,186 @@ function render() {
     tbody.appendChild(tr);
   }
 
+  // 엑셀 테이블 렌더링
+  renderExcelTable(records, ym);
+
   // 활성 드라이버 유지
   if (activeDriver && driverMap[activeDriver]) {
     showDetail(activeDriver, driverMap[activeDriver]);
   } else {
     closeDetail();
   }
+}
+
+function renderExcelTable(records, ym) {
+  const [yr, mo] = ym.split('-').map(Number);
+
+  // 날짜 목록 (정렬)
+  const dates = [...new Set(records.map(r => r.date))].sort();
+
+  // 주차 구분 (월요일 기준)
+  function getWeek(dateStr) {
+    const d = new Date(dateStr);
+    const first = new Date(yr, mo - 1, 1);
+    // 첫날부터 첫 월요일까지 = week1
+    let w = 1;
+    const firstMon = new Date(first);
+    while (firstMon.getDay() !== 1) firstMon.setDate(firstMon.getDate() + 1);
+    if (d < firstMon) return 1;
+    const diff = Math.floor((d - firstMon) / (7 * 86400000));
+    return diff + 2;
+  }
+
+  // 주차별 날짜 그룹
+  const weekMap = {};
+  for (const ds of dates) {
+    const w = getWeek(ds);
+    if (!weekMap[w]) weekMap[w] = [];
+    weekMap[w].push(ds);
+  }
+  const weeks = Object.entries(weekMap).sort((a,b) => +a[0] - +b[0]);
+
+  // 드라이버별 날짜별 데이터
+  const dataMap = {};
+  for (const r of records) {
+    if (!dataMap[r.name]) dataMap[r.name] = {};
+    dataMap[r.name][r.date] = r;
+  }
+
+  const drivers = DRIVER_ORDER.filter(n => dataMap[n]);
+
+  // ── THEAD ──
+  const thead = document.getElementById('excelHead');
+  thead.innerHTML = '';
+
+  // 날짜 헤더행
+  let hRow = `<tr class="row-header">
+    <th class="sticky sticky-0">드라이버</th>
+    <th class="sticky sticky-1">구분</th>`;
+  for (const [wi, [wn, wdates]] of weeks.entries()) {
+    for (const ds of wdates) {
+      const d = new Date(ds);
+      const day = ['일','월','화','수','목','금','토'][d.getDay()];
+      hRow += `<th>${mo}/${d.getDate()}<br><span style="font-size:9px;color:var(--text-dim)">${day}</span></th>`;
+    }
+    hRow += `<th class="week-total">W${wi+1}<br>합계</th>`;
+  }
+  hRow += `<th class="total-col">월간<br>합계</th></tr>`;
+  thead.innerHTML = hRow;
+
+  // ── TBODY ──
+  const tbody = document.getElementById('excelBody');
+  tbody.innerHTML = '';
+
+  // 일별 TOTAL용
+  const dateTotals = { target:{}, actual:{}, visits:{} };
+  for (const ds of dates) { dateTotals.target[ds]=0; dateTotals.actual[ds]=0; dateTotals.visits[ds]=0; }
+
+  for (const driver of drivers) {
+    const ddata = dataMap[driver];
+    const region = records.find(r => r.name === driver)?.region || '';
+
+    const rows = {
+      target: [], actual: [], visits: [], hours: []
+    };
+    const weekTotals = { target:[], actual:[], visits:[], hours:[] };
+    let mTgt=0, mAct=0, mVis=0, mHrs=0;
+
+    for (const [wi, [wn, wdates]] of weeks.entries()) {
+      let wTgt=0, wAct=0, wVis=0, wHrs=0;
+      for (const ds of wdates) {
+        const r = ddata[ds];
+        const tgt = r?.target || 0;
+        const act = r?.actual || 0;
+        const vis = r?.visits || 0;
+        const hrs = r?.hours || 0;
+        const exceed = act > tgt && tgt > 0;
+
+        rows.target.push(tgt ? `<td>${fmt(tgt)}</td>` : '<td>—</td>');
+        rows.actual.push(tgt && act
+          ? `<td class="${exceed?'exceed':''}">${fmt(act)}</td>`
+          : '<td>—</td>');
+        rows.visits.push(vis ? `<td>${vis}</td>` : '<td>—</td>');
+        rows.hours.push(hrs ? `<td>${hrs.toFixed(1)}</td>` : '<td>—</td>');
+
+        wTgt+=tgt; wAct+=act; wVis+=vis; wHrs+=hrs;
+        dateTotals.target[ds]+=tgt; dateTotals.actual[ds]+=act; dateTotals.visits[ds]+=vis;
+      }
+      const wExceed = wAct > wTgt && wTgt > 0;
+      rows.target.push(`<td class="week-total">${fmt(wTgt)}</td>`);
+      rows.actual.push(`<td class="week-total ${wExceed?'exceed':''}">${fmt(wAct)}</td>`);
+      rows.visits.push(`<td class="week-total">${wVis}</td>`);
+      rows.hours.push(`<td class="week-total">${wHrs.toFixed(1)}</td>`);
+      mTgt+=wTgt; mAct+=wAct; mVis+=wVis; mHrs+=wHrs;
+    }
+
+    const mExceed = mAct > mTgt && mTgt > 0;
+    const ach = mTgt > 0 ? (mAct/mTgt*100).toFixed(1) : '—';
+    const achColor = mAct >= mTgt ? 'var(--blue)' : 'var(--red)';
+
+    tbody.innerHTML += `
+      <tr class="driver-header">
+        <td class="sticky sticky-0" rowspan="4">
+          <div style="font-weight:700">${driver}</div>
+          <div style="font-size:10px;color:var(--text-mid);font-family:Inter,sans-serif">${region}</div>
+        </td>
+        <td class="sticky sticky-1 row-label">Target (L)</td>
+        ${rows.target.join('')}
+        <td class="total-col">${fmt(mTgt)}</td>
+      </tr>
+      <tr class="row-actual">
+        <td class="sticky sticky-1 row-label">실제 수거 (L)</td>
+        ${rows.actual.join('')}
+        <td class="total-col ${mExceed?'exceed':''}">${fmt(mAct)}<br><span style="font-size:10px;color:${achColor}">${ach}%</span></td>
+      </tr>
+      <tr class="row-visits">
+        <td class="sticky sticky-1 row-label">방문 수</td>
+        ${rows.visits.join('')}
+        <td class="total-col">${mVis}</td>
+      </tr>
+      <tr class="row-hours">
+        <td class="sticky sticky-1 row-label">근무 시간</td>
+        ${rows.hours.join('')}
+        <td class="total-col">${mHrs.toFixed(1)}h</td>
+      </tr>`;
+  }
+
+  // TOTAL 행
+  let totTgt='', totAct='', totVis='';
+  let grandTgt=0, grandAct=0, grandVis=0;
+  for (const [wi, [wn, wdates]] of weeks.entries()) {
+    let wTgt=0, wAct=0, wVis=0;
+    for (const ds of wdates) {
+      const te = dateTotals.target[ds], ae = dateTotals.actual[ds], ve = dateTotals.visits[ds];
+      totTgt += `<td class="${ae>te&&te>0?'exceed':''}">${fmt(te)}</td>`;
+      totAct += `<td class="${ae>te&&te>0?'exceed':''}">${fmt(ae)}</td>`;
+      totVis += `<td>${ve}</td>`;
+      wTgt+=te; wAct+=ae; wVis+=ve;
+    }
+    totTgt += `<td class="week-total">${fmt(wTgt)}</td>`;
+    totAct += `<td class="week-total">${fmt(wAct)}</td>`;
+    totVis += `<td class="week-total">${wVis}</td>`;
+    grandTgt+=wTgt; grandAct+=wAct; grandVis+=wVis;
+  }
+  const gAch = grandTgt>0?(grandAct/grandTgt*100).toFixed(1):'—';
+
+  tbody.innerHTML += `
+    <tr class="row-total-header">
+      <td class="sticky sticky-0" rowspan="3" style="font-weight:800;font-size:13px">TOTAL</td>
+      <td class="sticky sticky-1">Target (L)</td>
+      ${totTgt}
+      <td class="total-col">${fmt(grandTgt)}</td>
+    </tr>
+    <tr class="row-total">
+      <td class="sticky sticky-1">실제 수거 (L)</td>
+      ${totAct}
+      <td class="total-col">${fmt(grandAct)}<br><span style="font-size:10px">${gAch}%</span></td>
+    </tr>
+    <tr class="row-total">
+      <td class="sticky sticky-1">방문 수</td>
+      ${totVis}
+      <td class="total-col">${grandVis}</td>
+    </tr>`;
 }
 
 function showDetail(name, data) {
