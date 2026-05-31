@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UCO Driver Report</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg:        #0d1117;
+  --surface:   #161b22;
+  --surface2:  #21262d;
+  --surface3:  #2d333b;
+  --border:    #30363d;
+  --green:     #3fb950;
+  --green-dim: #3fb95020;
+  --orange:    #f0883e;
+  --red:       #f85149;
+  --red-dim:   #f8514920;
+  --blue:      #58a6ff;
+  --blue-dim:  #58a6ff20;
+  --blue-bright:#79c0ff;
+  --yellow:    #e3b341;
+  --purple:    #bc8cff;
+  --text:      #e6edf3;
+  --text-mid:  #8b949e;
+  --text-dim:  #484f58;
+  --goi-green: #238636;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo-mark {
+  width: 34px; height: 34px;
+  background: var(--goi-green);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 12px; color: #fff;
+}
+.logo-text { font-size: 15px; font-weight: 700; }
+.logo-sub  { font-size: 11px; color: var(--text-mid); }
+
+/* ── MONTH NAV ── */
+.month-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.month-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.15s;
+}
+.month-btn:hover { background: var(--surface3); border-color: var(--blue); }
+.month-label {
+  font-size: 15px;
+  font-weight: 700;
+  min-width: 110px;
+  text-align: center;
+  color: var(--blue-bright);
+  font-family: 'DM Mono', monospace;
+}
+
+/* ── MAIN ── */
+main { max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
+
+/* ── SUMMARY CARDS ── */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+.card-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-mid);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.card-value {
+  font-size: 28px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  line-height: 1;
+}
+.card-sub {
+  font-size: 12px;
+  color: var(--text-mid);
+  margin-top: 4px;
+}
+.card.blue  { border-color: #58a6ff40; }
+.card.green { border-color: #3fb95040; }
+.card.orange{ border-color: #f0883e40; }
+.card.purple{ border-color: #bc8cff40; }
+.card.yellow{ border-color: #e3b34140; }
+.card.blue  .card-value { color: var(--blue); }
+.card.green .card-value { color: var(--green); }
+.card.orange.card-value { color: var(--orange); }
+.card.purple .card-value { color: var(--purple); }
+.card.yellow .card-value { color: var(--yellow); }
+
+/* ── SECTION TITLE ── */
+.section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-mid);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── DRIVER TABLE ── */
+.table-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 32px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+thead tr {
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+}
+thead th {
+  padding: 12px 16px;
+  text-align: right;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-mid);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+thead th:first-child { text-align: left; }
+thead th:nth-child(2) { text-align: left; }
+
+tbody tr {
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--surface2); }
+tbody tr.active { background: #58a6ff10; border-left: 3px solid var(--blue); }
+
+td {
+  padding: 14px 16px;
+  text-align: right;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+}
+td:first-child { text-align: left; font-family: 'Inter', sans-serif; }
+td:nth-child(2) { text-align: left; font-family: 'Inter', sans-serif; color: var(--text-mid); font-size: 12px; font-family: 'DM Mono', monospace; }
+
+.driver-name { font-weight: 600; font-size: 14px; }
+.driver-region {
+  font-size: 11px;
+  color: var(--text-mid);
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+}
+.badge.good  { background: var(--green-dim);  color: var(--green); border: 1px solid #3fb95040; }
+.badge.over  { background: var(--blue-dim);   color: var(--blue);  border: 1px solid #58a6ff40; }
+.badge.low   { background: var(--red-dim);    color: var(--red);   border: 1px solid #f8514940; }
+.badge.mid   { background: #f0883e20;         color: var(--orange);border: 1px solid #f0883e40; }
+
+.exceed-days {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--blue);
+  font-weight: 700;
+}
+.exceed-days span { font-size: 10px; color: var(--text-mid); font-weight: 400; }
+
+/* ── DETAIL PANEL ── */
+.detail-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+  display: none;
+}
+.detail-panel.open { display: block; }
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.detail-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+.detail-stats {
+  display: flex;
+  gap: 24px;
+}
+.detail-stat { text-align: right; }
+.detail-stat-label { font-size: 11px; color: var(--text-mid); }
+.detail-stat-value { font-size: 16px; font-weight: 700; font-family: 'DM Mono', monospace; }
+
+.chart-wrap {
+  height: 280px;
+  position: relative;
+}
+
+/* ── DAILY GRID ── */
+.daily-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 6px;
+  margin-top: 20px;
+}
+.day-cell {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 6px;
+  text-align: center;
+}
+.day-cell.exceed { background: var(--blue-dim); border-color: #58a6ff40; }
+.day-cell.miss   { background: var(--red-dim);  border-color: #f8514940; }
+.day-cell.no-work{ opacity: 0.3; }
+.day-date  { font-size: 10px; color: var(--text-mid); margin-bottom: 4px; }
+.day-actual{ font-size: 12px; font-weight: 700; font-family: 'DM Mono', monospace; }
+.day-diff  { font-size: 10px; margin-top: 2px; font-family: 'DM Mono', monospace; }
+.day-diff.pos { color: var(--blue); }
+.day-diff.neg { color: var(--red); }
+
+/* ── CLOSE BTN ── */
+.close-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text-mid);
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+}
+.close-btn:hover { color: var(--text); border-color: var(--text-mid); }
+
+/* ── LOADING ── */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--text-mid);
+  font-size: 14px;
+  gap: 10px;
+}
+.spinner {
+  width: 18px; height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .summary-grid { grid-template-columns: repeat(3, 1fr); }
+  main { padding: 16px; }
+  header { padding: 0 16px; }
+}
+@media (max-width: 600px) {
+  .summary-grid { grid-template-columns: repeat(2, 1fr); }
+  .detail-stats { gap: 12px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">GOI</div>
+    <div>
+      <div class="logo-text">UCO Driver Report</div>
+      <div class="logo-sub">수거 실적 & 근무 현황</div>
+    </div>
+  </div>
+  <div class="month-nav">
+    <button class="month-btn" id="prevBtn">◀</button>
+    <div class="month-label" id="monthLabel">—</div>
+    <button class="month-btn" id="nextBtn">▶</button>
+  </div>
+</header>
+
+<main>
+  <div id="loadingView" class="loading">
+    <div class="spinner"></div> 데이터 불러오는 중...
+  </div>
+
+  <div id="mainView" style="display:none">
+
+    <!-- 월간 요약 카드 -->
+    <div class="summary-grid">
+      <div class="card blue">
+        <div class="card-label">월간 총 수거량</div>
+        <div class="card-value" id="totalActual">—</div>
+        <div class="card-sub" id="totalActualL">—</div>
+      </div>
+      <div class="card green">
+        <div class="card-label">평균 달성률</div>
+        <div class="card-value" id="avgAchieve">—</div>
+        <div class="card-sub" id="achSub">—</div>
+      </div>
+      <div class="card yellow">
+        <div class="card-label">목표 초과 드라이버</div>
+        <div class="card-value" id="overDrivers">—</div>
+        <div class="card-sub">100% 이상 달성</div>
+      </div>
+      <div class="card purple">
+        <div class="card-label">총 방문 수</div>
+        <div class="card-value" id="totalVisits">—</div>
+        <div class="card-sub">레스토랑 방문</div>
+      </div>
+      <div class="card orange">
+        <div class="card-label">평균 근무시간/일</div>
+        <div class="card-value" id="avgHours">—</div>
+        <div class="card-sub" id="hoursSub">—</div>
+      </div>
+    </div>
+
+    <!-- 드라이버 상세 패널 -->
+    <div class="detail-panel" id="detailPanel">
+      <div class="detail-header">
+        <div>
+          <div class="detail-title" id="detailName">—</div>
+          <div style="font-size:12px; color:var(--text-mid); margin-top:2px" id="detailRegion">—</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px">
+          <div class="detail-stats" id="detailStats"></div>
+          <button class="close-btn" onclick="closeDetail()">✕ 닫기</button>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="detailChart"></canvas>
+      </div>
+      <div class="daily-grid" id="dailyGrid"></div>
+    </div>
+
+    <!-- 드라이버 테이블 -->
+    <div class="section-title">드라이버별 월간 실적</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>드라이버</th>
+            <th>구역</th>
+            <th>타겟 (L)</th>
+            <th>실제 수거 (L)</th>
+            <th>달성률</th>
+            <th>목표 초과일</th>
+            <th>방문 수</th>
+            <th>근무 시간</th>
+            <th>일 평균</th>
+          </tr>
+        </thead>
+        <tbody id="driverTable"></tbody>
+      </table>
+    </div>
+
+  </div>
+</main>
+
+<script>
+const DATA_URL = 'https://raw.githubusercontent.com/Greenoilinc/greenoil-reports/main/data/uco_history.json';
+const DRIVER_ORDER = ['오종환','김태근','송재혁','Samuel Lee','유태규','김성민','이다윗','김민','권호문','송성민','송윤섭'];
+
+let allData = null;
+let months = [];
+let currentMonthIdx = 0;
+let activeDriver = null;
+let detailChart = null;
+
+// 데이터 로드
+async function loadData() {
+  const res = await fetch(DATA_URL + '?t=' + Date.now());
+  allData = await res.json();
+  months = [...new Set(allData.daily.map(r => r.date.slice(0,7)))].sort();
+  currentMonthIdx = months.length - 1;
+  render();
+  document.getElementById('loadingView').style.display = 'none';
+  document.getElementById('mainView').style.display = 'block';
+}
+
+function fmt(n) { return n ? Math.round(n).toLocaleString() : '0'; }
+function fmtH(h) { return h ? h.toFixed(1) + 'h' : '—'; }
+function fmtPct(p) { return (p * 100).toFixed(1) + '%'; }
+
+function render() {
+  const ym = months[currentMonthIdx];
+  const [yr, mo] = ym.split('-').map(Number);
+  document.getElementById('monthLabel').textContent = `${yr}년 ${mo}월`;
+  document.getElementById('prevBtn').disabled = currentMonthIdx === 0;
+  document.getElementById('nextBtn').disabled = currentMonthIdx === months.length - 1;
+
+  const records = allData.daily.filter(r => r.date.startsWith(ym));
+
+  // 드라이버별 집계
+  const driverMap = {};
+  for (const r of records) {
+    if (!driverMap[r.name]) driverMap[r.name] = { records:[], target:0, actual:0, visits:0, hours:0, exceedDays:0, workDays:0 };
+    const d = driverMap[r.name];
+    d.records.push(r);
+    d.target  += r.target || 0;
+    d.actual  += r.actual || 0;
+    d.visits  += r.visits || 0;
+    d.hours   += r.hours  || 0;
+    d.workDays++;
+    if ((r.actual || 0) > (r.target || 0) && r.target > 0) d.exceedDays++;
+  }
+
+  // 월간 요약
+  const totalActual = Object.values(driverMap).reduce((s,d) => s + d.actual, 0);
+  const totalTarget = Object.values(driverMap).reduce((s,d) => s + d.target, 0);
+  const avgAch = totalTarget > 0 ? totalActual / totalTarget : 0;
+  const overDrivers = Object.values(driverMap).filter(d => d.actual > d.target).length;
+  const totalVisits = Object.values(driverMap).reduce((s,d) => s + d.visits, 0);
+  const allHours = Object.values(driverMap).flatMap(d => d.records.map(r => r.hours).filter(Boolean));
+  const avgHours = allHours.length ? allHours.reduce((a,b) => a+b) / allHours.length : 0;
+
+  document.getElementById('totalActual').textContent = fmt(totalActual / 1000) + ' kL';
+  document.getElementById('totalActualL').textContent = fmt(totalActual) + ' L';
+  document.getElementById('avgAchieve').textContent = (avgAch * 100).toFixed(1) + '%';
+  document.getElementById('achSub').textContent = `타겟 ${fmt(totalTarget)}L → 실제 ${fmt(totalActual)}L`;
+  document.getElementById('overDrivers').textContent = overDrivers + '명';
+  document.getElementById('totalVisits').textContent = fmt(totalVisits);
+  document.getElementById('avgHours').textContent = avgHours.toFixed(1) + 'h';
+  document.getElementById('hoursSub').textContent = `총 ${Object.values(driverMap).reduce((s,d)=>s+d.hours,0).toFixed(0)}h`;
+
+  // 드라이버 테이블
+  const tbody = document.getElementById('driverTable');
+  tbody.innerHTML = '';
+  const ordered = DRIVER_ORDER.filter(n => driverMap[n]).concat(
+    Object.keys(driverMap).filter(n => !DRIVER_ORDER.includes(n))
+  );
+
+  for (const name of ordered) {
+    const d = driverMap[name];
+    const ach = d.target > 0 ? d.actual / d.target : 0;
+    const pct = (ach * 100).toFixed(1);
+    const region = d.records[0]?.region || '';
+    const avgH = d.workDays > 0 ? d.hours / d.workDays : 0;
+
+    let badgeClass = ach >= 1.05 ? 'over' : ach >= 1.0 ? 'good' : ach >= 0.9 ? 'mid' : 'low';
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>
+        <div class="driver-name">${name}</div>
+        <div class="driver-region">${region}</div>
+      </td>
+      <td><span style="font-family:'DM Mono',monospace;font-size:11px">${d.workDays}일 근무</span></td>
+      <td>${fmt(d.target)}</td>
+      <td style="color:${ach>=1?'var(--blue)':'var(--text)'};font-weight:${ach>=1?700:400}">${fmt(d.actual)}</td>
+      <td><span class="badge ${badgeClass}">${pct}%</span></td>
+      <td><span class="exceed-days">🔵 ${d.exceedDays}<span>/ ${d.workDays}일</span></span></td>
+      <td>${fmt(d.visits)}</td>
+      <td>${d.hours.toFixed(1)}h</td>
+      <td style="color:var(--text-mid)">${avgH.toFixed(1)}h</td>
+    `;
+    tr.addEventListener('click', () => showDetail(name, driverMap[name]));
+    tbody.appendChild(tr);
+  }
+
+  // 활성 드라이버 유지
+  if (activeDriver && driverMap[activeDriver]) {
+    showDetail(activeDriver, driverMap[activeDriver]);
+  } else {
+    closeDetail();
+  }
+}
+
+function showDetail(name, data) {
+  activeDriver = name;
+
+  // 테이블 행 활성화
+  document.querySelectorAll('tbody tr').forEach((tr, i) => {
+    const n = tr.querySelector('.driver-name')?.textContent;
+    tr.classList.toggle('active', n === name);
+  });
+
+  const panel = document.getElementById('detailPanel');
+  panel.classList.add('open');
+  document.getElementById('detailName').textContent = name;
+  document.getElementById('detailRegion').textContent = data.records[0]?.region || '';
+
+  const ach = data.target > 0 ? (data.actual / data.target * 100).toFixed(1) : '—';
+  const avgH = data.workDays > 0 ? (data.hours / data.workDays).toFixed(1) : '—';
+
+  document.getElementById('detailStats').innerHTML = `
+    <div class="detail-stat">
+      <div class="detail-stat-label">달성률</div>
+      <div class="detail-stat-value" style="color:${data.actual>=data.target?'var(--blue)':'var(--red)'}">${ach}%</div>
+    </div>
+    <div class="detail-stat">
+      <div class="detail-stat-label">목표 초과</div>
+      <div class="detail-stat-value" style="color:var(--blue)">${data.exceedDays}일</div>
+    </div>
+    <div class="detail-stat">
+      <div class="detail-stat-label">총 방문</div>
+      <div class="detail-stat-value">${fmt(data.visits)}</div>
+    </div>
+    <div class="detail-stat">
+      <div class="detail-stat-label">일 평균 근무</div>
+      <div class="detail-stat-value">${avgH}h</div>
+    </div>
+  `;
+
+  // 날짜 정렬
+  const sorted = [...data.records].sort((a,b) => a.date.localeCompare(b.date));
+  const labels = sorted.map(r => r.date.slice(5));
+  const actuals = sorted.map(r => r.actual || 0);
+  const targets = sorted.map(r => r.target || 0);
+  const colors = sorted.map(r => (r.actual||0) > (r.target||0) ? '#58a6ff' : '#30363d');
+  const borderColors = sorted.map(r => (r.actual||0) > (r.target||0) ? '#79c0ff' : '#58a6ff80');
+
+  if (detailChart) detailChart.destroy();
+  const ctx = document.getElementById('detailChart').getContext('2d');
+  detailChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: '실제 수거량',
+          data: actuals,
+          backgroundColor: colors,
+          borderColor: borderColors,
+          borderWidth: 1,
+          borderRadius: 4,
+          order: 2,
+        },
+        {
+          label: '타겟',
+          data: targets,
+          type: 'line',
+          borderColor: '#f0883e',
+          backgroundColor: 'transparent',
+          borderWidth: 2,
+          borderDash: [4, 3],
+          pointRadius: 3,
+          pointBackgroundColor: '#f0883e',
+          order: 1,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index' },
+      plugins: {
+        legend: {
+          labels: { color: '#8b949e', font: { size: 11 } }
+        },
+        tooltip: {
+          backgroundColor: '#21262d',
+          borderColor: '#30363d',
+          borderWidth: 1,
+          titleColor: '#e6edf3',
+          bodyColor: '#8b949e',
+          callbacks: {
+            label: ctx => `${ctx.dataset.label}: ${fmt(ctx.raw)} L`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: '#21262d' },
+          ticks: { color: '#8b949e', font: { size: 10 } }
+        },
+        y: {
+          grid: { color: '#21262d' },
+          ticks: {
+            color: '#8b949e', font: { size: 10 },
+            callback: v => (v/1000).toFixed(1) + 'k'
+          }
+        }
+      }
+    }
+  });
+
+  // 일별 카드
+  const grid = document.getElementById('dailyGrid');
+  grid.innerHTML = '';
+  for (const r of sorted) {
+    const exceed = (r.actual||0) > (r.target||0);
+    const diff = (r.actual||0) - (r.target||0);
+    const cls = !r.actual ? 'no-work' : exceed ? 'exceed' : 'miss';
+    grid.innerHTML += `
+      <div class="day-cell ${cls}">
+        <div class="day-date">${r.date.slice(5)}</div>
+        <div class="day-actual">${fmt(r.actual)}</div>
+        <div class="day-diff ${diff>=0?'pos':'neg'}">${diff>=0?'+':''}${fmt(diff)}</div>
+        <div style="font-size:9px;color:var(--text-dim);margin-top:2px">${r.hours?r.hours+'h':''}</div>
+      </div>`;
+  }
+
+  // 스크롤
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function closeDetail() {
+  activeDriver = null;
+  document.getElementById('detailPanel').classList.remove('open');
+  document.querySelectorAll('tbody tr').forEach(tr => tr.classList.remove('active'));
+  if (detailChart) { detailChart.destroy(); detailChart = null; }
+}
+
+// 네비게이션
+document.getElementById('prevBtn').addEventListener('click', () => {
+  if (currentMonthIdx > 0) { currentMonthIdx--; render(); }
+});
+document.getElementById('nextBtn').addEventListener('click', () => {
+  if (currentMonthIdx < months.length - 1) { currentMonthIdx++; render(); }
+});
+
+// 초기화
+loadData().catch(e => {
+  document.getElementById('loadingView').innerHTML = `<span style="color:var(--red)">데이터 로드 실패: ${e.message}</span>`;
+});
+</script>
+</body>
+</html>
