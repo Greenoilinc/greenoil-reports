@@ -32,12 +32,16 @@ function displayDate(yyyymmdd) {
 // ── 타겟 계산 (8시 forecast → 확정 타겟) ─────────────
 // 기본: max 5000L 캡
 // J.O 예외: <4500 그대로 / 4500~5000 → ×0.95 / >5000 → 5000×0.95=4750
+// S.L 예외: 상한 3500 (초과 시 3500)
 function calcTarget(driver, raw) {
   const fc = parseFloat(raw) || 0;
   if (driver === 'J.O') {
     if (fc < 4500) return Math.round(fc);
     if (fc <= 5000) return Math.round(fc * 0.95);
     return Math.round(5000 * 0.95); // 4750
+  }
+  if (driver === 'S.L') {
+    return Math.min(Math.round(fc), 3500); // 상한 3500
   }
   return Math.min(fc, 5000);
 }

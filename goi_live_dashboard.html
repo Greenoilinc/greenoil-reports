@@ -850,6 +850,9 @@
       if (fc <= 5000) return Math.round(fc * 0.95);
       return Math.round(5000 * 0.95);
     }
+    if (driver === 'S.L') {
+      return Math.min(Math.round(fc), 3500);
+    }
     return Math.min(fc, 5000);
   }
 
