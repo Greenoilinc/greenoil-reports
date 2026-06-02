@@ -104,9 +104,15 @@ module.exports = async (req, res) => {
   try {
     // 1. 스냅샷 확인
     let snapshot = null;
+    let alreadySent = false;
     const cached = await misRequest(`/assets/api/v1/orders.php?type=forecast&date=${today}`);
     if (cached.success && cached.data) {
       snapshot = cached.data;
+      // 스냅샷에 chat_sent 플래그가 있으면 이미 발송된 것 → 중복 발송 방지
+      if (cached.data._chat_sent === true) {
+        log.push(`이미 발송됨: ${today} — 중복 발송 건너뜀`);
+        return res.status(200).json({ success: true, date: today, log });
+      }
       log.push(`스냅샷 기존 사용: ${today}`);
     } else {
       // 2. tbl_daily에서 오늘 forecast 조회
@@ -148,6 +154,15 @@ module.exports = async (req, res) => {
     }
 
     log.push(`완료 — 성공:${ok} 스킵:${skip} 실패:${fail}`);
+
+    // 5. 발송 완료 플래그 저장 (중복 발송 방지)
+    snapshot._chat_sent = true;
+    await misRequest(
+      `/assets/api/v1/orders.php?type=forecast&date=${today}`,
+      'POST',
+      JSON.stringify(snapshot)
+    );
+
     res.status(200).json({ success: true, date: today, log });
 
   } catch (e) {
