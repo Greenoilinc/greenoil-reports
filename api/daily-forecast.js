@@ -93,9 +93,18 @@ function sendChat(webhookUrl, text) {
   });
 }
 
+const CRON_SECRET = '562fdc73afaf0b9f8702ed13f18560095449edeeee855f4e6935e863befb97d2';
+
 // ── 메인 핸들러 ──────────────────────────────────────
 module.exports = async (req, res) => {
   res.setHeader('Content-Type', 'application/json');
+
+  // 토큰 검증 (Vercel Cron 내부 호출은 예외 허용)
+  const isVercelCron = req.headers['x-vercel-cron'] === '1';
+  const token = req.query.token || req.headers['x-cron-token'];
+  if (!isVercelCron && token !== CRON_SECRET) {
+    return res.status(401).json({ success: false, error: 'Unauthorized' });
+  }
 
   const today = torontoDate();
   const date  = displayDate(today);
