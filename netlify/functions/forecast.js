@@ -1,12 +1,13 @@
 const https = require('https');
 
 exports.handler = async (event) => {
-  const API_KEY  = 'GOI_DASHBOARD_2026_SECRET';
+  const API_KEY  = process.env.MIS_API_KEY || '';
   const BASE_URL = 'mis.greenoilinc.com';
   const path     = '/assets/api/v1/orders.php';
 
   // CORS preflight
   if (event.httpMethod === 'OPTIONS') {
+    // (preflight은 키 불필요 — 아래 OPTIONS 블록에서 처리)
     return {
       statusCode: 204,
       headers: {
@@ -17,6 +18,8 @@ exports.handler = async (event) => {
       body: ''
     };
   }
+
+  if (!API_KEY) return { statusCode: 500, body: JSON.stringify({ success: false, error: 'MIS_API_KEY env 미설정' }) };
 
   const date     = event.queryStringParameters?.date || '';
   const fullPath = date ? `${path}?type=forecast&date=${date}` : `${path}?type=forecast`;

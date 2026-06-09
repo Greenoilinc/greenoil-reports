@@ -1,22 +1,17 @@
 const https = require('https');
 
 // ── 드라이버별 Google Chat Webhook URL ──────────────
-const DRIVER_WEBHOOKS = {
-  'D.L': 'https://chat.googleapis.com/v1/spaces/AAQAkPHPSAw/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=eUeKH4MEyK12ZxrrlOUssf3U5a2-mSJwzQHexIn24lE',
-  'H.K': 'https://chat.googleapis.com/v1/spaces/AAQAlHpMVPA/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=PlO2Wq_VVEpdKh27NJyXnMLEXCmZM9pzrhUF-VVvND4',
-  'J.O': 'https://chat.googleapis.com/v1/spaces/AAQATEvnCMU/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=7BYlTNEhX7wo0BJS8Fv_0iCBDDhBYIbHuRBIfMo9zyk',
-  'J.S': 'https://chat.googleapis.com/v1/spaces/AAQAsGnXv3Q/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=DJvSowPlh1FwRBcDoHGSG7wraDZ2eYyVQOctkgsxrJo',
-  'M.K': 'https://chat.googleapis.com/v1/spaces/AAQAOnxB0a4/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=jAtBuMgjWs86XsJp1Z0mx1P3AJJMBypFMDfsITEiHo8',
-  'S.K': 'https://chat.googleapis.com/v1/spaces/AAQAVoDQ6bY/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=0lFd0cm-zpZZwaopTIBBEpEOiB1FaDlUitV7xrI9djk',
-  'S.L': 'https://chat.googleapis.com/v1/spaces/AAQAUEdZZNI/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=l24FQhcEG6FACVCrkuBFZ1iAgTBQNjY2w_uqEf-41hU',
-  'S.S': 'https://chat.googleapis.com/v1/spaces/AAQA7A2xbYE/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=B0YvduDFAgJpjv0Um1sIrmpT6fw3obaLpDoavPshaTo',
-  'T.K': 'https://chat.googleapis.com/v1/spaces/AAQARuave7E/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=2-DQN4ybcAQvN94MGeTCo_vcR8s-8wDnmf76OlN8PwA',
-  'T.Y': 'https://chat.googleapis.com/v1/spaces/AAQA3OEI-Oc/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=AgfDUTvhhVAWtYSfgq6iJFezXiIK2vWL7xKwC9PX3yA',
-  'Y.S': 'https://chat.googleapis.com/v1/spaces/AAQAgd4qyV8/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=M7Ew5J75QSTmddyvGnCuwGTzM9mnr1-5VI_XgUll4n4',
-};
+// ⚠️ 저장소가 public이므로 webhook은 절대 하드코딩 금지.
+// Vercel 환경변수 DRIVER_WEBHOOKS 에 JSON 문자열로 주입: {"D.L":"https://...","H.K":"https://...", ...}
+let DRIVER_WEBHOOKS = {};
+try {
+  DRIVER_WEBHOOKS = JSON.parse(process.env.DRIVER_WEBHOOKS || '{}');
+} catch (e) {
+  console.error('DRIVER_WEBHOOKS env JSON 파싱 실패:', e.message);
+}
 
 const MIS_HOST  = 'mis.greenoilinc.com';
-const API_KEY   = 'GOI_DASHBOARD_2026_SECRET';
+const API_KEY   = process.env.MIS_API_KEY || '';
 
 // ── 날짜 헬퍼 (토론토 시간 기준) ────────────────────
 function torontoDate() {
@@ -93,7 +88,7 @@ function sendChat(webhookUrl, text) {
   });
 }
 
-const CRON_SECRET = '562fdc73afaf0b9f8702ed13f18560095449edeeee855f4e6935e863befb97d2';
+const CRON_SECRET = process.env.CRON_SECRET || '';
 
 // ── 메인 핸들러 ──────────────────────────────────────
 module.exports = async (req, res) => {
@@ -102,9 +97,11 @@ module.exports = async (req, res) => {
   // 토큰 검증 (Vercel Cron 내부 호출은 예외 허용)
   const isVercelCron = req.headers['x-vercel-cron'] === '1';
   const token = req.query.token || req.headers['x-cron-token'];
-  if (!isVercelCron && token !== CRON_SECRET) {
+  if (!isVercelCron && (!CRON_SECRET || token !== CRON_SECRET)) {
     return res.status(401).json({ success: false, error: 'Unauthorized' });
   }
+  if (!API_KEY)  return res.status(500).json({ success: false, error: 'MIS_API_KEY env 미설정' });
+  if (!Object.keys(DRIVER_WEBHOOKS).length) return res.status(500).json({ success: false, error: 'DRIVER_WEBHOOKS env 미설정' });
 
   const today = torontoDate();
   const date  = displayDate(today);

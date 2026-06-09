@@ -10,7 +10,7 @@ from google.oauth2.service_account import Credentials
 warnings.filterwarnings('ignore')
 
 # ── 설정 ──────────────────────────────────────────────────────────
-MIS_API_KEY  = os.environ.get('MIS_API_KEY', 'GOI_DASHBOARD_2026_SECRET')
+MIS_API_KEY  = os.environ.get('MIS_API_KEY', '')
 MIS_API_URL  = 'https://mis.greenoilinc.com/assets/api/v1/orders.php'
 FORECAST_URL = 'https://greenoil-reports-greenoilincs-projects.vercel.app/api/forecast'
 SHEET_ID     = os.environ.get('GOOGLE_SHEET_ID', '14znPnTJhVFP20vBmZTbV-3UOsohMiqKTGgh0TzkXIsM')

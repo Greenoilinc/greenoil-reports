@@ -12,7 +12,7 @@ const MIS_PROXY = 'https://greenoil-reports-greenoilincs-projects.vercel.app/api
 const DEPOT_LAT = 43.764, DEPOT_LON = -79.478, DEPOT_RADIUS_KM = 0.4;
 const TIME_DIFF_MIN = 60;     // MIS vs 트럭 시각 차이 임계 (분)
 const LONG_DAY_HRS = 12;      // 과다 외근 (시간)
-const CRON_SECRET = '562fdc73afaf0b9f8702ed13f18560095449edeeee855f4e6935e863befb97d2';
+const CRON_SECRET = process.env.CRON_SECRET || '';
 
 // MIS 이니셜 → Samsara 풀네임 (G.H/I.N 미상)
 const INITIAL_NAME = {
@@ -197,7 +197,7 @@ module.exports = async (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   const isVercelCron = req.headers['x-vercel-cron'] === '1';
   const token = req.query.token || req.headers['x-cron-token'];
-  if (!isVercelCron && token !== CRON_SECRET) return res.status(401).json({ success: false, error: 'Unauthorized' });
+  if (!isVercelCron && (!CRON_SECRET || token !== CRON_SECRET)) return res.status(401).json({ success: false, error: 'Unauthorized' });
   if (!SAMSARA_TOKEN) return res.status(500).json({ success: false, error: 'SAMSARA_TOKEN env 미설정' });
   if (!WEBHOOK) return res.status(500).json({ success: false, error: 'GOI_ATTENDANCE_WEBHOOK env 미설정' });
 

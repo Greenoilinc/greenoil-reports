@@ -10,8 +10,9 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const API_KEY  = 'GOI_DASHBOARD_2026_SECRET';
+  const API_KEY  = process.env.MIS_API_KEY || '';
   const BASE_URL = 'mis.greenoilinc.com';
+  if (!API_KEY) { res.status(500).json({ success: false, error: 'MIS_API_KEY env 미설정' }); return; }
   const date     = req.query.date || '';
   const fullPath = `/assets/api/v1/orders.php?type=forecast${date ? '&date=' + date : ''}`;
   const method   = req.method === 'POST' ? 'POST' : 'GET';

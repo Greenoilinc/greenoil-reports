@@ -1,8 +1,9 @@
 const https = require('https');
 
 exports.handler = async (event) => {
-  const API_KEY  = 'GOI_DASHBOARD_2026_SECRET';
+  const API_KEY  = process.env.MIS_API_KEY || '';
   const BASE_URL = 'mis.greenoilinc.com';
+  if (!API_KEY) return { statusCode: 500, body: JSON.stringify({ success: false, error: 'MIS_API_KEY env 미설정' }) };
 
   const type   = event.queryStringParameters?.type || 'orders';
   const params = new URLSearchParams(event.queryStringParameters || {});
