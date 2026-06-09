@@ -111,20 +111,21 @@ module.exports = async (req, res) => {
   const log   = [];
 
   try {
-    // 1. 스냅샷 확인
+    // 1. 스냅샷 확인 (saved_at 필드로 진짜 캐시인지 구분)
     let snapshot = null;
-    let alreadySent = false;
     const cached = await misRequest(`/assets/api/v1/orders.php?type=forecast&date=${today}`);
-    if (cached.success && cached.data) {
-      snapshot = cached.data;
-      // 스냅샷에 chat_sent 플래그가 있으면 이미 발송된 것 → 중복 발송 방지
+    const isRealCache = cached.success && cached.saved_at && cached.data && !Array.isArray(cached.data);
+
+    if (isRealCache) {
+      // 이미 발송된 경우 중복 방지
       if (cached.data._chat_sent === true) {
         log.push(`이미 발송됨: ${today} — 중복 발송 건너뜀`);
         return res.status(200).json({ success: true, date: today, log });
       }
+      snapshot = cached.data;
       log.push(`스냅샷 기존 사용: ${today}`);
     } else {
-      // 2. tbl_daily에서 오늘 forecast 조회
+      // 2. tbl_daily에서 오늘 forecast 직접 조회
       const orders = await misRequest(`/assets/api/v1/orders.php?date_from=${today}&date_to=${today}`);
       if (!orders.success || !Array.isArray(orders.data)) throw new Error('orders.php 조회 실패');
 
