@@ -4,7 +4,12 @@ const https = require('https');
 
 const MESSAGE_TOKEN = process.env.MESSAGE_TOKEN || '';  // 타임라인 HTML에 embed된 토큰과 일치해야 함
 
+// HR/ADP 안내용 별도 채널(HR_DRIVER_WEBHOOKS). 미설정 시 기존 타겟 채널(DRIVER_WEBHOOKS)로 폴백.
 function driverWebhooks() {
+  try {
+    const hr = JSON.parse(process.env.HR_DRIVER_WEBHOOKS || '{}');
+    if (Object.keys(hr).length) return hr;
+  } catch (e) { /* fall through */ }
   try { return JSON.parse(process.env.DRIVER_WEBHOOKS || '{}'); } catch (e) { return {}; }
 }
 
