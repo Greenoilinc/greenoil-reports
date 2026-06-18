@@ -186,6 +186,29 @@
       <span class="pill pill-purple">Google Chat Webhook</span>
     </p>
     <p style="margin-top:16px"><b style="color:var(--text)">의도적으로 단순하게:</b> 프레임워크·빌드 도구 없이 순수 HTML/JS로 작성. IT 인력 누구나 바로 읽고 수정할 수 있고, 빌드 파이프라인 장애 가능성이 없습니다.</p>
+
+    <h3 style="margin-top:24px">📊 그래프 라이브러리: Chart.js (4.4.1)</h3>
+    <p>모든 차트는 <b style="color:var(--text)">Chart.js</b>로 그립니다. 선택 이유:</p>
+    <ul>
+      <li><b style="color:var(--text)">무료·오픈소스</b> (MIT) — 상업적 사용 OK</li>
+      <li><b style="color:var(--text)">CDN 한 줄</b>이면 끝 — npm·빌드 불필요</li>
+      <li>막대·라인·도넛·<b style="color:var(--text)">혼합(막대+라인 오버레이)</b> 전부 지원</li>
+      <li>반응형 — PC·모바일·TV 모니터 자동 대응</li>
+      <li>JSON 설정만 넘기면 되는 낮은 학습 곡선</li>
+    </ul>
+    <div class="note" style="font-family:'DM Mono',monospace;font-size:12px;border-left-color:var(--blue);background:#58a6ff15;">
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"&gt;&lt;/script&gt;
+    </div>
+    <p style="font-size:13px;">대안 참고: 인터랙티브 금융차트는 <code>ECharts</code>, React 프로젝트는 <code>Recharts</code>, 초경량은 <code>uPlot</code>. 빌드 없이 빠르게 만들 거면 Chart.js가 가장 무난합니다.</p>
+
+    <h3 style="margin-top:24px">🚀 비슷한 대시보드, 이렇게 시작하면 됩니다</h3>
+    <ul>
+      <li><b style="color:var(--text)">1.</b> HTML 파일 하나 + Chart.js CDN <code>&lt;script&gt;</code> 추가</li>
+      <li><b style="color:var(--text)">2.</b> 데이터 API는 <code>fetch()</code>로 호출 → CORS·키 노출 막으려면 Vercel/Netlify 서버리스 프록시 한 겹</li>
+      <li><b style="color:var(--text)">3.</b> GitHub 레포에 push → GitHub Pages로 무료 호스팅 (자동 배포)</li>
+      <li><b style="color:var(--text)">4.</b> 정기 작업(스냅샷·알림)은 Vercel Cron</li>
+    </ul>
+    <p style="font-size:13px;">→ 우리 레포의 <a href="https://github.com/Greenoilinc/greenoil-reports/blob/main/goi_live_dashboard.html" target="_blank">goi_live_dashboard.html</a> 한 파일만 봐도 차트·fetch·자동갱신 패턴을 그대로 복사해 쓸 수 있습니다.</p>
   </div>
 
   <!-- 운영 -->
