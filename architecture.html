@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOI Dashboard — Architecture Overview</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+  :root{
+    --bg:#0d1117; --surface:#161b22; --surface2:#21262d; --border:#30363d;
+    --green:#3fb950; --orange:#f0883e; --red:#f85149; --blue:#58a6ff;
+    --yellow:#e3b341; --purple:#bc8cff; --text:#e6edf3; --text-mid:#8b949e; --text-dim:#6e7681;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);font-family:'Inter',sans-serif;color:var(--text);line-height:1.6;}
+  .wrap{max-width:1100px;margin:0 auto;padding:40px 24px 80px;}
+  header{text-align:center;margin-bottom:48px;border-bottom:1px solid var(--border);padding-bottom:32px;}
+  h1{font-size:32px;font-weight:800;margin-bottom:8px;}
+  h1 .g{color:var(--green);}
+  .subtitle{color:var(--text-mid);font-size:15px;}
+  .meta{margin-top:16px;font-size:13px;color:var(--text-dim);font-family:'DM Mono',monospace;}
+  h2{font-size:20px;font-weight:700;margin:48px 0 16px;display:flex;align-items:center;gap:10px;}
+  h2 .num{background:var(--green);color:#0d1117;width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;}
+  h3{font-size:15px;font-weight:600;margin:24px 0 8px;color:var(--blue);}
+  p{color:var(--text-mid);margin-bottom:12px;font-size:14px;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  table{width:100%;border-collapse:collapse;margin:12px 0;}
+  th{text-align:left;padding:8px 12px;font-size:11px;text-transform:uppercase;color:var(--text-mid);border-bottom:1px solid var(--border);letter-spacing:.5px;}
+  td{padding:8px 12px;font-size:13px;border-bottom:1px solid var(--surface2);}
+  code{background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:'DM Mono',monospace;font-size:12px;color:var(--yellow);}
+  .pill{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;font-family:'DM Mono',monospace;}
+  .pill-green{background:#3fb95025;color:var(--green);}
+  .pill-blue{background:#58a6ff25;color:var(--blue);}
+  .pill-orange{background:#f0883e25;color:var(--orange);}
+  .pill-purple{background:#bc8cff25;color:var(--purple);}
+  .pill-red{background:#f8514925;color:var(--red);}
+  a{color:var(--blue);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  .flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin:20px 0;}
+  .flow-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;flex:1;min-width:140px;text-align:center;}
+  .flow-box .ic{font-size:24px;margin-bottom:6px;}
+  .flow-box .t{font-weight:700;font-size:13px;}
+  .flow-box .d{font-size:11px;color:var(--text-mid);margin-top:4px;}
+  .flow-arrow{display:flex;align-items:center;color:var(--text-dim);font-size:20px;padding:0 8px;}
+  .note{background:#f0883e15;border-left:3px solid var(--orange);padding:12px 16px;border-radius:6px;margin:12px 0;font-size:13px;color:var(--text);}
+  .note b{color:var(--orange);}
+  ul{margin:8px 0 12px 20px;color:var(--text-mid);font-size:14px;}
+  li{margin-bottom:6px;}
+  .tag{font-family:'DM Mono',monospace;font-size:12px;color:var(--green);}
+  @media(max-width:768px){.grid2,.grid3{grid-template-columns:1fr;}.flow{flex-direction:column;}.flow-arrow{transform:rotate(90deg);padding:4px 0;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1><span class="g">GOI</span> Dashboard Platform</h1>
+    <div class="subtitle">Oil Collection Real-Time Operations & Analytics — Architecture Overview</div>
+    <div class="meta">Green Oil Inc. · Internal IT Documentation</div>
+  </header>
+
+  <!-- 개요 -->
+  <h2><span class="num">1</span> 한눈에 보기</h2>
+  <div class="card">
+    <p>기존 MIS 시스템(<code>mis.greenoilinc.com</code>)의 데이터를 활용해, <b style="color:var(--text)">서버 코드 변경을 최소화</b>하면서 실시간 대시보드·분석·자동 알림을 구축했습니다. 핵심 설계 원칙:</p>
+    <ul>
+      <li><b style="color:var(--text)">기존 인프라 무침해</b> — MIS 서버엔 읽기 전용 API(<code>orders.php</code>) 한 곳만 확장</li>
+      <li><b style="color:var(--text)">정적 호스팅 + 서버리스</b> — 별도 서버 운영 비용 0 (GitHub Pages + Vercel 무료 티어)</li>
+      <li><b style="color:var(--text)">API 키 노출 방지</b> — 키는 Vercel 서버리스 함수의 환경변수에만 존재, 브라우저엔 절대 노출 안 됨</li>
+    </ul>
+  </div>
+
+  <!-- 데이터 흐름 -->
+  <h2><span class="num">2</span> 데이터 흐름</h2>
+  <div class="card">
+    <div class="flow">
+      <div class="flow-box"><div class="ic">🗄️</div><div class="t">MIS 서버</div><div class="d">MySQL + PHP API<br>mis.greenoilinc.com</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box"><div class="ic">⚡</div><div class="t">Vercel</div><div class="d">서버리스 프록시<br>API 키 주입 / CORS</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box"><div class="ic">🌐</div><div class="t">GitHub Pages</div><div class="d">정적 대시보드<br>(HTML/JS)</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box"><div class="ic">👥</div><div class="t">사용자</div><div class="d">브라우저 / TV<br>모니터</div></div>
+    </div>
+    <p style="margin-top:16px"><b style="color:var(--text)">왜 프록시를 두었나?</b> 브라우저가 MIS 서버를 직접 호출하면 ① CORS 차단 ② API 키가 브라우저에 노출됩니다. Vercel 함수가 중간에서 키를 붙여 대신 호출하므로 두 문제를 한 번에 해결합니다.</p>
+  </div>
+
+  <!-- 구성요소 -->
+  <h2><span class="num">3</span> 구성 요소</h2>
+  <div class="grid3">
+    <div class="card">
+      <span class="pill pill-green">호스팅</span>
+      <h3 style="margin-top:12px">GitHub Pages</h3>
+      <p>정적 HTML/JS 대시보드 호스팅. git push 시 자동 배포.</p>
+      <div class="tag">greenoilinc.github.io<br>/greenoil-reports/</div>
+    </div>
+    <div class="card">
+      <span class="pill pill-blue">서버리스</span>
+      <h3 style="margin-top:12px">Vercel Functions</h3>
+      <p>MIS API 프록시 + 매일 8시 Cron(스냅샷·알림). Node.js.</p>
+      <div class="tag">/api/api<br>/api/forecast<br>/api/daily-forecast</div>
+    </div>
+    <div class="card">
+      <span class="pill pill-orange">데이터 소스</span>
+      <h3 style="margin-top:12px">MIS Server</h3>
+      <p>기존 운영 DB·PHP API. <code>orders.php</code>에 읽기 분기만 추가.</p>
+      <div class="tag">MySQL goiintra_db<br>PHP-FPM / nginx</div>
+    </div>
+  </div>
+
+  <!-- API -->
+  <h2><span class="num">4</span> API 엔드포인트 (Vercel 프록시)</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>엔드포인트</th><th>용도</th><th>대상</th></tr></thead>
+      <tbody>
+        <tr><td><code>/api/api</code></td><td>일별 수거 데이터 (forecast/actual/방문/출퇴근)</td><td>orders.php</td></tr>
+        <tr><td><code>/api/api?type=cs</code></td><td>고객서비스 접수/처리 통계</td><td>orders.php</td></tr>
+        <tr><td><code>/api/api?type=drivers</code></td><td>드라이버 목록</td><td>drivers.php</td></tr>
+        <tr><td><code>/api/forecast</code></td><td>8시 타겟 스냅샷 조회/저장 (GET/POST)</td><td>tbl_forecast_cache</td></tr>
+        <tr><td><code>/api/daily-forecast</code></td><td>Cron — 스냅샷 생성 + Google Chat 발송</td><td>(자동 실행)</td></tr>
+      </tbody>
+    </table>
+    <div class="note"><b>보안:</b> 모든 함수는 <code>X-API-Key</code>를 <b>서버 측 환경변수</b>(<code>process.env.MIS_API_KEY</code>)에서 읽어 MIS 서버로 전달합니다. 키가 클라이언트 코드·git 저장소 어디에도 없습니다.</div>
+  </div>
+
+  <!-- 대시보드 -->
+  <h2><span class="num">5</span> 대시보드 (3종)</h2>
+  <div class="grid3">
+    <div class="card">
+      <h3>📊 Live Operations</h3>
+      <p>실시간 운영 모니터. 5분 자동 갱신. 드라이버별 타겟 대비 실제 수거량, 달성률, 출퇴근, 방문 현황.</p>
+      <a href="goi_live_dashboard.html">→ 보기</a>
+    </div>
+    <div class="card">
+      <h3>📞 CS Dashboard</h3>
+      <p>고객 서비스 접수/처리 분석. 일별 추이, 접수자·지역·요일별 통계, 미처리 노화 분포.</p>
+      <a href="cs_dashboard.html">→ 보기</a>
+    </div>
+    <div class="card">
+      <h3>📈 History & Analytics</h3>
+      <p>17개월 장기 추세. 월별 달성률, 회사 KPI(계약/하역), 드라이버 성과·효율, 재직 타임라인.</p>
+      <a href="goi_history_dashboard.html">→ 보기</a>
+    </div>
+  </div>
+
+  <!-- 핵심 기능 -->
+  <h2><span class="num">6</span> 핵심 자동화 로직</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>🔒 8시 Forecast Lock</h3>
+      <p>타겟(forecast)은 운영 중 수시로 바뀌므로, 매일 <b style="color:var(--text)">오전 8시 값을 스냅샷으로 고정</b>합니다. 이후 하루 종일 동일 타겟 대비 달성률을 측정.</p>
+      <ul>
+        <li>저장: <code>tbl_forecast_cache</code> (날짜별)</li>
+        <li>드라이버별 상한·보정 규칙 적용</li>
+        <li>과거 날짜는 확정 히스토리 사용</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>💬 Google Chat 자동 알림</h3>
+      <p>매일 오전 8시(월~토), 각 드라이버의 Google Chat Space로 <b style="color:var(--text)">오늘의 목표량</b>을 자동 발송합니다.</p>
+      <ul>
+        <li>Vercel Cron <code>0 12 * * 1-6</code></li>
+        <li>드라이버별 Webhook URL</li>
+        <li>스냅샷과 동일 값 사용 → 일관성 보장</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 기술스택 -->
+  <h2><span class="num">7</span> 기술 스택</h2>
+  <div class="card">
+    <p>
+      <span class="pill pill-blue">HTML / CSS / Vanilla JS</span>
+      <span class="pill pill-green">Chart.js</span>
+      <span class="pill pill-purple">Node.js (Vercel Functions)</span>
+      <span class="pill pill-orange">PHP (기존 MIS)</span>
+      <span class="pill pill-red">MySQL</span>
+      <span class="pill pill-blue">GitHub Pages</span>
+      <span class="pill pill-green">Vercel Cron</span>
+      <span class="pill pill-purple">Google Chat Webhook</span>
+    </p>
+    <p style="margin-top:16px"><b style="color:var(--text)">의도적으로 단순하게:</b> 프레임워크·빌드 도구 없이 순수 HTML/JS로 작성. IT 인력 누구나 바로 읽고 수정할 수 있고, 빌드 파이프라인 장애 가능성이 없습니다.</p>
+  </div>
+
+  <!-- 운영 -->
+  <h2><span class="num">8</span> 배포 & 운영</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>항목</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td>코드 저장소</td><td><code>github.com/Greenoilinc/greenoil-reports</code></td></tr>
+        <tr><td>배포 방식</td><td>git push → GitHub Pages + Vercel <b style="color:var(--text)">자동 배포</b></td></tr>
+        <tr><td>운영 비용</td><td><span class="pill pill-green">$0</span> (무료 티어)</td></tr>
+        <tr><td>MIS 서버 변경</td><td>읽기 전용 API 분기만 추가 (기존 기능 무영향)</td></tr>
+        <tr><td>시크릿 관리</td><td>Vercel 환경변수 <code>MIS_API_KEY</code> (코드/git 미포함)</td></tr>
+      </tbody>
+    </table>
+    <div class="note"><b>확장성:</b> 새 대시보드·지표 추가 시 HTML 파일 하나 만들고 push하면 끝. 서버 인프라 추가 불필요.</div>
+  </div>
+
+  <footer style="margin-top:48px;padding-top:24px;border-top:1px solid var(--border);text-align:center;color:var(--text-dim);font-size:12px;">
+    Green Oil Inc. — Dashboard Platform Architecture · Internal Documentation
+  </footer>
+
+</div>
+</body>
+</html>
