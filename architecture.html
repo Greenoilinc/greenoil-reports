@@ -59,6 +59,9 @@
     <h1><span class="g">GOI</span> Dashboard Platform</h1>
     <div class="subtitle">Oil Collection Real-Time Operations & Analytics — Architecture Overview</div>
     <div class="meta">Green Oil Inc. · Internal IT Documentation</div>
+    <div style="margin-top:16px;">
+      <a href="https://github.com/Greenoilinc/greenoil-reports" target="_blank" style="display:inline-block;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;">⌨️ 전체 소스 코드 보기 (GitHub) ↗</a>
+    </div>
   </header>
 
   <!-- 개요 -->
@@ -114,13 +117,13 @@
   <h2><span class="num">4</span> API 엔드포인트 (Vercel 프록시)</h2>
   <div class="card">
     <table>
-      <thead><tr><th>엔드포인트</th><th>용도</th><th>대상</th></tr></thead>
+      <thead><tr><th>엔드포인트</th><th>용도</th><th>대상</th><th>소스</th></tr></thead>
       <tbody>
-        <tr><td><code>/api/api</code></td><td>일별 수거 데이터 (forecast/actual/방문/출퇴근)</td><td>orders.php</td></tr>
-        <tr><td><code>/api/api?type=cs</code></td><td>고객서비스 접수/처리 통계</td><td>orders.php</td></tr>
-        <tr><td><code>/api/api?type=drivers</code></td><td>드라이버 목록</td><td>drivers.php</td></tr>
-        <tr><td><code>/api/forecast</code></td><td>8시 타겟 스냅샷 조회/저장 (GET/POST)</td><td>tbl_forecast_cache</td></tr>
-        <tr><td><code>/api/daily-forecast</code></td><td>Cron — 스냅샷 생성 + Google Chat 발송</td><td>(자동 실행)</td></tr>
+        <tr><td><code>/api/api</code></td><td>일별 수거 데이터 (forecast/actual/방문/출퇴근)</td><td>orders.php</td><td><a href="https://github.com/Greenoilinc/greenoil-reports/blob/main/api/api.js" target="_blank">api.js ↗</a></td></tr>
+        <tr><td><code>/api/api?type=cs</code></td><td>고객서비스 접수/처리 통계</td><td>orders.php</td><td><a href="https://github.com/Greenoilinc/greenoil-reports/blob/main/api/api.js" target="_blank">api.js ↗</a></td></tr>
+        <tr><td><code>/api/api?type=drivers</code></td><td>드라이버 목록</td><td>drivers.php</td><td><a href="https://github.com/Greenoilinc/greenoil-reports/blob/main/api/api.js" target="_blank">api.js ↗</a></td></tr>
+        <tr><td><code>/api/forecast</code></td><td>8시 타겟 스냅샷 조회/저장 (GET/POST)</td><td>tbl_forecast_cache</td><td><a href="https://github.com/Greenoilinc/greenoil-reports/blob/main/api/forecast.js" target="_blank">forecast.js ↗</a></td></tr>
+        <tr><td><code>/api/daily-forecast</code></td><td>Cron — 스냅샷 생성 + Google Chat 발송</td><td>(자동 실행)</td><td><a href="https://github.com/Greenoilinc/greenoil-reports/blob/main/api/daily-forecast.js" target="_blank">daily-forecast.js ↗</a></td></tr>
       </tbody>
     </table>
     <div class="note"><b>보안:</b> 모든 함수는 <code>X-API-Key</code>를 <b>서버 측 환경변수</b>(<code>process.env.MIS_API_KEY</code>)에서 읽어 MIS 서버로 전달합니다. 키가 클라이언트 코드·git 저장소 어디에도 없습니다.</div>
@@ -132,17 +135,17 @@
     <div class="card">
       <h3>📊 Live Operations</h3>
       <p>실시간 운영 모니터. 5분 자동 갱신. 드라이버별 타겟 대비 실제 수거량, 달성률, 출퇴근, 방문 현황.</p>
-      <a href="goi_live_dashboard.html">→ 보기</a>
+      <a href="goi_live_dashboard.html">→ 보기</a> &nbsp;·&nbsp; <a href="https://github.com/Greenoilinc/greenoil-reports/blob/main/goi_live_dashboard.html" target="_blank">소스 ↗</a>
     </div>
     <div class="card">
       <h3>📞 CS Dashboard</h3>
       <p>고객 서비스 접수/처리 분석. 일별 추이, 접수자·지역·요일별 통계, 미처리 노화 분포.</p>
-      <a href="cs_dashboard.html">→ 보기</a>
+      <a href="cs_dashboard.html">→ 보기</a> &nbsp;·&nbsp; <a href="https://github.com/Greenoilinc/greenoil-reports/blob/main/cs_dashboard.html" target="_blank">소스 ↗</a>
     </div>
     <div class="card">
       <h3>📈 History & Analytics</h3>
       <p>17개월 장기 추세. 월별 달성률, 회사 KPI(계약/하역), 드라이버 성과·효율, 재직 타임라인.</p>
-      <a href="goi_history_dashboard.html">→ 보기</a>
+      <a href="goi_history_dashboard.html">→ 보기</a> &nbsp;·&nbsp; <a href="https://github.com/Greenoilinc/greenoil-reports/blob/main/goi_history_dashboard.html" target="_blank">소스 ↗</a>
     </div>
   </div>
 
