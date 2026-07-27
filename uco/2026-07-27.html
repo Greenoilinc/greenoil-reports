@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Oil UCO — 2026년 7/20 – 7/26 주</title>
+<style>
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+  background: #f0f4f0;
+  color: #1c2e1c;
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── Report Switch Badge ── */
+.report-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.report-switch:hover { background: rgba(255,255,255,0.25); }
+.report-switch .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #fbbf24; flex-shrink: 0;
+}
+
+/* ── PDF Button ── */
+.pdf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.pdf-btn:hover { background: rgba(255,255,255,0.22); }
+.pdf-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Print styles ── */
+@media print {
+  .week-nav, .report-switch, .pdf-btn, .nav-dots { display: none !important; }
+  .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: white; }
+  .container { padding: 0; }
+  .card { break-inside: avoid; }
+  a { text-decoration: none; color: inherit; }
+}
+
+/* ── Header ── */
+.header {
+  background: linear-gradient(135deg, #1a5c1a 0%, #2e8b2e 100%);
+  color: white;
+  padding: 18px 24px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.header-left h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 7px; }
+.header-left .sub { font-size: 11px; opacity: 0.75; margin-top: 3px; letter-spacing: 0.3px; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.updated-badge { font-size: 10px; opacity: 0.65; }
+
+/* ── Week Navigator ── */
+.week-nav {
+  background: white;
+  border-bottom: 1px solid #e0e8e0;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.nav-btn {
+  background: none;
+  border: 1px solid #c8dcc8;
+  border-radius: 8px;
+  padding: 5px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #2e8b2e;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+.nav-btn:hover { background: #eaf4ea; border-color: #2e8b2e; }
+.nav-btn.disabled { opacity: 0.3; pointer-events: none; }
+.nav-center { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+.nav-week-label { font-size: 14px; font-weight: 700; color: #1c2e1c; }
+.nav-week-sub { font-size: 10px; color: #999; }
+.nav-dots { display: flex; gap: 5px; margin-top: 4px; flex-wrap: wrap; justify-content: center; }
+.nav-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #d0e4d0; cursor: pointer; transition: background 0.15s;
+  display: block; text-decoration: none;
+}
+.nav-dot.active { background: #2e8b2e; }
+.nav-dot:hover { background: #7cb87c; }
+
+/* ── Container ── */
+.container { max-width: 920px; margin: 0 auto; padding: 18px 16px 32px; }
+
+/* ── Alert bar ── */
+.alert-bar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.pill {
+  display: flex; align-items: center; gap: 6px;
+  background: white; border-radius: 20px; padding: 5px 13px;
+  font-size: 11px; font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.pill.red   { border-left: 3px solid #e53e3e; color: #c53030; }
+.pill.amber { border-left: 3px solid #d69e2e; color: #975a16; }
+.pill.green { border-left: 3px solid #38a169; color: #22543d; }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.dot.red   { background: #e53e3e; }
+.dot.amber { background: #d69e2e; }
+.dot.green { background: #38a169; }
+
+/* ── Card ── */
+.card { background: white; border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.card-header { display: flex; align-items: center; gap: 9px; margin-bottom: 13px; padding-bottom: 10px; border-bottom: 1px solid #eaf2ea; }
+.card-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.icon-summary { background: #edfaed; }
+.icon-canada  { background: #fff0f0; }
+.icon-export  { background: #eef2ff; }
+.icon-market  { background: #fff8ec; }
+.icon-risk    { background: #fff5f5; }
+.icon-sources { background: #f5f5f5; }
+.icon-prov    { background: #fff3e0; }
+.card-title { font-size: 14px; font-weight: 700; color: #1c2e1c; }
+.card-title span { font-size: 10px; font-weight: 400; color: #888; margin-left: 5px; }
+
+/* ── Two-col ── */
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+@media (max-width: 620px) { .row2 { grid-template-columns: 1fr; } }
+
+/* ── Summary ── */
+.summary-list { list-style: none; }
+.summary-list li { padding: 7px 0 7px 18px; position: relative; border-bottom: 1px solid #f4f4f4; color: #2d3e2d; font-size: 13px; }
+.summary-list li:last-child { border-bottom: none; }
+.summary-list li::before { content: '▸'; position: absolute; left: 0; top: 8px; color: #2e8b2e; font-size: 10px; }
+
+/* ── Sub-label ── */
+.sub-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: #999; margin-bottom: 9px; }
+
+/* ── News item ── */
+.news-item { padding: 9px 0; border-bottom: 1px solid #f4f4f4; }
+.news-item:last-child { border-bottom: none; }
+a.news-item { text-decoration: none; color: inherit; display: block; border-radius: 7px; padding: 9px 8px; margin: 0 -8px; transition: background 0.15s; }
+a.news-item:hover { background: #edf6ed; }
+a.news-item .news-title::after { content: ' ↗'; font-size: 10px; color: #2e8b2e; opacity: 0.6; }
+.tag { display: inline-block; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 3px; }
+.tag-cfr      { background: #e6f4ea; color: #137333; }
+.tag-carbon   { background: #e8f0fe; color: #1558d6; }
+.tag-prov     { background: #fce8e6; color: #c5221f; }
+.tag-prov-politics { background: #fce8e6; color: #c5221f; }
+.tag-eu       { background: #ede7f6; color: #5e35b1; }
+.tag-us       { background: #e8eaed; color: #3c4043; }
+.tag-market   { background: #fff3e0; color: #e65100; }
+.tag-cert     { background: #e0f7fa; color: #006064; }
+.tag-trade    { background: #fce4ec; color: #880e4f; }
+.tag-politics { background: #e8eaf6; color: #283593; }
+.news-title { font-size: 12px; font-weight: 600; color: #1c2e1c; margin-bottom: 2px; }
+.news-body  { font-size: 11px; color: #5a6e5a; line-height: 1.5; }
+
+/* ── Risk radar ── */
+.risk-grid { display: flex; flex-direction: column; gap: 10px; }
+.risk-col { border-radius: 9px; padding: 12px 16px; }
+.risk-col.red   { background: #fff5f5; border: 1px solid #fed7d7; }
+.risk-col.amber { background: #fffbf0; border: 1px solid #fefcbf; }
+.risk-col.green { background: #f0fff4; border: 1px solid #c6f6d5; }
+.risk-col-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+.risk-col.red   .risk-col-title { color: #c53030; }
+.risk-col.amber .risk-col-title { color: #975a16; }
+.risk-col.green .risk-col-title { color: #22543d; }
+.risk-entry { font-size: 12px; color: #4a5568; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.05); line-height: 1.5; }
+.risk-entry:last-child { border-bottom: none; }
+
+/* ── Sources ── */
+.source-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f4f4f4; align-items: flex-start; }
+.source-row:last-child { border-bottom: none; }
+.src-num { width: 20px; height: 20px; flex-shrink: 0; background: #eaf2ea; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #2e8b2e; margin-top: 1px; }
+.src-link { font-size: 12px; font-weight: 600; color: #1a6b3c; text-decoration: none; }
+.src-link:hover { text-decoration: underline; }
+.src-meta { font-size: 10px; color: #aaa; margin-top: 1px; }
+
+/* ── Empty ── */
+.empty { background: #f9f9f9; border-radius: 7px; padding: 14px; text-align: center; color: #bbb; font-size: 12px; font-style: italic; }
+
+/* ── Footer ── */
+.footer { text-align: center; font-size: 10px; color: #bbb; padding: 8px 0 4px; letter-spacing: 0.2px; }
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="header">
+  <div class="header-left">
+    <h1>🌿 Green Oil Inc.</h1>
+    <div class="sub">주간 정책 &amp; 시장 인텔리전스 리포트 · Weekly Intelligence Report</div>
+  </div>
+  <div class="header-right">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="pdf-btn" onclick="downloadPDF()">
+        <svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><rect x="6" y="13" width="12" height="8" rx="1"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/></svg>
+        <span id="pdfBtnLabel">PDF 저장</span>
+      </button>
+      <a class="report-switch" href="../index.html">&#8592; 인덱스</a>
+      <a class="report-switch" href="../canola/index.html">
+        <span class="dot"></span>카놀라 리포트 →
+      </a>
+    </div>
+    <div class="updated-badge">마지막 업데이트: 2026.07.27</div>
+  </div>
+</div>
+
+<!-- ── Week Navigator ── -->
+<div class="week-nav">
+  <a class="nav-btn disabled" href="#">&#8592; 최신</a>
+  <div class="nav-center">
+    <div class="nav-week-label">이번 주 · 2026년 7/20 – 7/26 주</div>
+    <div class="nav-week-sub">2026.07.27 기준</div>
+    <div class="nav-dots">
+<a class="nav-dot active" href="./2026-07-27.html" title=""></a>
+<a class="nav-dot" href="./2026-07-20.html" title=""></a>
+<a class="nav-dot" href="./2026-07-13.html" title=""></a>
+<a class="nav-dot" href="./2026-07-06.html" title=""></a>
+<a class="nav-dot" href="./2026-06-29.html" title=""></a>
+<a class="nav-dot" href="./2026-06-22.html" title=""></a>
+<a class="nav-dot" href="./2026-06-15.html" title=""></a>
+<a class="nav-dot" href="./2026-06-08.html" title=""></a>
+<a class="nav-dot" href="./2026-06-01.html" title=""></a>
+<a class="nav-dot" href="./2026-05-25.html" title=""></a>
+<a class="nav-dot" href="./2026-05-18.html" title=""></a>
+<a class="nav-dot" href="./2026-05-11.html" title=""></a>
+<a class="nav-dot" href="./2026-05-05.html" title=""></a>
+<a class="nav-dot" href="./2026-04-28.html" title=""></a>
+<a class="nav-dot" href="./2026-04-21.html" title=""></a>
+<a class="nav-dot" href="./2026-04-14.html" title=""></a>
+<a class="nav-dot" href="./2026-04-07.html" title=""></a>
+<a class="nav-dot" href="./2026-03-30.html" title=""></a>
+<a class="nav-dot" href="./2026-03-23.html" title=""></a>
+<a class="nav-dot" href="./2026-03-16.html" title=""></a>
+<a class="nav-dot" href="./2026-03-09.html" title=""></a>
+<a class="nav-dot" href="./2026-03-02.html" title=""></a>
+<a class="nav-dot" href="./2026-02-23.html" title=""></a>
+<a class="nav-dot" href="./2026-02-16.html" title=""></a>
+<a class="nav-dot" href="./2026-02-09.html" title=""></a>
+<a class="nav-dot" href="./2026-02-02.html" title=""></a>
+<a class="nav-dot" href="./2026-01-26.html" title=""></a>
+<a class="nav-dot" href="./2026-01-19.html" title=""></a>
+<a class="nav-dot" href="./2026-01-12.html" title=""></a>
+<a class="nav-dot" href="./2026-01-05.html" title=""></a>
+    </div>
+  </div>
+  <a class="nav-btn" href="./2026-07-20.html">이전 &#8594;</a>
+</div>
+
+<div class="container">
+
+  <!-- Alert bar -->
+  <div class="alert-bar">
+    <div class="pill red">  <div class="dot red"></div>  <span>3</span> 관심 요망</div>
+    <div class="pill amber"><div class="dot amber"></div><span>3</span> 모니터링 필요</div>
+    <div class="pill green"><div class="dot green"></div><span>2</span> 기회 요인</div>
+  </div>
+
+  <!-- 1. Executive Summary -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-summary">📋</div>
+      <div class="card-title">이번 주 핵심 요약 <span>Executive Summary</span></div>
+    </div>
+    <ul class="summary-list">
+      <li>7월 20일 트럼프 대통령이 1930년 관세법 <strong>제338조(Section 338)</strong>를 근거로 3건의 포고문에 서명해 캐나다산 유제품·주류·자동차 관련 품목에 <strong>추가 50% 관세</strong>를 부과했다. 발효일은 <strong>8월 19일 오전 12시 1분(미 동부시간)</strong>, 대상 규모는 미국무역대표부(USTR) 발표 기준 <strong>약 200억 달러</strong>다. <strong>에너지·칼륨비료(potash)·수산물·핵심광물, 이미 232조 관세가 적용되는 품목은 제외</strong>되며, 결정적으로 <strong>CUSMA 원산지 특혜를 받는 물품도 예외 없이 50% 추가관세 대상</strong>이다.</li>
+      <li><strong>Green Oil 직접 노출은 현재로선 낮다.</strong> 3개 부속서(Annex) 품목표를 확인한 결과 <strong>HS 15류(동식물성 유지)·38류(바이오디젤)·폐유는 어느 부속서에도 포함되지 않았고</strong>, 에너지 품목은 명시적 제외 대상이다. 다만 자동차 부속서가 실제 차량이 아닌 <strong>약 380개 라인의 비자동차 품목</strong>(꿀·절화·종자·정유·시멘트·합판·기계 등)까지 끌어들인 방식은, 향후 추가 포고문이 품목을 확대할 여지를 보여준다.</li>
+      <li>7월 21~23일 프린스에드워드아일랜드 샬럿타운에서 연방협의회(Council of the Federation) 하계회의와 총리·주총리 회의가 열렸고, 7월 23일 <strong>「총리·주총리 공동성명(First Ministers' Joint Statement)」</strong>이 발표됐다. <strong>산업 탄소시장 연계 방안을 검토할 연방·주·준주 실무그룹을 올여름까지 발족(2027년 7월 보고)</strong>하고, 카니 총리가 <strong>탄소가격 벤치마크를 2026년 말까지 갱신</strong>하기로 했다. 이와 함께 2050년까지 전력망 용량 2배 확대, 주간 연계선(intertie) 사업 2028년 말 완료, 2026년 말까지 상호인정 입법 원칙 합의도 담겼다.</li>
+      <li>7월 20~21일 <strong>에어캐나다와 에어버스가 캐나다 국내 SAF 산업 육성을 위한 공동투자 플랫폼(약 C$1,370만 / US$1,000만)</strong>을 발표하고, 7월 21일 판버러 에어쇼에서 에어버스·ICF 공동 연구를 공개했다. 연구는 SAF가 <strong>2040년 캐나다 항공유 수요의 40%</strong>를 차지할 경우 2026~2040년 <strong>GDP 320억 달러 기여·14만 개 일자리</strong>가 창출된다고 추정했고, 원료로 <strong>폐식용유(UCO)</strong>·농림 부산물·식물유·도시폐기물을 명시했다. 동시에 국내 생산능력 확충이 없으면 <strong>2030년 캐나다 바이오연료 수입의존도가 65%를 넘을 것</strong>이라고 경고했다.</li>
+      <li>⭐ <strong>45Z 최종 세부지침과 캐나다 CFR 개정안은 이번 주(7/20–7/26)에도 발표·게재가 없었다.</strong> 45Z는 2월 4일 제안규칙·5월 28일 공청회 이후 최종규칙 목표가 11월이며, CFR 개정안은 1월 15일 협의 종료 후 6개월 넘게 Canada Gazette Part I 초안이 나오지 않고 있다(연방 의회 하계 휴회, 9월 21일 복귀). 상세 현황과 조치는 리스크 레이더 참조.</li>
+    </ul>
+  </div>
+
+  <!-- 2. Risk Radar -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-risk">⚡</div>
+      <div class="card-title">리스크 &amp; 기회 레이더</div>
+    </div>
+    <div class="risk-grid">
+      <div class="risk-col red">
+          <div class="risk-col-title">🔴 관심 요망</div>
+          <div class="risk-entry"><strong>미국 338조 50% 추가관세 8월 19일 발효 예정 — CUSMA 특혜 무력화 선례, 캐나다 보복 시 통관 변동성</strong> — 7월 20일 서명된 3건의 포고문은 유제품·주류·자동차 3개 부속서에 걸쳐 캐나다산 물품에 추가 50% 관세를 부과하며, 발효는 8월 19일이다. 확인 결과 <strong>UCO를 포함한 HS 15류 유지류와 38류 바이오디젤은 부속서에 없고 에너지는 명시적 제외</strong>이므로 Green Oil의 대미 UCO 수출 자체에 직접 부과되는 관세는 현재 없다. 그러나 (1) CUSMA 원산지 특혜가 이번 조치를 막지 못한다는 점이 확인됐고, (2) 자동차 부속서가 비자동차 품목 약 380개 라인까지 확장된 전례가 있으며, (3) 카니 총리가 7월 23일 보복 조치에 대해 "모든 것이 테이블 위에 있다"고 밝혀 캐나다 측 대응관세·수출통제 가능성이 열려 있다. <strong>Green Oil 조치:</strong> 8월 19일 이전에 미국향 계약 물량의 통관 일정을 앞당길 수 있는지 물류팀과 점검하고, 수출계약에 무역조치 발동 시 비용 분담·재협의 조항이 있는지 전수 확인할 것. 관세 부과 여부는 품목 HS 코드 기준으로 결정되므로 <strong>사용 중인 HS 코드(1518 등)가 부속서 목록에 없다는 사실을 통관사와 문서로 확인해 둘 것.</strong></div>
+          <div class="risk-entry">⭐ <strong>45Z 최종 세부지침 미발표 — 집계(aggregator) UCO 원산지 판정 방법론 여전히 미확정</strong> — 2월 4일 제안규칙 관보 게재, 4월 6일 의견 마감, 5월 28일 공청회를 거쳤으나 최종규칙은 아직 없고 통합규제일정상 목표가 11월이다. OBBBA에 따라 2026년 1월 1일 이후 생산분은 북미산(미국·멕시코·캐나다) 원료 한정이라 캐나다산 UCO의 적격 지위 자체는 유지되지만, 제안규칙은 집계업자를 거친 UCO의 원산지를 어떻게 입증할지에 대해 업계 의견을 요청한 상태이며, 해외산 원료 경로는 추가 지침 전까지 45ZCF-GREET 모델에서 사용할 수 없다. <strong>Green Oil 조치:</strong> 수거처–집계–수출 전 구간의 원산지 증빙(chain of custody) 문서 체계를 최종규칙 발표 전에 완비하고, 미국향 장기계약에는 45Z 최종규칙 확정 시 단가·조건을 재협의하는 조항을 반영할 것. 이번 관세 국면에서 '캐나다산 원료임을 서류로 증명하는 능력'의 가치가 더 커졌다.</div>
+          <div class="risk-entry">⭐ <strong>연방 CFR 개정안 6개월 넘게 관보 미게재 — 의회 하계 휴회로 단기 진전 가능성 낮음</strong> — 2025년 9월 5일 정부가 CFR 목표 개정 의사를 발표하고 2026년 1월 15일 의견수렴이 종료됐으나, Canada Gazette Part I 초안은 7월 말까지도 공표되지 않았다. 국내산 함량 의무 또는 국내산 크레딧 승수 중 어느 안이 채택될지 불투명하며, 카놀라·에탄올 업계는 해외산 부정 위험 UCO 유입 문제를 지체 없이 다뤄야 한다고 요구하고 있다. 연방 의회는 하계 휴회 중(9월 21일 복귀). <strong>Green Oil 조치:</strong> 캐나다 국내 CFR 크레딧 수요에 의존하는 매출 비중을 재점검하고, 미국·EU 수출 헤지 비율 상향을 검토. 개정안이 국내산 우대 방향으로 확정될 경우 캐나다 국내 정제·판매 경로의 가치가 상승하므로 시나리오별 대응안을 미리 준비할 것.</div>
+        </div>
+      <div class="risk-col amber">
+          <div class="risk-col-title">🟡 모니터링</div>
+          <div class="risk-entry"><strong>탄소가격 벤치마크 2026년 말 갱신 + 탄소시장 연계 실무그룹 발족 — CFR 크레딧 가치의 상위 변수(7/23)</strong> — 7월 23일 총리·주총리 공동성명에서 카니 총리는 탄소가격 벤치마크를 2026년 말까지 갱신하기로 했고, 산업 탄소시장 연계 모델을 검토할 연방·주·준주 실무그룹을 올여름까지 발족해 2027년 7월에 보고하기로 했다. 공동성명은 산업 탄소시장이 "투자를 촉진하고 시간이 지남에 따라 배출을 줄이며 국제적으로 경쟁력을 유지하도록" 설계돼야 한다고 명시했다. 벤치마크와 시장 연계 구조는 CFR 크레딧 가격의 상위 결정 변수이므로, 청정연료 크레딧 수익성에 중기적으로 직결된다. <strong>Green Oil 조치:</strong> 벤치마크 갱신안 공개 시점(2026년 4분기 예상)에 맞춰 CFR 크레딧 수익 가정을 재산정하고, 연간 예산·장기계약 단가에 반영할 시나리오를 준비할 것.</div>
+          <div class="risk-entry"><strong>캐나다 보복 조치 검토 국면 — 대미 수출 물류·통관 변동성(7/23)</strong> — 카니 총리는 7월 23일 샬럿타운에서 8월 19일 시한을 두고 "모든 것이 테이블 위에 있다"며, 다만 "지금 단계에서 미리 대응하는 것은 역효과"라고 밝혔다. 온타리오 포드 총리는 같은 주 "관세에는 관세로 전면 대응해야 한다"며 에너지 품목 보복까지 언급했다. 보복이 실제 발동되면 품목과 무관하게 국경 통관 처리 지연·서류 요건 강화가 함께 발생할 수 있다. <strong>Green Oil 조치:</strong> 8월 중 미국향 선적은 통관 리드타임을 평소보다 여유 있게 잡고, 주요 바이어와 인도 지연 시 책임 배분을 사전에 정리해 둘 것.</div>
+          <div class="risk-entry"><strong>ISCC EU 폐기물기반 바이오연료 인증 정지 논의 미결 — 표결 없음, 회원국 승인 필요(배경)</strong> — EU 지속가능성 위원회에서 ISCC의 폐기물기반 바이오연료 인증 승인을 2년 6개월 정지하는 방안이 논의됐으나, ISCC는 표결도 결정도 없었다고 확인했다. 실행되려면 회원국 승인이 필요하고 법적 검토가 남아 있다. 성사되면 EU향 UCO·UCO 기반 연료의 인증 경로가 흔들린다. 이번 주 새로운 진전은 확인되지 않았다. <strong>Green Oil 조치:</strong> EU향 물량에 대해 ISCC 단일 의존을 피하고 대체 인증(RSB 등) 병행 취득을 검토, EU 집행위·회원국 절차 진행 상황을 상시 확인할 것.</div>
+        </div>
+      <div class="risk-col green">
+          <div class="risk-col-title">🟢 기회 요인</div>
+          <div class="risk-entry"><strong>에어캐나다·에어버스, 캐나다 국내 SAF 공동투자 플랫폼 출범(7/20)</strong> — 양사가 약 C$1,370만(US$1,000만) 규모의 지속가능성 공동투자 플랫폼을 조성해, 합의된 캐나다 SAF 프로젝트를 최종투자결정(FID) 단계까지 끌어올리기로 했다. 캐나다 국내에 상업 규모 SAF 생산설비가 실제로 세워지면 UCO의 국내 수요처가 새로 생기고, 수출 물류비 없이 판매할 수 있는 경로가 열린다. 미국 관세 리스크가 커지는 국면에서 국내 수요처 확대는 특히 의미가 크다.</div>
+          <div class="risk-entry"><strong>에어버스·ICF 연구, 원료로 UCO 명시 + 2030년 수입의존 65% 초과 경고(7/21)</strong> — 판버러 에어쇼에서 공개된 연구는 SAF가 2040년 캐나다 항공유 수요의 40%를 차지할 경우 2026~2040년 GDP 320억 달러·14만 개 일자리·가계 순가처분소득 연 8억 9,000만 달러가 창출된다고 추정했다. 원료로 폐식용유를 첫 번째로 꼽았고, 국내 생산능력이 확충되지 않으면 2030년 바이오연료 수입의존도가 65%를 넘고 수요는 연 85억 리터에 이를 것이라고 경고하며 "예측 가능하고 상호보완적인 인센티브"를 정책 과제로 제시했다. 국내 원료 공급자의 협상력이 구조적으로 강화되는 방향의 근거 자료로, CFR 개정 의견 제출이나 바이어 협상 시 인용할 수 있다.</div>
+        </div>
+    </div>
+  </div>
+
+  <!-- 3. Federal Policy -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-canada">🍁</div>
+      <div class="card-title">연방 정책 동향 <span>Federal — CFR · 탄소세 · 집권당</span></div>
+    </div>
+
+    <a class="news-item" href="https://www.pm.gc.ca/en/news/statements/2026/07/23/first-ministers-joint-statement" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-carbon">탄소 정책</span>
+      <div class="news-title">7/23 총리·주총리 공동성명 — 탄소시장 연계 검토 실무그룹 발족, 탄소가격 벤치마크 2026년 말까지 갱신</div>
+      <div class="news-body">7월 23일 샬럿타운에서 열린 총리·주총리 회의 후 공동성명이 발표됐다. 탄소 부문에서는 캐나다의 산업 탄소시장이 투자를 촉진하고 시간이 지남에 따라 배출을 줄이며 국제적으로 경쟁력을 유지하도록 설계돼야 한다는 데 합의하고, 캐나다 전역의 탄소시장을 연계하는 여러 모델을 검토할 연방·주·준주 실무그룹을 올여름까지 발족하기로 했다. 실무그룹은 2027년 7월까지 구체적 향후 작업계획을 보고한다. 카니 총리는 주총리들과 협력해 탄소가격 벤치마크를 갱신하되 2026년 말 확정을 목표로 하겠다고 밝혔다. 에너지 부문에서는 2050년까지 캐나다 전력망 용량을 2배로 확대하고, 에너지 장관들에게 주간 연계선(intertie) 사업을 2028년 말까지 완료하도록 지시했다. 경제 성장과 인공지능 도입으로 2050년까지 전력 수요가 2배가 될 것이라는 전망이 근거로 제시됐다. 내부 무역에서는 2026년 말까지 상호인정 모델 입법을 채택하는 원칙 합의를 목표로 하기로 했다. Green Oil 관점: 탄소가격 벤치마크와 탄소시장 연계 구조는 CFR 크레딧 가격을 위에서 규정하는 변수다. 벤치마크 갱신 시점이 2026년 말로 못 박힌 만큼, CFR 개정안 자체가 지연되더라도 크레딧 수익 가정은 4분기에 한 번 재산정해야 한다. 공동성명에 바이오연료·청정연료가 개별 항목으로 등장하지는 않았다는 점도 함께 기록해 둔다.</div>
+    </a>
+
+    <a class="news-item" href="https://www.bnnbloomberg.ca/tariffs/2026/07/23/pm-carney-wraps-up-premiers-meeting-says-leaders-are-united-in-face-of-trump-tariff-threats/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-politics">연방 정치</span>
+      <div class="news-title">7/23 Carney 총리 "모든 것이 테이블 위에" — 8월 19일 시한 앞두고 보복 옵션 유보, 포괄적 합의 우선</div>
+      <div class="news-body">7월 23일 샬럿타운에서 3일간의 주총리 회의를 마친 뒤 카니 총리는 미국의 추가 관세에 대한 대응과 관련해 "모든 것이 테이블 위에 있다"고 밝혔다. 다만 구체적 보복 수단은 공개하지 않으며 "지금 단계에서 미리 대응하는 것은 역효과를 낳는다. 다만 선택지가 무엇인지 알고 미리 검토해 두는 것은 중요하다"고 말했다. 8월 19일 시한이 협상 타결의 기회인지 압박 전술인지를 묻는 질문에는 "둘 다"라고 답했다. 그는 미국과의 협상을 강화하고 있으며, 목표는 목재·철강·알루미늄·제조업·자동차를 포함해 관세 영향을 받는 전 부문을 아우르는 포괄적 합의라고 설명했다. 주총리들은 연방정부가 미국과 협상하는 과정에서 주·준주와 명확하고 시의적절한 협의 절차를 유지할 것을 공동성명을 통해 요구했다. 온타리오 포드 총리는 "계속 트럼프에게 굽히고 들어갈 수는 없다"며 약함이 아닌 강함에서 협상해야 한다고 말했다. Green Oil 관점: 캐나다 측 보복 조치의 내용과 시점이 아직 미확정이라는 점이 8월 대미 수출 계획의 핵심 불확실성이다. 보복 대상 품목에 UCO가 포함될 가능성은 낮지만, 국경 통관 절차 전반의 지연 리스크는 품목과 무관하게 발생할 수 있다.</div>
+    </a>
+  </div>
+
+  <!-- 4. Provincial Policy -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-prov">🏛️</div>
+      <div class="card-title">주정부 정책 동향 <span>Provincial — 주정부 · 집권당</span></div>
+    </div>
+
+    <a class="news-item" href="https://www.cp24.com/politics/queens-park/2026/07/21/we-cant-keep-rolling-over-ford-says-ontario-wont-lift-us-booze-ban/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-prov-politics">주정부 정치</span>
+      <div class="news-title">7/21 Ford 온타리오 총리, 미국산 주류 판매금지 유지 — "관세에는 관세로", 에너지 보복까지 언급</div>
+      <div class="news-body">7월 21일 더그 포드 온타리오 총리는 주류판매공사(LCBO) 매장에서 미국산 주류를 빼는 조치를 유지하겠다고 밝혔다. 그는 "괴롭히는 상대에게는 맞서야 하고, 관세에는 관세로 전면 대응해야 한다"며 "우리는 약함이 아니라 강함에서 협상해야 하고 모든 것을 테이블에 올려야 한다"고 말했다. 다만 관세 분쟁이 해결되면 미국산 주류를 다시 매대에 올릴 수 있다는 여지도 남겼다. 포드 총리는 8월 19일 발효 예정인 50% 추가관세가 온타리오에 심각한 타격을 줄 것이라고 경고하며 "언제나 온타리오만 나설 수는 없다. 팀 캐나다 방식이어야 하고 우리는 단결해야 한다"고 연방·주 공동대응을 촉구했다. 보복 수단으로 에너지 품목까지 거론하며 미국 경제가 캐나다 자원에 의존하고 있다는 점을 강조했다. Green Oil 관점: 온타리오는 국내산 함량 의무(디젤 75%·가솔린 64%)를 이미 시행 중인 주로, 이번 발언은 청정연료 정책이 아니라 무역 보복 국면의 발언이다. 다만 주정부가 미국산 배제와 국내 조달 우대 기조를 강화하는 흐름은 국내산 원료·연료의 정책적 우선순위가 계속 높아지는 방향으로 읽힌다.</div>
+    </a>
+
+    <a class="news-item" href="https://www.chrisd.ca/2026/07/22/manitoba-premier-wab-kinew-alberta-ontario-pipeline/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-prov-politics">주정부 정치</span>
+      <div class="news-title">7/22 Kinew 매니토바 총리, 앨버타–온타리오 파이프라인 "검토 용의" — 원주민 정부 참여·환경 조건 전제</div>
+      <div class="news-body">7월 22일 샬럿타운 연방협의회 회의에서 웹 키뉴 매니토바 총리는 7월 초 앨버타 스미스 총리와 온타리오 포드 총리가 발표한 앨버타–온타리오 원유 파이프라인(Northern Shield) 구상에 대해 "검토할 용의가 있다"고 밝혔다. 그는 "캐나다를 더 강하게 만든다면 좋다. 다만 당연히 제대로 된 방식으로 진행되기를 원한다"며 원주민 정부의 참여, 노동자 보호, 환경 문제 해결을 조건으로 제시했다. 또한 처칠 항만 확장 같은 인프라 사업이 협상 과정에서 인센티브로 논의될 수 있다고 언급했다. 해당 파이프라인은 앨버타 하디스티에서 온타리오 사니아까지 3,300km 구간에 하루 50만 배럴의 원유를 수송하는 구상으로, 사스카추완과 매니토바를 거치되 미국 영토를 통과하지 않는 경로다. 키뉴 총리는 당초 원주민 협의를 이유로 서명하지 않았으나 이번에 입장을 완화했다. 사스카추완 모 총리는 이전부터 이 구상에 찬성해 왔다. Green Oil 관점: 매니토바는 카놀라 등 농업 기반 원료 공급망의 핵심 주이며, 주정부가 국내 에너지 인프라에 협조적으로 선회하는 흐름은 향후 국내 정제·물류 인프라 논의에서 서부 주들의 결속이 강화될 가능성을 시사한다. UCO 규제와 직접 관련은 없으나, 8월 19일 관세 국면에서 주정부들이 국내 공급망 강화 쪽으로 수렴하는 정황으로 함께 볼 필요가 있다.</div>
+    </a>
+  </div>
+
+  <!-- 5. Export Markets -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-export">🌍</div>
+      <div class="card-title">수출 시장 정책 <span>EU RED III · 미국 RFS / 45Z · 무역</span></div>
+    </div>
+
+    <a class="news-item" href="https://ustr.gov/about/policy-offices/press-office/press-releases/2026/july/ambassador-greer-issues-statement-president-trump-imposing-section-338-tariffs-canada" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-trade">무역</span>
+      <div class="news-title">7/20 미국, 관세법 338조로 캐나다산에 추가 50% 관세 — 8월 19일 발효, 약 200억 달러 규모, 에너지·유지류는 제외</div>
+      <div class="news-body">7월 20일 트럼프 대통령이 1930년 관세법 제338조를 근거로 3건의 포고문에 서명해 캐나다산 물품에 추가 50% 종가세를 부과했다. 미국무역대표부(USTR) 그리어 대표는 대상 규모를 약 200억 달러로 밝히며, 캐나다가 미국산 주류를 매대에서 제외하고 유럽연합산 유제품에 더 나은 시장접근을 부여했으며 미국산 차량 수출에 상한을 뒀다는 점을 근거로 들었다. 338조는 미국 상거래에 대한 외국의 차별에 대응해 최대 50%의 관세를 부과할 수 있도록 한 조항으로, 수십 년간 거의 사용되지 않았다. 발효일은 법정 30일 대기기간을 거친 8월 19일 오전 12시 1분(미 동부시간)이다. 부속서는 3개로 나뉘어 주류(HTSUS 9903.03.12: 맥주·와인·증류주·사이다 및 침엽수재·목재식기·코팅판지·하키용품 일부), 유제품(9903.03.13: 분유·유청·유당·카세인·유단백·유가공 당류·유음료), 자동차(9903.03.14)로 구성되며, 자동차 부속서는 정작 승용차·부품을 빼고 약 380개 라인의 비자동차 품목(꿀·절화·종자·정유·시멘트·합판·석고보드·제지·기계·전자·가구·스포츠용품 등)을 담고 있다. 제외 대상은 에너지·칼륨비료·수산물·핵심광물, 이미 232조 관세가 적용되는 품목(철강·알루미늄·구리·반도체), WTO 민간항공기 협정 대상, 대부분의 98류 조항이다. 가장 중요한 점은 <strong>CUSMA 특혜 대상 물품도 예외 없이 추가 50% 관세를 부담한다는 것</strong>이다. Green Oil 관점: 3개 부속서 어디에도 HS 15류 동식물성 유지, 38류 바이오디젤, 폐유가 포함되지 않았고 에너지는 명시적 제외 대상이므로, 대미 UCO 수출에 직접 부과되는 추가관세는 현재 없다. 그러나 자동차 부속서가 품목과 무관한 380개 라인까지 확장된 방식은 향후 포고문이 대상을 넓힐 여지를 보여주며, CUSMA 원산지 특혜가 방어막이 되지 못한다는 선례가 남았다. 8월 19일 전에 통관사와 사용 HS 코드가 부속서 목록에 없음을 문서로 확인해 둘 것을 권고한다.</div>
+    </a>
+
+    <a class="news-item" href="https://www.pm.gc.ca/en/news/statements/2026/07/20/statement-prime-minister-carney-united-states-administrations-intention" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-trade">무역</span>
+      <div class="news-title">7/20 Carney 총리 성명 — 미국의 추가 50% 관세 부과 의사에 "CUSMA 위반" 규정</div>
+      <div class="news-body">7월 20일 카니 총리는 오타와에서 성명을 내고 미국 행정부가 상당수 캐나다산 물품에 새로 50% 관세를 부과할 의사를 발표했다고 확인했다. 성명은 이번 조치를 캐나다·미국·멕시코 협정(CUSMA) 위반으로 규정하며, 특히 캐나다 자동차 부문에 대한 조치를 협정 위반 사례로 지목했다. 성명 자체에는 대상 품목의 전체 목록이나 발효 시점이 명시되지 않았고, 미국의 일방적 무역조치에 대한 캐나다의 대응 기조를 밝히는 데 초점이 맞춰졌다. 같은 주 후반 샬럿타운에서 열린 주총리 회의에서 카니 총리는 보복 옵션을 검토 중이나 시한 이전에 미리 발동하지는 않겠다는 입장을 밝혔다. Green Oil 관점: 연방정부가 이번 조치를 CUSMA 위반으로 공식 규정한 것은 향후 분쟁해결 절차 제기 가능성을 열어두는 동시에, 협상 결렬 시 대응 조치의 명분을 축적하는 성격이다. 8월 19일까지 약 4주간 협상 창구가 열려 있으므로, 대미 계약 협상에서는 관세 시나리오를 확정된 사실이 아니라 조건부 변수로 다루는 편이 적절하다.</div>
+    </a>
+  </div>
+
+  <!-- 6. UCO Market -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-market">🛢️</div>
+      <div class="card-title">UCO 시장 &amp; 산업 동향 <span>Market Intelligence</span></div>
+    </div>
+
+    <a class="news-item" href="https://www.airbus.com/en/newsroom/press-releases/2026-07-airbus-unveils-study-on-the-potential-of-sustainable-aviation-fuel-to-support-economic-growth-and" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-market">UCO 시장</span>
+      <div class="news-title">7/21 에어버스·ICF 연구 — 캐나다 SAF 2040년 항공유 40% 시 GDP 320억 달러·14만 일자리, 원료로 UCO 첫손 꼽아</div>
+      <div class="news-body">7월 21일 판버러 국제에어쇼에서 에어버스가 ICF와 함께 수행한 캐나다 SAF 거시경제 연구를 공개했다. 연구는 SAF가 2040년 캐나다 항공유 수요의 40%를 차지하는 시나리오에서 2026~2040년 누적 <strong>GDP 320억 달러 기여, 14만 개 일자리 창출</strong>(현 석유·가스 부문 인력의 약 4분의 1 규모), 캐나다 가계 순가처분소득 연 8억 9,000만 달러 증가를 추정했다. SAF는 경로에 따라 기존 항공유 대비 전주기 이산화탄소 배출을 최대 80% 줄일 수 있으며, 이를 통한 기후비용 회피의 사회적 가치는 190억 달러로 산정됐다. 원료로는 <strong>폐식용유(used cooking oils)</strong>를 필두로 농업·임업 부산물, 식물유, 도시폐기물이 제시됐다. 연구는 국내 생산능력이 확충되지 않을 경우 <strong>2030년 캐나다의 바이오연료 수입의존도가 65%를 넘어설 수 있으며 당시 수요는 연 85억 리터</strong>에 이를 것이라고 경고하고, "예측 가능하고 상호보완적인 인센티브가 투자 유치에 결정적"이라고 정책 과제를 제시했다. Green Oil 관점: 항공기 제작사가 발주한 연구라는 점에서 SAF 확대에 우호적인 전제가 깔려 있다는 점은 감안해야 하나, 캐나다 국내 원료 공급 부족을 정량적으로 지적하고 그 첫 번째 원료로 UCO를 명시했다는 점은 국내 수거 사업자에게 유리한 논거다. CFR 개정안 의견 제출, 국내 정제사·바이어와의 장기계약 협상, 정부 지원 프로그램 신청 시 인용 가능한 자료로 확보해 둘 만하다.</div>
+    </a>
+
+    <a class="news-item" href="https://www.globenewswire.com/news-release/2026/07/20/3329805/0/en/Air-Canada-and-Airbus-launch-joint-initiative-to-scale-domestic-Canadian-SAF-and-help-reduce-the-life-cycle-emissions-of-corporate-travel.html" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-market">UCO 시장</span>
+      <div class="news-title">7/20 에어캐나다·에어버스, 캐나다 국내 SAF 공동투자 플랫폼 — 약 C$1,370만, 국내 SAF 프로젝트 최종투자결정까지 추진</div>
+      <div class="news-body">7월 20일 에어캐나다와 에어버스가 캐나다 국내 지속가능항공연료(SAF) 생산을 확대하기 위한 공동 출자 형태의 지속가능성 공동투자 플랫폼(Sustainability Co-Investment Platform) 설립 의향을 발표했다. 양사는 <strong>합계 약 C$1,370만(약 US$1,000만)</strong>을 투입해 상업 규모의 캐나다 SAF 산업을 지원하고, 공동으로 선정한 캐나다 SAF 프로젝트를 최종투자결정(FID) 단계까지 끌어올리는 것을 목표로 한다. 이와 별도로 에어버스는 에어캐나다와 5년간의 Leave Less Travel Program 협약을 체결해, 6만 리터 이상의 SAF에 해당하는 환경속성(environmental attributes)을 구매하기로 했다. 발표는 캐나다의 풍부한 원료 잠재력을 언급했으나 개별 원료를 특정하지는 않았으며, 같은 주 공개된 에어버스·ICF 연구의 2040년 40% 목표와 연결돼 있다. Green Oil 관점: 투자 규모 자체는 크지 않으나, 캐나다 국내에 상업 규모 SAF 설비를 실제로 세우려는 첫 단계 자금이 항공사와 제작사 양쪽에서 나왔다는 점이 의미 있다. 국내 SAF 생산이 현실화되면 UCO의 국내 수요처가 생겨 수출 물류비 없이 판매할 수 있는 경로가 열리며, 8월 19일 관세 국면처럼 대미 수출 조건이 흔들릴 때의 완충 장치가 된다. 프로젝트 위치와 원료 조달 방식이 공개되는 시점을 주시하고, 확정되면 초기 원료 공급자 논의에 조기 참여할 것을 권고한다.</div>
+    </a>
+  </div>
+
+  <!-- 7. Sources -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-sources">🔗</div>
+      <div class="card-title">주요 출처 <span>Sources</span></div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">1</div>
+      <div>
+        <a class="src-link" href="https://ustr.gov/about/policy-offices/press-office/press-releases/2026/july/ambassador-greer-issues-statement-president-trump-imposing-section-338-tariffs-canada" target="_blank">Ambassador Greer Issues Statement on President Trump Imposing Section 338 Tariffs on Canada</a>
+        <div class="src-meta">United States Trade Representative (USTR) · 2026-07-20</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">2</div>
+      <div>
+        <a class="src-link" href="https://www.pm.gc.ca/en/news/statements/2026/07/20/statement-prime-minister-carney-united-states-administrations-intention" target="_blank">Statement by Prime Minister Carney on the United States administration's intention to impose new tariffs on Canadian goods</a>
+        <div class="src-meta">Prime Minister of Canada · 2026-07-20</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">3</div>
+      <div>
+        <a class="src-link" href="https://www.troutman.com/insights/three-strikes-new-50-tariffs-to-hit-certain-canadian-goods-and-usmca-wont-save-you/" target="_blank">Three Strikes: New 50% Tariffs to Hit Certain Canadian Goods — and USMCA Won't Save You</a>
+        <div class="src-meta">Troutman Pepper Locke · 2026-07-21 (부속서 HTSUS 구성·CUSMA 예외 없음 확인)</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">4</div>
+      <div>
+        <a class="src-link" href="https://www.peacocktariffconsulting.com/the-new-section-338-tariffs-on-canada-what-they-are-what-they-cover-and-what-importers-should-do-before-august-19/" target="_blank">The New Section 338 Tariffs on Canada: What They Are, What They Cover, and What Importers Should Do Before August 19</a>
+        <div class="src-meta">Peacock Tariff Consulting · 2026-07-21 (부속서별 품목 상세 — 15류·38류 미포함 확인)</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">5</div>
+      <div>
+        <a class="src-link" href="https://www.ghy.com/trade-compliance/us-imposes-50-section-338-tariffs-on-canadian-imports-dairy-alcoholic-beverages-and-motor-vehicles/" target="_blank">U.S. Imposes 50% Section 338 Tariffs on Canadian Imports — Dairy, Alcoholic Beverages and Motor Vehicles</a>
+        <div class="src-meta">GHY International · 2026-07-20 (발효 일시·제외 품목)</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">6</div>
+      <div>
+        <a class="src-link" href="https://www.cp24.com/politics/queens-park/2026/07/21/we-cant-keep-rolling-over-ford-says-ontario-wont-lift-us-booze-ban/" target="_blank">'We can't keep rolling over': Ford says Ontario won't lift U.S. booze ban</a>
+        <div class="src-meta">CP24 · 2026-07-21</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">7</div>
+      <div>
+        <a class="src-link" href="https://www.chrisd.ca/2026/07/22/manitoba-premier-wab-kinew-alberta-ontario-pipeline/" target="_blank">Manitoba Premier Kinew 'Willing to Entertain' Alberta to Ontario Pipeline</a>
+        <div class="src-meta">ChrisD.ca · 2026-07-22 (연방협의회 샬럿타운)</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">8</div>
+      <div>
+        <a class="src-link" href="https://www.pm.gc.ca/en/news/statements/2026/07/23/first-ministers-joint-statement" target="_blank">First Ministers' Joint Statement</a>
+        <div class="src-meta">Prime Minister of Canada · 2026-07-23</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">9</div>
+      <div>
+        <a class="src-link" href="https://www.bnnbloomberg.ca/tariffs/2026/07/23/pm-carney-wraps-up-premiers-meeting-says-leaders-are-united-in-face-of-trump-tariff-threats/" target="_blank">PM Carney wraps up premiers meeting, says leaders are united in face of Trump tariff threats</a>
+        <div class="src-meta">BNN Bloomberg · 2026-07-23</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">10</div>
+      <div>
+        <a class="src-link" href="https://www.globenewswire.com/news-release/2026/07/20/3329805/0/en/Air-Canada-and-Airbus-launch-joint-initiative-to-scale-domestic-Canadian-SAF-and-help-reduce-the-life-cycle-emissions-of-corporate-travel.html" target="_blank">Air Canada and Airbus launch joint initiative to scale domestic Canadian SAF</a>
+        <div class="src-meta">GlobeNewswire (Air Canada / Airbus) · 2026-07-20</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">11</div>
+      <div>
+        <a class="src-link" href="https://www.airbus.com/en/newsroom/press-releases/2026-07-airbus-unveils-study-on-the-potential-of-sustainable-aviation-fuel-to-support-economic-growth-and" target="_blank">Airbus unveils study on the potential of sustainable aviation fuel to support economic growth and accelerate Canada's climate transition</a>
+        <div class="src-meta">Airbus · 2026-07-21 (판버러 에어쇼)</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">12</div>
+      <div>
+        <a class="src-link" href="https://www.federalregister.gov/documents/2026/02/04/2026-02246/section-45z-clean-fuel-production-credit" target="_blank">Section 45Z Clean Fuel Production Credit — Proposed Rule</a>
+        <div class="src-meta">Federal Register · 2026-02-04 (배경 — 의견마감 4/6, 공청회 5/28, 최종규칙 11월 목표)</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">13</div>
+      <div>
+        <a class="src-link" href="https://www.canada.ca/en/environment-climate-change/corporate/transparency/consultations/share-view-ideas-targeted-amendments-clean-fuel-regulations.html" target="_blank">Targeted amendments to the Clean Fuel Regulations (consultation)</a>
+        <div class="src-meta">Government of Canada (ECCC) · 배경 — 협의 1/15 종료, Canada Gazette Part I 게재 대기</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Green Oil Inc. Internal Use Only &nbsp;·&nbsp; Powered by Claude AI &nbsp;·&nbsp; <a href="../index.html" style="color:#bbb;">← 인덱스</a></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+  const btn = document.getElementById('pdfBtnLabel');
+  btn.textContent = '생성 중...';
+  html2pdf().set({
+    margin: [8, 8, 8, 8],
+    filename: 'GreenOil-UCO-2026-07-27.pdf',
+    image: { type: 'jpeg', quality: 0.95 },
+    html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: 'avoid-all' }
+  }).from(document.body).save().then(() => { btn.textContent = 'PDF 저장'; });
+}
+</script>
+</body>
+</html>
