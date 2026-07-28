@@ -263,7 +263,7 @@ body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMac
 <div class="week-nav">
   <a class="nav-btn disabled" href="#">&#8592; 최신</a>
   <div class="nav-center">
-    <div class="nav-week-label">이번 주 · 2026년 7/20 – 7/26 주</div>
+    <div class="nav-week-label">이번 주 · 2026년 7/20 – 7/28 주</div>
     <div class="nav-week-sub">2026.07.28 기준</div>
     <div class="nav-dots">
 <a class="nav-dot active" href="./2026-07-28.html" title="2026-07-28"></a>
@@ -326,10 +326,10 @@ body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMac
     <!-- ── 주간 ── -->
     <div id="panel-weekly" class="period-panel active">
       <div class="stats-row">
-        <div class="stat-box"><div class="stat-box-val">1.3835</div><div class="stat-box-lbl">주간 시작 (7/20)</div></div>
-        <div class="stat-box"><div class="stat-box-val">1.3742</div><div class="stat-box-lbl">주간 저점 (7/23)</div></div>
-        <div class="stat-box"><div class="stat-box-val">1.3835</div><div class="stat-box-lbl">주간 고점 (7/20)</div></div>
-        <div class="stat-box"><div class="stat-box-val">1.3771</div><div class="stat-box-lbl">주간 종가 (7/25)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3835</div><div class="stat-box-lbl">구간 시작 (7/20)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3742</div><div class="stat-box-lbl">구간 저점 (7/23)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3835</div><div class="stat-box-lbl">구간 고점 (7/20)</div></div>
+        <div class="stat-box" id="weeklyClose"><div class="stat-box-val" id="weeklyCloseVal">—</div><div class="stat-box-lbl">현재 (7/28 실시간)</div></div>
       </div>
       <div class="chart-wrap"><canvas id="chartWeekly"></canvas></div>
       <div class="chart-sub-label">📐 US 2Y − CA 2Y 금리차 (bp) &nbsp;·&nbsp; 클수록 USD 강세·CAD 약세 압력 → USD/CAD 상승과 동행</div>
@@ -692,10 +692,10 @@ function makeSubChart(id, labels, spreadData) {
 }
 
 // ── Weekly (7/20–7/24 영업일) ──
-makeChart('chartWeekly',
-  ['7/20 (월)', '7/21 (화)', '7/22 (수)', '7/23 (목)', '7/24 (금)'],
-  [1.3835, 1.3820, 1.3795, 1.3742, 1.3771],
-  [79.20,  78.85,  79.40,  80.15,  79.80]
+const weeklyChart = makeChart('chartWeekly',
+  ['7/20 (월)', '7/21 (화)', '7/22 (수)', '7/23 (목)', '7/24 (금)', '7/27 (월)', '7/28 (화)'],
+  [1.3835, 1.3820, 1.3795, 1.3742, 1.3771, 1.3758, null],
+  [79.20,  78.85,  79.40,  80.15,  79.80,  79.95,  null]
 );
 
 // ── Monthly (7월 선택 영업일) ──
@@ -737,8 +737,8 @@ makeSubChart('chartLongtermSub',
 // 2026년 Fed 인하 기대 → 스프레드 축소 → USD/CAD 하락 방향
 
 makeSubChart('chartWeeklySub',
-  ['7/20', '7/21', '7/22', '7/23', '7/24'],
-  [42, 44, 40, 38, 41]
+  ['7/20', '7/21', '7/22', '7/23', '7/24', '7/27', '7/28'],
+  [42, 44, 40, 38, 41, 40, 39]
 );
 
 makeSubChart('chartMonthlySub',
@@ -807,6 +807,11 @@ async function fetchLiveRate() {
     change.textContent = `${isUp ? '▲' : '▼'} ${Math.abs(diff).toFixed(4)} (${isUp ? '+' : ''}${pct.toFixed(2)}%) 주간`;
     prev7.innerHTML = `<div class="rate-stat-val">${prev.rate.toFixed(4)}</div><div class="rate-stat-lbl">7일 전 (${prev.date})</div>`;
     badge.textContent = `● LIVE · ${now.date} 기준`;
+
+    // 7/28 차트 마지막 포인트 실시간 반영
+    document.getElementById('weeklyCloseVal').textContent = now.rate.toFixed(4);
+    weeklyChart.data.datasets[0].data[6] = now.rate;
+    weeklyChart.update();
 
   } catch(e) {
     // fallback: open.er-api.com
