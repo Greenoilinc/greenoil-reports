@@ -320,6 +320,7 @@ body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMac
       <button class="period-tab"        onclick="switchPeriod('monthly', this)">월간</button>
       <button class="period-tab"        onclick="switchPeriod('quarterly', this)">분기</button>
       <button class="period-tab"        onclick="switchPeriod('annual', this)">연간</button>
+      <button class="period-tab"        onclick="switchPeriod('longterm', this)">장기 10Y</button>
     </div>
 
     <!-- ── 주간 ── -->
@@ -454,6 +455,39 @@ body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMac
           <div class="driver-rank">드라이버 3 · 원자재 구조</div>
           <div class="driver-title">원유 수출국 캐나다의 에너지 가격 민감도 — Trans Mountain 완공으로 WCS-WTI 스프레드 구조적 축소</div>
           <div class="driver-body">캐나다 GDP의 약 11%를 차지하는 에너지 수출은 CAD의 장기 방향성을 결정하는 구조적 요인이다. WTI가 $65–80/bbl 구간을 유지하는 가운데 Trans Mountain 완공(2024년 말)으로 WCS-WTI 스프레드가 종전 $12-15/bbl에서 $5/bbl 내외로 영구적으로 축소됐다. 이는 캐나다 에너지 수출 수익성을 구조적으로 개선시켜 동일 유가 수준에서도 더 강한 CAD 지지 효과를 가져온다. 바이오연료 원료 수출과 간접 연동되는 에너지 가격 동향을 주간 단위로 모니터링할 것을 권장한다.</div>
+        </li>
+      </ul>
+    </div>
+    <!-- ── 장기 10Y ── -->
+    <div id="panel-longterm" class="period-panel">
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-box-val">1.4450</div><div class="stat-box-lbl">10년 고점 (2026.01)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.2005</div><div class="stat-box-lbl">10년 저점 (2021.06)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3220</div><div class="stat-box-lbl">10년 평균</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3771</div><div class="stat-box-lbl">현재</div></div>
+      </div>
+      <div class="chart-wrap"><canvas id="chartLongterm"></canvas></div>
+      <div class="chart-sub-label">📐 US 2Y − CA 2Y 금리차 (bp) &nbsp;·&nbsp; 클수록 USD/CAD 상승과 동행</div>
+      <div class="chart-wrap-sub"><canvas id="chartLongtermSub"></canvas></div>
+      <div class="card-header" style="margin-top:4px;">
+        <div class="card-icon icon-driver">🔑</div>
+        <div class="card-title">장기 핵심 드라이버 3 <span>2016–2026</span></div>
+      </div>
+      <ul class="driver-list">
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 1 · 원유 가격 사이클</div>
+          <div class="driver-title">WTI 유가와 USD/CAD의 역관계 — 에너지 수출국 CAD의 구조적 특성</div>
+          <div class="driver-body">캐나다 GDP의 약 11%가 에너지 수출이어서 WTI 유가와 USD/CAD는 구조적으로 역관계다. 2020년 COVID 유가 급락($42/bbl) 시 USD/CAD 1.41까지 급등, 2021-22년 유가 반등($68→$95) 시 USD/CAD 1.20 저점을 찍은 흐름이 10년 차트에서 뚜렷하게 확인된다. 2022년 WTI $95는 CAD 역대 강세 구간과 일치. 현재 $78-80 구간은 중립 수준으로 원유 요인만으로는 CAD 방향성 결정이 어렵고 관세·금리 변수의 영향이 더 큰 국면이다.</div>
+        </li>
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 2 · 미-캐 금리 사이클</div>
+          <div class="driver-title">Fed-BOC 금리차가 USD/CAD를 지배 — 스프레드 확대 = CAD 약세, 축소 = CAD 강세</div>
+          <div class="driver-body">2018년 Fed 선제 인상으로 US-CA 2Y 스프레드가 +60bp까지 벌어지며 USD/CAD 1.30대 유지, 2020-21년 양국 제로금리(스프레드 ±0) 시기에 CAD가 최강세(1.20)를 기록했다. 2023-24년 Fed 고금리 유지·BOC 선제 인하로 스프레드가 +45-55bp로 재확대되며 USD/CAD도 1.35-1.44 구간으로 이동. 하단 서브 차트에서 스프레드와 USD/CAD의 동행 패턴이 10년 전체에 걸쳐 확인된다.</div>
+        </li>
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 3 · 구조적 무역 충격</div>
+          <div class="driver-title">USMCA 재협상(2018-19)·COVID(2020)·트럼프 2기 관세(2025-26) — 10년간 3번의 충격</div>
+          <div class="driver-body">① 2018-19년 NAFTA→USMCA 재협상 불확실성: USD/CAD 1.29-1.34 박스권. ② 2020년 COVID 봉쇄·유가 급락: USD/CAD 순간 1.45 터치 후 V자 반등. ③ 2025-26년 트럼프 2기 관세 위협: 2025년 2월 1.4450 신고점 후 CUSMA 협상으로 점진 회복. 각 충격은 초기 급등 후 협상/안정화로 되돌리는 패턴을 반복. 현재(1.3771)는 3차 충격 후 정상화 진행 중으로 읽힌다.</div>
         </li>
       </ul>
     </div>
@@ -683,6 +717,18 @@ makeChart('chartAnnual',
   ["'25 8월", "9월", "10월", "11월", "12월", "'26 1월", "2월", "3월", "4월", "5월", "6월", "7월*"],
   [1.3720, 1.3750, 1.3820, 1.3880, 1.3950, 1.4020, 1.4080, 1.4150, 1.3950, 1.3870, 1.3820, 1.3795],
   [73.0,   74.0,   75.0,   74.0,   73.0,   78.0,   77.0,   75.0,   77.0,   78.0,   79.0,   80.0]
+);
+
+// ── Long-term (연간 평균 2016–2026) ──
+makeChart('chartLongterm',
+  ['2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026*'],
+  [1.3248, 1.2986, 1.2957, 1.3269, 1.3415, 1.2535, 1.3013, 1.3497, 1.3601, 1.3870, 1.3950],
+  [43.0,   51.0,   65.0,   57.0,   42.0,   68.0,   95.0,   77.0,   77.0,   74.0,   78.0]
+);
+
+makeSubChart('chartLongtermSub',
+  ['2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026*'],
+  [30, 20, 60, 30, -5, -10, 20, 45, 35, 55, 48]
 );
 
 // ── Sub-charts: CA 2Y − US 2Y 금리차 (bp) ──
