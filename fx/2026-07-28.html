@@ -770,43 +770,58 @@ function downloadPDF() {
   }).from(document.body).save().then(() => { btn.textContent = 'PDF 저장'; });
 }
 
-// ── Live rate fetch (Frankfurter API) ──
+// ── Live rate fetch ──
+// Primary: @fawazahmed0/currency-api via jsDelivr CDN (CORS-safe)
+// Fallback: open.er-api.com
+async function getRateFromCDN(dateTag) {
+  const url = `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@${dateTag}/v1/currencies/usd.json`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(res.status);
+  const data = await res.json();
+  return { rate: data.usd.cad, date: data.date };
+}
+
 async function fetchLiveRate() {
+  const badge  = document.getElementById('rateLiveBadge');
+  const main   = document.getElementById('rateMain');
+  const change = document.getElementById('rateChange');
+  const prev7  = document.getElementById('rateMonthStart');
+
   try {
-    const today = new Date();
-    const weekAgo = new Date(today);
-    weekAgo.setDate(today.getDate() - 7);
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
     const weekAgoStr = weekAgo.toISOString().split('T')[0];
 
-    const [nowRes, prevRes] = await Promise.all([
-      fetch('https://api.frankfurter.app/latest?from=USD&to=CAD'),
-      fetch(`https://api.frankfurter.app/${weekAgoStr}?from=USD&to=CAD`)
+    const [now, prev] = await Promise.all([
+      getRateFromCDN('latest'),
+      getRateFromCDN(weekAgoStr)
     ]);
-    const nowData  = await nowRes.json();
-    const prevData = await prevRes.json();
 
-    const rate = nowData.rates.CAD;
-    const prev = prevData.rates.CAD;
-    const diff = rate - prev;
-    const pct  = diff / prev * 100;
+    const diff = now.rate - prev.rate;
+    const pct  = diff / prev.rate * 100;
     const isUp = diff >= 0;
 
-    document.getElementById('rateMain').textContent = rate.toFixed(4);
+    main.textContent = now.rate.toFixed(4);
+    change.style.opacity = '1';
+    change.className = 'rate-change ' + (isUp ? 'up' : 'down');
+    change.textContent = `${isUp ? '▲' : '▼'} ${Math.abs(diff).toFixed(4)} (${isUp ? '+' : ''}${pct.toFixed(2)}%) 주간`;
+    prev7.innerHTML = `<div class="rate-stat-val">${prev.rate.toFixed(4)}</div><div class="rate-stat-lbl">7일 전 (${prev.date})</div>`;
+    badge.textContent = `● LIVE · ${now.date} 기준`;
 
-    const changeEl = document.getElementById('rateChange');
-    changeEl.style.opacity = '1';
-    changeEl.className = 'rate-change ' + (isUp ? 'up' : 'down');
-    changeEl.textContent =
-      `${isUp ? '▲' : '▼'} ${Math.abs(diff).toFixed(4)} (${isUp ? '+' : ''}${pct.toFixed(2)}%) 주간`;
-
-    document.getElementById('rateMonthStart').innerHTML =
-      `<div class="rate-stat-val">${prev.toFixed(4)}</div><div class="rate-stat-lbl">7일 전 (${prevData.date})</div>`;
-
-    document.getElementById('rateLiveBadge').textContent =
-      `● LIVE · ${nowData.date} 기준`;
   } catch(e) {
-    document.getElementById('rateLiveBadge').textContent = '⚠ 데이터 로드 실패';
-    document.getElementById('rateMain').textContent = '—';
+    // fallback: open.er-api.com
+    try {
+      const res  = await fetch('https://open.er-api.com/v6/latest/USD');
+      const data = await res.json();
+      const rate = data.rates.CAD;
+      main.textContent    = rate.toFixed(4);
+      badge.textContent   = `● LIVE (fallback) · ${data.time_last_update_utc.slice(0,16)} 기준`;
+      change.style.opacity = '0.5';
+      change.textContent  = '주간 변동 계산 중…';
+    } catch(e2) {
+      badge.textContent = '⚠ 데이터 로드 실패';
+      main.textContent  = '—';
+    }
   }
 }
 fetchLiveRate();
