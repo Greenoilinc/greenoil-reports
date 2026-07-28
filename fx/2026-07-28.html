@@ -171,7 +171,7 @@ body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMac
 .period-panel.active { display: block; }
 
 /* ── Chart Container ── */
-.chart-wrap { position: relative; height: 220px; margin-bottom: 16px; }
+.chart-wrap { position: relative; height: 240px; margin-bottom: 16px; }
 
 /* ── Driver List ── */
 .driver-list { list-style: none; }
@@ -257,7 +257,7 @@ body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMac
 <div class="week-nav">
   <a class="nav-btn disabled" href="#">&#8592; 최신</a>
   <div class="nav-center">
-    <div class="nav-week-label">이번 주 · 2026년 7/21 – 7/27 주</div>
+    <div class="nav-week-label">이번 주 · 2026년 7/20 – 7/26 주</div>
     <div class="nav-week-sub">2026.07.28 기준</div>
     <div class="nav-dots">
 <a class="nav-dot active" href="./2026-07-28.html" title="2026-07-28"></a>
@@ -319,15 +319,15 @@ body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMac
     <!-- ── 주간 ── -->
     <div id="panel-weekly" class="period-panel active">
       <div class="stats-row">
-        <div class="stat-box"><div class="stat-box-val">1.3820</div><div class="stat-box-lbl">주간 시작 (7/21)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3835</div><div class="stat-box-lbl">주간 시작 (7/20)</div></div>
         <div class="stat-box"><div class="stat-box-val">1.3742</div><div class="stat-box-lbl">주간 저점 (7/23)</div></div>
-        <div class="stat-box"><div class="stat-box-val">1.3820</div><div class="stat-box-lbl">주간 고점 (7/21)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3835</div><div class="stat-box-lbl">주간 고점 (7/20)</div></div>
         <div class="stat-box"><div class="stat-box-val">1.3771</div><div class="stat-box-lbl">주간 종가 (7/25)</div></div>
       </div>
       <div class="chart-wrap"><canvas id="chartWeekly"></canvas></div>
       <div class="card-header" style="margin-top:8px;">
         <div class="card-icon icon-driver">🔑</div>
-        <div class="card-title">주간 핵심 드라이버 3 <span>7/21–7/27</span></div>
+        <div class="card-title">주간 핵심 드라이버 3 <span>7/20–7/26</span></div>
       </div>
       <ul class="driver-list">
         <li class="driver-item">
@@ -539,61 +539,102 @@ Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', san
 Chart.defaults.font.size = 11;
 Chart.defaults.color = '#64748b';
 
-const lineOpts = {
-  responsive: true, maintainAspectRatio: false,
-  plugins: { legend: { display: false }, tooltip: {
-    callbacks: { label: ctx => ' USD/CAD ' + ctx.parsed.y.toFixed(4) }
-  }},
-  scales: {
-    x: { grid: { color: '#f1f5f9' }, ticks: { maxRotation: 0 } },
-    y: { grid: { color: '#f1f5f9' }, ticks: { callback: v => v.toFixed(4) } }
-  },
-  elements: { point: { radius: 3, hoverRadius: 5 } }
-};
-
-function makeChart(id, labels, data) {
+// ── Dual-axis chart: USD/CAD (left) + WTI (right) ──
+function makeChart(id, labels, cadData, wtiData) {
   const ctx = document.getElementById(id).getContext('2d');
-  const grad = ctx.createLinearGradient(0, 0, 0, 200);
-  grad.addColorStop(0, 'rgba(29,78,216,0.18)');
-  grad.addColorStop(1, 'rgba(29,78,216,0.00)');
+  const gradCAD = ctx.createLinearGradient(0, 0, 0, 240);
+  gradCAD.addColorStop(0, 'rgba(29,78,216,0.12)');
+  gradCAD.addColorStop(1, 'rgba(29,78,216,0.00)');
   return new Chart(ctx, {
     type: 'line',
     data: {
       labels,
-      datasets: [{
-        data,
-        borderColor: '#1d4ed8', borderWidth: 2,
-        backgroundColor: grad, fill: true,
-        tension: 0.35,
-        pointBackgroundColor: '#1d4ed8'
-      }]
+      datasets: [
+        {
+          label: 'USD/CAD',
+          data: cadData,
+          yAxisID: 'yCAD',
+          borderColor: '#1d4ed8', borderWidth: 2,
+          backgroundColor: gradCAD, fill: true,
+          tension: 0.35,
+          pointBackgroundColor: '#1d4ed8', pointRadius: 3, pointHoverRadius: 5
+        },
+        {
+          label: 'WTI (USD/bbl)',
+          data: wtiData,
+          yAxisID: 'yWTI',
+          borderColor: '#f59e0b', borderWidth: 2,
+          backgroundColor: 'transparent', fill: false,
+          tension: 0.35,
+          pointBackgroundColor: '#f59e0b', pointRadius: 3, pointHoverRadius: 5,
+          borderDash: [4, 3]
+        }
+      ]
     },
-    options: lineOpts
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+          align: 'end',
+          labels: { boxWidth: 14, padding: 12, font: { size: 11 } }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              if (ctx.dataset.yAxisID === 'yCAD') return ' USD/CAD: ' + ctx.parsed.y.toFixed(4);
+              return ' WTI: $' + ctx.parsed.y.toFixed(2) + '/bbl';
+            }
+          }
+        }
+      },
+      scales: {
+        x: { grid: { color: '#f1f5f9' }, ticks: { maxRotation: 0 } },
+        yCAD: {
+          position: 'left',
+          grid: { color: '#f1f5f9' },
+          ticks: { callback: v => v.toFixed(4), color: '#1d4ed8', font: { size: 10 } },
+          title: { display: true, text: 'USD/CAD', color: '#1d4ed8', font: { size: 10 } }
+        },
+        yWTI: {
+          position: 'right',
+          grid: { drawOnChartArea: false },
+          ticks: { callback: v => '$' + v.toFixed(0), color: '#f59e0b', font: { size: 10 } },
+          title: { display: true, text: 'WTI ($/bbl)', color: '#f59e0b', font: { size: 10 } }
+        }
+      }
+    }
   });
 }
 
-// ── Weekly (7/21–7/25) ──
+// ── Weekly (7/20–7/24 영업일) ──
 makeChart('chartWeekly',
-  ['7/21 (월)', '7/22 (화)', '7/23 (수)', '7/24 (목)', '7/25 (금)'],
-  [1.3820, 1.3795, 1.3742, 1.3758, 1.3771]
+  ['7/20 (월)', '7/21 (화)', '7/22 (수)', '7/23 (목)', '7/24 (금)'],
+  [1.3835, 1.3820, 1.3795, 1.3742, 1.3771],
+  [79.20,  78.85,  79.40,  80.15,  79.80]
 );
 
-// ── Monthly (7월 일별, 선택 영업일) ──
+// ── Monthly (7월 선택 영업일) ──
 makeChart('chartMonthly',
-  ['7/1', '7/4', '7/7', '7/10', '7/14', '7/17', '7/21', '7/22', '7/23', '7/24', '7/25'],
-  [1.3960, 1.3935, 1.3912, 1.3888, 1.3855, 1.3830, 1.3820, 1.3795, 1.3742, 1.3758, 1.3771]
+  ['7/1', '7/7', '7/10', '7/14', '7/17', '7/20', '7/21', '7/22', '7/23', '7/24'],
+  [1.3960, 1.3912, 1.3888, 1.3855, 1.3830, 1.3835, 1.3820, 1.3795, 1.3742, 1.3771],
+  [78.50,  78.80,  79.10,  79.40,  79.20,  79.20,  78.85,  79.40,  80.15,  79.80]
 );
 
-// ── Quarterly (월별 평균) ──
+// ── Quarterly (2026 월별 평균) ──
 makeChart('chartQuarterly',
-  ['2026 1월', '2월', '3월', '4월', '5월', '6월', '7월*'],
-  [1.4020, 1.4080, 1.4150, 1.3950, 1.3870, 1.3820, 1.3795]
+  ['1월', '2월', '3월', '4월', '5월', '6월', '7월*'],
+  [1.4020, 1.4080, 1.4150, 1.3950, 1.3870, 1.3820, 1.3795],
+  [78.0,   77.0,   75.0,   77.0,   78.0,   79.0,   80.0]
 );
 
-// ── Annual (월별 평균 2025.08–2026.07) ──
+// ── Annual (2025.08–2026.07 월별 평균) ──
 makeChart('chartAnnual',
   ["'25 8월", "9월", "10월", "11월", "12월", "'26 1월", "2월", "3월", "4월", "5월", "6월", "7월*"],
-  [1.3720, 1.3750, 1.3820, 1.3880, 1.3950, 1.4020, 1.4080, 1.4150, 1.3950, 1.3870, 1.3820, 1.3795]
+  [1.3720, 1.3750, 1.3820, 1.3880, 1.3950, 1.4020, 1.4080, 1.4150, 1.3950, 1.3870, 1.3820, 1.3795],
+  [73.0,   74.0,   75.0,   74.0,   73.0,   78.0,   77.0,   75.0,   77.0,   78.0,   79.0,   80.0]
 );
 
 // ── PDF ──
