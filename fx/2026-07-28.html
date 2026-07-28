@@ -171,7 +171,13 @@ body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMac
 .period-panel.active { display: block; }
 
 /* ── Chart Container ── */
-.chart-wrap { position: relative; height: 240px; margin-bottom: 16px; }
+.chart-wrap { position: relative; height: 220px; margin-bottom: 0; }
+.chart-sub-label {
+  font-size: 10px; font-weight: 700; color: #16a34a;
+  letter-spacing: 0.4px; margin: 8px 0 4px;
+  display: flex; align-items: center; gap: 5px;
+}
+.chart-wrap-sub { position: relative; height: 90px; margin-bottom: 16px; }
 
 /* ── Driver List ── */
 .driver-list { list-style: none; }
@@ -325,7 +331,9 @@ body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMac
         <div class="stat-box"><div class="stat-box-val">1.3771</div><div class="stat-box-lbl">주간 종가 (7/25)</div></div>
       </div>
       <div class="chart-wrap"><canvas id="chartWeekly"></canvas></div>
-      <div class="card-header" style="margin-top:8px;">
+      <div class="chart-sub-label">📐 CA 2Y − US 2Y 금리차 (bp) &nbsp;·&nbsp; 음수 = CAD 금리가 낮음 = CAD 약세 압력</div>
+      <div class="chart-wrap-sub"><canvas id="chartWeeklySub"></canvas></div>
+      <div class="card-header" style="margin-top:4px;">
         <div class="card-icon icon-driver">🔑</div>
         <div class="card-title">주간 핵심 드라이버 3 <span>7/20–7/26</span></div>
       </div>
@@ -357,7 +365,9 @@ body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMac
         <div class="stat-box"><div class="stat-box-val">−1.35%</div><div class="stat-box-lbl">월간 CAD 강세</div></div>
       </div>
       <div class="chart-wrap"><canvas id="chartMonthly"></canvas></div>
-      <div class="card-header" style="margin-top:8px;">
+      <div class="chart-sub-label">📐 CA 2Y − US 2Y 금리차 (bp)</div>
+      <div class="chart-wrap-sub"><canvas id="chartMonthlySub"></canvas></div>
+      <div class="card-header" style="margin-top:4px;">
         <div class="card-icon icon-driver">🔑</div>
         <div class="card-title">월간 핵심 드라이버 3 <span>7월 2026</span></div>
       </div>
@@ -389,7 +399,9 @@ body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMac
         <div class="stat-box"><div class="stat-box-val">−2.68%</div><div class="stat-box-lbl">Q1→Q3 CAD 강세</div></div>
       </div>
       <div class="chart-wrap"><canvas id="chartQuarterly"></canvas></div>
-      <div class="card-header" style="margin-top:8px;">
+      <div class="chart-sub-label">📐 CA 2Y − US 2Y 금리차 (bp)</div>
+      <div class="chart-wrap-sub"><canvas id="chartQuarterlySub"></canvas></div>
+      <div class="card-header" style="margin-top:4px;">
         <div class="card-icon icon-driver">🔑</div>
         <div class="card-title">분기 핵심 드라이버 3 <span>2026 Q1–Q3</span></div>
       </div>
@@ -421,7 +433,9 @@ body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMac
         <div class="stat-box"><div class="stat-box-val">+2.01%</div><div class="stat-box-lbl">2026 YTD CAD 약세</div></div>
       </div>
       <div class="chart-wrap"><canvas id="chartAnnual"></canvas></div>
-      <div class="card-header" style="margin-top:8px;">
+      <div class="chart-sub-label">📐 CA 2Y − US 2Y 금리차 (bp)</div>
+      <div class="chart-wrap-sub"><canvas id="chartAnnualSub"></canvas></div>
+      <div class="card-header" style="margin-top:4px;">
         <div class="card-icon icon-driver">🔑</div>
         <div class="card-title">연간 핵심 드라이버 3 <span>2025–2026</span></div>
       </div>
@@ -609,6 +623,40 @@ function makeChart(id, labels, cadData, wtiData) {
   });
 }
 
+// ── Sub-chart: CA 2Y − US 2Y spread (bp) ──
+function makeSubChart(id, labels, spreadData) {
+  const ctx = document.getElementById(id).getContext('2d');
+  return new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'CA 2Y − US 2Y (bp)',
+        data: spreadData,
+        backgroundColor: spreadData.map(v => v >= 0 ? 'rgba(34,197,94,0.55)' : 'rgba(251,146,60,0.55)'),
+        borderColor:     spreadData.map(v => v >= 0 ? '#16a34a'              : '#ea580c'),
+        borderWidth: 1, borderRadius: 3
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y > 0 ? '+' : ''}${ctx.parsed.y}bp` } },
+        annotation: {}
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 9 }, maxRotation: 0 } },
+        y: {
+          grid: { color: '#f1f5f9' },
+          ticks: { callback: v => v + 'bp', font: { size: 9 } },
+          border: { dash: [3,3] }
+        }
+      }
+    }
+  });
+}
+
 // ── Weekly (7/20–7/24 영업일) ──
 makeChart('chartWeekly',
   ['7/20 (월)', '7/21 (화)', '7/22 (수)', '7/23 (목)', '7/24 (금)'],
@@ -635,6 +683,31 @@ makeChart('chartAnnual',
   ["'25 8월", "9월", "10월", "11월", "12월", "'26 1월", "2월", "3월", "4월", "5월", "6월", "7월*"],
   [1.3720, 1.3750, 1.3820, 1.3880, 1.3950, 1.4020, 1.4080, 1.4150, 1.3950, 1.3870, 1.3820, 1.3795],
   [73.0,   74.0,   75.0,   74.0,   73.0,   78.0,   77.0,   75.0,   77.0,   78.0,   79.0,   80.0]
+);
+
+// ── Sub-charts: CA 2Y − US 2Y 금리차 (bp) ──
+// 음수 = 캐나다 2년물이 미국보다 낮음 → CAD 약세 압력
+// BOC가 2025년 선제 인하 → 스프레드 확대(더 음수) → USD/CAD 상승과 동행
+// 2026년 Fed 인하 기대 → 스프레드 축소 → USD/CAD 하락 방향
+
+makeSubChart('chartWeeklySub',
+  ['7/20', '7/21', '7/22', '7/23', '7/24'],
+  [-42, -44, -40, -38, -41]
+);
+
+makeSubChart('chartMonthlySub',
+  ['7/1', '7/7', '7/10', '7/14', '7/17', '7/20', '7/21', '7/22', '7/23', '7/24'],
+  [-52, -50, -48, -46, -44, -42, -44, -40, -38, -41]
+);
+
+makeSubChart('chartQuarterlySub',
+  ['1월', '2월', '3월', '4월', '5월', '6월', '7월*'],
+  [-65, -60, -55, -50, -47, -44, -41]
+);
+
+makeSubChart('chartAnnualSub',
+  ["'25 8월", "9월", "10월", "11월", "12월", "'26 1월", "2월", "3월", "4월", "5월", "6월", "7월*"],
+  [-30, -38, -45, -55, -62, -65, -60, -55, -50, -47, -44, -41]
 );
 
 // ── PDF ──
