@@ -277,9 +277,9 @@ body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMac
   <!-- Rate Hero -->
   <div class="rate-hero">
     <div>
-      <div class="rate-label">USD/CAD 현재 환율</div>
-      <div class="rate-main">1.3771</div>
-      <div class="rate-change down">▼ 0.0049 (−0.35%) 주간</div>
+      <div class="rate-label">USD/CAD 현재 환율 &nbsp;<span id="rateLiveBadge" style="font-size:9px;opacity:0.55;letter-spacing:0.3px;">로딩 중…</span></div>
+      <div class="rate-main" id="rateMain">—</div>
+      <div class="rate-change" id="rateChange" style="opacity:0.5;">계산 중…</div>
     </div>
     <div class="rate-stats">
       <div class="rate-stat">
@@ -294,9 +294,9 @@ body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMac
         <div class="rate-stat-val">1.3870</div>
         <div class="rate-stat-lbl">52주 평균</div>
       </div>
-      <div class="rate-stat">
-        <div class="rate-stat-val">1.3795</div>
-        <div class="rate-stat-lbl">월간 시작</div>
+      <div class="rate-stat" id="rateMonthStart">
+        <div class="rate-stat-val">—</div>
+        <div class="rate-stat-lbl">7일 전</div>
       </div>
     </div>
   </div>
@@ -769,6 +769,47 @@ function downloadPDF() {
     pagebreak: { mode: 'avoid-all' }
   }).from(document.body).save().then(() => { btn.textContent = 'PDF 저장'; });
 }
+
+// ── Live rate fetch (Frankfurter API) ──
+async function fetchLiveRate() {
+  try {
+    const today = new Date();
+    const weekAgo = new Date(today);
+    weekAgo.setDate(today.getDate() - 7);
+    const weekAgoStr = weekAgo.toISOString().split('T')[0];
+
+    const [nowRes, prevRes] = await Promise.all([
+      fetch('https://api.frankfurter.app/latest?from=USD&to=CAD'),
+      fetch(`https://api.frankfurter.app/${weekAgoStr}?from=USD&to=CAD`)
+    ]);
+    const nowData  = await nowRes.json();
+    const prevData = await prevRes.json();
+
+    const rate = nowData.rates.CAD;
+    const prev = prevData.rates.CAD;
+    const diff = rate - prev;
+    const pct  = diff / prev * 100;
+    const isUp = diff >= 0;
+
+    document.getElementById('rateMain').textContent = rate.toFixed(4);
+
+    const changeEl = document.getElementById('rateChange');
+    changeEl.style.opacity = '1';
+    changeEl.className = 'rate-change ' + (isUp ? 'up' : 'down');
+    changeEl.textContent =
+      `${isUp ? '▲' : '▼'} ${Math.abs(diff).toFixed(4)} (${isUp ? '+' : ''}${pct.toFixed(2)}%) 주간`;
+
+    document.getElementById('rateMonthStart').innerHTML =
+      `<div class="rate-stat-val">${prev.toFixed(4)}</div><div class="rate-stat-lbl">7일 전 (${prevData.date})</div>`;
+
+    document.getElementById('rateLiveBadge').textContent =
+      `● LIVE · ${nowData.date} 기준`;
+  } catch(e) {
+    document.getElementById('rateLiveBadge').textContent = '⚠ 데이터 로드 실패';
+    document.getElementById('rateMain').textContent = '—';
+  }
+}
+fetchLiveRate();
 
 // ── History for future nav-dots ──
 // HISTORY_START
