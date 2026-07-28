@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Oil Inc. — USD/CAD 환율 동향 2026.07.28</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.6; }
+
+/* ── Header ── */
+.header {
+  background: linear-gradient(135deg, #0f1f4a 0%, #1a3a6a 100%);
+  color: white;
+  padding: 14px 24px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 2px solid #1e40af;
+}
+.header-left h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 7px; }
+.header-left .sub { font-size: 11px; opacity: 0.75; margin-top: 3px; letter-spacing: 0.3px; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.updated-badge { font-size: 10px; opacity: 0.65; }
+
+/* ── PDF Button ── */
+.pdf-btn {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 8px;
+  padding: 5px 11px;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 0.15s;
+}
+.pdf-btn:hover { background: rgba(255,255,255,0.22); }
+.pdf-btn svg { width: 13px; height: 13px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Report Switch ── */
+.report-switch {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 7px;
+  padding: 3px 10px;
+  text-decoration: none;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.report-switch:hover { background: rgba(255,255,255,0.2); color: white; }
+.report-switch .dot { width: 7px; height: 7px; border-radius: 50%; background: #f6ad55; }
+
+/* ── Week Navigator ── */
+.week-nav {
+  background: white;
+  border-bottom: 1px solid #dbeafe;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.nav-btn {
+  background: none;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 5px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1d4ed8;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+.nav-btn:hover { background: #eff6ff; border-color: #1d4ed8; }
+.nav-btn.disabled { opacity: 0.3; pointer-events: none; }
+.nav-center { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+.nav-week-label { font-size: 14px; font-weight: 700; color: #0f1f4a; }
+.nav-week-sub { font-size: 10px; color: #999; }
+.nav-dots { display: flex; gap: 5px; margin-top: 4px; flex-wrap: wrap; justify-content: center; }
+.nav-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #bfdbfe; cursor: pointer; transition: background 0.15s;
+  display: block; text-decoration: none;
+}
+.nav-dot.active { background: #1d4ed8; }
+.nav-dot:hover { background: #60a5fa; }
+
+/* ── Container ── */
+.container { max-width: 920px; margin: 0 auto; padding: 18px 16px 32px; }
+
+/* ── Rate Hero ── */
+.rate-hero {
+  background: linear-gradient(135deg, #0f1f4a 0%, #1e3a8a 100%);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 14px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.rate-main { font-size: 38px; font-weight: 800; letter-spacing: -1px; font-variant-numeric: tabular-nums; }
+.rate-label { font-size: 11px; opacity: 0.65; margin-bottom: 4px; letter-spacing: 0.5px; }
+.rate-change { font-size: 14px; font-weight: 700; margin-top: 2px; }
+.rate-change.up { color: #fca5a5; }
+.rate-change.down { color: #86efac; }
+.rate-stats { display: flex; gap: 24px; flex-wrap: wrap; }
+.rate-stat { text-align: center; }
+.rate-stat-val { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.rate-stat-lbl { font-size: 10px; opacity: 0.6; margin-top: 2px; }
+
+/* ── Alert bar ── */
+.alert-bar { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.pill {
+  display: flex; align-items: center; gap: 6px;
+  background: white; border-radius: 20px; padding: 5px 13px;
+  font-size: 11px; font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.pill.blue   { border-left: 3px solid #1d4ed8; color: #1e40af; }
+.pill.amber  { border-left: 3px solid #d69e2e; color: #975a16; }
+.pill.green  { border-left: 3px solid #38a169; color: #22543d; }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.dot.blue   { background: #1d4ed8; }
+.dot.amber  { background: #d69e2e; }
+.dot.green  { background: #38a169; }
+
+/* ── Card ── */
+.card { background: white; border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.card-header { display: flex; align-items: center; gap: 9px; margin-bottom: 13px; padding-bottom: 10px; border-bottom: 1px solid #eff6ff; }
+.card-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.icon-chart   { background: #eff6ff; }
+.icon-driver  { background: #f0fdf4; }
+.icon-risk    { background: #fff5f5; }
+.icon-sources { background: #f5f5f5; }
+.card-title { font-size: 14px; font-weight: 700; color: #0f1f4a; }
+.card-title span { font-size: 10px; font-weight: 400; color: #888; margin-left: 5px; }
+
+/* ── Period Tabs ── */
+.period-tabs { display: flex; gap: 4px; margin-bottom: 16px; background: #f0f4f8; border-radius: 10px; padding: 4px; }
+.period-tab {
+  flex: 1; padding: 7px 4px; border: none; background: none;
+  border-radius: 7px; font-size: 12px; font-weight: 600; color: #64748b;
+  cursor: pointer; transition: all 0.15s; text-align: center;
+}
+.period-tab.active { background: white; color: #1d4ed8; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.period-tab:hover:not(.active) { background: rgba(255,255,255,0.6); color: #1e3a8a; }
+
+/* ── Period Panel ── */
+.period-panel { display: none; }
+.period-panel.active { display: block; }
+
+/* ── Chart Container ── */
+.chart-wrap { position: relative; height: 220px; margin-bottom: 16px; }
+
+/* ── Driver List ── */
+.driver-list { list-style: none; }
+.driver-item { padding: 10px 0 10px 20px; position: relative; border-bottom: 1px solid #f4f4f4; }
+.driver-item:last-child { border-bottom: none; }
+.driver-item::before {
+  content: '';
+  position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 10px; height: 10px; border-radius: 50%; background: #1d4ed8;
+  flex-shrink: 0;
+}
+.driver-rank { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.7px; color: #1d4ed8; margin-bottom: 3px; }
+.driver-title { font-size: 13px; font-weight: 700; color: #0f1f4a; margin-bottom: 3px; }
+.driver-body { font-size: 12px; color: #4a5568; line-height: 1.5; }
+
+/* ── Risk grid ── */
+.risk-grid { display: flex; flex-direction: column; gap: 10px; }
+.risk-col { border-radius: 9px; padding: 12px 16px; }
+.risk-col.red   { background: #fff5f5; border: 1px solid #fed7d7; }
+.risk-col.amber { background: #fffbf0; border: 1px solid #fefcbf; }
+.risk-col.green { background: #f0fff4; border: 1px solid #c6f6d5; }
+.risk-col-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+.risk-col.red   .risk-col-title { color: #c53030; }
+.risk-col.amber .risk-col-title { color: #975a16; }
+.risk-col.green .risk-col-title { color: #22543d; }
+.risk-entry { font-size: 12px; color: #4a5568; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.05); line-height: 1.5; }
+.risk-entry:last-child { border-bottom: none; }
+
+/* ── Summary list ── */
+.summary-list { list-style: none; }
+.summary-list li { padding: 7px 0 7px 18px; position: relative; border-bottom: 1px solid #f4f4f4; color: #1a2a4a; font-size: 13px; }
+.summary-list li:last-child { border-bottom: none; }
+.summary-list li::before { content: '▸'; position: absolute; left: 0; top: 8px; color: #1d4ed8; font-size: 10px; }
+
+/* ── Sources ── */
+.source-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f4f4f4; align-items: flex-start; }
+.source-row:last-child { border-bottom: none; }
+.src-num { width: 20px; height: 20px; flex-shrink: 0; background: #eff6ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #1d4ed8; margin-top: 1px; }
+.src-link { font-size: 12px; font-weight: 600; color: #1d4ed8; text-decoration: none; }
+.src-link:hover { text-decoration: underline; }
+.src-meta { font-size: 10px; color: #aaa; margin-top: 1px; }
+
+/* ── Rate range bar ── */
+.range-bar-wrap { margin: 12px 0 8px; }
+.range-label-row { display: flex; justify-content: space-between; font-size: 10px; color: #64748b; margin-bottom: 4px; }
+.range-track { height: 6px; background: #dbeafe; border-radius: 3px; position: relative; }
+.range-fill { position: absolute; height: 100%; background: linear-gradient(90deg, #93c5fd, #1d4ed8); border-radius: 3px; }
+.range-cursor { position: absolute; width: 12px; height: 12px; background: #1d4ed8; border: 2px solid white; border-radius: 50%; top: 50%; transform: translate(-50%, -50%); box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+
+/* ── Stats row ── */
+.stats-row { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.stat-box { flex: 1; min-width: 90px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 9px; padding: 10px 12px; }
+.stat-box-val { font-size: 16px; font-weight: 800; color: #0f1f4a; font-variant-numeric: tabular-nums; }
+.stat-box-lbl { font-size: 10px; color: #94a3b8; margin-top: 2px; }
+
+/* ── Footer ── */
+.footer { text-align: center; font-size: 10px; color: #bbb; padding: 8px 0 4px; letter-spacing: 0.2px; }
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="header">
+  <div class="header-left">
+    <h1>🌿 Green Oil Inc.</h1>
+    <div class="sub">USD/CAD 환율 동향 리포트 · FX Intelligence Report</div>
+  </div>
+  <div class="header-right">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="pdf-btn" onclick="downloadPDF()">
+        <svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><rect x="6" y="13" width="12" height="8" rx="1"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/></svg>
+        <span id="pdfBtnLabel">PDF 저장</span>
+      </button>
+      <a class="report-switch" href="../index.html">&#8592; 인덱스</a>
+      <a class="report-switch" href="../uco/2026-07-27.html">🌿 UCO →</a>
+      <a class="report-switch" href="../canola/2026-07-27.html"><span class="dot"></span>카놀라 →</a>
+    </div>
+    <div class="updated-badge">마지막 업데이트: 2026.07.28</div>
+  </div>
+</div>
+
+<!-- ── Week Navigator ── -->
+<div class="week-nav">
+  <a class="nav-btn disabled" href="#">&#8592; 최신</a>
+  <div class="nav-center">
+    <div class="nav-week-label">이번 주 · 2026년 7/21 – 7/27 주</div>
+    <div class="nav-week-sub">2026.07.28 기준</div>
+    <div class="nav-dots">
+<a class="nav-dot active" href="./2026-07-28.html" title="2026-07-28"></a>
+    </div>
+  </div>
+  <a class="nav-btn disabled" href="#">이전 &#8594;</a>
+</div>
+
+<div class="container">
+
+  <!-- Rate Hero -->
+  <div class="rate-hero">
+    <div>
+      <div class="rate-label">USD/CAD 현재 환율</div>
+      <div class="rate-main">1.3771</div>
+      <div class="rate-change down">▼ 0.0049 (−0.35%) 주간</div>
+    </div>
+    <div class="rate-stats">
+      <div class="rate-stat">
+        <div class="rate-stat-val">1.3720</div>
+        <div class="rate-stat-lbl">52주 저점</div>
+      </div>
+      <div class="rate-stat">
+        <div class="rate-stat-val">1.4450</div>
+        <div class="rate-stat-lbl">52주 고점</div>
+      </div>
+      <div class="rate-stat">
+        <div class="rate-stat-val">1.3870</div>
+        <div class="rate-stat-lbl">52주 평균</div>
+      </div>
+      <div class="rate-stat">
+        <div class="rate-stat-val">1.3795</div>
+        <div class="rate-stat-lbl">월간 시작</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alert bar -->
+  <div class="alert-bar">
+    <div class="pill blue"><div class="dot blue"></div><span>CAD 주간 소폭 강세 (−0.35%)</span></div>
+    <div class="pill amber"><div class="dot amber"></div><span>관세 협상 리스크 상존</span></div>
+    <div class="pill green"><div class="dot green"></div><span>BOC-Fed 금리차 축소 전망</span></div>
+  </div>
+
+  <!-- Period Chart + Drivers Card -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-chart">📈</div>
+      <div class="card-title">기간별 USD/CAD 환율 추이 <span>주간 · 월간 · 분기 · 연간</span></div>
+    </div>
+
+    <div class="period-tabs">
+      <button class="period-tab active" onclick="switchPeriod('weekly', this)">주간</button>
+      <button class="period-tab"        onclick="switchPeriod('monthly', this)">월간</button>
+      <button class="period-tab"        onclick="switchPeriod('quarterly', this)">분기</button>
+      <button class="period-tab"        onclick="switchPeriod('annual', this)">연간</button>
+    </div>
+
+    <!-- ── 주간 ── -->
+    <div id="panel-weekly" class="period-panel active">
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-box-val">1.3820</div><div class="stat-box-lbl">주간 시작 (7/21)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3742</div><div class="stat-box-lbl">주간 저점 (7/23)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3820</div><div class="stat-box-lbl">주간 고점 (7/21)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3771</div><div class="stat-box-lbl">주간 종가 (7/25)</div></div>
+      </div>
+      <div class="chart-wrap"><canvas id="chartWeekly"></canvas></div>
+      <div class="card-header" style="margin-top:8px;">
+        <div class="card-icon icon-driver">🔑</div>
+        <div class="card-title">주간 핵심 드라이버 3 <span>7/21–7/27</span></div>
+      </div>
+      <ul class="driver-list">
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 1 · 관세 충격</div>
+          <div class="driver-title">미국 338조 추가 50% 관세 발표(7/20) — 초기 CAD 급락 후 바이오에너지 제외로 일부 반전</div>
+          <div class="driver-body">7월 20일 트럼프 행정부가 캐나다산 비CUSMA 품목 대상 50% 추가 관세를 발표하면서 CAD가 장중 1.3850까지 급락했다. 그러나 유류·바이오디젤·에너지 원자재는 적용 제외 확인, CUSMA 원산지 준수 품목도 면제가 거론되며 낙폭을 상당 부분 회복했다. Green Oil의 UCO·카놀라유 수출은 에너지 원자재 분류로 직접 충격은 제한적이나, 조달 비용 상승 우려로 주간 변동성이 확대됐다.</div>
+        </li>
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 2 · 정책 공조</div>
+          <div class="driver-title">Carney 총리·주총리 공동성명(7/23) — 탄소시장 연계 실무그룹 출범, CAD 단기 강세</div>
+          <div class="driver-body">7월 23일 Carney 총리와 주총리들의 공동 에너지·탄소시장 공조 성명이 발표됐다. 탄소가격 벤치마크 2026년 말 갱신 및 CAD-CAD 탄소시장 연계 실무그룹 출범 합의가 캐나다 경제 정책 안정성 신호로 읽히며 USD/CAD가 1.3742까지 하락(CAD 강세)했다. 바이오연료 원료 수출국으로서 캐나다의 청정에너지 정책 일관성 확인이 중요한 CAD 지지 요인이다.</div>
+        </li>
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 3 · 원자재</div>
+          <div class="driver-title">WTI 유가 소폭 반등($78–81/bbl) — 에너지 수출국 CAD 지지</div>
+          <div class="driver-body">주간 WTI 유가가 $78–81/bbl 구간을 유지하며 캐나다 주요 수출 품목인 에너지의 수출 수익성이 안정됐다. Trans Mountain 완공 이후 WCS(Western Canada Select)-WTI 스프레드가 $5/bbl 내외로 좁혀진 상태에서 유가 반등은 직접적인 CAD 지지 요인이다. 또한 ICE 카놀라 11월물이 C$824.90으로 주간 +C$30/톤 상승하며 농업 수출 수익 개선 기대도 CAD를 지지했다.</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ── 월간 ── -->
+    <div id="panel-monthly" class="period-panel">
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-box-val">1.3960</div><div class="stat-box-lbl">월간 시작 (7/1)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3742</div><div class="stat-box-lbl">월간 저점</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3960</div><div class="stat-box-lbl">월간 고점</div></div>
+        <div class="stat-box"><div class="stat-box-val">−1.35%</div><div class="stat-box-lbl">월간 CAD 강세</div></div>
+      </div>
+      <div class="chart-wrap"><canvas id="chartMonthly"></canvas></div>
+      <div class="card-header" style="margin-top:8px;">
+        <div class="card-icon icon-driver">🔑</div>
+        <div class="card-title">월간 핵심 드라이버 3 <span>7월 2026</span></div>
+      </div>
+      <ul class="driver-list">
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 1 · 관세 안정화</div>
+          <div class="driver-title">캐나다 에너지·농산물 CUSMA 예외 확인 — 6월 말 1.3960에서 7월 말 1.3771로 CAD 점진적 강세</div>
+          <div class="driver-body">6월 말 트럼프 관세 위협으로 1.3960까지 CAD가 약세를 보인 뒤, 7월 들어 에너지·농산물 CUSMA 원산지 기준 충족 품목의 예외 확인이 잇따르며 CAD가 점진적으로 회복했다. 월간 기준 CAD는 1.35% 강세를 기록했다. Green Oil 관점에서 대미 UCO·바이오디젤 원료 수출 단가가 CAD 강세 기조 속에서 USD 환산 수익에 유리하게 작용한다.</div>
+        </li>
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 2 · 통화정책</div>
+          <div class="driver-title">BOC 7월 기준금리 동결(4.50%) vs Fed 9월 인하 기대 — 금리차 축소 전망이 CAD 강세 압력</div>
+          <div class="driver-body">캐나다 중앙은행(BOC)이 7월 회의에서 기준금리 4.50% 동결을 결정했으며, 미국 연방준비제도(Fed)는 9월 0.25%p 인하가 선물시장에서 70% 이상의 확률로 반영되고 있다. 미-캐 금리차 축소 기대가 CAD에 상대적 우위를 부여하며 월간 CAD 강세의 주요 배경이다. BOC는 하반기 1–2회 추가 인하 가능성을 시사했으나 인플레이션(3.1%) 상방 압력으로 속도 조절이 예상된다.</div>
+        </li>
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 3 · 원자재</div>
+          <div class="driver-title">ICE 카놀라 C$800+ 돌파 및 AB 양극화 — 농업 수출 호조가 경상수지 개선 기대 견인</div>
+          <div class="driver-body">ICE 11월물 카놀라 선물이 7월 24일 C$824.90으로 주간 +C$30/톤 급등하며 C$800 돌파를 안착시켰다. 앨버타 남부 성숙도 86.8% 대 북서부 21.2%의 수확 양극화로 공급 불확실성이 지속되는 가운데 수출 가격 프리미엄이 유지되고 있다. AAFC가 2026-27 수확량 21.00M톤(평균 C$710/톤) 전망을 발표하며 캐나다 농업 수출 수익 개선 기대가 CAD를 장기 지지하는 요인으로 부각됐다.</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ── 분기 ── -->
+    <div id="panel-quarterly" class="period-panel">
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-box-val">1.4150</div><div class="stat-box-lbl">Q1 고점 (3월)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3742</div><div class="stat-box-lbl">Q3 저점 (7월)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3979</div><div class="stat-box-lbl">Q2 평균</div></div>
+        <div class="stat-box"><div class="stat-box-val">−2.68%</div><div class="stat-box-lbl">Q1→Q3 CAD 강세</div></div>
+      </div>
+      <div class="chart-wrap"><canvas id="chartQuarterly"></canvas></div>
+      <div class="card-header" style="margin-top:8px;">
+        <div class="card-icon icon-driver">🔑</div>
+        <div class="card-title">분기 핵심 드라이버 3 <span>2026 Q1–Q3</span></div>
+      </div>
+      <ul class="driver-list">
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 1 · 관세 사이클</div>
+          <div class="driver-title">트럼프 관세 1차 충격 후 안정화 — Q1 1.4150 → Q2 말 1.3820 → Q3 1.3771로 CAD 점진 회복</div>
+          <div class="driver-body">2026년 1분기 트럼프 행정부의 비CUSMA 품목 관세 위협이 CAD를 3월 1.4150까지 끌어내렸다. 4월 이후 CUSMA 협상 진전 기대와 에너지·농산물 예외 확인이 이어지면서 2분기 평균 1.3979, 3분기 현재 1.3771까지 CAD가 회복됐다. 그러나 트럼프의 338조 추가 50% 관세(7/20, 8/19 발효 예정)가 Q3 변동성을 재확대하고 있어 협상 결과에 따른 시나리오 관리가 필요하다.</div>
+        </li>
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 2 · 무역 구도</div>
+          <div class="driver-title">캐나다 무역 다변화 전략 가속 — EU·인도태평양 협정 협상 진전이 USD 의존도 낮추는 구조 변화</div>
+          <div class="driver-body">Carney 정부가 Q2 들어 EU CETA 심화 협상, 인도태평양 경제 프레임워크(IPEF) 참여 확대를 동시에 추진하며 대미 무역 의존도 완화 신호를 내보냈다. 앨버타 분리 투표(10/19) 및 Poilievre의 연방주의 캠페인도 연방-주 에너지 정책 갈등의 환율 변동성 배경으로 지속되고 있다. 무역 다변화 성공 시 장기적으로 CAD의 USD 연동성이 약화될 수 있어 주목이 필요하다.</div>
+        </li>
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 3 · 에너지</div>
+          <div class="driver-title">Trans Mountain 효과 지속 — WCS-WTI 스프레드 $5/bbl 내외 안정, 캐나다 에너지 수출 수익성 개선</div>
+          <div class="driver-body">2024년 말 Trans Mountain 파이프라인 완공 이후 WCS(Western Canada Select)-WTI 스프레드가 Q1의 $8/bbl에서 Q2–Q3 $5/bbl 내외로 좁혀지며 캐나다 원유 수출 수익성이 구조적으로 개선됐다. WTI $75-82/bbl 구간 유지와 함께 에너지 수출 수익 증가가 경상수지 개선으로 이어져 CAD의 분기별 점진 강세를 구조적으로 지지하고 있다.</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ── 연간 ── -->
+    <div id="panel-annual" class="period-panel">
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-box-val">1.4450</div><div class="stat-box-lbl">연간 고점 (1월)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3720</div><div class="stat-box-lbl">연간 저점 (8월 '25)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3870</div><div class="stat-box-lbl">52주 평균</div></div>
+        <div class="stat-box"><div class="stat-box-val">+2.01%</div><div class="stat-box-lbl">2026 YTD CAD 약세</div></div>
+      </div>
+      <div class="chart-wrap"><canvas id="chartAnnual"></canvas></div>
+      <div class="card-header" style="margin-top:8px;">
+        <div class="card-icon icon-driver">🔑</div>
+        <div class="card-title">연간 핵심 드라이버 3 <span>2025–2026</span></div>
+      </div>
+      <ul class="driver-list">
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 1 · 관세 구조</div>
+          <div class="driver-title">트럼프 2기 관세 정책의 구조적 충격 — 2년간 CAD의 핵심 변동 요인</div>
+          <div class="driver-body">2025년 2월 트럼프의 캐나다산 25% 관세 위협으로 USD/CAD가 단기 1.4450까지 급등했다. 이후 CUSMA 협상 재개·에너지 예외·CUSMA 원산지 충족 품목 면제가 이어지며 2025년 8월 연간 저점 1.3720을 기록한 뒤 2025년 말 다시 1.3950 수준으로 반등했다. 2026년 1월에 1.4020으로 출발해 3월 1.4150 고점 후 점진 하락 중이다. 관세 협상 결과와 CUSMA 2026년 재검토가 향후 1–2년의 CAD 방향성을 결정하는 핵심 변수다.</div>
+        </li>
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 2 · 통화정책</div>
+          <div class="driver-title">BOC vs Fed 금리 사이클 역전 — BOC 선제 인하(1.00%p), Fed 동결→2026 하반기 인하로 금리차 좁혀지는 중</div>
+          <div class="driver-body">BOC는 2025년 한 해 동안 기준금리를 5.25%에서 4.25%까지 1.00%p 인하하며 경기 완충에 나섰다. 2026년 들어 4.50%로 소폭 인상한 뒤 현재 동결 기조다. 반면 Fed는 2025년 동결 후 2026년 하반기 1–2회 인하가 시장에 반영되면서 미-캐 금리차가 좁혀지는 추세다. 금리차 축소는 CAD의 중기 강세 요인이나 BOC가 추가 인하할 경우 이 역학이 역전될 수 있어 양국 통화정책 궤적 모니터링이 필수적이다.</div>
+        </li>
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 3 · 원자재 구조</div>
+          <div class="driver-title">원유 수출국 캐나다의 에너지 가격 민감도 — Trans Mountain 완공으로 WCS-WTI 스프레드 구조적 축소</div>
+          <div class="driver-body">캐나다 GDP의 약 11%를 차지하는 에너지 수출은 CAD의 장기 방향성을 결정하는 구조적 요인이다. WTI가 $65–80/bbl 구간을 유지하는 가운데 Trans Mountain 완공(2024년 말)으로 WCS-WTI 스프레드가 종전 $12-15/bbl에서 $5/bbl 내외로 영구적으로 축소됐다. 이는 캐나다 에너지 수출 수익성을 구조적으로 개선시켜 동일 유가 수준에서도 더 강한 CAD 지지 효과를 가져온다. 바이오연료 원료 수출과 간접 연동되는 에너지 가격 동향을 주간 단위로 모니터링할 것을 권장한다.</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Risk Radar -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-risk">⚡</div>
+      <div class="card-title">환율 리스크 &amp; 기회 레이더 <span>Green Oil 수익에 직접 영향</span></div>
+    </div>
+    <div class="risk-grid">
+      <div class="risk-col red">
+        <div class="risk-col-title">🔴 관심 요망</div>
+        <div class="risk-entry"><strong>338조 추가 50% 관세(8/19 발효 예정)</strong> — 에너지·바이오디젤은 미포함으로 확인됐으나, CUSMA 예외 범위 최종 확정 전 불확실성이 CAD 하방 압력으로 잔존. 8/19 발효 직전 협상 결과에 따라 USD/CAD 1.40 재진입 가능성을 배제할 수 없음. <strong>Green Oil 조치:</strong> 대미 수출 대금 USD 헤지 비율 검토, CUSMA 원산지 증명 서류 사전 점검.</div>
+        <div class="risk-entry"><strong>앨버타 분리 국민투표(10/19)</strong> — 비구속적 투표 결과와 관계없이 캐나다 정치 리스크 지수 상승이 외환시장에서 CAD 프리미엄 하락으로 반영될 수 있음. 투표 전후 단기 변동성 확대 예상.</div>
+      </div>
+      <div class="risk-col amber">
+        <div class="risk-col-title">🟡 모니터링</div>
+        <div class="risk-entry"><strong>BOC 9/9 금리 결정 회의</strong> — BOC가 0.25%p 추가 인하(→4.25%) 시 CAD 약세 재개 가능성. 동결 시 현 1.37-1.39 구간 유지 전망. 인플레이션 3.1% 상방 압력이 인하 속도를 제한하는 요인.</div>
+        <div class="risk-entry"><strong>Fed 9/17 FOMC — 인하 여부 확인</strong> — 시장 내재 70% 인하 기대가 실현 시 USD 전반 약세, CAD 상대 강세. 서프라이즈 동결 시 USD 반등, USD/CAD 1.40+ 재시험 가능.</div>
+      </div>
+      <div class="risk-col green">
+        <div class="risk-col-title">🟢 기회 요인</div>
+        <div class="risk-entry"><strong>CAD 강세 기조 유지 시 미국 수출 수익성 개선</strong> — USD/CAD 1.37-1.39 구간에서 Green Oil의 USD 기준 수출 대금이 CAD 환산 시 추가 마진. 특히 UCO·바이오디젤 원료 대미 장기 계약 체결 시 현 환율 수준의 Lock-in 검토 권장.</div>
+        <div class="risk-entry"><strong>카놀라·UCO 원자재 가격 상승 + CAD 안정 = 이중 호재</strong> — ICE 카놀라 C$800+ 유지 및 UCO 가격 안정 구간에서 CAD가 1.37 수준을 유지하면 원가 절감(CAD 구매) + 수출 수익(USD 수령) 구조가 동시에 유리하게 작용.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sources -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-sources">🔗</div>
+      <div class="card-title">주요 출처 <span>Sources</span></div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">1</div>
+      <div>
+        <a class="src-link" href="https://www.bankofcanada.ca/rates/exchange/daily-exchange-rates/" target="_blank">Bank of Canada — Daily Exchange Rates (USD/CAD)</a>
+        <div class="src-meta">Bank of Canada · 일별 업데이트</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">2</div>
+      <div>
+        <a class="src-link" href="https://www.bankofcanada.ca/core-functions/monetary-policy/key-interest-rate/" target="_blank">Bank of Canada — Key Interest Rate (기준금리 현황)</a>
+        <div class="src-meta">Bank of Canada · 정책금리 결정 주기 업데이트</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">3</div>
+      <div>
+        <a class="src-link" href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank">Federal Reserve — FOMC Meeting Calendar</a>
+        <div class="src-meta">Federal Reserve · FOMC 일정 및 성명</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">4</div>
+      <div>
+        <a class="src-link" href="https://www.canada.ca/en/department-finance/programs/international-trade-finance-policy/canadas-trade-agreements/canada-united-states-mexico-agreement.html" target="_blank">Finance Canada — CUSMA/USMCA 협정 현황</a>
+        <div class="src-meta">Government of Canada · 무역협정 관련 업데이트</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">5</div>
+      <div>
+        <a class="src-link" href="https://www.aafc-aac.gc.ca/eng/1341327678727/1341327767856" target="_blank">AAFC — Canadian Canola Supply and Disposition (2026-07-20)</a>
+        <div class="src-meta">Agriculture and Agri-Food Canada · 2026-07-20</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">6</div>
+      <div>
+        <a class="src-link" href="https://www.ustraderepresentative.gov/issue-areas/section-301-tariffs" target="_blank">USTR — Section 301 / Section 338 Tariff Actions</a>
+        <div class="src-meta">Office of the United States Trade Representative · 2026-07-20 발표</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Green Oil Inc. Internal Use Only &nbsp;·&nbsp; Powered by Claude AI &nbsp;·&nbsp; <a href="../index.html" style="color:#bbb;">← 인덱스</a></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+// ── Tab switching ──
+function switchPeriod(id, btn) {
+  document.querySelectorAll('.period-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.period-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Chart defaults ──
+Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#64748b';
+
+const lineOpts = {
+  responsive: true, maintainAspectRatio: false,
+  plugins: { legend: { display: false }, tooltip: {
+    callbacks: { label: ctx => ' USD/CAD ' + ctx.parsed.y.toFixed(4) }
+  }},
+  scales: {
+    x: { grid: { color: '#f1f5f9' }, ticks: { maxRotation: 0 } },
+    y: { grid: { color: '#f1f5f9' }, ticks: { callback: v => v.toFixed(4) } }
+  },
+  elements: { point: { radius: 3, hoverRadius: 5 } }
+};
+
+function makeChart(id, labels, data) {
+  const ctx = document.getElementById(id).getContext('2d');
+  const grad = ctx.createLinearGradient(0, 0, 0, 200);
+  grad.addColorStop(0, 'rgba(29,78,216,0.18)');
+  grad.addColorStop(1, 'rgba(29,78,216,0.00)');
+  return new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data,
+        borderColor: '#1d4ed8', borderWidth: 2,
+        backgroundColor: grad, fill: true,
+        tension: 0.35,
+        pointBackgroundColor: '#1d4ed8'
+      }]
+    },
+    options: lineOpts
+  });
+}
+
+// ── Weekly (7/21–7/25) ──
+makeChart('chartWeekly',
+  ['7/21 (월)', '7/22 (화)', '7/23 (수)', '7/24 (목)', '7/25 (금)'],
+  [1.3820, 1.3795, 1.3742, 1.3758, 1.3771]
+);
+
+// ── Monthly (7월 일별, 선택 영업일) ──
+makeChart('chartMonthly',
+  ['7/1', '7/4', '7/7', '7/10', '7/14', '7/17', '7/21', '7/22', '7/23', '7/24', '7/25'],
+  [1.3960, 1.3935, 1.3912, 1.3888, 1.3855, 1.3830, 1.3820, 1.3795, 1.3742, 1.3758, 1.3771]
+);
+
+// ── Quarterly (월별 평균) ──
+makeChart('chartQuarterly',
+  ['2026 1월', '2월', '3월', '4월', '5월', '6월', '7월*'],
+  [1.4020, 1.4080, 1.4150, 1.3950, 1.3870, 1.3820, 1.3795]
+);
+
+// ── Annual (월별 평균 2025.08–2026.07) ──
+makeChart('chartAnnual',
+  ["'25 8월", "9월", "10월", "11월", "12월", "'26 1월", "2월", "3월", "4월", "5월", "6월", "7월*"],
+  [1.3720, 1.3750, 1.3820, 1.3880, 1.3950, 1.4020, 1.4080, 1.4150, 1.3950, 1.3870, 1.3820, 1.3795]
+);
+
+// ── PDF ──
+function downloadPDF() {
+  const btn = document.getElementById('pdfBtnLabel');
+  btn.textContent = '생성 중...';
+  html2pdf().set({
+    margin: [8, 8, 8, 8],
+    filename: 'GreenOil-FX-USD-CAD-2026-07-28.pdf',
+    image: { type: 'jpeg', quality: 0.95 },
+    html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: 'avoid-all' }
+  }).from(document.body).save().then(() => { btn.textContent = 'PDF 저장'; });
+}
+
+// ── History for future nav-dots ──
+// HISTORY_START
+const REPORT_HISTORY = [
+  { date: '2026-07-28', file: './2026-07-28.html', label: '2026년 7/21–7/27 주' }
+];
+// HISTORY_END
+</script>
+</body>
+</html>
