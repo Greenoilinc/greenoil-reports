@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Oil UCO — 2026년 8/10 – 8/16 주</title>
+<style>
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+  background: #f0f4f0;
+  color: #1c2e1c;
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── Report Switch Badge ── */
+.report-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.report-switch:hover { background: rgba(255,255,255,0.25); }
+.report-switch .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #fbbf24; flex-shrink: 0;
+}
+
+/* ── PDF Button ── */
+.pdf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.pdf-btn:hover { background: rgba(255,255,255,0.22); }
+.pdf-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Print styles ── */
+@media print {
+  .week-nav, .report-switch, .pdf-btn, .nav-dots { display: none !important; }
+  .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: white; }
+  .container { padding: 0; }
+  .card { break-inside: avoid; }
+  a { text-decoration: none; color: inherit; }
+}
+
+/* ── Header ── */
+.header {
+  background: linear-gradient(135deg, #1a5c1a 0%, #2e8b2e 100%);
+  color: white;
+  padding: 18px 24px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.header-left h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 7px; }
+.header-left .sub { font-size: 11px; opacity: 0.75; margin-top: 3px; letter-spacing: 0.3px; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.updated-badge { font-size: 10px; opacity: 0.65; }
+
+/* ── Week Navigator ── */
+.week-nav {
+  background: white;
+  border-bottom: 1px solid #e0e8e0;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.nav-btn {
+  background: none;
+  border: 1px solid #c8dcc8;
+  border-radius: 8px;
+  padding: 5px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #2e8b2e;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+.nav-btn:hover { background: #eaf4ea; border-color: #2e8b2e; }
+.nav-btn.disabled { opacity: 0.3; pointer-events: none; }
+.nav-center { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+.nav-week-label { font-size: 14px; font-weight: 700; color: #1c2e1c; }
+.nav-week-sub { font-size: 10px; color: #999; }
+.nav-dots { display: flex; gap: 5px; margin-top: 4px; flex-wrap: wrap; justify-content: center; }
+.nav-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #d0e4d0; cursor: pointer; transition: background 0.15s;
+  display: block; text-decoration: none;
+}
+.nav-dot.active { background: #2e8b2e; }
+.nav-dot:hover { background: #7cb87c; }
+
+/* ── Container ── */
+.container { max-width: 920px; margin: 0 auto; padding: 18px 16px 32px; }
+
+/* ── Alert bar ── */
+.alert-bar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.pill {
+  display: flex; align-items: center; gap: 6px;
+  background: white; border-radius: 20px; padding: 5px 13px;
+  font-size: 11px; font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.pill.red   { border-left: 3px solid #e53e3e; color: #c53030; }
+.pill.amber { border-left: 3px solid #d69e2e; color: #975a16; }
+.pill.green { border-left: 3px solid #38a169; color: #22543d; }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.dot.red   { background: #e53e3e; }
+.dot.amber { background: #d69e2e; }
+.dot.green { background: #38a169; }
+
+/* ── Card ── */
+.card { background: white; border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.card-header { display: flex; align-items: center; gap: 9px; margin-bottom: 13px; padding-bottom: 10px; border-bottom: 1px solid #eaf2ea; }
+.card-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.icon-summary { background: #edfaed; }
+.icon-canada  { background: #fff0f0; }
+.icon-export  { background: #eef2ff; }
+.icon-market  { background: #fff8ec; }
+.icon-risk    { background: #fff5f5; }
+.icon-sources { background: #f5f5f5; }
+.icon-prov    { background: #fff3e0; }
+.card-title { font-size: 14px; font-weight: 700; color: #1c2e1c; }
+.card-title span { font-size: 10px; font-weight: 400; color: #888; margin-left: 5px; }
+
+/* ── Two-col ── */
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+@media (max-width: 620px) { .row2 { grid-template-columns: 1fr; } }
+
+/* ── Summary ── */
+.summary-list { list-style: none; }
+.summary-list li { padding: 7px 0 7px 18px; position: relative; border-bottom: 1px solid #f4f4f4; color: #2d3e2d; font-size: 13px; }
+.summary-list li:last-child { border-bottom: none; }
+.summary-list li::before { content: '▸'; position: absolute; left: 0; top: 8px; color: #2e8b2e; font-size: 10px; }
+
+/* ── Sub-label ── */
+.sub-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: #999; margin-bottom: 9px; }
+
+/* ── News item ── */
+.news-item { padding: 9px 0; border-bottom: 1px solid #f4f4f4; }
+.news-item:last-child { border-bottom: none; }
+a.news-item { text-decoration: none; color: inherit; display: block; border-radius: 7px; padding: 9px 8px; margin: 0 -8px; transition: background 0.15s; }
+a.news-item:hover { background: #edf6ed; }
+a.news-item .news-title::after { content: ' ↗'; font-size: 10px; color: #2e8b2e; opacity: 0.6; }
+.tag { display: inline-block; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 3px; }
+.tag-cfr      { background: #e6f4ea; color: #137333; }
+.tag-carbon   { background: #e8f0fe; color: #1558d6; }
+.tag-prov     { background: #fce8e6; color: #c5221f; }
+.tag-prov-politics { background: #fce8e6; color: #c5221f; }
+.tag-eu       { background: #ede7f6; color: #5e35b1; }
+.tag-us       { background: #e8eaed; color: #3c4043; }
+.tag-market   { background: #fff3e0; color: #e65100; }
+.tag-cert     { background: #e0f7fa; color: #006064; }
+.tag-trade    { background: #fce4ec; color: #880e4f; }
+.tag-politics { background: #e8eaf6; color: #283593; }
+.news-title { font-size: 12px; font-weight: 600; color: #1c2e1c; margin-bottom: 2px; }
+.news-body  { font-size: 11px; color: #5a6e5a; line-height: 1.5; }
+
+/* ── Risk radar ── */
+.risk-grid { display: flex; flex-direction: column; gap: 10px; }
+.risk-col { border-radius: 9px; padding: 12px 16px; }
+.risk-col.red   { background: #fff5f5; border: 1px solid #fed7d7; }
+.risk-col.amber { background: #fffbf0; border: 1px solid #fefcbf; }
+.risk-col.green { background: #f0fff4; border: 1px solid #c6f6d5; }
+.risk-col-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+.risk-col.red   .risk-col-title { color: #c53030; }
+.risk-col.amber .risk-col-title { color: #975a16; }
+.risk-col.green .risk-col-title { color: #22543d; }
+.risk-entry { font-size: 12px; color: #4a5568; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.05); line-height: 1.5; }
+.risk-entry:last-child { border-bottom: none; }
+
+/* ── Sources ── */
+.source-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f4f4f4; align-items: flex-start; }
+.source-row:last-child { border-bottom: none; }
+.src-num { width: 20px; height: 20px; flex-shrink: 0; background: #eaf2ea; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #2e8b2e; margin-top: 1px; }
+.src-link { font-size: 12px; font-weight: 600; color: #1a6b3c; text-decoration: none; }
+.src-link:hover { text-decoration: underline; }
+.src-meta { font-size: 10px; color: #aaa; margin-top: 1px; }
+
+/* ── Empty ── */
+.empty { background: #f9f9f9; border-radius: 7px; padding: 14px; text-align: center; color: #bbb; font-size: 12px; font-style: italic; }
+
+/* ── Footer ── */
+.footer { text-align: center; font-size: 10px; color: #bbb; padding: 8px 0 4px; letter-spacing: 0.2px; }
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="header">
+  <div class="header-left">
+    <h1>🌿 Green Oil Inc.</h1>
+    <div class="sub">주간 정책 &amp; 시장 인텔리전스 리포트 · Weekly Intelligence Report</div>
+  </div>
+  <div class="header-right">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="pdf-btn" onclick="downloadPDF()">
+        <svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><rect x="6" y="13" width="12" height="8" rx="1"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/></svg>
+        <span id="pdfBtnLabel">PDF 저장</span>
+      </button>
+      <a class="report-switch" href="../index.html">&#8592; 인덱스</a>
+      <a class="report-switch" href="../canola/2026-08-17.html">
+        <span class="dot"></span>카놀라 리포트 →
+      </a>
+    </div>
+    <div class="updated-badge">마지막 업데이트: 2026.08.17</div>
+  </div>
+</div>
+
+<!-- ── Week Navigator ── -->
+<div class="week-nav">
+  <a class="nav-btn disabled" href="#">&#8592; 최신</a>
+  <div class="nav-center">
+    <div class="nav-week-label">이번 주 · 2026년 8/10 – 8/16 주</div>
+    <div class="nav-week-sub">2026.08.17 기준</div>
+    <div class="nav-dots">
+<a class="nav-dot active" href="./2026-08-17.html" title=""></a>
+<a class="nav-dot" href="./2026-08-10.html" title=""></a>
+<a class="nav-dot" href="./2026-08-03.html" title=""></a>
+<a class="nav-dot" href="./2026-07-27.html" title=""></a>
+<a class="nav-dot" href="./2026-07-20.html" title=""></a>
+<a class="nav-dot" href="./2026-07-13.html" title=""></a>
+<a class="nav-dot" href="./2026-07-06.html" title=""></a>
+<a class="nav-dot" href="./2026-06-29.html" title=""></a>
+<a class="nav-dot" href="./2026-06-22.html" title=""></a>
+<a class="nav-dot" href="./2026-06-15.html" title=""></a>
+<a class="nav-dot" href="./2026-06-08.html" title=""></a>
+<a class="nav-dot" href="./2026-06-01.html" title=""></a>
+<a class="nav-dot" href="./2026-05-25.html" title=""></a>
+<a class="nav-dot" href="./2026-05-18.html" title=""></a>
+<a class="nav-dot" href="./2026-05-11.html" title=""></a>
+<a class="nav-dot" href="./2026-05-05.html" title=""></a>
+<a class="nav-dot" href="./2026-04-28.html" title=""></a>
+<a class="nav-dot" href="./2026-04-21.html" title=""></a>
+<a class="nav-dot" href="./2026-04-14.html" title=""></a>
+<a class="nav-dot" href="./2026-04-07.html" title=""></a>
+<a class="nav-dot" href="./2026-03-30.html" title=""></a>
+<a class="nav-dot" href="./2026-03-23.html" title=""></a>
+<a class="nav-dot" href="./2026-03-16.html" title=""></a>
+<a class="nav-dot" href="./2026-03-09.html" title=""></a>
+<a class="nav-dot" href="./2026-03-02.html" title=""></a>
+<a class="nav-dot" href="./2026-02-23.html" title=""></a>
+<a class="nav-dot" href="./2026-02-16.html" title=""></a>
+<a class="nav-dot" href="./2026-02-09.html" title=""></a>
+<a class="nav-dot" href="./2026-02-02.html" title=""></a>
+<a class="nav-dot" href="./2026-01-26.html" title=""></a>
+<a class="nav-dot" href="./2026-01-19.html" title=""></a>
+<a class="nav-dot" href="./2026-01-12.html" title=""></a>
+<a class="nav-dot" href="./2026-01-05.html" title=""></a>
+    </div>
+  </div>
+  <a class="nav-btn" href="./2026-08-10.html">이전 &#8594;</a>
+</div>
+
+<div class="container">
+
+  <div class="alert-bar">
+    <div class="pill red">  <div class="dot red"></div>  <span>3</span> 관심 요망</div>
+    <div class="pill amber"><div class="dot amber"></div><span>3</span> 모니터링 필요</div>
+    <div class="pill green"><div class="dot green"></div><span>3</span> 기회 요인</div>
+  </div>
+
+  <!-- 1. Executive Summary -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-summary">📋</div>
+      <div class="card-title">이번 주 핵심 요약 <span>Executive Summary</span></div>
+    </div>
+    <ul class="summary-list">
+      <li><strong>8월 19일 제338조 50% 추가관세 발효까지 2일 — 이번 주에도 타결되지 않았고 협상은 교착 상태다.</strong> 8월 11일 미국이 일부 부문별 관세를 낮추는 새 제안을 제시했으나 캐나다는 만족하지 않았고, 양측은 합의 가능 지점에 이르지 못했다(8월 12일 보도). 8월 13일 워싱턴 협의 후 미국 무역대표부 대표 그리어는 <strong>"대통령과 총리에게 선택지가 제시될 것"</strong>이라고 밝혔고, 8월 14일 르블랑 장관이 대미경제관계 자문위원회에 협상 상황을 브리핑했다. <strong>UCO를 포함한 HS 15류 유지류와 38류 바이오디젤은 3개 부속서 어디에도 없어 Green Oil의 대미 UCO 수출에 직접 부과되는 관세는 없다</strong>(이전 회차에서 확인한 사실). 다만 발효 직전 주간이므로 통관·서류 리스크는 이번 주가 정점이다.</li>
+      <li>⭐ <strong>8월 15일자 Canada Gazette Part I(제160권 제33호)에 환경부·보건부가 전기차 의무판매제(EVAS) 전면 폐지 제안규정을 게재했다.</strong> 관보 본문을 직접 확인한 결과 <strong>2026년형 최소 20%·2030년형 60%·2035년형 이후 100%</strong>의 무배출차(ZEV) 의무가 모두 삭제되며, 제조·수입사의 준수단위 보고·부족분 산정 의무도 함께 없어진다. 의견제출 기간은 <strong>게재 후 75일(10월 29일 마감)</strong>이고, 심사위원회를 요구하는 이의신청은 60일(10월 14일)까지다. 정부는 미국 관세·정책 변화에 따른 단기 경제 불확실성과 <strong>ZEV 판매 비중이 2024년 14%에서 2025년 9%로 하락</strong>한 점을 근거로 들었다. Green Oil 관점: 내연기관 차량이 더 오래 도로에 남는다는 뜻이므로 <strong>액체연료 수요와 그에 연동된 CFR 크레딧·바이오연료 혼합 수요에는 지지 요인</strong>이다.</li>
+      <li>⭐ <strong>45Z 최종규칙과 캐나다 CFR 개정안은 이번 주(8/10–8/16)에도 발표·게재가 없었다 — 세 개 채널을 직접 확인했다.</strong> ① <strong>8월 15일자 Gazette Part I 제33호</strong>의 제안규정은 위 EVAS 폐지와 이민난민보호규정 개정 2건뿐이었고 청정연료규정 항목은 없었다. ② <strong>Gazette Part II는 8월 12일자 제160권 제16호가 이번 주에 실제 발행됐으나</strong>, 등록된 10건은 농산물 마케팅 부과금·쿼터, 목재 가구 추가관세, 국내물질목록 개정 등으로 <strong>연료 관련 등록은 없었다</strong>(발행이 없어 확인 불가였던 지난주와 달리 이번 주는 발행된 호를 직접 열어 부재를 확인했다). ③ <strong>미국 연방관보를 8월 10~16일 기간으로 'renewable fuel'·'clean fuel'·'biodiesel' 세 어구로 각각 조회</strong>한 결과 45Z 및 RFS 신규 조치는 0건이었다.</li>
+      <li><strong>8월 12일 ISCC EU가 캘리포니아 저탄소연료표준(LCFS)의 적격 인증제도로 인정됐다.</strong> 캘리포니아 대기자원위원회(CARB)가 운영하는 LCFS 체계가 <strong>EU 재생에너지지침(EU RED)에서 이미 승인된 자발적 인증제도를 수용</strong>하는 방식이며 ISCC EU가 여기에 포함됐다. ISCC에 따르면 LCFS의 지속가능성 인증 요건은 <strong>2028년부터 단계 적용</strong>되지만 ISCC EU 인증은 현 시점에도 해당 요건을 충족한다. Green Oil 관점: EU향으로 취득·유지해 온 ISCC EU 인증을 <strong>캘리포니아 시장에서 그대로 활용할 수 있는 경로</strong>가 열린 것으로, 북미 저탄소연료 공급망 진입 시 인증 중복투자를 줄일 수 있다.</li>
+      <li><strong>8월 13일 ISCC가 EU 소비자권익강화지침(EmpCo) 적합성에 관한 외부 법률검토 결과를 공개했다</strong> — <strong>9월 27일 지침 시행</strong>에 앞서 ISCC 인증제도·라벨·환경주장이 EmpCo와 독일 부정경쟁방지법(UWG) 개정 요건을 충족한다는 결론이다(제3자 인증·자기인증 배제·투명한 수수료 구조 등을 근거로 제시). 한편 <strong>총리는 8월 8일 총리실 발표대로 8월 17일까지 축소 일정</strong>(이탈리아 개인 일정)이었고, 온타리오·앨버타·사스카추완·매니토바·BC·퀘벡에서는 이번 주 바이오연료·청정연료 관련 실질적 발표가 확인되지 않아 주정부 항목은 두지 않았다.</li>
+    </ul>
+  </div>
+
+  <!-- 2. Risk Radar -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-risk">⚡</div>
+      <div class="card-title">리스크 &amp; 기회 레이더</div>
+    </div>
+    <div class="risk-grid">
+      <div class="risk-col red">
+          <div class="risk-col-title">🔴 관심 요망</div>
+          <div class="risk-entry"><strong>8월 19일 제338조 50% 추가관세 발효까지 2일 — 협상 교착, 무관세 타결 시나리오의 확률이 낮아졌다</strong> — 이번 주 전개를 시간순으로 보면 <strong>8월 11일 미국이 일부 부문별 관세를 낮추는 새 제안 제시 → 캐나다 불만족·합의 가능 지점 미달(8월 12일 보도) → 8월 13일 워싱턴 협의 후 미국 무역대표부가 "대통령과 총리에게 선택지가 제시될 것"이라고 언급 → 8월 14일 르블랑 장관이 대미경제관계 자문위원회 브리핑</strong> 순이다. 실무 협상에서 결론이 나지 않아 최고위급 정치 판단으로 넘어간 국면이며, 총리는 8월 17일까지 축소 일정이었다. <strong>리포트 작성 시점(8월 17일) 보도에 따르면 양국은 여전히 교착 상태이고 캐나다 협상팀은 관세 발효를 막을 방법이 없을 수 있다고 우려하고 있다.</strong> <strong>Green Oil 직접 노출:</strong> UCO를 포함한 HS 15류와 38류 바이오디젤은 3개 부속서에 없어 <strong>직접 부과되는 관세는 없다.</strong> 남는 리스크는 ① CUSMA 원산지 특혜로도 면제되지 않는 조항이 실제로 발동되는 선례가 되는 점, ② 캐나다 보복 발동 시 품목과 무관하게 국경 서류 요건·통관 지연이 발생하는 점이다. <strong>Green Oil 조치:</strong> ① <strong>8월 19일 이전 선적 앞당김은 이번 주 초가 사실상 마지막 실행 시점이다</strong> — 남은 2일 내 처리 가능한 물량을 오늘 물류팀과 확정할 것. ② 사용 중인 HS 코드(1518 등)가 부속서에 없다는 사실을 <strong>통관사로부터 서면으로</strong> 받아 둘 것 — 이번 주 확인한 대로 관보 포고 본문의 부속서는 이미지로만 게재돼 텍스트 검색으로 입증할 수 없으므로 서면 확인의 실무적 중요도가 더 크다. ③ 8월 하순 대미 선적은 <strong>관세 부과·무관세 타결 두 시나리오를 모두 전제</strong>로 통관 리드타임을 평소보다 여유 있게 잡고, 계약상 무역조치(trade measure) 조항 발동 요건을 점검할 것.</div>
+          <div class="risk-entry">⭐ <strong>45Z 최종규칙 여전히 미발표 — 연방관보 8월 10~16일 조회 결과 45Z 문서 0건(3개 어구로 직접 확인)</strong> — 2월 4일 제안규칙 관보 게재, 4월 6일 의견 마감, 5월 28일 공청회를 거쳤으나 최종규칙은 아직 없다. 이번 주 미국 연방관보를 <strong>8월 10~16일 기간으로 'renewable fuel'·'clean fuel'·'biodiesel' 세 어구로 각각 조회한 결과 45Z 및 RFS 신규 조치는 0건</strong>이었다. 한 가지 짚어 둘 사항이 있다 — <strong>8월 14일 연방관보에 2026년 통합규제일정(Unified Agenda)이 게재됐고 재무부 일정도 제14부로 함께 실렸다.</strong> 다만 <strong>재무부 고시 본문을 직접 확인한 결과 45Z나 관련 규제식별번호(RIN)에 대한 언급이 전혀 없는 정형 문구였고</strong>, 실제 항목은 reginfo.gov에 게재된다는 안내만 담고 있었다. 즉 <strong>이번 관보 게재는 45Z에 관한 새로운 발표가 아니다.</strong> 45Z가 최종규칙 단계이며 목표 시점이 11월이라는 내용은 이미 7월부터 공개돼 있던 통합규제일정 정보다. OBBBA에 따라 2026년 1월 1일 이후 생산분은 북미산(미국·멕시코·캐나다) 원료 한정이므로 <strong>캐나다산 UCO의 적격 지위 자체는 유지</strong>되지만, 집계업자를 거친 UCO의 원산지를 어떻게 입증할지는 최종규칙까지 미확정이다. <strong>Green Oil 조치:</strong> 수거처–집계–수출 전 구간의 원산지 증빙(chain of custody) 문서 체계를 최종규칙 발표 전에 완비할 것. 11월 목표까지 약 3개월이 남았으므로 지금이 준비 기간이다. 미국향 장기계약에는 45Z 최종규칙 확정 시 단가·조건을 재협의하는 조항을 반영한다.</div>
+          <div class="risk-entry">⭐ <strong>연방 CFR 개정안 8개월째 관보 미게재 — 이번 주는 Part I·Part II 두 호를 모두 직접 열어 부재를 확인했다</strong> — 2025년 9월 5일 정부가 CFR 목표 개정 의사를 발표하고 2026년 1월 15일 의견수렴이 종료됐으나 진전이 없다. 이번 주 확인 결과는 지난주보다 근거가 강하다 — ① <strong>8월 15일자 Gazette Part I 제160권 제33호</strong>의 제안규정은 EVAS 폐지와 이민난민보호규정 개정 2건뿐으로 청정연료규정 항목이 없었고, ② <strong>Gazette Part II는 8월 12일자 제160권 제16호가 이번 주에 실제 발행됐는데</strong> 등록된 10건(농산물 마케팅 부과금·쿼터 4건, 목재 가구 추가관세, 국내물질목록 개정 3건, 에너지효율국 이관 명령, 원주민재정관리법 부칙 개정) 모두 연료와 무관했다. <strong>지난주는 Part II 발행 자체가 없어 확인이 불가능했으나 이번 주는 발행된 호에서 부재를 직접 확인했다는 점이 다르다.</strong> 특히 주목할 대비는 <strong>환경부가 같은 주에 EVAS 폐지라는 대형 제안규정은 게재하면서 CFR 개정안은 여전히 내놓지 않았다</strong>는 것이다. 국내산 함량 의무 방식과 국내산 크레딧 승수 방식 중 어느 안이 채택될지 불투명하고 연방 의회는 하계 휴회 중(9월 21일 복귀)이다. <strong>Green Oil 조치:</strong> 캐나다 국내 CFR 크레딧 수요에 의존하는 매출 비중을 재점검하고 미국·EU 수출 헤지 비율 상향을 검토할 것. EVAS 폐지 제안의 의견제출 마감(10월 29일)과 CFR 개정안 게재 시점이 겹칠 가능성이 있으므로 <strong>4분기에 두 사안이 동시에 움직이는 시나리오</strong>를 사업계획에 반영한다.</div>
+        </div>
+      <div class="risk-col amber">
+          <div class="risk-col-title">🟡 모니터링</div>
+          <div class="risk-entry"><strong>EVAS 폐지는 아직 제안 단계 — 75일 의견수렴(10월 29일 마감)과 이의신청(10월 14일)이 남아 있다(8/15)</strong> — 8월 15일 관보에 게재된 것은 <strong>제안규정</strong>이며 확정규정이 아니다. 의견제출은 게재 후 75일인 <strong>10월 29일</strong>까지, 심사위원회 구성을 요구하는 이의신청은 60일인 <strong>10월 14일</strong>까지다. 자동차 산업·환경단체·주정부 간 입장 차가 큰 사안이므로 최종 내용이 제안과 달라질 수 있고, 특히 정부가 별도로 언급한 <strong>캐나다 고유 기준(2035년 EV 75%·2040년 90% 목표)</strong>이 어떤 형태로 구체화되는지에 따라 액체연료 수요 전망의 기울기가 바뀐다. 또 하나의 함의는 <strong>연방정부가 기후 규제를 실제로 되돌릴 수 있음을 보여준 사례</strong>라는 점이다. 이는 CFR 개정 방향에 양방향으로 작용한다 — 국내산 우대 강화 쪽으로 갈 수도, 규제 완화 쪽으로 갈 수도 있다는 뜻이다. <strong>Green Oil 조치:</strong> 10월 29일 마감 전후로 확정규정 게재 여부를 추적하고, 액체연료 수요 전망을 EVAS 폐지 확정·부분수정·철회 3개 시나리오로 나눠 관리할 것. 캐나다 국내 판매 비중 계획은 확정규정이 나온 뒤 조정하는 편이 안전하다.</div>
+          <div class="risk-entry"><strong>ISCC EU 폐기물기반 바이오연료 인증 정지 제안 미결 — 이번 주 진전 없음(배경)</strong> — EU 위원회 논의에서 ISCC의 폐기물 기반 바이오연료 인증 승인을 2년 6개월간 정지하는 방안이 제안됐으나, 법적 검토와 회원국 승인이 남아 있고 ISCC는 표결이나 결정이 없었다고 확인한 바 있다. 실행되면 EU향 UCO 및 UCO 기반 연료의 인증 경로가 흔들린다. <strong>이번 주(8/10–8/16) 이 사안에 관한 새로운 진전은 확인되지 않았다.</strong> 다만 같은 주에 ISCC가 <strong>캘리포니아 LCFS 적격 인정(8/12)과 EmpCo 적합성 법률검토(8/13)</strong> 두 건을 공개한 점은 함께 볼 만하다 — 정지 제안이 미결인 상태에서도 <strong>ISCC 인증의 활용처와 법적 근거가 다른 방향으로 넓어지고 있다</strong>는 뜻이다. 배경으로, EU 집행위는 중국산 바이오연료 수입에서 UCO로 신고된 화물에 미사용 팜유가 섞인 정황을 확인한 바 있다. <strong>Green Oil 조치:</strong> EU향 물량의 ISCC 단일 의존을 피하고 대체 인증(RSB 등) 병행 취득 검토를 계속할 것. 동시에 캘리포니아 경로가 열린 만큼 <strong>같은 ISCC EU 인증으로 접근 가능한 시장을 EU·캘리포니아로 이원화</strong>하는 방향을 검토한다.</div>
+          <div class="risk-entry"><strong>EmpCo 지침 9월 27일 시행 — EU향 거래 문서에 환경주장 근거 요구가 늘어날 국면(8/13)</strong> — EU 소비자권익강화지침(EmpCo)이 <strong>9월 27일부터 적용</strong>되며 환경주장과 지속가능성 라벨에 투명성·독립 검증·소비자 보호 요건이 강화된다. 8월 13일 ISCC가 공개한 외부 법률검토는 ISCC 인증·라벨·주장이 EmpCo와 독일 부정경쟁방지법 개정 요건을 충족한다는 결론이었으나, <strong>이는 ISCC가 의뢰한 검토이며 EU 당국의 공식 승인은 아니다.</strong> Green Oil 관점: 시행 이후 EU 바이어가 자사 환경주장을 방어하기 위해 <strong>공급망 상류에 인증·증빙 문서를 더 강하게 요구할 가능성</strong>이 있다. 이는 부담이기도 하지만 문서 체계가 잘 갖춰진 공급자에게는 차별화 요인이기도 하다. <strong>Green Oil 조치:</strong> 9월 27일 이전에 EU향 계약·출하 문서에서 사용하는 지속가능성 표현을 점검하고, ISCC 법률검토 자료를 참조자료로 확보해 둘 것. 45Z 대응으로 준비하는 원산지 증빙 체계와 상당 부분 겹치므로 <strong>두 요건을 하나의 문서 체계로 묶어 설계</strong>하는 편이 효율적이다.</div>
+        </div>
+      <div class="risk-col green">
+          <div class="risk-col-title">🟢 기회 요인</div>
+          <div class="risk-entry"><strong>EVAS(전기차 의무판매제) 폐지 제안 — 액체연료 수요 전망 상향 요인, CFR 크레딧·바이오연료 혼합 수요에 지지(8/15)</strong> — 8월 15일 관보에 게재된 제안규정은 <strong>2026년형 20%·2030년형 60%·2035년형 이후 100%</strong>의 무배출차 의무를 전면 삭제한다. 정부가 근거로 든 <strong>ZEV 판매 비중 하락(2024년 14% → 2025년 9%)</strong>은 이미 시장에서 전동화 속도가 둔화되고 있음을 보여주는 수치다. Green Oil 관점: 의무판매제가 사라지면 <strong>내연기관 차량이 당초 계획보다 오래 도로에 남게 되고, 이는 휘발유·디젤 수요 기반이 예상보다 두텁게 유지된다는 뜻</strong>이다. CFR은 액체연료 공급자에게 탄소집약도 감축 의무를 부과하는 구조이므로 <strong>액체연료 수요가 유지되면 CFR 크레딧 수요와 바이오연료 혼합 수요도 함께 유지된다.</strong> UCO는 그 혼합 원료의 공급원이므로 중기 수요 전망에 긍정적이다. 다만 확정규정이 아니라는 점(위 모니터링 항목 참조)과, 액체연료 수요 유지가 곧바로 UCO 단가 상승으로 이어지는 것은 아니라는 점을 구분해야 한다. <strong>Green Oil 조치:</strong> 캐나다 국내 판매 물량의 중기 계획(2027~2030년)을 세울 때 <strong>EVAS 폐지 시나리오를 기본 가정 중 하나로 포함</strong>할 것. 바이어 협상에서 국내 액체연료 수요 전망의 근거 자료로 이 관보 게재 사실과 ZEV 판매 하락 수치를 활용할 수 있다.</div>
+          <div class="risk-entry"><strong>ISCC EU가 캘리포니아 LCFS 적격 인증제도로 인정 — 인증 재활용으로 북미 판로 확대 여지(8/12)</strong> — 8월 12일 ISCC 발표에 따르면 <strong>ISCC EU가 캘리포니아 대기자원위원회(CARB)의 LCFS 체계에서 적격 인증제도로 적용 가능</strong>해졌다. 갱신된 LCFS 체계가 EU RED 승인 인증제도를 수용하는 방식이며, LCFS 지속가능성 인증 요건은 <strong>2028년부터 단계 적용</strong>되나 ISCC EU 인증은 현재도 요건을 충족한다. Green Oil 관점: <strong>EU향으로 이미 유지하고 있는 인증을 캘리포니아 시장 진입에 그대로 활용할 수 있다는 뜻</strong>으로, 신규 인증 체계 구축 비용 없이 판로를 넓힐 수 있는 드문 기회다. 특히 EU의 ISCC 폐기물기반 인증 정지 제안이 미결인 상황에서 <strong>같은 인증의 활용처가 늘어난 것은 인증 리스크 분산 효과</strong>가 있다. <strong>Green Oil 조치:</strong> ① 2028년 요건 적용까지 시간이 있으므로 캘리포니아향 판로 검토를 중기 과제로 올릴 것. ② 단, 이번 발표문은 <strong>폐유지류·UCO 원료의 구체적 적용 범위를 명시하지 않았으므로</strong> 실제 거래 추진 전에 원료별 적용 여부를 CARB 규정과 인증기관을 통해 반드시 별도 확인할 것 — 이 확인 없이 판로를 전제하면 안 된다.</div>
+          <div class="risk-entry"><strong>45Z 북미산 원료 한정 규정이 캐나다산 UCO의 적격 지위를 계속 보장 — 최종규칙 지연은 준비 시간(배경)</strong> — OBBBA에 따라 2026년 1월 1일 이후 생산분은 미국·캐나다·멕시코산 원료로 한정되며, 이 구조에서 <strong>중국산 UCO는 45Z 크레딧 대상에서 사실상 배제되고 캐나다산은 적격을 유지한다.</strong> 2월 4일 제안규칙 서문에서 재무부·국세청이 <strong>수입 UCO와 팜유를 신뢰성 있게 구분하기 어렵다는 우려</strong>를 명시하고 2025년 12월 31일 이후 해외 원료 경로를 45ZCF-GREET 모델에서 제외한 것도 같은 방향이다. 최종규칙이 11월 목표로 미뤄져 있는 상황은 불확실성이자 동시에 <strong>원산지 증빙 체계를 갖출 시간</strong>이기도 하다. 중국산이 밀려나는 국면에서 <strong>"캐나다산임을 서류로 증명하는 능력" 자체가 가격 프리미엄의 근거</strong>가 되므로, 최종규칙 발표 후 서둘러 준비하는 경쟁사보다 앞서 체계를 완비하는 것이 협상력으로 직결된다. <strong>Green Oil 조치:</strong> 위 EmpCo 대응과 45Z 대응이 요구하는 문서가 겹치므로 <strong>원산지·이력추적 문서 체계를 하나로 설계</strong>해 두 제도에 동시 대응할 것.</div>
+        </div>
+    </div>
+  </div>
+
+  <!-- 3. Federal Policy -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-canada">🍁</div>
+      <div class="card-title">연방 정책 동향 <span>Federal — CFR · 탄소세 · 집권당</span></div>
+    </div>
+
+    <a class="news-item" href="https://gazette.gc.ca/rp-pr/p1/2026/2026-08-15/html/reg2-eng.html" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-carbon">연방 규제</span>
+      <div class="news-title">8/15 관보 게재 — 연방 전기차 의무판매제(EVAS) 전면 폐지 제안, 의견제출 10월 29일 마감</div>
+      <div class="news-body">8월 15일자 Canada Gazette Part I 제160권 제33호에 환경부와 보건부가 <strong>승용차·경트럭 온실가스배출규정 개정 제안</strong>을 게재했다. 관보 본문을 직접 확인한 결과 핵심은 <strong>전기차 의무판매제(Electric Vehicle Availability Standard, EVAS)의 전면 폐지</strong>다. 기존 EVAS는 <strong>2026년형 최소 20%, 2030년형 60%, 2035년형 이후 100%</strong>를 무배출차(ZEV)로 판매하도록 의무화했는데 이 요건이 모두 삭제되며, 제조·수입사의 <strong>준수단위 보고 및 부족분 산정 의무도 함께 없어진다.</strong> 아울러 미국 환경보호청이 2026년 2월 연방 차량배출기준을 폐지하기 이전 시점의 기준을 참조하도록 하는 행정적 조정도 포함된다. 의견제출은 <strong>게재 후 75일(10월 29일)</strong>까지이고, 심사위원회 구성을 요구하는 이의신청은 <strong>60일(10월 14일)</strong>까지다. 정부가 제시한 근거는 미국 관세와 정책 변화에서 비롯된 단기 경제 불확실성, <strong>ZEV 판매 비중이 2024년 14%에서 2025년 9%로 하락</strong>한 현실, 그리고 캐나다 고유 기준(2035년 EV 75%·2040년 90% 목표)을 마련하는 동안 규제 유연성을 확보할 필요다. Green Oil 관점: 이 제안이 확정되면 <strong>내연기관 차량이 당초 계획보다 오래 도로에 남게 되므로 휘발유·디젤 등 액체연료 수요가 상향 조정</strong>되고, 액체연료 수요에 연동되는 <strong>CFR 크레딧 수요와 바이오연료 혼합 수요도 함께 지지된다.</strong> UCO 수요 전망에는 긍정적 요인이다. 다만 아직 <strong>제안 단계</strong>이며 75일 의견수렴이 남아 있어 확정 내용이 달라질 수 있고, 연방정부가 기후 규제를 되돌릴 수 있음을 보여준 사례라는 점에서 CFR 개정 방향에도 양방향 함의가 있다.</div>
+    </a>
+
+    <a class="news-item" href="https://www.cbc.ca/news/politics/canada-unhappy-u-s-offer-tariffs-9.7304923" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-politics">연방 정치</span>
+      <div class="news-title">8/12 대미 관세 협상 교착 — 미국이 8/11 새 제안 제시했으나 캐나다 불만족</div>
+      <div class="news-body">8월 12일 보도에 따르면 8월 19일 관세 시한이 다가오는 가운데 <strong>캐나다와 미국은 관세 합의가 가능한 지점에 이르지 못했고, 캐나다 당국자들은 미국의 최신 제안에 만족하지 않았다.</strong> 양측 소식통에 따르면 미국은 <strong>8월 11일(화) 일부 부문별 관세를 낮추는 새 제안</strong>을 제시했으나 캐나다가 원하는 수준에는 못 미쳤다. 르블랑 장관과 수석협상관 재니스 샤레트는 최근 3주간 미국 무역대표부 대표 그리어와 <strong>세 차례 만났다.</strong> 협상 의제로는 캐나다의 미국산 차량 보복관세 철폐, 주정부의 미국산 주류 판매 제한 해제, 유제품 쿼터 구조 재조정이 올라 있다. Green Oil 관점: 지난주 리포트에서 "총리가 시한 내 타결을 장담하지 않았다"고 정리한 상황이 이번 주에는 <strong>"미국 제안을 거부한 교착"으로 한 단계 더 진행됐다.</strong> 발효까지 2일이 남은 시점에서 무관세 타결 시나리오의 확률은 낮아진 것으로 보아야 한다. UCO는 부속서에 없어 직접 관세 대상이 아니지만, <strong>캐나다 측 보복이 발동되면 품목과 무관하게 국경 서류 요건과 통관 지연이 함께 발생</strong>하므로 8월 하순 대미 선적 일정에 여유를 두어야 한다.</div>
+    </a>
+
+    <a class="news-item" href="https://www.cbc.ca/news/politics/trade-tariff-talks-canada-us-canada-dominic-leblanc-jamieson-greer-9.7305811" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-politics">연방 정치</span>
+      <div class="news-title">8/13 워싱턴 협의 후 미국 무역대표부 — "대통령과 총리에게 선택지가 제시될 것", 8/14 르블랑 자문위 브리핑</div>
+      <div class="news-body">8월 13일(목) 캐나다·미국 무역 당국자 간 협의가 끝난 뒤 미국 무역대표부 대표 제이미슨 그리어는 <strong>"대통령과 총리에게 선택지와 논의가 제시될 것"</strong>이라고 밝혔다. 이는 트럼프 행정부 측에서 나온 <strong>협상 진행 상황에 대한 가장 분명한 언급</strong>으로, 그리어는 회의를 "좋았다", "정중했다"고 표현했다. 협의 후 르블랑 장관은 <strong>"캐나다인들이 기대하는 일을 계속하겠다"</strong>고 말했고 추가 회의 일정은 제시하지 않은 채 "필요한 만큼 만나겠다"고 했다. 같은 보도에 따르면 르블랑 장관은 <strong>8월 14일(금) 오후 연방정부의 대미경제관계 자문위원회에 협상 상황을 브리핑</strong>할 예정이었다. 합의가 없으면 <strong>새 관세는 8월 19일 발효</strong>한다. Green Oil 관점: "선택지를 제시한다"는 표현은 실무 협상에서 결론이 나지 않아 <strong>정치적 결단으로 넘어갔다는 신호</strong>로 읽는 편이 타당하다. 즉 타결 여부가 발효 직전 최고위급 판단에 달려 있어 <strong>기업 입장에서는 예측 가능성이 가장 낮은 국면</strong>이다. 관세 부과와 무관세 타결 두 시나리오를 모두 전제로 8월 하순 물류를 이원 준비할 것을 권고한다.</div>
+    </a>
+
+    <a class="news-item" href="https://www.theglobeandmail.com/politics/article-prime-minister-mark-carney-on-vacation-in-italy-for-a-week/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-politics">연방 정치</span>
+      <div class="news-title">8/8 총리실 발표 — 총리, 8월 17일까지 축소 일정(이탈리아 개인 일정), 관세 시한 주간과 겹침</div>
+      <div class="news-body">8월 8일(토) 총리실은 <strong>총리가 개인 일정으로 이탈리아에 머물며 8월 17일까지 축소 일정으로 운영한다</strong>고 발표했다(보도는 8월 9일, 8월 10일 갱신). 총리실은 해당 일정이 <strong>연방 윤리감독관의 확인을 거쳤다</strong>고 밝혔으며, 총리가 <strong>대미 무역협상을 포함한 주요 사안에서 참모·당국자들과 긴밀히 연락을 유지</strong>한다고 덧붙였다. Green Oil 관점: 이 항목은 이번 보고 주간에 새로 발생한 사건이 아니라 <strong>보고 주간 전체(8/10–8/16)에 걸쳐 유지된 상태</strong>이므로 날짜를 명시해 배경으로 싣는다. 중요한 점은 이 축소 일정이 <strong>8월 19일 관세 시한 직전 주간과 정확히 겹친다</strong>는 것이다. 위 8월 13일 항목에서 그리어가 "대통령과 총리에게 선택지가 제시될 것"이라고 말한 정황과 함께 보면, <strong>최종 판단 주체가 시한 직전에야 본격 개입하는 구조</strong>였음을 시사한다. 협상 타결이 발효 직전까지 미뤄질 가능성을 높이는 요인으로 관리한다.</div>
+    </a>
+
+  </div>
+
+  <!-- 4. Provincial Policy -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-prov">🏛️</div>
+      <div class="card-title">주정부 정책 동향 <span>Provincial — 주정부 · 집권당</span></div>
+    </div>
+    <div class="empty">이번 주(8/10–8/16) 온타리오·앨버타·사스카추완·매니토바·BC·퀘벡에서 바이오연료·청정연료 정책과 관련한 실질적 발표가 확인되지 않아 항목을 두지 않았습니다. 연방 차원의 전기차 의무판매제(EVAS) 폐지 제안은 연방 정책 동향을 참조하십시오.</div>
+  </div>
+
+  <!-- 5. Export Markets -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-export">🌍</div>
+      <div class="card-title">수출 시장 정책 <span>EU RED III · 미국 RFS / 45Z · 무역</span></div>
+    </div>
+
+    <a class="news-item" href="https://iscc-system.org/iscc-is-now-applicable-under-the-low-carbon-fuel-standard-framework/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-cert">인증</span>
+      <div class="news-title">8/12 ISCC EU, 캘리포니아 LCFS 적격 인증제도로 인정 — EU 인증을 북미에서 재활용하는 경로</div>
+      <div class="news-body">8월 12일 ISCC는 <strong>ISCC EU가 캘리포니아 저탄소연료표준(LCFS)의 적격 인증제도(eligible certification scheme)로 적용 가능해졌다</strong>고 발표했다. LCFS는 캘리포니아 <strong>대기자원위원회(CARB)</strong>가 운영하며 수송연료의 탄소집약도를 낮추기 위해 저탄소 대안연료에 인센티브를 주고 지속가능한 원료 조달을 촉진하는 제도로, ISCC는 이를 "세계에서 가장 영향력 있는 청정연료 제도 중 하나"로 설명했다. 인정 방식은 <strong>갱신된 LCFS 체계가 EU 재생에너지지침(EU RED)에서 이미 승인된 자발적 인증제도를 수용</strong>하는 구조이며 ISCC EU가 여기에 포함됐다. ISCC에 따르면 <strong>LCFS의 지속가능성 인증 요건은 2028년부터 단계적으로 적용</strong>되지만 ISCC EU 인증은 현 시점에도 해당 요건을 충족한다. ISCC는 2012년부터 북미 지역 이해관계자 위원회를 운영해 왔고 2025년 지역 회의에서 CARB가 LCFS와 인증의 역할에 관해 발표한 바 있다고 밝혔다. Green Oil 관점: <strong>EU향 물량을 위해 이미 취득·유지하고 있는 ISCC EU 인증을 캘리포니아 시장 진입에 그대로 활용할 수 있는 경로가 열린 것</strong>으로, 별도 인증 체계를 새로 구축하는 비용을 줄일 수 있다. 특히 EU의 ISCC 폐기물기반 연료 인증 정지 제안이 미결로 남아 있는 상황에서 <strong>같은 인증의 활용처가 캘리포니아로 넓어졌다는 점은 인증 포트폴리오의 리스크 분산 측면에서 의미가 있다.</strong> 2028년 요건 적용 전까지 시간이 있으므로 캘리포니아향 판로를 검토한다면 지금이 인증 상태를 정비할 시점이다. 다만 이번 발표문은 <strong>폐유지류·UCO 원료의 구체적 적용 범위를 명시하지 않았으므로</strong>, 실제 캘리포니아향 거래를 추진할 때는 원료별 적용 여부를 CARB 규정과 인증기관을 통해 별도 확인해야 한다.</div>
+    </a>
+
+    <a class="news-item" href="https://iscc-system.org/empco-directive-independent-legal-assessment-concludes-that-iscc-certification-sustainability-labels-and-claims-comply-with-the-legal-requirements/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-eu">EU 규정</span>
+      <div class="news-title">8/13 ISCC, EmpCo 지침 적합성 외부 법률검토 공개 — 9월 27일 시행 앞두고 인증·라벨 요건 충족 결론</div>
+      <div class="news-body">8월 13일 ISCC는 EU <strong>소비자권익강화지침(Empowering Consumers for the Green Transition Directive, EmpCo)</strong>에 대한 외부 법률사무소의 독립 법률검토 결과를 공개했다. EmpCo는 <strong>2026년 9월 27일부터 적용</strong>되며 환경주장과 지속가능성 라벨에 대해 투명성·독립적 검증·소비자 보호를 강화하는 새 규칙을 도입한다. ISCC는 자사 인증제도와 로고·주장이 EmpCo 및 그에 따른 <strong>독일 부정경쟁방지법(UWG) 개정</strong> 요건을 충족하는지 평가받았으며, 검토 결과는 <strong>ISCC 인증제도가 EmpCo가 인증제도에 요구하는 핵심 법적 요건을 충족한다</strong>는 결론이었다. 근거로는 <strong>독립적이고 인정받은 제3자에 의한 검증(자기인증 배제)</strong>, 중소기업을 불리하게 하지 않는 비례적 수수료 구조를 포함한 투명·공정·비차별적 자격요건, 산업·학계·시민사회 전문가와 협력해 개발된 시스템 요건 등이 제시됐다. 검토는 <strong>공개된 정보만을 근거로 수행</strong>됐다. Green Oil 관점: EU향 UCO·UCO 기반 연료 거래에서 <strong>바이어가 자사 환경주장의 근거로 인증을 인용할 때 그 인증 자체가 EmpCo 요건을 충족하는지가 9월 27일 이후 실무 쟁점</strong>이 된다. 이번 검토는 그 근거를 보강하는 자료이므로 EU향 계약·문서에 참조자료로 확보해 둘 가치가 있다. 다만 이는 <strong>ISCC가 의뢰한 검토이며 EU 당국의 공식 승인이 아니라는 점</strong>을 구분해 인식해야 하고, 아래 리스크 레이더의 ISCC 폐기물기반 인증 정지 제안과는 별개 사안이다.</div>
+    </a>
+
+    <a class="news-item" href="https://www.bnnbloomberg.ca/business/politics/2026/08/11/canada-us-trade-officials-aim-to-present-trump-with-layout-of-deal-before-deadline/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-trade">무역</span>
+      <div class="news-title">8/12 협상팀, 시한 전 대통령에게 합의 골격 제시 목표 — 8월 19일 50% 관세 발효 시한</div>
+      <div class="news-body">8월 12일 보도에 따르면 캐나다와 미국 무역 당국자들은 <strong>8월 19일 시한 전에 트럼프 대통령에게 합의의 골격(layout of a deal)을 제시하는 것을 목표</strong>로 협상을 진행했다. 캐나다 측은 르블랑 장관과 수석협상관 재니스 샤레트가 이끌었고 <strong>주말에도 협상을 이어갈 것으로 예상</strong>됐다. 같은 주 별도 보도에서도 8월 19일 시한을 앞두고 협상이 격화됐음이 확인된다. 이번 관세의 법적 근거는 <strong>1930년 관세법 제338조</strong>로, 미국 상거래를 차별한 것으로 판단되는 국가에 대통령이 최대 50%의 추가관세를 부과할 수 있도록 한 조항이다. 관련 대통령 포고 3건(자동차·유제품·주류 관련)은 <strong>7월 20일 서명·7월 23일 관보 게재</strong>됐으며, 포고 본문을 직접 확인한 결과 <strong>부속서 II에 열거된 캐나다산 품목에 8월 19일 오전 12시 1분(미 동부시간)부터 50% 추가 종가세를 부과</strong>한다고 명시돼 있다. Green Oil 관점: <strong>UCO를 포함한 HS 15류 유지류와 38류 바이오디젤은 3개 부속서 어디에도 없어 직접 부과되는 관세는 없다</strong>(이전 회차에서 확인). 이번 주 새로 확인한 사항은 <strong>연방관보의 포고 본문에 부속서가 이미지(TIFF) 형태로만 실려 있어 텍스트 검색으로는 품목 목록을 조회할 수 없다</strong>는 점이다. 따라서 <strong>부속서 미포함 사실을 통관사로부터 서면으로 받아 두는 절차가 실무상 반드시 필요</strong>하며, 이는 아래 리스크 레이더의 조치 항목으로 다시 정리했다.</div>
+    </a>
+
+  </div>
+
+  <!-- 6. UCO Market -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-market">🛢️</div>
+      <div class="card-title">UCO 시장 &amp; 산업 동향 <span>Market Intelligence</span></div>
+    </div>
+    <div class="empty">이번 주(8/10–8/16) UCO 가격·수급에 관해 발행일이 확인되는 신규 기사·발표를 확보하지 못해 항목을 두지 않았습니다. 인증 제도 변화(캘리포니아 LCFS·EmpCo)는 수출 시장 정책을, 액체연료 수요 관련 사항은 연방 정책 동향을 참조하십시오.</div>
+  </div>
+
+  <!-- 7. Sources -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-sources">🔗</div>
+      <div class="card-title">주요 출처 <span>Sources</span></div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">1</div>
+      <div>
+        <a class="src-link" href="https://www.cbc.ca/news/politics/canada-unhappy-u-s-offer-tariffs-9.7304923" target="_blank">Canada, U.S. not yet ready to make tariff deal, Canada unsatisfied with latest U.S. offer: sources</a>
+        <div class="src-meta">CBC News (발행일 메타 직접 확인) · 2026-08-12</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">2</div>
+      <div>
+        <a class="src-link" href="https://www.cbc.ca/news/politics/trade-tariff-talks-canada-us-canada-dominic-leblanc-jamieson-greer-9.7305811" target="_blank">Carney, Trump to be given 'options' following latest trade talks, says U.S. rep</a>
+        <div class="src-meta">CBC News (8/13 협의·8/14 자문위 브리핑 예정 명시) · 2026-08-13</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">3</div>
+      <div>
+        <a class="src-link" href="https://gazette.gc.ca/rp-pr/p1/2026/2026-08-15/html/reg2-eng.html" target="_blank">Regulations Amending the Passenger Automobile and Light Truck Greenhouse Gas Emission Regulations (제안규정 — EVAS 폐지)</a>
+        <div class="src-meta">Canada Gazette, Part I, Vol. 160, No. 33 (본문 직접 확인 — 의견제출 75일·이의신청 60일, ZEV 판매 14%→9%) · 2026-08-15</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">4</div>
+      <div>
+        <a class="src-link" href="https://gazette.gc.ca/rp-pr/p1/2026/2026-08-15/html/index-eng.html" target="_blank">Canada Gazette, Part I, Volume 160, Number 33 — 주간 호 목차</a>
+        <div class="src-meta">Canada Gazette (직접 확인 — 청정연료규정 항목 없음) · 2026-08-15</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">5</div>
+      <div>
+        <a class="src-link" href="https://gazette.gc.ca/rp-pr/p2/2026/2026-08-12/html/index-eng.html" target="_blank">Canada Gazette, Part II, Volume 160, Number 16 — 등록 규정 목차</a>
+        <div class="src-meta">Canada Gazette (직접 확인 — 등록 10건 모두 연료 무관, 이번 주 실제 발행된 호) · 2026-08-12</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">6</div>
+      <div>
+        <a class="src-link" href="https://iscc-system.org/iscc-is-now-applicable-under-the-low-carbon-fuel-standard-framework/" target="_blank">ISCC is now applicable under the Low Carbon Fuel Standard framework</a>
+        <div class="src-meta">ISCC (캘리포니아 LCFS·CARB, 2028년 단계 적용) · 2026-08-12</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">7</div>
+      <div>
+        <a class="src-link" href="https://iscc-system.org/empco-directive-independent-legal-assessment-concludes-that-iscc-certification-sustainability-labels-and-claims-comply-with-the-legal-requirements/" target="_blank">EmpCo Directive: Independent legal assessment concludes that ISCC certification, sustainability labels, and claims comply with the legal requirements</a>
+        <div class="src-meta">ISCC (EmpCo 2026-09-27 시행) · 2026-08-13</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">8</div>
+      <div>
+        <a class="src-link" href="https://www.bnnbloomberg.ca/business/politics/2026/08/11/canada-us-trade-officials-aim-to-present-trump-with-layout-of-deal-before-deadline/" target="_blank">Canada, U.S. trade officials aim to present Trump with layout of deal before deadline</a>
+        <div class="src-meta">BNN Bloomberg (발행일 메타 직접 확인) · 2026-08-12</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">9</div>
+      <div>
+        <a class="src-link" href="https://qz.com/canada-us-trade-talks-tariffs-deadline-081226" target="_blank">Canada-U.S. tariff talks intensify before August 19 deadline</a>
+        <div class="src-meta">Quartz (발행일 메타 직접 확인) · 2026-08-12</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">10</div>
+      <div>
+        <a class="src-link" href="https://www.theglobeandmail.com/politics/article-prime-minister-mark-carney-on-vacation-in-italy-for-a-week/" target="_blank">Prime Minister Mark Carney on vacation in Italy for a week</a>
+        <div class="src-meta">The Globe and Mail (총리실 8/8 발표 · 8/10 갱신 — 8/17까지 축소 일정) · 2026-08-09</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">11</div>
+      <div>
+        <a class="src-link" href="https://www.cbc.ca/news/politics/canada-united-states-trade-negotiations-tariffs-9.7309218" target="_blank">Where do Canada-U.S. trade negotiations stand? Here's a sector-by-sector breakdown</a>
+        <div class="src-meta">CBC News (리포트 작성 시점 현황 — 보고 주간 이후 8/17 보도, 교착 지속·발효 2일 전) · 2026-08-17</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">12</div>
+      <div>
+        <a class="src-link" href="https://www.federalregister.gov/documents/2026/08/14/2026-16600/agenda" target="_blank">Agenda (2026 Unified Agenda, Department of the Treasury — Part XIV)</a>
+        <div class="src-meta">Federal Register (본문 직접 확인 — 45Z·RIN 언급 없는 정형 문구, 실제 항목은 reginfo.gov 게재. 45Z 신규 발표 아님) · 2026-08-14</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">13</div>
+      <div>
+        <a class="src-link" href="https://www.federalregister.gov/documents/2026/02/04/2026-02246/section-45z-clean-fuel-production-credit" target="_blank">Section 45Z Clean Fuel Production Credit — Proposed Rule</a>
+        <div class="src-meta">Federal Register (배경 — 의견마감 4/6, 공청회 5/28, 최종규칙 11월 목표. 8/10~8/16 기간 3개 어구 조회 결과 45Z 신규 문서 0건) · 2026-02-04</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">14</div>
+      <div>
+        <a class="src-link" href="https://www.blakes.com/insights/us-canada-tariffs-timeline-of-key-dates-and-documents/" target="_blank">U.S.-Canada Tariffs: Timeline of Key Dates and Documents</a>
+        <div class="src-meta">Blakes (배경 — 제338조 근거·8/19 발효. 포고 본문 직접 확인 결과 부속서는 이미지로만 게재돼 품목 텍스트 조회 불가) · 2026-08-07</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">15</div>
+      <div>
+        <a class="src-link" href="https://www.canada.ca/en/environment-climate-change/corporate/transparency/consultations/share-view-ideas-targeted-amendments-clean-fuel-regulations.html" target="_blank">Targeted amendments to the Clean Fuel Regulations (consultation)</a>
+        <div class="src-meta">Government of Canada (ECCC) · 배경 — 협의 2026-01-15 종료, Canada Gazette Part I 게재 대기 · 2026-01-15</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Green Oil Inc. Internal Use Only &nbsp;·&nbsp; Powered by Claude AI &nbsp;·&nbsp; <a href="../index.html" style="color:#bbb;">← 인덱스</a></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+  const btn = document.getElementById('pdfBtnLabel');
+  btn.textContent = '생성 중...';
+  html2pdf().set({
+    margin: [8, 8, 8, 8],
+    filename: 'GreenOil-UCO-2026-08-17.pdf',
+    image: { type: 'jpeg', quality: 0.95 },
+    html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: 'avoid-all' }
+  }).from(document.body).save().then(() => { btn.textContent = 'PDF 저장'; });
+}
+</script>
+</body>
+</html>
