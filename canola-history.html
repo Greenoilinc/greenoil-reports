@@ -250,6 +250,17 @@ a.news-item { text-decoration: none; color: inherit; display: block; }
       <div class="pill green"><div class="dot green"></div><span id="cntGreen">—</span> 기회 요인</div>
     </div>
 
+    <div class="card" id="cardFollowup" style="display:none;border:2px solid #e53e3e;background:#fffaf8;">
+      <div class="card-header">
+        <div class="card-icon" style="background:#ffecec;">🔔</div>
+        <div class="card-title">보고 주간 이후 속보 <span id="followupSub">Follow-up</span></div>
+      </div>
+      <div style="font-size:11px;color:#8a3b3b;background:#ffecec;border-radius:6px;padding:8px 10px;margin-bottom:8px;line-height:1.6;">
+        아래 항목은 <b>해당 보고 주간 이후</b>에 발생한 사안이다. 본문의 주간 수치·분석은 보고 주간 기준 그대로 두고, 그 이후 변화만 이 칸에 분리해 기록한다.
+      </div>
+      <div id="elFollowup"></div>
+    </div>
+
     <div class="card">
       <div class="card-header">
         <div class="card-icon icon-summary">📋</div>
@@ -339,6 +350,7 @@ const REPORT_HISTORY = /* HISTORY_START */
     "generatedAt": "2026-08-24T05:08:00-04:00",
     "seeding_bars": [],
     "summary": [
+      "🔔 <b>「8/24–8/25 후속」 리포트 발행 이후 상황이 한 번 더 크게 움직였다.</b> 8월 21일 미국 EPA가 <b>9월 1일 RFS 준수시한 연장</b>과 <b>소규모정유 면제(SRE) 8월 말 일괄 결정</b>을 예고하면서 바이오매스디젤(D4) RIN이 약 US$1.92로 4월 말 이후 최저까지 밀렸고, 이 여파와 원유 급락(WTI −US$2.10)이 겹쳐 <b>8월 24일 ICE 11월물이 C$770.60(−C$28.50)으로 C$800선을 하루 만에 내줬다</b>. 현물 9월 인도분도 부셸당 C$15.75~16.45로 추가로 약 C$0.63 내렸다. 8월 25일 오전에는 C$776.20으로 반등했으나 20일·50일선 아래이며, 크러시 마진은 톤당 C$272~277로 오히려 C$10 개선됐다. 무역 쪽에서는 8월 24일 미국 대통령이 <b>차량·부품·철강에 내년 1월 1일까지 50% 관세</b>를 추가 위협했고 루니는 US$0.7224로 하락했다. 캐나다의 9월 8일 보복관세 품목 목록은 아직 미공표다",
       "⭐ <b>미국의 50% 관세가 8월 22일 0시 1분(동부시간) 실제로 발효됐고, 카놀라유·UCO는 품목 목록에 없다.</b> 8월 21일 자정 시한까지 협상이 타결되지 않아 대통령 포고 11046·11047·11048(2026년 7월 20일)의 추가관세가 발효됐다. 포고 11056(8월 18일 서명)으로 발효일이 8월 19일에서 <b>8월 22일로 3일 늦춰진</b> 것이 마지막 변경이었다. 세 포고 부속서(Annex II)의 8자리 HTSUS 코드를 직접 판독한 결과 <b>15류(동식물성 유지)는 세 목록 모두 0건</b>으로 카놀라유(1514)·UCO(1518·1522)·유박(2306)·유채씨(1205)가 없다. 인접한 12류(1209 종자류)·13류·14류·17류는 정상 판독돼 판독 누락이 아니다",
       "⭐ <b>그러나 CUSMA 원산지 면제가 이번에 깨졌다는 점이 구조적 위험이다.</b> 종전 미국 관세 조치에서는 CUSMA 적합 물품이 면제됐으나 이번 232조 근거가 아닌 <b>1930년 관세법 338조</b> 조치는 CUSMA 적합 여부와 무관하게 부과된다. 즉 이번에 카놀라유·UCO가 빠진 것은 <b>품목 목록에서 빠졌기 때문일 뿐</b>이며, 다음 라운드에서 목록이 확대되면 막아 줄 안전장치가 없다. 캐나다는 8월 22일 <b>9월 8일부터 동일 규모 보복관세</b>를 예고했고 대상에 철강·유제품·가전·농기계·펄프제지·전자가 포함된다",
       "⭐ <b>ICE 11월물은 주간 −C$19.80(−2.4%)로 3주 만에 하락 전환했다.</b> 8/17 C$827.40(+8.50)으로 연중 고점권까지 올랐다가 8/18 C$805.90(−21.50), 8/19 C$819.90(+14.00), 8/20 C$820.40(+0.50), <b>8/21 C$799.10(−21.30)</b>으로 마감해 직전 주 마감(8/14 C$818.90) 대비 C$19.80 내렸다. 금요일 급락은 투기자금의 대규모 매수 포지션 차익실현과 시카고 대두유 급락이 겹친 결과다. 현물도 같이 내려 PDQ 8/21 기준 9월 인도분은 부셸당 <b>C$16.38(북동SK)~C$17.09(동MB)</b>로 한 주 전 C$16.86~17.50 대비 약 C$0.45(톤당 약 C$20) 하락했다",
@@ -492,7 +504,8 @@ const REPORT_HISTORY = /* HISTORY_START */
     "risks": {
       "red": [
         "⭐ 미국 50% 관세가 8/22 발효됐고 CUSMA 면제가 이번에 적용되지 않았다 — 이번엔 카놀라유·UCO가 목록에 없지만 다음 라운드를 막을 안전장치가 사라졌다 — 1930년 관세법 338조에 근거한 포고 11046·11047·11048의 추가관세가 8월 22일 0시 1분(동부시간)부로 발효됐다. 세 부속서 II의 8자리 HTSUS 코드를 판독한 결과 <b>15류는 세 목록 모두 0건</b>으로 카놀라유(1514)·UCO(1518·1522)·유박(2306)·유채씨(1205)에 직접 관세는 없다(12류는 파종용 종자 1209 등만 포함, 인접 13·14·17류 정상 판독으로 판독 누락 아님). 문제는 <b>종전 조치에서 면제되던 CUSMA 적합 물품이 이번에는 상당수 면제되지 않았다</b>는 점이다. 즉 우리 품목이 빠진 이유는 원산지 규정이 지켜 준 것이 아니라 단지 목록에 없었기 때문이다. <b>조치</b>: ① 통관사에 우리 수출 품목별 HTSUS 코드 기준 <b>서면 비적용 확인</b>을 이번 주 안에 받아 둘 것(관보 부속서는 스캔본 판독이므로 CBP 확정 HTSUS 대조가 필요하다). ② 미국향 계약서에 <b>신규 관세 발생 시 부담 주체와 재협상 조건</b>을 명시하는 조항을 표준화할 것. ③ 미국향 매출 비중과 대체 판로(EU·아시아) 전환에 필요한 리드타임을 4분기 계획서에 수치로 정리할 것",
-        "⭐ 45Z 재무부·IRS 최종규정 — 이번 주도 공표 없음(제안규정 이후 6개월 이상 공백) — Federal Register API로 게재일 2026-08-17~2026-08-23 구간을 검색한 결과 검색어 <b>\"45Z\"는 0건</b>이고, \"clean fuel production credit\" 2건과 \"canola\" 2건은 모두 무관 문서다(EPA 대기계획 승인안, 중소기업청 규모기준 개정안, EPA 농약 등록·청원 공고 2건). 2026년 2월 4일 제안규정 공표, 4월 6일 의견수렴 종료, 5월 28일 공청회를 마친 뒤 <b>6개월 넘게</b> 최종규정이 없다. 캐나다산 카놀라유는 북미산 원료로 45Z 적격을 유지하지만, 제안 단계 장기화로 미국 바이어의 장기계약 확정 지연이 고착되고 있다. 여기에 8/22 관세 사태로 미국향 거래의 정책 불확실성이 한 겹 더 쌓였다. <b>조치</b>: 미국향 카놀라유·UCO 계약은 최종규정 공표 전까지 <b>단기·유연 조건</b>을 유지하고, 최종규정 확정 시 단가·물량 재협상 조항을 반드시 넣을 것. 9월에도 공백이 이어지면 미국향 비중 자체를 낮추는 시나리오를 4분기 예산의 대안 시나리오로 정식 편성할 것"
+        "⭐ 45Z 재무부·IRS 최종규정 — 이번 주도 공표 없음(제안규정 이후 6개월 이상 공백) — Federal Register API로 게재일 2026-08-17~2026-08-23 구간을 검색한 결과 검색어 <b>\"45Z\"는 0건</b>이고, \"clean fuel production credit\" 2건과 \"canola\" 2건은 모두 무관 문서다(EPA 대기계획 승인안, 중소기업청 규모기준 개정안, EPA 농약 등록·청원 공고 2건). 2026년 2월 4일 제안규정 공표, 4월 6일 의견수렴 종료, 5월 28일 공청회를 마친 뒤 <b>6개월 넘게</b> 최종규정이 없다. 캐나다산 카놀라유는 북미산 원료로 45Z 적격을 유지하지만, 제안 단계 장기화로 미국 바이어의 장기계약 확정 지연이 고착되고 있다. 여기에 8/22 관세 사태로 미국향 거래의 정책 불확실성이 한 겹 더 쌓였다. <b>조치</b>: 미국향 카놀라유·UCO 계약은 최종규정 공표 전까지 <b>단기·유연 조건</b>을 유지하고, 최종규정 확정 시 단가·물량 재협상 조항을 반드시 넣을 것. 9월에도 공백이 이어지면 미국향 비중 자체를 낮추는 시나리오를 4분기 예산의 대안 시나리오로 정식 편성할 것",
+        "⭐ 「8/24 후속」 미국 EPA가 RFS 준수시한 연장과 소규모정유 면제 일괄 결정을 예고 — 바이오연료 원료 <b>수요 측</b> 악재가 현실화됐다 — 8월 21일 EPA는 정유사가 2025년 바이오연료 혼합의무 이행을 입증해야 하는 9월 1일 시한을 <b>연장하겠다</b>고 밝혔고(기간 미정, 30~90일 검토), 동시에 소규모 정유사 의무 면제(SRE) 신청 전건을 <b>8월 말까지 결정</b>하겠다고 예고했다. 8월 24일 D6 에탄올 RIN이 US$1.75로 34센트 급락해 4월 15일 이후 최저를 기록했고, 우리에게 직접 관련되는 <b>2026년 바이오매스디젤(D4) RIN은 약 US$1.92로 4월 말 이후 최저</b>다(Argus Media 집계). 그 여파로 시카고 대두유가 파운드당 2.23센트, 카놀라 11월물이 톤당 C$28.50 밀렸다. 준수시한 연장과 SRE 확대는 <b>둘 다 의무 혼합량을 실질적으로 줄이는 방향</b>이라 미국향 UCO·폐유지 수요와 RIN 수취가를 동시에 압박한다. 45Z 최종규정 공백과 겹치면 미국향 바이오연료 원료 수요 전망 자체가 흔들린다. 8월 25일 현재 연방관보에 공식 문서는 아직 없다. <b>조치</b>: ① <b>8월 말 발표될 SRE 결정</b>의 건수·면제 물량과 함께 <b>면제 물량 재배분(reallocation) 여부</b>를 반드시 확인할 것 — 재배분되면 실수요 타격은 제한된다. ② 미국향 UCO·정제유 계약 중 RIN 가치가 단가에 연동된 건이 있으면 D4 RIN 하락에 대한 노출 금액을 이번 주 안에 산출할 것. ③ 45Z와 RFS 두 축이 동시에 불확실해진 만큼 4분기 미국향 판매 물량 가정을 보수적으로 재설정할 것"
       ],
       "amber": [
         "⭐ CFR 타겟 개정 초안 — 8/22자 Gazette Part I 제34호까지 미게재, 이번 주는 Part II 발행 호도 없음 — 2026년 8월 22일자 Canada Gazette Part I 제160권 제34호 목차를 직접 확인한 결과 CFR 개정 초안은 게재되지 않았고, 이번 호에는 <b>규정안 항목 자체가 없다</b>(환경부 항목은 비국내물질목록 개정 명령 1건). Part II는 8월 17~23일 구간에 발행 호가 없으며 직전 호가 8월 12일, 다음 호가 8월 26일이다. ECCC가 2025년 9월 5일 개정 방침을 발표한 지 11개월 이상 경과했다. 최소 국내함량 요건과 크레딧 승수 방식은 카놀라유 기반 바이오연료 크레딧 산정에 직접 영향을 준다. <b>조치</b>: 8월 26일자 Part II와 8월 29일자 Part I을 다음 확인 지점으로 잡을 것. 게재 없이 9월로 넘어가면 2027년 크레딧 가정을 <b>현행 규정 기준으로 고정</b>해 4분기 예산을 확정하고, 게재 시에는 통상 60~75일인 의견수렴 기간 안에 국내함량 정의에 대한 의견서를 업계 채널로 제출할 것",
@@ -501,10 +514,58 @@ const REPORT_HISTORY = /* HISTORY_START */
       ],
       "green": [
         "⭐ AAFC가 국내 압착 전망을 13.951M톤으로 1.25M톤 상향 — 바이오연료용 유지 수요가 정부 공식 추정에서 다시 확인됐다 — 8월 20일 AAFC 수급 갱신에서 2026-27년 카놀라 국내 소화가 12.701M톤에서 <b>13.951M톤</b>으로 1.25M톤 늘었다. 수출은 8.000M톤으로 동결됐으므로 증산분 60만 톤은 사실상 전량 국내 압착이 흡수하는 구조다. 이는 카놀라 원료 매입에는 부담이지만, Green Oil의 <b>UCO·정제유 판매 단가</b>에는 같은 방향으로 유리하게 작용한다. 8월 19일 Glacier FarmMedia 시장 담당 이사도 동남아시아 의무혼합률 상향이 팜유 수출 여력을 줄여 세계 식물유 수급 전체를 조이고 있다고 정리했다. <b>조치</b>: 4분기 손익 시뮬레이션에서 원료(카놀라유)와 판가(UCO 기반)를 분리하지 말고 <b>마진 스프레드</b> 기준으로 볼 것. 원료 상승분을 판가에 얹을 수 있는 계약 구조(인덱스 연동)를 신규 계약에 우선 적용할 것",
-        "이번 주 하락은 수급이 아니라 포지션 청산이 만든 것 — 9월 인도분이 다시 연중 최저 호가 구간이 됐다 — ICE 11월물은 8월 17일 C$827.40으로 연중 고점권까지 올랐다가 8월 21일 C$799.10으로 마감해 <b>고점 대비 톤당 C$28.30</b> 내렸고 주간으로도 −C$19.80(−2.4%)이다. 8월 21일 급락 사유는 투기펀드의 대규모 매수 포지션 차익실현과 시카고 대두유 급락이며, 같은 주에 AAFC 기말재고는 오히려 축소되고 CGC 상업재고는 40% 줄었다. 즉 <b>펀더멘털과 반대 방향으로 값이 내렸다</b>. 현물도 함께 내려 PDQ 9월 인도분이 부셸당 C$16.38~17.09로 한 주 전보다 약 C$0.45(톤당 약 C$20) 낮아졌다. <b>조치</b>: 4분기 소요분 중 확정 가능한 물량은 <b>9월 인도분 구간에서 분할 체결</b>을 시작할 것. 2월 이후 인도분은 부셸당 C$0.5 이상 비싸므로 원월 이연은 피할 것. 다만 11월물이 20일 이동평균선 부근까지 내려온 만큼, 이 선이 지지되면 하락은 여기서 멈출 가능성이 높다는 점을 감안해 한 번에 몰지 말 것"
+        "조달 단가가 2주 만에 톤당 약 C$77 내려왔다 — 다만 하락 동인이 기술적 요인에서 <b>미국 정책</b>으로 바뀐 점에 주의 — ICE 11월물은 8월 17일 C$827.40으로 연중 고점권을 찍은 뒤 8월 21일 C$799.10, <b>「8/24 후속」 8월 24일 C$770.60(−C$28.50)</b>까지 내려 고점 대비 톤당 <b>C$56.80</b> 하락했고, 8월 25일 오전에는 C$776.20으로 소폭 반등했으나 20일·50일 이동평균선 아래에 머물러 있다. 현물은 더 크게 움직여 PDQ 9월 인도분이 8월 14일 C$16.86~17.50 → 8월 21일 C$16.38~17.09 → <b>8월 24일 C$15.75~16.45</b>로 2주 만에 부셸당 약 C$1.1(톤당 약 C$49) 내렸다. 중요한 것은 성격 변화다. 보고 주간의 하락은 투기 포지션 청산이었지만, 8월 24일 하락은 <b>미국 EPA의 RFS 완화와 원유 급락</b>이라는 실물 수요 요인이다. 반면 캐나다 국내 수급은 오히려 타이트해졌고(AAFC 기말재고 1.504M톤, CGC 상업재고 709.6천 톤), 8월 25일 크러시 마진은 톤당 C$272~277로 C$10 개선됐다. <b>조치</b>: 4분기 소요분의 <b>첫 분할 체결을 지금 구간에서 시작</b>하되 한 번에 몰지 말 것. 남은 물량은 ① 8월 말 SRE 결정, ② 9월 8일 캐나다 보복관세 발효, ③ <b>9월 16일 StatCan 주요작물 보고</b> 세 개 이벤트를 통과시키며 나눠 체결할 것. 크러시 마진이 개선되고 있다는 것은 선물이 더 빠져도 <b>현물 확보 난이도는 따라 낮아지지 않는다</b>는 신호다"
       ]
     },
     "sources": [
+      {
+        "title": "ICE Closing Review: Canola falls under pressure from comparable oils (Aug. 24)",
+        "url": "https://www.manitobacooperator.ca/market-update/ice-closing-review-canola-falls-under-pressure-from-comparable-oils/",
+        "outlet": "Manitoba Co-operator / Glacier FarmMedia",
+        "date": "2026-08-24"
+      },
+      {
+        "title": "ICE Canada Morning Comment: Canola turns positive (Aug. 25)",
+        "url": "https://www.manitobacooperator.ca/market-update/ice-canada-morning-comment-canola-turns-positive/",
+        "outlet": "Manitoba Co-operator / Glacier FarmMedia",
+        "date": "2026-08-25"
+      },
+      {
+        "title": "Canadian canola cash bids — Aug. 24",
+        "url": "https://www.manitobacooperator.ca/market-update/canadian-canola-cash-bids-aug-24/",
+        "outlet": "Manitoba Co-operator / PDQ",
+        "date": "2026-08-24"
+      },
+      {
+        "title": "U.S. EPA to extend renewable fuel standard compliance deadline for refiners",
+        "url": "https://www.hydrocarbonprocessing.com/news/2026/08/us-epa-to-extend-renewable-fuel-standard-compliance-deadline-for-refiners/",
+        "outlet": "Hydrocarbon Processing / Reuters",
+        "date": "2026-08-24"
+      },
+      {
+        "title": "EPA delays biofuel compliance deadline for oil refiners (D6 US$1.75 · D4 US$1.92)",
+        "url": "https://www.bicmagazine.com/industry/regulations/us-epa-to-extend-renewable-fuel-standard/",
+        "outlet": "BIC Magazine / Argus Media",
+        "date": "2026-08-24"
+      },
+      {
+        "title": "Global Markets: Canada, U.S. trade talks fall apart (차량·부품·철강 50% 추가 위협)",
+        "url": "https://www.manitobacooperator.ca/market-update/global-markets-canada-u-s-trade-talks-fall-apart/",
+        "outlet": "Manitoba Co-operator / Glacier FarmMedia",
+        "date": "2026-08-24"
+      },
+      {
+        "title": "Canadian Financial Close: Loonie takes a hit after Canada, U.S. negotiations halt",
+        "url": "https://www.manitobacooperator.ca/market-update/canadian-financial-close-loonie-takes-a-hit-after-canada-u-s-negotiations-halt/",
+        "outlet": "Manitoba Co-operator",
+        "date": "2026-08-24"
+      },
+      {
+        "title": "Canadian agriculture in limbo yet again after trade deal collapses",
+        "url": "https://www.manitobacooperator.ca/daily/canadian-agriculture-in-limbo-yet-again-after-trade-deal-collapses/",
+        "outlet": "Manitoba Co-operator / Glacier FarmMedia",
+        "date": "2026-08-24"
+      },
       {
         "title": "ICE Closing Review: Sharp declines for canola",
         "url": "https://www.manitobacooperator.ca/market-update/ice-closing-review-sharp-declines-for-canola/",
@@ -667,7 +728,52 @@ const REPORT_HISTORY = /* HISTORY_START */
         "outlet": "Federal Register / IRS",
         "date": "2026-02-04"
       }
-    ]
+    ],
+    "followup": [
+      {
+        "tag": "canola-price",
+        "tagLabel": "8/24 급락",
+        "headline": "8/24(월) ICE 11월물 C$770.60(−C$28.50) — 보고 주간 마감 C$799.10에서 하루 만에 C$800선 붕괴, 거래량 85,166계약으로 폭증",
+        "summary": "주말을 넘긴 카놀라 선물은 8월 24일 월요일 톤당 <b>C$770.60(−C$28.50)</b>으로 마감해 보고 주간 마지막 거래일(8/21 C$799.10)보다 한 번에 C$28.50 더 내렸다(Manitoba Co-operator/Glacier FarmMedia, 2026-08-24). 1월물 C$779.40(−29.00), 3월물 C$786.30(−29.10), 5월물 C$790.90(−29.10)으로 전 한계월이 함께 무너졌다. 하락 동인은 <b>둘 다 카놀라 외부</b>다. 첫째, 미국 재무장관이 주말 인터뷰에서 월요일을 이란에 대한 \"경제적 디데이\"로 규정하며 신규 제재를 예고하자 원유가 배럴당 US$2 넘게 빠졌다(WTI US$84.96, −2.10). 둘째, 아래 항목의 미국 EPA 바이오연료 준수시한 연장 발표로 시카고 대두유 10월물이 파운드당 2.23센트 급락했다. 유럽 유채와 말레이시아 팜유도 동반 하락했다. 거래량은 85,166계약으로 직전 거래일 48,315계약에서 폭증해 <b>투매성 정리</b>였음을 보여준다. Green Oil 관점: 직전 리포트가 기준선으로 삼았던 C$800이 하루 만에 무너졌고, 이제 기준선은 <b>C$770대</b>다. 다만 하락 동인이 카놀라 수급이 아니라 원유·미국 정책이라는 점은 그대로이므로, 위 AAFC 기말재고 1.504M톤·CGC 상업재고 709.6천 톤이라는 타이트한 수급 구도 자체는 바뀌지 않았다.",
+        "url": "https://www.manitobacooperator.ca/market-update/ice-closing-review-canola-falls-under-pressure-from-comparable-oils/"
+      },
+      {
+        "tag": "us",
+        "tagLabel": "⭐ 미국 바이오연료 정책",
+        "headline": "⭐ 8/21 미국 EPA, 9/1 RFS 준수시한 연장 예고 + 소규모정유 면제 8월 말 일괄 결정 — 바이오매스디젤 RIN이 4월 말 이후 최저로 급락",
+        "summary": "미국 환경보호청(EPA)이 정유사의 2025년 바이오연료 혼합의무 이행 입증 시한인 <b>9월 1일을 연장하겠다</b>고 밝혔다(Reuters/Hydrocarbon Processing, 2026-08-24). 구체적 기간은 밝히지 않았고 추후 공식 조치에 담기며, 사정에 밝은 두 소식통은 <b>30~90일</b> 사이가 검토되고 있다고 전했다. EPA는 동시에 소규모 정유사의 의무 면제 신청(SRE) 전건을 <b>8월 말까지 결정</b>하겠다고 예고했다. 시장 반응은 즉각적이었다. 8월 24일 오후 D6 에탄올 RIN이 개당 <b>US$1.75</b>로 금요일 대비 34센트 급락해 4월 15일 이후 최저를 기록했고(7월 7일 고점 US$2.50), Green Oil에 직접 관련되는 2026년 <b>바이오매스디젤(D4) RIN은 약 US$1.92로 4월 말 이후 최저</b>로 평가됐다(Argus Media 집계, BIC Magazine 2026-08-24). 준수시한 연장과 SRE 확대는 모두 <b>의무 혼합량을 실질적으로 줄이는 방향</b>이다. 8월 25일 현재 연방관보에는 이 조치의 공식 문서가 아직 게재되지 않았다(게재일 8/24~8/26 구간 검색 결과 관련 문서 0건). Green Oil 관점: 이번 주 리포트에서 가장 중요한 <b>수요 측 악재</b>다. 45Z 최종규정 공백에 더해 RFS 이행 자체가 느슨해지면 미국향 UCO·폐유지 수요와 RIN 수취가가 동시에 눌린다.",
+        "url": "https://www.hydrocarbonprocessing.com/news/2026/08/us-epa-to-extend-renewable-fuel-standard-compliance-deadline-for-refiners/"
+      },
+      {
+        "tag": "canola-price",
+        "tagLabel": "8/25 반등",
+        "headline": "8/25(화) 오전 11월물 C$776.20(+C$5.60) 반등 — 다만 20일·50일 이동평균선 아래, 크러시 마진은 톤당 C$272~277로 C$10 개선",
+        "summary": "8월 25일 화요일 오전 카놀라 선물은 전일 급락을 되돌리며 11월물이 톤당 <b>C$776.20(+C$5.60)</b>, 1월물 C$785.20(+5.80), 3월물 C$792.20(+5.90)에 거래됐다(Manitoba Co-operator/Glacier FarmMedia, 2026-08-25). 시카고 대두 복합과 원유 약세를 유럽 유채 강세가 상쇄했고 말레이시아 시장은 휴장이었다. 다만 <b>11월물은 20일선과 50일선 아래에 머물러</b> 기술적으로는 여전히 약세 구간이다. 주목할 지표는 압착 마진이다. 11월 포지션 기준 크러시 마진이 선물 대비 톤당 <b>C$272.30~276.70</b>으로 약 C$10 개선됐다. 시장은 또한 <b>9월 16일 캐나다 통계청 주요작물 보고</b> 전까지 수확 규모를 두고 계속 추측할 수밖에 없는 상태이며, 한 애널리스트는 <b>\"일부가 생각하는 것만큼 큰 작황이 오는 게 아니다\"</b>라고 말했다. AAFC 21.6M톤, USDA 22.5M톤, 2025-26년 실적 21.81M톤이 비교 기준이다. Green Oil 관점: 크러시 마진이 급락 국면에서 오히려 개선됐다는 것은 <b>국내 압착 수요가 이 가격대에서 더 강하게 붙는다</b>는 뜻이다. 선물이 더 빠져도 현물 확보가 그만큼 쉬워지지는 않는다는 신호로 읽어야 한다.",
+        "url": "https://www.manitobacooperator.ca/market-update/ice-canada-morning-comment-canola-turns-positive/"
+      },
+      {
+        "tag": "canola-price",
+        "tagLabel": "현물 호가",
+        "headline": "8/24 현물 호가: 9월 인도분 부셸당 C$15.75~16.45 — 8/21 대비 부셸당 약 C$0.63(톤당 약 C$28) 추가 하락",
+        "summary": "PDQ 집계 8월 24일자 서부 캐나다 평균 이연 카놀라 현물 호가에서 9월 인도분은 부셸당 북AB C$16.10, 남AB C$16.23, 북서SK C$15.91, 남서SK C$15.93, <b>북동SK C$15.75</b>, 남동SK C$15.92, 서MB C$16.18, <b>동MB C$16.45</b>다(Manitoba Co-operator/PDQ, 2026-08-24). 보고 주간 마지막 집계인 8월 21일의 C$16.38~17.09와 비교하면 <b>부셸당 약 C$0.63~0.64(톤당 약 C$28) 추가 하락</b>이다. 원월물도 함께 내려 12월 C$15.97~16.51, 1월 C$16.02~16.58, 3월 C$16.32~16.89이며, 2월 이후가 더 비싼 캐리 구조는 유지된다. 8월 21일 집계에 있던 즉시 인도(SPOT) 항목은 8월 24일 집계에 표시되지 않았다. Green Oil 관점: 선물 −C$28.50과 현물 −약 C$28이 거의 정확히 일치해 <b>베이시스는 벌어지지 않았다</b>. 즉 이번 하락은 산지 수급 악화가 아니라 선물 주도의 전면적 하락이며, 조달 단가에는 그대로 반영된다. 2주 전 C$17.50까지 갔던 동MB 9월 인도분이 C$16.45로 내려온 만큼, 4분기 소요분의 첫 분할 체결을 검토할 구간에 들어섰다.",
+        "url": "https://www.manitobacooperator.ca/market-update/canadian-canola-cash-bids-aug-24/"
+      },
+      {
+        "tag": "trade",
+        "tagLabel": "무역분쟁 확대",
+        "headline": "8/24 트럼프 대통령, 차량·부품·철강에 내년 1월 1일까지 50% 관세 추가 위협 — 루니는 US$0.7224로 하락",
+        "summary": "8월 24일 미국 대통령이 소셜미디어를 통해 <b>차량·자동차부품·철강에 내년 1월 1일까지 50% 관세를 부과하겠다</b>고 위협했다(Manitoba Co-operator/Glacier FarmMedia, 2026-08-24). 8월 22일 발효된 338조 관세에 더해지는 추가 위협으로, 아직 포고나 공식 문서로 확정된 것은 아니다. 같은 날 캐나다 달러는 <b>US$0.7224(US$1=C$1.3842)</b>로 마감해 금요일 US$0.7267(C$1.3760)에서 하락했고, 이는 캐나다가 협상에서 철수한 데 따른 반응이다(Manitoba Co-operator, 2026-08-24). 원유는 이란 제재 예고로 WTI가 배럴당 US$84.96(−2.10), 브렌트 US$92.00(−2.39)으로 하락했다. 캐나다의 9월 8일 보복관세 <b>구체적 품목 목록은 8월 25일 현재 아직 공표되지 않았다</b>. Green Oil 관점: 루니 약세는 캐나다산 원료의 미국향 가격경쟁력에는 유리하게, 미국산 설비·부품 구매에는 불리하게 작용한다. 더 중요한 것은 <b>확전 방향</b>이다. 338조 목록에 없던 품목까지 별도 근거로 관세가 붙는 흐름이 이어진다면, 이번에 빠진 15류(카놀라유·UCO)의 안전도 영구적이지 않다.",
+        "url": "https://www.manitobacooperator.ca/market-update/global-markets-canada-u-s-trade-talks-fall-apart/"
+      },
+      {
+        "tag": "canola-policy",
+        "tagLabel": "업계 반응",
+        "headline": "8/24 캐나다 농업계: \"1차 농산물 대부분은 이번 목록 밖이지만 수출 의존 부문 전체가 우려해야\" — 미국은 CUSMA 갱신도 거부",
+        "summary": "새 관세와 협상 결렬, 보복관세 예고로 캐나다 농업단체들이 불안정한 상태에 놓였다(Manitoba Co-operator/Glacier FarmMedia, 2026-08-24). 캐나다농업연맹(CFA) 회장 Keith Currie는 8월 22일 성명에서 <b>\"교역 관계의 안정이 결정적으로 중요한 시기에 협상 결렬은 농가에 불확실성을 만든다\"</b>며 공급망 교란과 식품 가격 부담을 우려했다. 기사는 8월 22일 발효된 50% 관세가 <b>유제품 원료·꿀·일부 양모 및 양모제품·주류 등</b>에 적용됐다고 정리하면서, <b>1차 농업 대부분은 새 50% 부과 대상에 포함되지 않았다</b>고 명시했다 — 이는 Green Oil이 부속서 코드 판독으로 확인한 결과와 일치한다. 다만 Wheat Growers Association은 캐나다-미국 관계 악화가 <b>\"수출 의존 부문 전부가 우려해야 할 일\"</b>이라며 <b>\"우리 일은 우리가 바라는 미국이 아니라 실제로 존재하는 미국을 상대하는 것\"</b>이라고 조속한 협상 복귀를 촉구했다. 기사는 또한 지난 18개월간 잦은 관세 위협과 함께 <b>미국이 CUSMA를 갱신하지 않기로 결정</b>해 협정의 장래 자체가 불확실해졌다고 배경을 정리했다. Green Oil 관점: <b>CUSMA 갱신 거부</b>가 이번 338조 조치에서 CUSMA 면제가 사라진 것과 같은 방향의 사실이다. 원산지 규정에 기대는 리스크 관리 전제를 접고, 품목별 관세 노출을 개별적으로 관리하는 체제로 전환할 것.",
+        "url": "https://www.manitobacooperator.ca/daily/canadian-agriculture-in-limbo-yet-again-after-trade-deal-collapses/"
+      }
+    ],
+    "followupAsOf": "2026-08-25"
   },
   {
     "generatedAt": "2026-08-17T05:08:00-04:00",
@@ -3005,6 +3111,10 @@ function renderWeek(index) {
     document.getElementById('cntRed').textContent   = (r.risks?.red   || []).length;
     document.getElementById('cntAmber').textContent = (r.risks?.amber || []).length;
     document.getElementById('cntGreen').textContent = (r.risks?.green || []).length;
+    const fu = r.followup || [];
+    document.getElementById('cardFollowup').style.display = fu.length ? '' : 'none';
+    document.getElementById('elFollowup').innerHTML       = fu.length ? renderNewsItems(fu, r.sources) : '';
+    document.getElementById('followupSub').textContent    = fu.length && r.followupAsOf ? `Follow-up · ${r.followupAsOf} 기준` : 'Follow-up';
     document.getElementById('elSummary').innerHTML        = (r.summary || []).map(s => `<li>${s}</li>`).join('');
     document.getElementById('elCanolaMarket').innerHTML   = renderNewsItems(r.canola_market, r.sources);
     document.getElementById('elCropConditions').innerHTML = renderNewsItems(r.canola_crop, r.sources);
