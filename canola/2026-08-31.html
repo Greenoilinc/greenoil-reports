@@ -88,6 +88,41 @@ body {
 
 .container { max-width: 920px; margin: 0 auto; padding: 18px 16px 32px; }
 
+/* ── One-line "Why" Summary (맨 위 한 줄 요약) ── */
+/* 방향 클래스: .up = 지표 상승(빨강) / .down = 지표 하락(파랑). 색을 직접 쓰지 말 것. */
+.why-line {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border-radius: 12px;
+  padding: 13px 17px;
+  margin-bottom: 14px;
+  border: 1px solid #e2e8f0;
+  border-left: 5px solid #94a3b8;
+  background: #f8fafc;
+  flex-wrap: wrap;
+}
+.why-line.up   { border-color: #fecaca; border-left-color: #dc2626; background: linear-gradient(135deg, #fef2f2 0%, #fff7f7 100%); }
+.why-line.down { border-color: #bfdbfe; border-left-color: #1d4ed8; background: linear-gradient(135deg, #eff6ff 0%, #f7fbff 100%); }
+.why-move {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  padding: 5px 11px;
+  border-radius: 8px;
+  color: white;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.why-line.up   .why-move { background: #dc2626; }
+.why-line.down .why-move { background: #1d4ed8; }
+.why-text { font-size: 14px; line-height: 1.55; color: #1a2a4a; flex: 1; min-width: 240px; }
+.why-text strong { font-weight: 700; }
+.why-line.up   .why-text strong { color: #b91c1c; }
+.why-line.down .why-text strong { color: #1d4ed8; }
+@media (max-width: 560px) { .why-text { font-size: 13px; } }
+
 .alert-bar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
 .pill {
   display: flex; align-items: center; gap: 6px;
@@ -220,6 +255,12 @@ a.news-item .news-title::after { content: ' ↗'; font-size: 10px; color: #c49a0
 </div>
 
 <div class="container">
+
+  <!-- ── 맨 위 한 줄 요약: 왜 이렇게 움직였나 ── -->
+  <div class="why-line up">
+    <div class="why-move">▲ +3.1% &nbsp;ICE 11월물 C$823.70</div>
+    <div class="why-text"><strong>왜?</strong> 주 초 C$770.60까지 밀렸던 가격이, <strong>흑해 수출 붕괴에 따른 반사 수요</strong>와 <strong>7월 사상 최대 압착량</strong>(132.2만 톤), <strong>1%에 그친 카놀라 수확 진도</strong>가 겹치며 주간 <strong>+C$24.60</strong>으로 급락분을 전부 되돌렸습니다.</div>
+  </div>
 
   <!-- Alert bar -->
   <div class="alert-bar">

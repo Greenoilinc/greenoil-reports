@@ -129,6 +129,41 @@ body {
 .container { max-width: 920px; margin: 0 auto; padding: 18px 16px 32px; }
 
 /* ── Alert bar ── */
+/* ── One-line "Why" Summary (맨 위 한 줄 요약) ── */
+/* 방향 클래스: .up = 지표 상승(빨강) / .down = 지표 하락(파랑). 색을 직접 쓰지 말 것. */
+.why-line {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border-radius: 12px;
+  padding: 13px 17px;
+  margin-bottom: 14px;
+  border: 1px solid #e2e8f0;
+  border-left: 5px solid #94a3b8;
+  background: #f8fafc;
+  flex-wrap: wrap;
+}
+.why-line.up   { border-color: #fecaca; border-left-color: #dc2626; background: linear-gradient(135deg, #fef2f2 0%, #fff7f7 100%); }
+.why-line.down { border-color: #bfdbfe; border-left-color: #1d4ed8; background: linear-gradient(135deg, #eff6ff 0%, #f7fbff 100%); }
+.why-move {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  padding: 5px 11px;
+  border-radius: 8px;
+  color: white;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.why-line.up   .why-move { background: #dc2626; }
+.why-line.down .why-move { background: #1d4ed8; }
+.why-text { font-size: 14px; line-height: 1.55; color: #1a2a4a; flex: 1; min-width: 240px; }
+.why-text strong { font-weight: 700; }
+.why-line.up   .why-text strong { color: #b91c1c; }
+.why-line.down .why-text strong { color: #1d4ed8; }
+@media (max-width: 560px) { .why-text { font-size: 13px; } }
+
 .alert-bar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
 .pill {
   display: flex; align-items: center; gap: 6px;
@@ -285,6 +320,12 @@ a.news-item .news-title::after { content: ' ↗'; font-size: 10px; color: #2e8b2
 </div>
 
 <div class="container">
+
+  <!-- ── 맨 위 한 줄 요약: 왜 이렇게 움직였나 ── -->
+  <div class="why-line down">
+    <div class="why-move">▼ D4 RIN $1.92 &nbsp;4개월여 최저</div>
+    <div class="why-text"><strong>왜?</strong> 8/24 <strong>EPA가 정유사 준수시한을 연장</strong>하며 면제 결정을 예고한 데 이어 8/26 <strong>백악관이 면제를 12억~18억 RIN으로 확대 요청</strong>한 사실이 드러나면서, 미국 바이오연료 의무 수요가 줄어든다는 관측이 <strong>UCO 매입가 상한을 정하는 크레딧 가격</strong>을 무너뜨렸습니다.</div>
+  </div>
 
   <div class="alert-bar">
     <div class="pill red">  <div class="dot red"></div>  <span>3</span> 관심 요망</div>
