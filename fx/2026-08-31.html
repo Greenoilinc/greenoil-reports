@@ -106,6 +106,41 @@ body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMac
 /* ── Container ── */
 .container { max-width: 920px; margin: 0 auto; padding: 18px 16px 32px; }
 
+/* ── One-line "Why" Summary (맨 위 한 줄 요약) ── */
+/* 방향에 따라 .up(CAD 약세·USD/CAD 상승) / .down(CAD 강세·USD/CAD 하락)을 붙입니다. */
+.why-line {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border-radius: 12px;
+  padding: 13px 17px;
+  margin-bottom: 14px;
+  border: 1px solid #e2e8f0;
+  border-left: 5px solid #94a3b8;
+  background: #f8fafc;
+  flex-wrap: wrap;
+}
+.why-line.up   { border-color: #fecaca; border-left-color: #dc2626; background: linear-gradient(135deg, #fef2f2 0%, #fff7f7 100%); }
+.why-line.down { border-color: #bfdbfe; border-left-color: #1d4ed8; background: linear-gradient(135deg, #eff6ff 0%, #f7fbff 100%); }
+.why-move {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  padding: 5px 11px;
+  border-radius: 8px;
+  color: white;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.why-line.up   .why-move { background: #dc2626; }
+.why-line.down .why-move { background: #1d4ed8; }
+.why-text { font-size: 14px; line-height: 1.55; color: #1a2a4a; flex: 1; min-width: 240px; }
+.why-text strong { font-weight: 700; }
+.why-line.up   .why-text strong { color: #b91c1c; }
+.why-line.down .why-text strong { color: #1d4ed8; }
+@media (max-width: 560px) { .why-text { font-size: 13px; } }
+
 /* ── Rate Hero ── */
 .rate-hero {
   background: linear-gradient(135deg, #0f1f4a 0%, #1e3a8a 100%);
@@ -289,6 +324,12 @@ body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMac
 
 <div class="container">
 
+  <!-- ── 맨 위 한 줄 요약: 왜 이렇게 움직였나 ── -->
+  <div class="why-line up">
+    <div class="why-move">▲ +0.93% &nbsp;CAD 약세</div>
+    <div class="why-text"><strong>왜?</strong> 금요일 잭슨홀에서 <strong>워시 Fed 의장이 인상 가능성을 시사</strong>한 데다, 관세 발효로 <strong>캐나다 금리가 먼저 무너지고</strong>(2년물 −7bp) <strong>유가까지 4.2% 빠지면서</strong>, 같은 날 나온 2분기 GDP 호조(연율 +3.3%)가 묻혔습니다.</div>
+  </div>
+
   <!-- Rate Hero -->
   <div class="rate-hero">
     <div>
@@ -328,7 +369,7 @@ body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMac
 
   <!-- 이번 주 한눈에 -->
   <div class="data-note">
-    <strong>📌 이번 주 한 줄 요약 — 캐나다 지표는 좋았는데 CAD는 밀렸습니다. 이유가 전부 캐나다 밖에 있었기 때문입니다.</strong><br>
+    <strong>📌 한 줄 요약 풀어 보기 — 캐나다 지표는 좋았는데 CAD는 밀렸습니다. 이유가 전부 캐나다 밖에 있었기 때문입니다.</strong><br>
     지난 4주간 CAD는 연속으로 강해져 8/21에 <strong>1.3760</strong>, 3개월 최저를 찍었습니다. 이번 주는 그 흐름이 <strong>한 주 만에 끊겼습니다</strong> — USD/CAD는 <strong>+0.93% 올라 1.3888</strong>로 마감했고, 이는 <strong>6월 19일(+1.39%) 이후 가장 큰 주간 상승폭</strong>입니다.
     <br><br>
     특이한 것은 <strong>캐나다 쪽 뉴스가 오히려 좋았다</strong>는 점입니다. 금요일 발표된 <strong>2분기 GDP는 연율 +3.3%</strong>로 BOC 자체 전망(2.5%)을 크게 웃돌았고, 마이너스로 알려졌던 1분기도 <strong>플러스로 상향 수정</strong>됐습니다. 정상적이라면 CAD가 올라야 할 재료입니다.
