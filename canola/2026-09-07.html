@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Oil 카놀라 — 2026년 8/31 – 9/6 주</title>
+<style>
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+  background: #f5f2e8;
+  color: #2a200a;
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.report-switch {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 20px; padding: 5px 12px;
+  font-size: 11px; font-weight: 600; color: #fff;
+  text-decoration: none; white-space: nowrap; transition: background 0.15s;
+}
+.report-switch:hover { background: rgba(255,255,255,0.25); }
+.report-switch .dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; flex-shrink: 0; }
+
+.pdf-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px; padding: 5px 12px;
+  font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.85);
+  cursor: pointer; font-family: inherit; transition: background 0.15s;
+}
+.pdf-btn:hover { background: rgba(255,255,255,0.22); }
+.pdf-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+@media print {
+  .week-nav, .report-switch, .pdf-btn, .nav-dots { display: none !important; }
+  .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: white; }
+  .container { padding: 0; }
+  .card { break-inside: avoid; }
+  a { text-decoration: none; color: inherit; }
+}
+
+.header {
+  background: linear-gradient(135deg, #7a5c00 0%, #c49a00 100%);
+  color: white; padding: 18px 24px 16px;
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+.header-left h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 7px; }
+.header-left .sub { font-size: 11px; opacity: 0.75; margin-top: 3px; letter-spacing: 0.3px; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.updated-badge { font-size: 10px; opacity: 0.65; }
+
+.week-nav {
+  background: white; border-bottom: 1px solid #e8dfa8;
+  padding: 10px 24px; display: flex; align-items: center;
+  justify-content: space-between; gap: 12px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.nav-btn {
+  background: none; border: 1px solid #d4b800;
+  border-radius: 8px; padding: 5px 13px;
+  font-size: 12px; font-weight: 600; color: #8a6800;
+  cursor: pointer; transition: all 0.15s;
+  display: inline-flex; align-items: center; gap: 5px;
+  text-decoration: none;
+}
+.nav-btn:hover { background: #fdf8e0; border-color: #c49a00; }
+.nav-btn.disabled { opacity: 0.3; pointer-events: none; }
+.nav-center { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+.nav-week-label { font-size: 14px; font-weight: 700; color: #2a200a; }
+.nav-week-sub { font-size: 10px; color: #999; }
+.nav-dots { display: flex; gap: 5px; margin-top: 4px; flex-wrap: wrap; justify-content: center; }
+.nav-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #e8dfa8; cursor: pointer; transition: background 0.15s;
+  display: block; text-decoration: none;
+}
+.nav-dot.active { background: #c49a00; }
+.nav-dot:hover { background: #d4b800; }
+
+.container { max-width: 920px; margin: 0 auto; padding: 18px 16px 32px; }
+
+/* ── One-line "Why" Summary (맨 위 한 줄 요약) ── */
+/* 방향 클래스: .up = 지표 상승(빨강) / .down = 지표 하락(파랑). 색을 직접 쓰지 말 것. */
+.why-line {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border-radius: 12px;
+  padding: 13px 17px;
+  margin-bottom: 14px;
+  border: 1px solid #e2e8f0;
+  border-left: 5px solid #94a3b8;
+  background: #f8fafc;
+  flex-wrap: wrap;
+}
+.why-line.up   { border-color: #fecaca; border-left-color: #dc2626; background: linear-gradient(135deg, #fef2f2 0%, #fff7f7 100%); }
+.why-line.down { border-color: #bfdbfe; border-left-color: #1d4ed8; background: linear-gradient(135deg, #eff6ff 0%, #f7fbff 100%); }
+.why-move {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  padding: 5px 11px;
+  border-radius: 8px;
+  color: white;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.why-line.up   .why-move { background: #dc2626; }
+.why-line.down .why-move { background: #1d4ed8; }
+.why-text { font-size: 14px; line-height: 1.55; color: #1a2a4a; flex: 1; min-width: 240px; }
+.why-text strong { font-weight: 700; }
+.why-line.up   .why-text strong { color: #b91c1c; }
+.why-line.down .why-text strong { color: #1d4ed8; }
+@media (max-width: 560px) { .why-text { font-size: 13px; } }
+
+.alert-bar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.pill {
+  display: flex; align-items: center; gap: 6px;
+  background: white; border-radius: 20px; padding: 5px 13px;
+  font-size: 11px; font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.pill.red   { border-left: 3px solid #e53e3e; color: #c53030; }
+.pill.amber { border-left: 3px solid #d69e2e; color: #975a16; }
+.pill.green { border-left: 3px solid #38a169; color: #22543d; }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.dot.red   { background: #e53e3e; }
+.dot.amber { background: #d69e2e; }
+.dot.green { background: #38a169; }
+
+.card { background: white; border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.card-header { display: flex; align-items: center; gap: 9px; margin-bottom: 13px; padding-bottom: 10px; border-bottom: 1px solid #f5edcc; }
+.card-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.icon-summary  { background: #fdf8e0; }
+.icon-canada   { background: #fff0f0; }
+.icon-prov     { background: #fff3e0; }
+.icon-price    { background: #fdf8e0; }
+.icon-crop     { background: #f0fdf0; }
+.icon-export   { background: #eef2ff; }
+.icon-risk     { background: #fff5f5; }
+.icon-sources  { background: #f5f5f5; }
+.card-title { font-size: 14px; font-weight: 700; color: #2a200a; }
+.card-title span { font-size: 10px; font-weight: 400; color: #888; margin-left: 5px; }
+
+.summary-list { list-style: none; }
+.summary-list li { padding: 7px 0 7px 18px; position: relative; border-bottom: 1px solid #f9f4e0; color: #3a2c0a; font-size: 13px; }
+.summary-list li:last-child { border-bottom: none; }
+.summary-list li::before { content: '▸'; position: absolute; left: 0; top: 8px; color: #c49a00; font-size: 10px; }
+
+.news-item { padding: 9px 0; border-bottom: 1px solid #f9f4e0; }
+.news-item:last-child { border-bottom: none; }
+a.news-item { text-decoration: none; color: inherit; display: block; border-radius: 7px; padding: 9px 8px; margin: 0 -8px; transition: background 0.15s; }
+a.news-item:hover { background: #fdf8e0; }
+a.news-item .news-title::after { content: ' ↗'; font-size: 10px; color: #c49a00; opacity: 0.6; }
+.tag { display: inline-block; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 3px; }
+.tag-cfr           { background: #e6f4ea; color: #137333; }
+.tag-carbon        { background: #e8f0fe; color: #1558d6; }
+.tag-prov          { background: #fce8e6; color: #c5221f; }
+.tag-politics      { background: #e8eaf6; color: #283593; }
+.tag-prov-politics { background: #fff3e0; color: #8a4500; }
+.tag-canola-price  { background: #fdf8e0; color: #7a5c00; }
+.tag-canola-crop   { background: #e8f5e9; color: #1b5e20; }
+.tag-canola-export { background: #e3f2fd; color: #0d47a1; }
+.tag-canola-policy { background: #fce4ec; color: #880e4f; }
+.tag-us            { background: #e8eaed; color: #3c4043; }
+.tag-eu            { background: #ede7f6; color: #5e35b1; }
+.tag-trade         { background: #fce4ec; color: #880e4f; }
+
+.news-title { font-size: 12px; font-weight: 600; color: #2a200a; margin-bottom: 2px; }
+.news-body  { font-size: 11px; color: #6b5c30; line-height: 1.5; }
+
+.risk-grid { display: flex; flex-direction: column; gap: 10px; }
+.risk-col { border-radius: 9px; padding: 12px 16px; }
+.risk-col.red   { background: #fff5f5; border: 1px solid #fed7d7; }
+.risk-col.amber { background: #fffbf0; border: 1px solid #fefcbf; }
+.risk-col.green { background: #f0fff4; border: 1px solid #c6f6d5; }
+.risk-col-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+.risk-col.red   .risk-col-title { color: #c53030; }
+.risk-col.amber .risk-col-title { color: #975a16; }
+.risk-col.green .risk-col-title { color: #22543d; }
+.risk-entry { font-size: 12px; color: #4a5568; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.05); line-height: 1.5; }
+.risk-entry:last-child { border-bottom: none; }
+
+.source-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f9f4e0; align-items: flex-start; }
+.source-row:last-child { border-bottom: none; }
+.src-num { width: 20px; height: 20px; flex-shrink: 0; background: #fdf0a0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #8a6800; margin-top: 1px; }
+.src-link { font-size: 12px; font-weight: 600; color: #7a5c00; text-decoration: none; }
+.src-link:hover { text-decoration: underline; }
+.src-meta { font-size: 10px; color: #aaa; margin-top: 1px; }
+
+.empty { background: #fdf8e8; border-radius: 7px; padding: 14px; text-align: center; color: #bbb; font-size: 12px; font-style: italic; }
+.footer { text-align: center; font-size: 10px; color: #bbb; padding: 8px 0 4px; letter-spacing: 0.2px; }
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="header">
+  <div class="header-left">
+    <h1>🌾 Green Oil Inc.</h1>
+    <div class="sub">카놀라 공급 &amp; 정책 인텔리전스 리포트 · Canola Supply &amp; Policy Intelligence</div>
+  </div>
+  <div class="header-right">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="pdf-btn" onclick="downloadPDF()">
+        <svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><rect x="6" y="13" width="12" height="8" rx="1"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/></svg>
+        <span id="pdfBtnLabel">PDF 저장</span>
+      </button>
+      <a class="report-switch" href="../index.html">&#8592; 인덱스</a>
+      <a class="report-switch" href="../uco/2026-09-07.html">
+        <span class="dot"></span>UCO 리포트 →
+      </a>
+    </div>
+    <div class="updated-badge">마지막 업데이트: 2026.09.07</div>
+  </div>
+</div>
+
+<!-- ── Week Navigator ── -->
+<div class="week-nav">
+  <a class="nav-btn disabled" href="#">&#8592; 최신</a>
+  <div class="nav-center">
+    <div class="nav-week-label">이번 주 · 2026년 8/31 – 9/6 주</div>
+    <div class="nav-week-sub">2026.09.07 기준</div>
+    <div class="nav-dots">
+<a class="nav-dot active" href="./2026-09-07.html"></a>
+<a class="nav-dot" href="./2026-08-31.html"></a>
+<a class="nav-dot" href="./2026-08-24.html"></a>
+<a class="nav-dot" href="./2026-08-17.html"></a>
+<a class="nav-dot" href="./2026-08-10.html"></a>
+<a class="nav-dot" href="./2026-08-03.html"></a>
+<a class="nav-dot" href="./2026-07-27.html"></a>
+<a class="nav-dot" href="./2026-07-20.html"></a>
+<a class="nav-dot" href="./2026-07-13.html"></a>
+<a class="nav-dot" href="./2026-07-06.html"></a>
+<a class="nav-dot" href="./2026-06-29.html"></a>
+<a class="nav-dot" href="./2026-06-22.html"></a>
+<a class="nav-dot" href="./2026-06-15.html"></a>
+<a class="nav-dot" href="./2026-06-08.html"></a>
+<a class="nav-dot" href="./2026-06-01.html"></a>
+<a class="nav-dot" href="./2026-05-25.html"></a>
+<a class="nav-dot" href="./2026-05-18.html"></a>
+<a class="nav-dot" href="./2026-05-11.html"></a>
+    </div>
+  </div>
+  <a class="nav-btn" href="./2026-08-31.html">이전 &#8594;</a>
+</div>
+
+<div class="container">
+
+  <!-- ── 맨 위 한 줄 요약: 왜 이렇게 움직였나 ── -->
+  <div class="why-line down">
+    <div class="why-move">▼ −0.1% &nbsp;ICE 11월물 C$822.50</div>
+    <div class="why-text"><strong>왜?</strong> 9월 1일 미국·이란 공방으로 원유가 급등하면서 11월물이 <strong>C$841.90</strong>까지 올라 연중 최고를 새로 썼지만, 이후 시카고 대두유 하락과 <strong>수확 본격화</strong> 압력이 겹쳐 상승분을 모두 반납했고 결국 직전 주 종가 C$823.70보다 <strong>C$1.20 낮은 자리</strong>에서 한 주를 마쳤습니다.</div>
+  </div>
+
+  <!-- Alert bar -->
+  <div class="alert-bar">
+    <div class="pill red">  <div class="dot red"></div>  <span>3</span> 관심 요망</div>
+    <div class="pill amber"><div class="dot amber"></div><span>4</span> 모니터링 필요</div>
+    <div class="pill green"><div class="dot green"></div><span>3</span> 기회 요인</div>
+  </div>
+
+  <!-- 1. Executive Summary -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-summary">📋</div>
+      <div class="card-title">이번 주 핵심 요약 <span>Executive Summary · 8/31–9/6</span></div>
+    </div>
+    <ul class="summary-list">
+      <li>⭐ <b>ICE 11월물이 연중 최고를 새로 썼다가 그대로 되밀려 주간으로는 제자리였습니다.</b> 8/31 C$813.20(−10.50)로 밀린 뒤 <b>9월 1일 C$841.90(+C$28.70)</b>으로 급등해 8월 17일 연중 고점 C$827.40을 톤당 C$14.50 넘어섰지만, 9/2 C$825.90(−16.10), 9/3 C$828.70(+2.90), <b>9/4 C$822.50(−6.20)</b>으로 되돌렸습니다. 직전 주 마감 8/28 C$823.70 대비 <b>주간 −C$1.20(−0.1%)</b>입니다. 1월물 C$832.70, 3월물 C$841.40, 5월물 C$846.70이며 9월 1일 급등의 직접 원인은 미국·이란 공방에 따른 원유 급등이었습니다</li>
+      <li>⭐ <b>미국 EPA가 8월 31일 소규모정유 면제(SRE) 34건을 한꺼번에 결정했고 9월 2일 연방관보에 게재됐습니다.</b> 2025년 이행연도 34건 중 <b>18건은 전량(100%) 면제</b>, <b>11건은 절반(50%) 부분면제</b>, 3건 기각, 2건 부적격 판정이며 2024년 이행연도 1건의 부분면제도 재발행됐습니다. 지난주 리포트가 "9월로 넘어갔다"고 본 사안이 <b>한 주 만에 결정</b>된 것으로, 미국 RFS 의무량이 그만큼 줄어 RIN 수요와 원료 수요를 함께 낮추는 방향입니다. 같은 기관은 9월 4일 <b>2025년 이행보고 기한을 9월 1일에서 10월 1일로 한 달 연장</b>하는 최종규칙도 공표했습니다</li>
+      <li>⭐ <b>최우선 감시 2건은 이번 주에도 게재가 없었습니다.</b> <b>미국 45Z</b>는 Federal Register 게재일 2026-08-31~09-06 구간에서 검색어 "45Z" <b>0건</b>, "canola" <b>0건</b>이며 2026년 2월 4일 제안규정 이후 <b>약 7개월째</b> 최종규정이 없습니다. <b>캐나다 CFR 개정안</b>은 9월 5일자 Canada Gazette Part I 제160권 <b>제36호</b> 목차를 직접 확인한 결과 환경부(ECCC) 항목 자체가 없어 미게재이며, <b>Part II는 이번 주에 발행 자체가 없었습니다</b>(최신 호가 8월 26일 제17호, 다음 호는 9월 9일)</li>
+      <li>⭐ <b>내일(9월 8일) 발효되는 대응관세에 미국산 세미트레일러 25%가 포함돼 차량 조달 원가가 바로 오릅니다.</b> 서부 캐나다 최대 트레일러 판매사는 <b>C$4,500만·600대</b> 발주 잔량을 발효 전에 통관시키려 하고 있으며, 평균 대당 <b>C$75,000</b>인 트레일러가 25% 관세로 <b>약 C$95,000</b>이 된다고 밝혔습니다. 캐나다 국내 제조사는 단 2곳(온타리오·퀘벡)뿐이고 그중 온타리오 업체는 냉동 트레일러를 만들지 않아 <b>국내 대체 능력이 업계 수요의 절반 미만</b>이라는 것이 업계 설명입니다</li>
+      <li><b>프레리 수확이 두 자릿수로 올라섰지만 카놀라는 여전히 초기 단계입니다.</b> 사스카추완은 8월 31일 마감 주간 기준 <b>18%</b>(직전 주 11%, 5년평균 39%)이며 <b>카놀라는 4%·평균 단수 38부셸/에이커</b>입니다. 매니토바는 9월 1일 기준 <b>11%</b>(직전 4%)에 카놀라 6%, 앨버타는 9월 1일 기준 <b>10.2%</b>(직전 4.2%, 5년평균 23%)에 <b>카놀라 0.8%</b>입니다. 캐나다 통계청 생산보고는 <b>9월 16일</b>, 재고보고는 <b>9월 8일</b>입니다</li>
+      <li><b>FAO 세계 식품가격지수가 8월 133.3으로 2022년 11월 이후 최고를 기록했습니다.</b> 7월 130.8에서 올랐고 <b>식물유 지수는 0.6% 올라 2022년 6월 이후 최고</b>입니다. FAO는 2026년 세계 곡물 생산 전망을 7월 대비 340만 톤 낮춘 <b>29억 8,000만 톤</b>으로 조정했으며 이는 2025년 대비 2.0% 감소로 <b>2018년 이후 최대 감소폭</b>입니다. 유럽의 폭염·가뭄, 엘니뇨 우려, 흑해 물류 교란이 원인으로 지목됐습니다</li>
+      <li><b>압착 마진이 톤당 C$284~291로 유지되며 국내 압착이 원료를 계속 흡수하고 있습니다.</b> 한 애널리스트는 올해 캐나다 압착능력이 전년 대비 <b>12% 증가</b>했고(2024→2025년은 10% 증가) 압착업체의 목표 마진이 톤당 C$100인데 <b>실제로는 C$270~370</b>을 벌고 있다고 분석했습니다. 이 마진 수준이면 압착업체가 <b>유채씨에 더 높은 값을 치를 여력</b>이 있다는 뜻입니다</li>
+      <li><b>수출은 신곡 대기로 주간 물량이 급감했지만 누적으로는 전년을 크게 앞섭니다.</b> 캐나다곡물위원회 집계로 8월 30일 마감 주간 카놀라 수출은 <b>58.3천 톤</b>으로 직전 주 118.1천 톤에서 절반 이하로 줄었으나, 곡물연도 누적은 <b>584.8천 톤</b>으로 전년 동기 482.3천 톤보다 <b>21% 많습니다</b>. 같은 주간 국내 소화는 294.6천 톤으로 늘어 누적 <b>106.8만 톤</b>(전년 89.3만 톤)입니다</li>
+    </ul>
+  </div>
+
+  <!-- 2. Risk Radar -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-risk">⚡</div>
+      <div class="card-title">리스크 &amp; 기회 레이더</div>
+    </div>
+    <div class="risk-grid">
+      <div class="risk-col red">
+        <div class="risk-col-title">🔴 관심 요망</div>
+        <div class="risk-entry">⭐ 45Z 재무부·IRS 최종규정 — 이번 주도 공표 없음(제안규정 이후 약 7개월 공백) — Federal Register API로 게재일 2026-08-31~2026-09-06 구간을 검색한 결과 검색어 <b>"45Z" 0건</b>, <b>"canola" 0건</b>이며, "clean fuel production credit"으로 잡힌 2건은 EPA의 RFS 보고기한 연장 규칙과 농무부 개인정보 고시로 45Z와 무관합니다. 2026년 2월 4일 제안규정, 4월 6일 의견수렴 종료, 5월 28일 공청회 이후 <b>약 7개월째</b> 최종규정이 없습니다. 캐나다산 카놀라유는 북미산 원료로 45Z 적격을 유지하지만 제안 단계 장기화로 미국 바이어의 장기계약 확정 지연이 고착되고 있습니다. <b>조치</b>: ① 미국향 카놀라유·UCO 계약은 최종규정 공표 전까지 <b>단기·유연 조건</b>을 유지하고 최종규정 확정 시 단가·물량 재협상 조항을 반드시 넣으시기 바랍니다. ② 이번 주 SRE 결정으로 RFS 쪽 불확실성은 일부 해소됐으므로, <b>남은 변수를 45Z 하나로 좁혀</b> 4분기 미국향 물량 가정을 다시 세우시기 바랍니다. ③ 9월에도 공백이 이어지면 미국향 비중을 낮추는 시나리오를 4분기 예산의 대안 시나리오로 정식 편성하시기 바랍니다</div>
+        <div class="risk-entry">9월 8일 대응관세 발효까지 하루 — 미국산 세미트레일러 25%가 우리 수거 차량 조달 원가를 바로 올립니다 — 8월 25일 확정된 미국산 C$276억 규모 대응관세가 <b>9월 8일 0시 1분</b>부터 부과되며, 목록에는 <b>세미트레일러가 25%</b>로 들어 있습니다. 서부 캐나다 최대 트레일러 판매사는 평균 대당 <b>C$75,000</b>이 25% 관세로 <b>약 C$95,000</b>이 된다고 밝혔고, 캐나다 국내 제조사는 2곳뿐이며 그 능력이 업계 수요의 절반에 못 미칩니다. 렌털 수요 급증도 예고됐습니다. <b>조치</b>: ① 수거 차량·탱크로리·트레일러 발주 잔량을 오늘 안에 조회하고 <b>발효일에 이미 운송 중인 화물은 적용 제외</b>이므로 선적 시점으로 통관 가능 여부를 판단하시기 바랍니다. ② 통관이 어려운 건은 <b>취소 가능 여부와 위약 조건</b>을 먼저 확인하시기 바랍니다(이미 제작에 들어간 물량은 취소가 안 될 수 있습니다). ③ 50%가 걸리는 강재 저장탱크(7309)·드럼(7310)·강관(7304~7306)·관연결구(7307) 잔량도 같은 기준으로 재점검하시기 바랍니다. ④ 늦어지는 건은 <b>관세경감(remission) 신청</b> 대상인지 검토하시기 바랍니다</div>
+        <div class="risk-entry">미국 EPA의 SRE 34건 대량 승인 — 미국향 원료 수요·판가에 하방 압력입니다 — EPA는 8월 31일 2025년 이행연도 SRE 34건에 대해 <b>18건 전량(100%) 면제·11건 절반(50%) 부분면제·3건 기각·2건 부적격</b>을 결정했고 9월 2일 연방관보에 게재했습니다. 34건 중 <b>29건에 면제가 부여</b>됐다는 뜻이므로 2025년 RFS 의무량이 상당폭 줄고, 이는 RIN 가격과 바이오연료 원료 수요를 함께 낮추는 방향입니다. 같은 기관이 9월 4일 이행보고 기한을 <b>10월 1일로 연장</b>해 시장이 실제 수급을 반영하는 시점도 한 달 밀렸습니다. <b>조치</b>: ① 미국향 UCO·카놀라유 판가 가정을 <b>RIN 약세 시나리오</b>로 한 벌 더 만들어 4분기 손익에 대입하시기 바랍니다. ② 미국향 스팟 판매는 10월 1일 보고기한 직전 수요를 노리기보다 <b>분할 체결</b>로 가격 위험을 나누시기 바랍니다. ③ 판가 하방이 확인되면 이번 주 확인된 <b>EU·국내 압착 수요</b> 쪽으로 물량 배분을 옮길 여지가 있는지 미리 견적을 받아 두시기 바랍니다</div>
+      </div>
+      <div class="risk-col amber">
+        <div class="risk-col-title">🟡 모니터링 필요</div>
+        <div class="risk-entry">⭐ CFR 개정안 — 이번 주도 미게재이며 Part II는 발행 자체가 없었습니다 — 9월 5일자 Canada Gazette <b>Part I 제160권 제36호</b> 목차를 직접 열어 확인한 결과 정부 고시(Government notices) 항목은 이민·보건·교통 관련뿐이고 <b>환경부(ECCC) 항목 자체가 없어</b> CFR 개정 초안은 게재되지 않았습니다. <b>Part II</b>는 격주 수요일 발행이라 이번 주에는 호가 나오지 않았고 최신 호는 8월 26일 제160권 제17호, <b>다음 호는 9월 9일</b>입니다. <b>조치</b>: 9월 9일 Part II 제18호와 9월 12일 Part I 제37호를 다음 회차에서 반드시 직접 확인하겠습니다. 카놀라유 크레딧 산정 방식이 바뀌면 국내 판가 구조가 함께 바뀌므로 <b>게재 즉시 판단할 수 있도록</b> 현행 크레딧 기준 손익표를 미리 준비해 두시기 바랍니다</div>
+        <div class="risk-entry">수확 지연 + 8월 말 우박 — 단수와 등급 위험이 함께 커졌습니다 — 프레리 3개 주 수확률은 사스카추완 18%(5년평균 39%)·매니토바 11%·앨버타 10.2%(5년평균 23%)로 <b>평년의 절반 이하</b>이고 카놀라는 SK 4%·MB 6%·AB 0.8%에 그칩니다. 캐나다우박보험협회는 8월 16~29일 폭풍으로 <b>약 2,000건</b>의 청구를 조사했고 앨버타는 <b>10년 만의 최고 수준</b>이라고 밝혔습니다. 사스카추완 작황보고에는 <b>균핵병(sclerotinia)</b> 피해가 다시 기록됐습니다. <b>조치</b>: ① 실측 단수의 첫 공식 확인은 <b>9월 16일 통계청 생산보고</b>이므로 그 전 계약은 물량을 확정하기보다 <b>가격 구간</b>으로 잡으시기 바랍니다. ② 균핵병·우박은 등급 하락 위험이므로 <b>품위 조건이 붙은 계약</b>은 허용 범위를 넉넉히 두시기 바랍니다</div>
+        <div class="risk-entry">랠리의 지속성에 대해 시장 견해가 정면으로 갈립니다 — 한 대형 농업금융기관의 북미 작물 총괄은 <b>"공급충격발 강세는 대체로 짧게 끝난다"</b>며 <b>"취약한 랠리"</b>라고 평가하고, 미국 작황이 알려진 것보다 좋아 9~10월 실측이 나오면 강세 재료가 소진될 것이라며 <b>현재 가격에서 일부 매도</b>를 권고했습니다. 반면 기술적 분석가들은 2021년 9월과 같은 <b>본격 상승 국면 진입</b>을 보고 있고, 한 애널리스트는 지지선 <b>C$810</b>·저항 <b>C$840</b>·돌파 시 다음 목표 <b>C$880</b>을 제시했습니다. <b>조치</b>: 4분기 소요분은 <b>C$810 지지 확인 시 분할 매수</b>, C$840 돌파 확인 시 잔여분 조기 체결이라는 두 갈래로 사전에 정해 두면 어느 쪽 견해가 맞더라도 대응이 늦지 않습니다</div>
+        <div class="risk-entry">원유 급등과 8월 고용 감소가 원가·환율에 동시에 걸립니다 — WTI는 9월 4일 배럴당 <b>US$91.35</b>, 브렌트는 <b>US$96.00</b>으로 직전 주 금요일 US$83.45·US$89.31에서 각각 <b>약 9%·7% 올랐습니다</b>. 미국·이란 공방이 원인이며 이는 우리 <b>수거 차량 연료비를 직접</b> 밀어 올립니다. 한편 캐나다는 8월에 일자리 <b>4만 2,000개</b>가 줄어 실업률 6.4%를 유지했고, 루니는 주중 71.95~72.53 사이를 오간 끝에 9월 4일 <b>US$0.7225</b>로 마감했습니다. <b>조치</b>: ① 4분기 연료비 가정을 원유 US$90대 전제로 다시 세우시기 바랍니다. ② 같은 사건이 바이오연료 원료 판가를 올리므로 원가와 판가를 <b>스프레드</b>로 함께 보시기 바랍니다</div>
+      </div>
+      <div class="risk-col green">
+        <div class="risk-col-title">🟢 기회 요인</div>
+        <div class="risk-entry">FAO 식품가격지수·식물유 지수가 동시에 다년 최고 — 우리 제품 판가의 바닥을 받쳐 줍니다 — 8월 FAO 식품가격지수는 <b>133.3</b>으로 2022년 11월 이후 최고이고, <b>식물유 지수는 2022년 6월 이후 최고</b>입니다. FAO는 2026년 세계 곡물 생산 전망을 <b>29억 8,000만 톤</b>으로 340만 톤 낮췄고 이는 2018년 이후 최대 감소폭입니다. <b>활용</b>: 4분기 판가 협상에서 이 지수를 <b>공개 근거</b>로 쓸 수 있습니다. 바이어가 가격 인하를 요구할 때 식물유 지수의 방향을 함께 제시하시기 바랍니다</div>
+        <div class="risk-entry">국내 압착 마진 C$284~291/톤 — 압착업체가 원료에 더 낼 여력이 확인됐습니다 — 9월 1일 ICE 카놀라 보드 크러시 마진은 톤당 <b>C$284.20</b>, 9월 2일 11월물 기준으로는 <b>C$284.20~291.20</b>입니다. 압착업체 목표 마진이 톤당 C$100인데 실제 C$270~370을 벌고 있고 캐나다 압착능력은 전년 대비 <b>12% 증가</b>했습니다. <b>활용</b>: 국내 압착 수요가 유지되는 한 카놀라유 계열 제품 판가의 하방이 제한됩니다. 다만 같은 사실이 <b>원료 조달 경쟁</b>을 뜻하므로 매입가와 판가를 반드시 스프레드로 묶어 관리하시기 바랍니다</div>
+        <div class="risk-entry">미국 SAF 증설이 원료 계약 축소가 아니라 확대 방향으로 수정됐습니다 — 몬태나주의 대형 재생연료 정제사가 9월 1일 SAF 증설 계획을 수정해, 인접 정유설비를 전용하는 방식으로 <b>총 잔여 투자비를 12억 달러에서 1억 3,700만 달러로</b> 줄이면서도 2028년 말 <b>연 2억 갤런</b> SAF 생산 목표는 유지한다고 밝혔습니다. 현재 연 6,000만 갤런 수준에서 연말 8,000만, 2027년 봄 1억 2,000만 갤런으로 올린다는 계획이며 <b>연간 원료 소요는 약 20억 파운드</b>입니다. <b>활용</b>: 45Z 불확실성 속에서도 북미 원료 수요 자체는 <b>줄지 않고 늘어나는</b> 방향임을 보여 주는 사례입니다. 미국향 판매 축소 시나리오를 짤 때 <b>수요 부족이 아니라 제도 불확실성</b>이 원인이라는 점을 구분해 판단하시기 바랍니다</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Market -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-price">🌾</div>
+      <div class="card-title">카놀라 시장 가격 &amp; 수급 <span>Price · Supply · Demand</span></div>
+    </div>
+    <a class="news-item" href="https://www.manitobacooperator.ca/market-update/ice-closing-review-canola-declines-ahead-of-long-weekend/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-canola-price">카놀라 가격</span>
+      <div class="news-title">ICE 11월물 9/4 C$822.50(−C$6.20) 마감 — 9/1 C$841.90으로 연중 최고를 새로 썼다가 되밀려 주간 −C$1.20(−0.1%)</div>
+      <div class="news-body">ICE 카놀라 선물은 9월 4일 금요일 시카고 대두 복합체 약세에 눌려 11월물이 톤당 <b>C$822.50</b>으로 전일 대비 C$6.20 내려 한 주를 마쳤습니다(Manitoba Co-operator/Glacier FarmMedia, 2026-09-04). 1월물 C$832.70(−6.80), 3월물 C$841.40(−7.00), 5월물 C$846.70(−6.90)으로 전 한계월이 함께 내렸습니다. 이번 주 일별 종가는 8/31 C$813.20(−10.50) → <b>9/1 C$841.90(+28.70)</b> → 9/2 C$825.90(−16.10) → 9/3 C$828.70(+2.90) → 9/4 C$822.50(−6.20)이며, 직전 주 마감 8/28 C$823.70 대비 <b>주간 −C$1.20(−0.1%)</b>입니다. 9월 1일의 급등은 미국의 이란 공격에 따른 원유 급등이 대두 복합체를 밀어 올린 결과였고, 이때 8월 17일 연중 고점 C$827.40을 <b>톤당 C$14.50 넘어섰습니다</b>. 금요일 거래량은 39,575계약으로 전일 50,674계약에서 줄었고 이 중 스프레드가 21,590계약이었습니다. Green Oil 관점: 지난주 리포트가 제시한 <b>C$825 저항</b>은 9월 1일 한 차례 뚫렸지만 <b>사흘 만에 되밀렸습니다</b>. 결과적으로 저항은 아직 유효하며, 지난주에 올려 잡은 재진입선 C$800은 그대로 두되 <b>C$810~840 박스</b>를 이번 주 기준선으로 삼는 것이 현실적입니다. 4분기 소요분 미체결분은 C$810 부근 되밀림에서 분할로 접근하시기 바랍니다.</div>
+    </a>
+    <a class="news-item" href="https://www.manitobacooperator.ca/daily/deck-is-stacked-in-favour-of-price-rally-analysts/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-canola-price">압착 마진</span>
+      <div class="news-title">ICE 카놀라 보드 크러시 마진 9/1 톤당 C$284.20 — 압착능력 전년 대비 12% 증가, 목표 C$100의 세 배 가까운 실적</div>
+      <div class="news-body">한 곡물시장 애널리스트는 캐나다 압착업체들이 통상 톤당 <b>C$100</b>의 압착 마진을 목표로 하는데 2026년에는 자신의 분석 기준 <b>C$270~370</b>을 벌고 있다고 밝혔습니다(Manitoba Co-operator/Glacier FarmMedia, 2026-09-02). ICE 카놀라 보드 크러시 마진 지수는 <b>9월 1일 기준 톤당 C$284.20</b>이었고, 9월 2일 종가 기준 11월물 포지션에서는 선물 대비 <b>C$284.20~291.20</b> 범위였습니다. 같은 애널리스트는 2026년에 신규·증설 압착설비가 가동되면서 압착능력이 전년 대비 <b>12% 늘었고</b>(2024→2025년은 10% 증가) 이 마진 수준이면 압착업체가 <b>유채씨에 더 높은 값을 치를 여력</b>이 있다고 설명했습니다. 그는 또 미국·유럽의 단수 부진, 흑해 봉쇄, 바이오연료 수요 확대를 들어 <b>매도자에게 유리한 판이 짜여 있다</b>고 평가했습니다. Green Oil 관점: 압착 마진이 이 수준에서 유지되는 한 국내 압착업체는 우리보다 높은 원료 매입가를 감당할 수 있습니다. 조달 측면에서는 <b>경쟁 심화</b>이지만, 동시에 카놀라유 계열 제품 판가의 하방을 받쳐 주는 힘이기도 합니다. 매입가와 판가를 <b>스프레드 하나로</b> 묶어 보는 관리 방식이 이번 주에도 유효합니다.</div>
+    </a>
+    <a class="news-item" href="https://www.manitobacooperator.ca/daily/could-the-gain-market-bull-run-be-ending/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-canola-price">반대 견해</span>
+      <div class="news-title">대형 농업금융기관은 "취약한 랠리" 경고 — 공급충격발 강세는 짧고 9~10월 실측이 나오면 소진된다는 진단</div>
+      <div class="news-body">한 대형 농업금융기관의 북미 작물 총괄은 곡물 강세장이 과도할 수 있다고 경고했습니다(Manitoba Co-operator/Glacier FarmMedia, 2026-09-04). 그는 <b>"공급충격에 따른 강세는 대체로 짧게 끝난다"</b>며 현 국면을 <b>"취약한 랠리"</b>로 규정했습니다. 유럽의 밀·옥수수 감산과 미국의 부진한 경질적동소맥 수확, 흑해 물류 차질은 사실이지만 <b>작년 세계 수확이 사상 최대였고 올해도 재앙 수준은 아니라는</b> 것이 근거입니다. 밀·대두·쌀의 세계 기말재고율은 여전히 건전하고 옥수수만 2026-27년 미국 기준 10%로 낮습니다. 그는 미국 옥수수 단수가 민간 조사치 173.2부셸보다 높은 <b>177~180부셸</b> 범위일 것으로 보고, 9~10월에 실측이 드러나면 강세 재료를 계속 공급하기 어렵다며 <b>현재 가격에서 일부 매도</b>를 권했습니다. 다만 초대형 엘니뇨가 남아시아의 밀·쌀·팜유에 미칠 영향은 강세 요인으로 인정했고, 2027년 북미 농가 마진이 올해만 못할 수 있다고 덧붙였습니다. Green Oil 관점: 이 견해는 같은 주에 나온 <b>"2027년까지 강세" 전망과 정면으로 충돌합니다</b>. 어느 쪽이 맞을지 지금 고르기보다, 조달 계획을 <b>지지선 매수·저항 돌파 시 조기 체결</b>의 두 갈래로 미리 정해 두는 편이 안전합니다. 판단의 분수령은 <b>9월 16일 통계청 생산보고</b>와 미국 실측입니다.</div>
+    </a>
+    <a class="news-item" href="https://www.manitobacooperator.ca/daily/ice-canola-weekly-tight-supplies-point-to-strong-2027/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-canola-price">지지·저항</span>
+      <div class="news-title">주간 전망: 지지 C$810·저항 C$840, 돌파 시 C$880 — "수확 압력은 오래가지 않을 것"</div>
+      <div class="news-body">9월 2일 발표된 주간 시황에서 한 상품 애널리스트는 카놀라가 현재 <b>등락이 잦은(choppy) 구간</b>에 있지만 2027년은 좋은 해가 될 것이라고 전망했습니다(Manitoba Co-operator/Glacier FarmMedia, 2026-09-02). 그는 <b>"장기적으로 카놀라의 수요 측면은 훌륭하다"</b>면서 다만 <b>원유가 급락하지 않는다는 전제</b>를 달았습니다. 2027년 재고가 더 타이트해져 가격을 높게 유지할 것으로 봤고, 구체적으로 <b>매도가 나와도 톤당 C$810이 구간 바닥</b>이며 저항은 <b>C$840</b>, 이를 넘어서면 다음 목표는 <b>C$880</b>이라고 제시했습니다. 지난 한 달 카놀라가 C$770에서 C$840까지 올랐다는 점도 함께 지적했습니다. 그는 카놀라와 식물유를 이끄는 가장 큰 변수는 <b>원유의 방향</b>이며 미국·이란 전쟁이 이어지는 한 유가는 높게 유지될 것으로 봤고, 엘니뇨가 생산 패턴을 바꿀 변수라고 덧붙였습니다. 캐나다 수확이 본격화해도 <b>그 압력은 오래가지 않을 것</b>이라는 것이 결론이었습니다. Green Oil 관점: 이번 주 실제 저가는 8월 31일 C$813.20으로 <b>제시된 지지선 C$810과 거의 일치</b>했고 고가 C$841.90은 저항 C$840을 살짝 넘겼다가 실패했습니다. 이 구간이 실제로 작동한 셈이므로 <b>C$810~840 박스</b>를 4분기 조달 판단의 기준 틀로 삼을 만합니다.</div>
+    </a>
+    <a class="news-item" href="https://www.manitobacooperator.ca/market-update/canadian-canola-cash-bids-sept-4/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-canola-price">현물 호가</span>
+      <div class="news-title">9/4 서부 캐나다 현물 호가(PDQ): 즉시분 부셸당 C$17.23~17.75로 SPOT 항목 재등장 — 10월 인도분보다 비싼 역전 구조 지속</div>
+      <div class="news-body">PDQ 집계 기준 2026년 9월 4일자 서부 캐나다 평균 카놀라 현물 호가가 공개됐습니다(Manitoba Co-operator/PDQ, 2026-09-04). 즉시 인도(SPOT)는 부셸당 북AB C$17.54, 남AB C$17.63, 북서SK C$17.31, 남서SK C$17.42, 북동SK C$17.23, 남동SK C$17.45, 서MB C$17.63, 동MB C$17.75입니다. 10월 인도분은 C$17.05~17.62, 11월 C$17.14~17.60, 12월 C$17.26~17.73, 1월 C$17.31~17.80, 2월 C$17.49~18.07로 <b>10월이 가장 싸고 그 뒤로 다시 올라가는 구조</b>입니다. 즉 지난주 호가표에서 사라졌던 SPOT 항목이 다시 나타났고 <b>즉시분이 10월분보다 비싼 역전</b>이 유지되고 있습니다. 별도로 9월 4일 ICE 현물 마감은 Par Region C$806.70(베이시스 −C$22.00, 전일 대비 +C$2.90), Thunder Bay 인도 C$832.50(+C$10.00 베이시스, 전일 대비 −C$6.20), Vancouver 인도 C$857.50(+C$35.00 베이시스, −C$6.20)이었습니다. Green Oil 관점: 신곡이 실제로 들어오기 시작했다면 즉시분이 눌려야 하는데 <b>여전히 역전</b>이라는 것은 프레리 카놀라 수확이 SK 4%·MB 6%·AB 0.8%에 그친 사실과 정확히 맞물립니다. 즉 <b>현물 압력은 아직 오지 않았습니다</b>. 밴쿠버 베이시스가 톤당 C$35로 지난주와 동일하게 유지된 점도 서해안 적체가 그대로라는 신호이므로 서해안 경유 물량은 계속 여유 리드타임을 두시기 바랍니다.</div>
+    </a>
+    <a class="news-item" href="https://www.manitobacooperator.ca/market-update/canadian-financial-close-loonie-falls-back-2/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-canola-price">환율 · 거시</span>
+      <div class="news-title">9/4 루니 US$0.7225 — 8월 고용 4만 2,000명 감소에도 소폭 상승 마감, WTI US$91.35로 주간 약 9% 급등</div>
+      <div class="news-body">캐나다 달러는 9월 4일 금요일 <b>US$0.7225</b>(US$1=C$1.3840)로 마감해 전일 US$0.7252에서 내렸습니다(Manitoba Co-operator/Glacier FarmMedia, 2026-09-04). 다만 직전 주 금요일 종가 US$0.7200과 비교하면 소폭 오른 자리입니다. 주중 각 일자의 오후 시세는 8/31 US$0.7217, 9/1 US$0.7195, 9/2 US$0.7225, 9/3 US$0.7253으로 오르내렸습니다. 같은 날 캐나다 통계청은 8월에 일자리 <b>4만 2,000개</b>가 줄었고 실업률은 <b>6.4%</b>를 유지했다고 발표해 시장 예상을 벗어났습니다. 미 달러지수는 0.250포인트 오른 99.130이었습니다. 원유는 연휴를 앞둔 숏커버로 소폭 올라 <b>WTI 배럴당 US$91.35(+0.05), 브렌트 US$96.00(+0.48)</b>이었으며, 직전 주 금요일 US$83.45·US$89.31 대비 <b>각각 약 9%·7% 급등</b>한 수준입니다. TSX는 119.32포인트 내린 36,633.12, 금은 온스당 US$62.30 하락한 US$4,477.60이었습니다. Green Oil 관점: 이번 주 거시의 핵심은 환율이 아니라 <b>원유입니다</b>. 배럴당 US$91대는 수거 차량 연료비를 직접 밀어 올리며, 여기에 9월 8일부터 미국산 트레일러 25% 관세가 더해집니다. 반대로 같은 유가가 바이오연료 원료 판가를 받치므로 <b>4분기 예산은 연료비 상향과 판가 상향을 같은 표에서</b> 다루시기 바랍니다.</div>
+    </a>
+  </div>
+
+  <!-- 4. Crop -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-crop">🌱</div>
+      <div class="card-title">작황 동향 <span>Harvest — SK · MB · AB</span></div>
+    </div>
+    <a class="news-item" href="https://www.manitobacooperator.ca/daily/saskatchewan-crop-report-dryness-gives-way-to-rainfall/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-canola-crop">사스카추완</span>
+      <div class="news-title">SK 작황보고 8/25–8/31(9/3 발표): 수확 18%로 7%p 진전했으나 5년평균 39%의 절반 미만 — 카놀라 4%·단수 38부셸</div>
+      <div class="news-body">사스카추완주가 9월 3일 발표한 8월 31일 마감 주간 작황보고에 따르면 주 전체 수확이 <b>18% 완료</b>로 직전 주 11%에서 7%포인트 올라섰습니다(Manitoba Co-operator/Government of Saskatchewan, 2026-09-03). 5년평균 39%에는 여전히 절반에도 못 미칩니다. 주 초반의 건조한 날씨가 수확을 도왔지만 주 후반에 비와 우박이 작업을 방해했고, Prairie Rose 지역은 주 최고인 <b>136mm</b>의 강우를 기록했습니다. 유지작물 수확률은 <b>카놀라 4%에 평균 단수 38부셸/에이커</b>, 겨자 25%(1,129파운드), 대두 7%, 아마 1%(26부셸)입니다. 곡물류는 가을호밀 88%, 겨울밀 74%, 보리 32%(74부셸), 듀럼 20%(44부셸), 귀리 12%(94부셸), 경질적동소맥 6%(52부셸)이며 렌틸 73%·완두 66%로 조기 작물에 작업이 집중됐습니다. 강우 덕분에 표토수분이 크게 개선돼 경작지 기준 과잉 11%·적정 64%·부족 20%·매우부족 5%로, <b>부족 이상이 직전 주 47%에서 25%로 절반 가까이 줄었습니다</b>. 주간 작물 피해는 바람·비·국지적 침수가 주원인이었고 <b>카놀라 균핵병</b> 피해도 다시 보고됐습니다. Green Oil 관점: 이번 주 처음으로 <b>카놀라 실측 단수(38부셸/에이커)</b>가 나왔다는 점이 중요합니다. 다만 수확률 4% 표본이므로 대표성은 제한적입니다. 수분 여건이 개선된 것은 <b>내년 작기에는 호재</b>이지만 올해로 보면 <b>수확 지연 요인</b>이며, 균핵병 재보고는 등급 하락 위험을 뜻합니다. 품위 조건부 계약의 허용 범위를 넉넉히 잡으시기 바랍니다.</div>
+    </a>
+    <a class="news-item" href="https://www.manitobacooperator.ca/daily/manitoba-crop-report-harvest-marches-on-despite-varied-rainfall/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-canola-crop">매니토바</span>
+      <div class="news-title">MB 작황보고 9/1 기준: 수확 11%로 직전 4%에서 급진전 — 카놀라 6%, 다만 전년 동기 29%에는 크게 못 미침</div>
+      <div class="news-body">매니토바 농업부 작황보고에 따르면 9월 1일 기준 주 전체 수확은 <b>11% 완료</b>로 직전 주 4%에서 크게 진전했습니다(Manitoba Co-operator/Manitoba Agriculture, 2026-09-02). 다만 2025년 같은 시점 29%, 2024년 24%에는 크게 못 미칩니다. 작물별로 가을호밀 92%, 겨울밀 86%, 완두 64%, 보리 26%, 봄밀 21%, 귀리 12%, <b>카놀라 6%</b>입니다. 지역별로는 중부가 20%로 가장 앞섰고 인터레이크 16%, 남서부 7%, 동부 5%, 북서부 3% 순입니다. 강우 편차가 커서 남서부 Kola는 주간 <b>82.9mm</b>가 내린 반면 동부 Pinawa는 강우가 전혀 없었습니다. 유지작물에서는 <b>중부·남서부에서 카놀라 수확이 시작</b>됐고 나머지 지역 대부분은 여전히 <b>종자 착색기</b>로 상당 면적에서 스와딩이 진행 중입니다. 봄밀은 전 주에서 수확이 시작됐고 초기 단수 보고는 평년 이하에서 평년 수준입니다. Green Oil 관점: 지난주 "매니토바 카놀라 콤바인 작업이 9월 첫~둘째 주에 몰릴 것"이라고 본 예상대로 <b>중부·남서부에서 실제 수확이 시작</b>됐습니다. 다만 착색기 면적이 여전히 넓어 <b>현물 압력이 본격화하는 시점은 9월 둘째~셋째 주</b>로 미뤄질 가능성이 큽니다. 그 구간이 이번 분기 현물 매입의 첫 기회가 될 것입니다.</div>
+    </a>
+    <a class="news-item" href="https://www.manitobacooperator.ca/daily/alberta-crop-report-harvest-moves-into-double-digits/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-canola-crop">앨버타</span>
+      <div class="news-title">AB 작황보고 9/1 기준: 수확 10.2%로 직전 4.2%에서 두 배 이상 — 5년평균 23%에 크게 미달, 카놀라는 0.8%</div>
+      <div class="news-body">앨버타주 주간 작황보고에 따르면 9월 1일 마감 주간 주요 작물 수확이 <b>10.2% 완료</b>로 직전 주 4.2%에서 두 배 이상 진전했습니다(Manitoba Co-operator/Government of Alberta, 2026-09-04). 5년평균 23%에는 크게 못 미칩니다. 지역별로 남부 27%, 중부 11.8%, 피스 3.3%, 북동부 2.4%, 북서부 1%로 <b>남부에 집중</b>돼 있습니다. 작물별로는 건조완두 53.4%, 보리 20.3%, 봄밀 6%, <b>카놀라 0.8%</b>, 귀리 0.5%입니다. 표토수분은 양호~우수 <b>56.2%</b>에 과잉 5.4%로 5년평균(양호~우수 38.5%)을 크게 웃돌며, 심토수분도 57%로 전주 대비 3%포인트 올라 5년평균 36%를 크게 넘습니다. 지역별 표토 양호~우수는 피스 85.8%, 북서부 69.2%(과잉 28.6%), 북동부 67.3%, 중부 48.8%, 남부 41.5%이며 <b>중부만 전주 대비 하락</b>했습니다. Green Oil 관점: 2위 생산 주의 카놀라 수확이 <b>1% 미만</b>이라는 것은 프레리 전체 카놀라 물량이 사실상 아직 시장에 나오지 않았다는 뜻입니다. 북서부의 과잉 수분 28.6%는 <b>수확 지연과 품질 저하</b> 위험을 동시에 뜻하며, 지난주 정리한 앨버타의 농지 배수 규제 완화가 실효를 내는 시점은 2027년 작기여서 올해에는 도움이 되지 않습니다.</div>
+    </a>
+    <a class="news-item" href="https://www.manitobacooperator.ca/daily/hail-claims-climb-on-the-prairies/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-canola-crop">우박 피해</span>
+      <div class="news-title">프레리 우박 청구 급증 — 8/16~29 폭풍으로 약 2,000건 조사, 앨버타는 10년 만의 최고 수준</div>
+      <div class="news-body">캐나다우박보험협회는 8월 후반 프레리를 강타한 폭풍으로 우박 피해 청구가 늘고 있다고 밝혔습니다(Manitoba Co-operator/Glacier FarmMedia, 2026-09-04). 회원사들은 <b>8월 16~29일</b> 사이 발생한 폭풍에 대해 <b>약 2,000건</b>의 청구를 조사했으며, 골프공보다 큰 우박과 많은 비가 <b>이미 익은 작물</b>을 심하게 손상시켰습니다. 앨버타는 특히 피해가 커서 한 주 작물보험 관계자는 <b>"10년 만에 이런 수준의 청구는 처음"</b>이라고 밝혔고, 중부 지역은 <b>세 번에서 네 번까지 반복해서</b> 우박을 맞은 곳이 있다고 설명했습니다. 사스카추완·매니토바도 평년보다 청구가 많지만 10년 최고 수준은 아니며, 사스카추완은 <b>9월 첫째 주에도 광범위한 폭풍이 두 차례</b> 지나가 청구가 더 늘었습니다. 협회 관계자는 <b>"5년평균으로는 지금쯤 수확이 절반 끝났어야 하는데 프레리 전체가 20~25%에 그쳐</b> 청구 규모가 평소보다 크다"고 설명했습니다. 한 회원사는 보고기간 중 <b>13일간</b> 우박이 관측됐고 8월 23·28·29·30일이 가장 심했으며 사스카추완의 좁은 지역에서만 <b>26만 5,000에이커</b>가 피해를 입어 시즌 최대 손실 사고가 될 것으로 봤습니다. Green Oil 관점: 늦은 우박은 <b>단수보다 등급</b>을 먼저 깎습니다. 9월 16일 통계청 생산보고에는 이 피해가 일부만 반영될 수 있으므로, 실제 수급은 발표 숫자보다 <b>타이트한 쪽</b>으로 기울 가능성을 열어 두시기 바랍니다.</div>
+    </a>
+  </div>
+
+  <!-- 5. Export -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-export">🚢</div>
+      <div class="card-title">수출 채널 &amp; 무역 동향 <span>CGC · FAO · EU · 물류</span></div>
+    </div>
+    <a class="news-item" href="https://www.manitobacooperator.ca/market-update/ice-closing-review-canola-declines-ahead-of-long-weekend/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-canola-export">수출 실적</span>
+      <div class="news-title">CGC 주간 카놀라 수출 8/30 마감 주 58.3천 톤으로 반토막 — 그러나 곡물연도 누적 584.8천 톤으로 전년 대비 21% 많음</div>
+      <div class="news-body">캐나다곡물위원회(CGC)는 8월 30일 마감 주간 카놀라 수출이 <b>58.3천 톤</b>으로 직전 주 118.1천 톤에서 절반 이하로 줄었다고 집계했습니다(Manitoba Co-operator/Glacier FarmMedia, 2026-09-04). 다만 2026-27년 곡물연도 누적으로는 <b>584.8천 톤</b>으로 전년 동기 482.3천 톤보다 <b>21% 많습니다</b>. 한 애널리스트는 <b>수확을 앞둔 이 시기에 수출이 둔화되는 것은 매우 전형적</b>이라고 설명했습니다. 같은 주간 국내 소화는 <b>294.6천 톤</b>으로 직전 주 267.3천 톤에서 늘었고 누적은 <b>106.8만 톤</b>으로 전년 89.3만 톤을 크게 웃돕니다. 즉 신곡 대기 구간에서도 <b>국내 압착이 수출보다 다섯 배 빠르게</b> 구곡을 소화하고 있습니다. 한편 미국 농무부 뉴델리 주재관은 인도의 2026-27년 유채 생산을 <b>1,210만 톤</b>으로 2025-26년 1,190만 톤보다 소폭 늘려 잡았습니다. 캐나다 통계청은 <b>9월 8일 주요 작물 재고</b>, <b>9월 16일 생산보고</b>를 예정하고 있습니다. Green Oil 관점: 수출 둔화는 계절 요인이므로 그 자체로 약세 신호가 아닙니다. 오히려 <b>국내 소화 누적이 전년 대비 20% 늘어난 점</b>이 우리에게 더 중요한 사실이며, 국내에서 확보 가능한 카놀라 원료가 계속 줄어드는 방향임을 재확인해 줍니다. 다음 주 9월 8일 재고보고가 <b>구곡 이월이 실제로 얼마나 얇은지</b>를 처음으로 숫자로 보여 줄 것입니다.</div>
+    </a>
+    <a class="news-item" href="https://www.manitobacooperator.ca/daily/world-food-prices-at-highest-since-2022-as-supply-risks-mount-fao-says/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-canola-export">세계 가격</span>
+      <div class="news-title">FAO 8월 세계 식품가격지수 133.3으로 2022년 11월 이후 최고 — 식물유 지수는 2022년 6월 이후 최고, 곡물 생산 전망 340만 톤 하향</div>
+      <div class="news-body">유엔 식량농업기구(FAO)는 9월 4일 금요일 8월 세계 식품가격이 <b>2022년 말 이후 최고</b>로 올랐다고 발표했습니다(Manitoba Co-operator/Reuters, 2026-09-04). FAO 식품가격지수는 8월 평균 <b>133.3포인트</b>로 7월 수정치 130.8에서 올랐으며 이는 <b>2022년 11월 이후 최고</b>입니다(2022년 3월 사상 최고 대비로는 약 17% 낮은 수준). 곡물·식물유·설탕·육류·유제품 <b>전 품목</b>이 올랐고, 곡물지수는 전월비 2.2% 올라 2024년 5월 이후 최고, <b>식물유 지수는 0.6% 올라 2022년 6월 이후 최고</b>, 설탕은 11.9% 급등했습니다. FAO 수석이코노미스트는 <b>"기후 충격·지정학적 긴장·물류 교란이 겹치며 식품시장에 위험 프리미엄이 돌아오고 있다"</b>고 밝혔습니다. 별도 보고서에서 FAO는 2026년 세계 곡물 생산 전망을 7월 대비 <b>340만 톤 낮춘 29억 8,000만 톤</b>으로 조정했으며 이는 2025년 대비 2.0% 감소로 <b>2018년 이후 최대 감소폭</b>입니다. 2026-27년 기말 세계 곡물재고 전망도 1.1% 낮춘 <b>9억 4,720만 톤</b>으로 조정됐습니다. Green Oil 관점: <b>식물유 지수가 4년여 만의 최고</b>라는 것은 우리 제품 판가의 바닥이 위로 올라갔다는 뜻입니다. 4분기 판가 협상에서 바이어가 인하를 요구할 경우 이 지수를 <b>공개 근거</b>로 제시할 수 있습니다. 다만 같은 지수가 원료 매입가도 함께 밀어 올린다는 점은 스프레드 관리로 흡수해야 합니다.</div>
+    </a>
+    <a class="news-item" href="https://www.biobased-diesel.com/post/german-rapeseed-oil-exports-down-over-14" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-eu">EU 유채유</span>
+      <div class="news-title">독일 유채유 수출 2025-26년 111만 톤으로 14.4% 감소 — EU 역내 91% 비중, 바이오연료 의무 상향으로 내수 전환</div>
+      <div class="news-body">독일 연방통계청 자료에 따르면 독일의 2025-26년 유채유 수출은 <b>111만 톤</b>으로 직전 연도 130만 톤 대비 <b>약 14.4% 감소</b>했습니다(Biobased Diesel Daily/UFOP, 2026-09-03). 직전 연도가 금세기 들어 두 번째로 많은 수출 실적이었던 데서 크게 꺾인 것입니다. 수출의 <b>91%인 101만 톤</b>이 EU 역내로 향했고 네덜란드가 56만 8,900톤으로 절반 이상을 차지했지만 전년 대비 23% 줄었습니다. 벨기에는 11만 8,500톤으로 34% 늘었고 폴란드 38% 증가, 덴마크 3% 감소, 프랑스 21% 감소였습니다. EU 역외로는 노르웨이가 2만 9,900톤으로 45% 줄었습니다. 독일 유지작물협회(UFOP)는 독일 착유업계의 처리능력이 <b>연 1,000만 톤 규모</b>이고 <b>2026~2027년 EU 전역의 바이오연료 의무 비율이 상향되면서</b> 착유공장 가동률의 중요성이 커지고 있다고 지적했습니다. 특히 독일 착유공장 소요량의 <b>약 40%만 국내 생산으로 충당</b>된다는 점을 들어 유채 수요가 꾸준히 늘며 가격을 지지하고 있다고 설명했습니다. Green Oil 관점: 유럽 최대 유채 가공국이 <b>수출을 줄이고 내수로 돌리고 있다</b>는 것은 EU 역내 식물유가 타이트해진다는 뜻입니다. 여기에 지난주 확인한 흑해 공급 붕괴가 겹치면 <b>EU가 캐나다산을 찾을 개연성</b>이 한층 높아집니다. EU향은 동부 캐나다 항만이 처리하므로 서해안 적체와도 무관합니다. 동부 항만 기준 물류 견적을 미리 확보해 두시기 바랍니다.</div>
+    </a>
+    <a class="news-item" href="https://www.manitobacooperator.ca/daily/canadian-trade-infrastructure-doesnt-add-up-to-a-strategy-amid-push-to-diversify/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-canola-export">수출 물류</span>
+      <div class="news-title">"항만·교량·도로가 전략이 되지 못한다" — 밴쿠버항은 비유럽·비북미 교역의 40%를 처리하면서도 세계 최비효율 항만 중 하나로 지목</div>
+      <div class="news-body">두 정책분석가는 캐나다가 수출 다변화를 말하면서도 <b>인프라 투자 없이는 어렵다</b>고 지적했습니다(Manitoba Co-operator/Glacier FarmMedia, 2026-09-04). 공공정책포럼의 전략·정책 담당 부회장은 <b>"우리 항만, 교량, 도로는 하나의 전략으로 합쳐지지 않는다"</b>며 <b>밴쿠버항</b>을 대표 사례로 들었습니다. 밴쿠버항은 캐나다 비북미 교역의 <b>40%</b>를 처리하는 최대 농식품 수출 허브이고 최근 물동량도 늘었지만, 그는 여전히 <b>"현재 세계에서 가장 비효율적인 항만 중 하나"</b>라고 평가했습니다. 이들은 2025년 보고서에서 ① 주간 교역을 포함한 국내 우선순위 정리, ② 아시아·EU를 포함한 수출시장 최대한 다변화, ③ 미국과의 관계 유지를 개선 과제로 제시했으며, <b>"농업·임업·에너지·광업 같은 생산 부문이 중요한 부문"</b>이라고 강조했습니다. 현 연방정부가 카타르·중국·인도태평양 등 비미국 교역 강화에 이미 나선 점은 방향이 맞다고 평가하면서도 지원 수단의 실효적 배치가 더 필요하다고 덧붙였습니다. Green Oil 관점: 이번 주 현물 호가에서 <b>밴쿠버 인도 베이시스가 톤당 C$35로 유지</b>된 사실이 이 지적을 그대로 뒷받침합니다. 서해안 적체는 정책·투자가 붙기 전까지 구조적으로 남을 문제이므로, <b>아시아향은 리드타임을 길게, EU향은 동부 항만</b>으로 나누어 설계하는 것이 현실적인 대응입니다.</div>
+    </a>
+  </div>
+
+  <!-- 6. Federal -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-canada">🍁</div>
+      <div class="card-title">연방 정책 &amp; 정치 동향 <span>대응관세 · 45Z · CFR · 미국 RFS</span></div>
+    </div>
+    <a class="news-item" href="https://www.federalregister.gov/documents/2026/09/02/2026-17985/notice-of-august-31-2026-decisions-on-petitions-for-small-refinery-exemptions-under-the-renewable" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-us">미국 RFS</span>
+      <div class="news-title">EPA, 8/31 소규모정유 면제 34건 일괄 결정 — 18건 전량면제·11건 절반면제·3건 기각·2건 부적격, 9/2 연방관보 게재</div>
+      <div class="news-body">미국 환경보호청(EPA)은 재생연료기준(RFS) 2025년 이행연도 소규모정유 면제(SRE) 청원 <b>34건</b>에 대한 최종 결정을 8월 31일 내렸고 9월 2일 연방관보에 고시했습니다(Federal Register, 2026-09-02). 에너지부(DOE)와 협의해 검토한 결과 <b>18건은 전량(100%) 면제</b>, <b>11건은 부분(50%) 면제</b>, <b>3건은 기각</b>, <b>2건은 부적격</b> 판정이며 2024년 이행연도 1건의 부분면제도 재발행됐습니다. 즉 34건 중 <b>29건에 면제가 부여</b>됐습니다. EPA는 청정대기법 211조(o)(9)가 <b>부분적 불균형 경제부담(partial DEH)을 인정해 부분면제를 부여할 권한</b>을 자신에게 부여한다고 해석했고, DOE의 심사 매트릭스를 DEH 판단의 합리적 대리지표로 삼아 <b>다른 경제 요인이 반대 결론을 강제하지 않는 한 DOE 판단을 따르겠다</b>고 밝혔습니다. 소규모정유는 연평균 원유 처리량 <b>일 7만 5,000배럴 이하</b>인 정유시설입니다. Green Oil 관점: 지난주 리포트는 이 결정이 <b>9월로 넘어갔다</b>고 봤는데 한 주 만에 나왔고, 결과는 <b>면제 쪽으로 크게 기울었습니다</b>. 면제가 늘면 2025년 RFS 의무량이 줄고 이는 <b>RIN 가격과 바이오연료 원료 수요를 함께 낮추는</b> 방향입니다. 미국향 UCO·카놀라유 판가 가정에 <b>RIN 약세 시나리오</b>를 한 벌 더 만들어 4분기 손익에 대입하시기 바랍니다.</div>
+    </a>
+    <a class="news-item" href="https://www.federalregister.gov/documents/2026/09/04/2026-18132/renewable-fuel-standard-rfs-program-extension-of-2025-compliance-reporting-deadline" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-us">미국 RFS</span>
+      <div class="news-title">EPA, 2025년 RFS 이행보고 기한을 9/1에서 10/1로 한 달 연장 — 9/4 공표·즉시 발효 최종규칙</div>
+      <div class="news-body">미국 환경보호청은 재생연료기준(RFS) <b>2025년 이행연도의 이행보고 기한을 2026년 9월 1일에서 10월 1일로</b> 연장하는 최종규칙을 9월 4일 공표했으며 <b>같은 날 즉시 발효</b>됐습니다(Federal Register, 2026-09-04). 이 조치는 이틀 전 고시된 SRE 34건 결정과 한 묶음으로 보아야 합니다. 면제가 대량으로 부여되면서 의무이행자들이 <b>재계산된 의무량에 맞춰 RIN 정산을 다시 해야 하고</b>, 그 작업 시간을 확보해 주는 성격의 연장이기 때문입니다. Green Oil 관점: 실무적 의미는 <b>미국 RIN 시장의 실제 수급 반영 시점이 한 달 밀렸다</b>는 것입니다. 보고기한 직전에는 통상 의무이행자의 RIN 확보 수요가 몰리는데, 그 시점이 9월 1일에서 10월 1일로 이동했습니다. 미국향 스팟 판매를 <b>10월 1일 직전 수요에 몰아 넣기보다 9월 중 분할 체결</b>로 나누는 편이 가격 위험을 줄이는 방법입니다. 동시에 이 한 달 동안 45Z 최종규정까지 나오면 조건이 한꺼번에 바뀔 수 있으므로 계약서에 <b>제도 변경 시 재협상 조항</b>을 반드시 넣으시기 바랍니다.</div>
+    </a>
+    <a class="news-item" href="https://www.cbc.ca/news/canada/manitoba/trucking-semi-trailer-costs-us-tariffs-9.7330014" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-canola-policy">대응관세</span>
+      <div class="news-title">9/8 발효 대응관세에 미국산 세미트레일러 25% — 평균 대당 C$75,000이 약 C$95,000으로, 국내 제조사는 단 2곳</div>
+      <div class="news-body">9월 8일 0시 1분부터 발효되는 미국산 <b>C$276억</b> 규모 대응관세 목록에 <b>세미트레일러가 25%</b>로 포함돼 있어 운송업계가 발효 전 통관에 몰리고 있습니다(CBC News, 2026-09-06). 서부 캐나다 최대 트레일러 판매사는 미국 제조사로부터 <b>C$4,500만·600대</b> 규모 발주 잔량을 안고 있으며, 최고운영책임자는 <b>"25%는 트레일러 한 대의 마진을 훨씬 넘어서므로 고객에게 전가할 수밖에 없다"</b>고 밝혔습니다. 이미 제작에 들어간 물량은 취소가 어렵고, 9월 8일까지 캐나다로 들여오지 못하면 미국에 세워 두거나 미국 소매상에 되팔아야 하며 <b>매입가를 회수하지 못한다</b>고 설명했습니다. 매니토바트럭협회 사무국장은 <b>"캐나다 세미트레일러의 절대다수가 미국산"</b>이며 회원사들이 관세 이전에 발주한 물량의 25% 추가 부담을 감당하기 어려울 것이라고 밝혔고, <b>"이 상황이 몇 주 이상 이어지면 운송업계 안팎에서 파산이 나올 수 있다"</b>고 경고했습니다. 캐나다 국내 세미트레일러 제조사는 <b>온타리오·퀘벡 2곳뿐</b>이고 온타리오 업체는 냉동 트레일러를 만들지 않으며, 업계 추산 국내 제조능력은 필요량의 <b>절반 미만</b>입니다. 평균 대당 <b>C$75,000</b>인 트레일러가 25% 관세로 <b>약 C$95,000</b>이 되며 렌털 수요 급증도 예상됩니다. Green Oil 관점: 지난주까지 우리 노출을 <b>미국산 설비·자재</b>로 봤는데 이번 주에 <b>차량 자산</b>이 추가로 확인됐습니다. UCO 수거는 차량 사업이므로 트레일러·탱크 조달 원가는 곧 자본지출입니다. ① 발주 잔량을 오늘 안에 조회하고 <b>발효일에 이미 운송 중인 화물은 적용 제외</b>이므로 선적 시점으로 판단하시기 바랍니다. ② 취소 가능 여부와 위약 조건을 먼저 확인하시기 바랍니다. ③ 렌털 수요 급증이 예고됐으므로 렌털 대체를 고려한다면 <b>지금 계약을 잡아 두어야</b> 합니다.</div>
+    </a>
+    <a class="news-item" href="https://gazette.gc.ca/rp-pr/p1/2026/2026-09-05/html/index-eng.html" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-cfr">CFR 감시</span>
+      <div class="news-title">⭐ Canada Gazette Part I 9/5자 제160권 제36호 — 환경부 항목 자체가 없어 CFR 개정 미게재, Part II는 이번 주 발행 없음</div>
+      <div class="news-body">9월 5일자 Canada Gazette <b>Part I 제160권 제36호</b>의 목차를 직접 열어 확인한 결과 청정연료규정(CFR) 개정 초안은 게재되지 않았습니다(Canada Gazette, 2026-09-05). 이번 호의 정부 고시(Government notices)는 이민난민보호법에 따른 에볼라 관련 명령 개정, 추밀원 임명 공고, 공공안전부 지문감식관 지정 정오표, 교통부의 에볼라 관련 항공 임시명령과 몬트리올항만청 보충특허, 캐나다공중보건청의 검역법 명령으로 구성돼 있으며 <b>환경기후변화부(ECCC) 항목 자체가 존재하지 않습니다</b>. 위원회(Commissions) 항목은 국경서비스청의 합판·단조분쇄매체 반덤핑 결정, 캐나다에너지규제기관의 대미 전력수출 신청, 국제무역심판소 사건, 경쟁심판소, 공직위원회 허가 5건입니다. <b>Part II</b>는 격주 수요일 발행이라 8월 31일~9월 6일 구간에는 <b>호 자체가 발행되지 않았고</b> 최신 호는 8월 26일자 제160권 제17호, <b>다음 호는 9월 9일</b>입니다. Green Oil 관점: CFR 개정은 여전히 <b>초안조차 나오지 않은 상태</b>입니다. 다음 회차에서는 <b>9월 9일 Part II 제18호</b>와 <b>9월 12일 Part I 제37호</b>를 반드시 직접 확인하겠습니다. 카놀라유 크레딧 산정 방식이 바뀌면 국내 판가 구조가 함께 바뀌므로, 게재 즉시 판단할 수 있도록 <b>현행 크레딧 기준의 손익표</b>를 미리 준비해 두시기 바랍니다.</div>
+    </a>
+    <a class="news-item" href="https://www.biobased-diesel.com/post/montana-renewables-slashes-cost-of-saf-expansion-in-newly-revised-plan" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-us">미국 SAF</span>
+      <div class="news-title">몬태나주 대형 SAF 증설 계획 수정 — 잔여 투자비를 12억 달러에서 1억 3,700만 달러로 줄이면서 2028년 말 연 2억 갤런 목표 유지</div>
+      <div class="news-body">미국 몬태나주 그레이트폴스의 대형 재생연료 정제사가 9월 1일 지속가능항공유(SAF) 증설의 새 계획을 발표했습니다(Biobased Diesel Daily, 2026-09-01). 인접 정유공장의 <b>기존 수첨처리설비·수소플랜트·나프타 분리탑을 전용</b>하는 방식으로, 2028년 말까지 연 <b>2억 갤런</b> SAF 생산과 일 1만 7,000배럴 총 판매를 달성한다는 목표는 유지하면서 <b>잔여 투자비를 12억 달러에서 1억 3,700만 달러로</b> 줄였습니다. 이에 따라 미국 에너지부 대출보증도 최대 6억 5,800만 달러 추가 인출에서 <b>3,400만 달러 단일 최종 인출</b>로 축소 수정됐고, 나머지는 자체 이익으로 조달합니다. 현재 생산은 연 6,000만 갤런 수준이며 연말 8,000만 갤런, 2027년 봄 1억 2,000만 갤런으로 올린다는 계획입니다. 증설 후 <b>연간 원료 소요는 약 20억 파운드</b>로 늘고, 이 원료는 목장·농장에서 나오는 것으로 설명됐습니다. 대규모 단일 공사 대신 <b>여섯 개의 작고 회수기간이 짧은 프로젝트</b>로 쪼갠 것이 특징입니다. Green Oil 관점: 45Z 최종규정이 7개월째 나오지 않고 이번 주 SRE 대량 면제로 RFS 수요까지 줄었는데도, 현장의 <b>설비 투자는 축소가 아니라 효율화 후 확대</b>로 갔습니다. 이는 북미 원료 수요 자체는 견조하며 문제는 <b>수요 부족이 아니라 제도 불확실성</b>이라는 뜻입니다. 미국향 축소 시나리오를 짤 때 두 원인을 분리해 판단하시기 바랍니다.</div>
+    </a>
+  </div>
+
+  <!-- 7. Provincial -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-prov">🏛️</div>
+      <div class="card-title">주정부 동향 <span>SK · MB · AB</span></div>
+    </div>
+    <a class="news-item" href="https://www.620ckrm.com/2026/08/31/saskatchewan-moves-ahead-with-next-steps-in-trade-dispute/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-prov-politics">사스카추완 (Moe)</span>
+      <div class="news-title">SK 8/31 무역분쟁 다음 단계 발표 — 미국산 주류 50% 부과금(진열은 유지), 9/2 미네소타 중서부입법회의에 MLA 6인 대표단 파견</div>
+      <div class="news-body">사스카추완주는 8월 31일 무역분쟁 대응의 다음 단계를 밝혔습니다(620 CKRM, 2026-08-31). 미국산 주류에 <b>50% 상당의 상호 부과금</b>을 적용하되 매장 진열에서는 빼지 않는 방침을 유지했고, 연방정부의 <b>15·25·50% 대응관세</b>가 미국 세율을 그대로 맞춘 조치라는 점에서 이를 지지한다고 확인했습니다. 동시에 주의회 의원 <b>6인 대표단</b>을 9월 2일 미네소타에서 열린 중서부입법회의에 파견해 <b>11개 주 입법가</b>들과 접촉했습니다. Moe 총리는 수출세에 대해 <b>"왜 잘못된 정책으로 캐나다인을 실직시키려 하는가"</b>라며 반대 입장을 재확인하고 <b>"최대 교역상대와 어떻게 교역 확실성을 확보할지에만 집중해야 한다"</b>고 밝혔습니다. 농업장관은 회의에 <b>15개 주 농업담당관</b>이 참석했고 <b>모두가 USMCA(CUSMA) 유지에 매우 우호적</b>이었다며, 사스카추완이 농업 분야에서만 <b>27개 주</b>와 거래한다는 점을 강조했습니다. Green Oil 관점: 카놀라 1위 생산 주가 <b>연방 대응관세는 지지하되 자원 수출세에는 계속 선을 긋고, 주 차원에서는 대미 관계 복원에 자원을 쓰는</b> 기조가 이번 주에도 유지됐습니다. 카놀라 원료의 주간 이동이나 수출에 주정부발 추가 규제가 붙을 가능성은 여전히 낮다고 보는 것이 합리적입니다.</div>
+    </a>
+    <a class="news-item" href="https://news.gov.mb.ca/news/index.html?item=75177" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-prov-politics">매니토바 (Kinew)</span>
+      <div class="news-title">MB 9/4 인도 통상대표 신규 임명·무역수출성장계획 발표 — 수출 내비게이터 포털로 시장정보·교역협정 자료 제공</div>
+      <div class="news-body">매니토바주는 9월 4일 인도 내 통상 활동을 확대한다고 발표했습니다(Province of Manitoba, 2026-09-04). 기업·광업·무역·일자리창출부 장관은 인도에 본사를 두고 싱가포르·영국에 사무소를 둔 컨설팅사를 <b>인도 통상대표</b>로 임명해 매니토바 기업의 현지 진출을 지원한다고 밝혔습니다. 이 회사는 통상 개발, 투자 유치, 입지 평가 서비스를 전문으로 합니다. 함께 <b>무역수출성장계획(Trade and Export Growth Plan)</b>을 새로 내놓았고, 세계무역센터 위니펙과 함께 <b>수출 내비게이터 포털</b>을 구축해 수출 안내서·시장조사·교역협정 자료·교육 도구·기업 연결을 제공하기로 했습니다. 인도를 <b>가장 빠르게 성장하는 경제 중 하나</b>로 지목했으나 이번 발표문에는 농업·카놀라·유지작물에 대한 직접 언급은 없었고 예산 규모도 제시되지 않았습니다. Green Oil 관점: 지난주 매니토바의 C$1억 초과 관세 대응 패키지에 이어 <b>2주 연속으로 대미 의존도 축소 조치</b>가 나왔습니다. 인도는 이번 주 미국 농무부 주재관이 2026-27년 유채 생산을 1,210만 톤으로 소폭 상향한 시장이므로 유채씨 자체의 판로로는 제한적이지만, <b>공정유지·바이오연료 원료</b> 쪽으로는 접점이 있을 수 있습니다. 매니토바에 사업장이 있다면 수출 내비게이터 포털과 지난주의 다변화대출보증(한도 C$500만) 요건을 <b>함께</b> 확인해 볼 가치가 있습니다.</div>
+    </a>
+    <a class="news-item" href="https://www.cbc.ca/news/politics/alberta-diplomacy-u-s-canada-trade-war-9.7332762" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-prov-politics">앨버타 (Smith)</span>
+      <div class="news-title">AB 9/6 "외교 우선" 노선 성과 주장 — 미국산 주류 규제가 없는 유일한 주, 10월 분리 주민투표는 대미 협상의 변수</div>
+      <div class="news-body">앨버타의 주미 수석대표는 9월 6일 공개된 인터뷰에서 <b>강경 대응을 택한 다른 주들에 비해 앨버타가 앞서 있다</b>고 밝혔습니다(CBC News, 2026-09-06). 그는 <b>"총리의 외교 우선 접근이 주에 분명히 도움이 됐다"</b>며 <b>"미국 관세가 앨버타 경제에 미친 충격은 상대적으로 작다"</b>고 설명했습니다. 실제로 앨버타는 <b>미국산 주류에 대한 판매 금지나 보복 부과금이 없는 유일한 주</b>이며, 미국 측이 이 입장에 <b>"진정한 고마움"</b>을 표해 왔고 그것이 결과로 이어졌다는 것이 그의 주장입니다. 한 전략커뮤니케이션 자문은 <b>"성과를 기준으로 보면 앨버타의 노력이 열매를 맺고 있는 것으로 보인다"</b>고 평가했으나, 다른 주 총리들은 에너지 수출 중단이나 석유 수출세 같은 더 강한 압박을 요구해 왔고 Smith 총리는 두 방안을 모두 거부해 왔습니다. 한편 <b>10월로 예정된 분리 주민투표 실시 여부에 대한 투표</b>가 다가오면서 미국 측 인사들이 이를 <b>캐나다 내부 분열과 무역협상 실패의 신호</b>로 인용하기 시작했습니다. Green Oil 관점: 카놀라 2위 생산 주가 <b>연방 대응관세와 다른 길</b>을 가고 있다는 점은 주별 규제 환경이 갈릴 수 있음을 뜻합니다. 다만 앨버타의 무개입 기조는 원료 조달 측면에서는 <b>추가 규제 위험이 낮다</b>는 뜻이므로 우리에게 불리하지 않습니다. 10월 주민투표는 캐나다 전체의 대미 협상력에 영향을 줄 수 있는 변수이므로 다음 회차부터 <b>일정과 결과</b>를 계속 따라가겠습니다.</div>
+    </a>
+  </div>
+
+  <!-- 8. Sources -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-sources">🔗</div>
+      <div class="card-title">주요 출처 <span>Sources · 전 항목 발행일 직접 확인</span></div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">1</div>
+      <div>
+        <a class="src-link" href="https://www.manitobacooperator.ca/market-update/ice-closing-review-canola-declines-ahead-of-long-weekend/" target="_blank">ICE Closing Review: Canola declines ahead of long weekend (9/4 종가 · CGC 주간 · 인도 유채 전망)</a>
+        <div class="src-meta">Manitoba Co-operator / Glacier FarmMedia · 2026-09-04</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">2</div>
+      <div>
+        <a class="src-link" href="https://www.manitobacooperator.ca/market-update/ice-closing-review-canola-starts-week-on-downside/" target="_blank">ICE Closing Review: Canola starts week on downside (8/31 종가 C$813.20)</a>
+        <div class="src-meta">Manitoba Co-operator / Glacier FarmMedia · 2026-08-31</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">3</div>
+      <div>
+        <a class="src-link" href="https://www.manitobacooperator.ca/market-update/ice-closing-review-sharp-hikes-in-crude-drives-up-canola/" target="_blank">ICE Closing Review: Sharp hikes in crude drives up canola (9/1 종가 C$841.90 · 연중 최고)</a>
+        <div class="src-meta">Manitoba Co-operator / Glacier FarmMedia · 2026-09-01</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">4</div>
+      <div>
+        <a class="src-link" href="https://www.manitobacooperator.ca/market-update/ice-closing-review-canola-down-hard/" target="_blank">ICE Closing Review: Canola down hard (9/2 종가 C$825.90 · 압착 마진 C$284.20~291.20)</a>
+        <div class="src-meta">Manitoba Co-operator / Glacier FarmMedia · 2026-09-02</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">5</div>
+      <div>
+        <a class="src-link" href="https://www.manitobacooperator.ca/market-update/ice-closing-review-canola-overcomes-earlier-declines/" target="_blank">ICE Closing Review: Canola overcomes earlier declines (9/3 종가 C$828.70 · SK 작황)</a>
+        <div class="src-meta">Manitoba Co-operator / Glacier FarmMedia · 2026-09-03</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">6</div>
+      <div>
+        <a class="src-link" href="https://www.manitobacooperator.ca/daily/ice-canola-weekly-tight-supplies-point-to-strong-2027/" target="_blank">ICE Canola Weekly: Tight supplies point to strong 2027 (지지 C$810 · 저항 C$840 · 목표 C$880)</a>
+        <div class="src-meta">Manitoba Co-operator / Glacier FarmMedia · 2026-09-02</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">7</div>
+      <div>
+        <a class="src-link" href="https://www.manitobacooperator.ca/daily/deck-is-stacked-in-favour-of-price-rally-analysts/" target="_blank">‘Deck is stacked’ in favour of price rally: analysts (크러시 마진 C$284.20 · 압착능력 +12%)</a>
+        <div class="src-meta">Manitoba Co-operator / Glacier FarmMedia · 2026-09-02</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">8</div>
+      <div>
+        <a class="src-link" href="https://www.manitobacooperator.ca/daily/could-the-gain-market-bull-run-be-ending/" target="_blank">Could the grain market bull run be ending? ("취약한 랠리" 반대 견해)</a>
+        <div class="src-meta">Manitoba Co-operator / Glacier FarmMedia · 2026-09-04</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">9</div>
+      <div>
+        <a class="src-link" href="https://www.manitobacooperator.ca/market-update/canadian-canola-cash-bids-sept-4/" target="_blank">Canadian canola cash bids – Sept. 4 (PDQ 서부 캐나다 평균 현물 호가)</a>
+        <div class="src-meta">Manitoba Co-operator / PDQ · 2026-09-04</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">10</div>
+      <div>
+        <a class="src-link" href="https://www.manitobacooperator.ca/market-update/ice-canola-cash-close-21/" target="_blank">ICE Canola Cash Close – Sept. 4 (Par Region · Thunder Bay · Vancouver 베이시스)</a>
+        <div class="src-meta">Manitoba Co-operator / ICE Futures · 2026-09-04</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">11</div>
+      <div>
+        <a class="src-link" href="https://www.manitobacooperator.ca/market-update/canadian-financial-close-loonie-falls-back-2/" target="_blank">Canadian Financial Close: Loonie falls back (루니 US$0.7225 · WTI US$91.35 · 브렌트 US$96.00)</a>
+        <div class="src-meta">Manitoba Co-operator / Glacier FarmMedia · 2026-09-04</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">12</div>
+      <div>
+        <a class="src-link" href="https://www.manitobacooperator.ca/daily/saskatchewan-crop-report-dryness-gives-way-to-rainfall/" target="_blank">Saskatchewan Crop Report: Dryness gives way to rainfall (8/25–8/31 · 수확 18% · 카놀라 4%·38부셸)</a>
+        <div class="src-meta">Manitoba Co-operator / Government of Saskatchewan · 2026-09-03</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">13</div>
+      <div>
+        <a class="src-link" href="https://www.manitobacooperator.ca/daily/manitoba-crop-report-harvest-marches-on-despite-varied-rainfall/" target="_blank">Manitoba crop report: Harvest jumps to 11 per cent complete (9/1 기준 · 카놀라 6%)</a>
+        <div class="src-meta">Manitoba Co-operator / Manitoba Agriculture · 2026-09-02</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">14</div>
+      <div>
+        <a class="src-link" href="https://www.manitobacooperator.ca/daily/alberta-crop-report-harvest-moves-into-double-digits/" target="_blank">Alberta Crop Report: Harvest moves into double digits (9/1 기준 10.2% · 카놀라 0.8%)</a>
+        <div class="src-meta">Manitoba Co-operator / Government of Alberta · 2026-09-04</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">15</div>
+      <div>
+        <a class="src-link" href="https://www.manitobacooperator.ca/daily/hail-claims-climb-on-the-prairies/" target="_blank">Hail claims climb on the Prairies (8/16–29 약 2,000건 · 앨버타 10년 최고)</a>
+        <div class="src-meta">Manitoba Co-operator / Glacier FarmMedia · 2026-09-04</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">16</div>
+      <div>
+        <a class="src-link" href="https://www.manitobacooperator.ca/daily/world-food-prices-at-highest-since-2022-as-supply-risks-mount-fao-says/" target="_blank">World food prices at highest since 2022 as supply risks mount, FAO says (지수 133.3 · 식물유 4년 최고)</a>
+        <div class="src-meta">Manitoba Co-operator / Reuters · 2026-09-04</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">17</div>
+      <div>
+        <a class="src-link" href="https://www.manitobacooperator.ca/daily/canadian-trade-infrastructure-doesnt-add-up-to-a-strategy-amid-push-to-diversify/" target="_blank">Canadian trade infrastructure doesn’t “add up to a strategy” amid push to diversify (밴쿠버항 비효율)</a>
+        <div class="src-meta">Manitoba Co-operator / Glacier FarmMedia · 2026-09-04</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">18</div>
+      <div>
+        <a class="src-link" href="https://www.biobased-diesel.com/post/german-rapeseed-oil-exports-down-over-14" target="_blank">German rapeseed-oil exports down over 14% (2025-26년 111만 톤 · EU 역내 91%)</a>
+        <div class="src-meta">Biobased Diesel Daily / UFOP · 2026-09-03</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">19</div>
+      <div>
+        <a class="src-link" href="https://www.biobased-diesel.com/post/montana-renewables-slashes-cost-of-saf-expansion-in-newly-revised-plan" target="_blank">Montana Renewables slashes cost of SAF expansion in newly revised plan (연 2억 갤런 · 원료 20억 파운드)</a>
+        <div class="src-meta">Biobased Diesel Daily / Calumet Inc. · 2026-09-01</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">20</div>
+      <div>
+        <a class="src-link" href="https://www.federalregister.gov/documents/2026/09/02/2026-17985/notice-of-august-31-2026-decisions-on-petitions-for-small-refinery-exemptions-under-the-renewable" target="_blank">Notice of August 31, 2026 Decisions on Petitions for Small Refinery Exemptions Under the RFS Program (34건 결정 원문)</a>
+        <div class="src-meta">Federal Register / U.S. EPA · 2026-09-02</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">21</div>
+      <div>
+        <a class="src-link" href="https://www.federalregister.gov/documents/2026/09/04/2026-18132/renewable-fuel-standard-rfs-program-extension-of-2025-compliance-reporting-deadline" target="_blank">Renewable Fuel Standard (RFS) Program: Extension of 2025 Compliance Reporting Deadline (10/1로 연장)</a>
+        <div class="src-meta">Federal Register / U.S. EPA · 2026-09-04</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">22</div>
+      <div>
+        <a class="src-link" href="https://gazette.gc.ca/rp-pr/p1/2026/2026-09-05/html/index-eng.html" target="_blank">Canada Gazette, Part I, Volume 160, Number 36: Index (⭐CFR 미게재 직접 확인)</a>
+        <div class="src-meta">Canada Gazette · 2026-09-05</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">23</div>
+      <div>
+        <a class="src-link" href="https://gazette.gc.ca/rp-pr/p2/2026/index-eng.html" target="_blank">Canada Gazette, Part II 2026 연간 목록 (최신 호 8/26 제17호 · 이번 주 발행 없음 확인)</a>
+        <div class="src-meta">Canada Gazette · 2026-09-05</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">24</div>
+      <div>
+        <a class="src-link" href="https://www.cbc.ca/news/canada/manitoba/trucking-semi-trailer-costs-us-tariffs-9.7330014" target="_blank">Counter-tariffs won’t just affect the cost of goods for Canadians. They’ll hit the trailers moving them too (세미트레일러 25%)</a>
+        <div class="src-meta">CBC News · 2026-09-06</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">25</div>
+      <div>
+        <a class="src-link" href="https://www.620ckrm.com/2026/08/31/saskatchewan-moves-ahead-with-next-steps-in-trade-dispute/" target="_blank">Saskatchewan moves ahead with next steps in trade dispute (주류 50% · 미네소타 대표단)</a>
+        <div class="src-meta">620 CKRM · 2026-08-31</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">26</div>
+      <div>
+        <a class="src-link" href="https://news.gov.mb.ca/news/index.html?item=75177" target="_blank">Manitoba Government Appoints New India Trade Representative, Announces Export Supports</a>
+        <div class="src-meta">Province of Manitoba · 2026-09-04</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">27</div>
+      <div>
+        <a class="src-link" href="https://www.cbc.ca/news/politics/alberta-diplomacy-u-s-canada-trade-war-9.7332762" target="_blank">Elbows up or down? Why Alberta is diplomacy-first in the trade war</a>
+        <div class="src-meta">CBC News · 2026-09-06</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Green Oil Inc. Internal Use Only &nbsp;·&nbsp; Powered by Claude AI &nbsp;·&nbsp; <a href="../index.html" style="color:#bbb;">← 인덱스</a></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+  const btn = document.getElementById('pdfBtnLabel');
+  if (typeof html2pdf === 'undefined') { alert('PDF 라이브러리 로딩 실패. 브라우저 인쇄(Ctrl+P)를 이용해 주세요.'); return; }
+  btn.textContent = '생성 중...';
+  const opt = {
+    margin: [8, 8, 8, 8], filename: 'GreenOil-Canola-2026-09-07.pdf',
+    image: { type: 'jpeg', quality: 0.92 },
+    html2canvas: { scale: 2, useCORS: true, logging: false },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(document.body).save()
+    .then(() => { btn.textContent = 'PDF 저장'; })
+    .catch(() => { btn.textContent = 'PDF 저장'; alert('PDF 생성 실패. 브라우저 인쇄(Ctrl+P → PDF 저장)를 이용해 주세요.'); });
+}
+</script>
+</body>
+</html>
