@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Oil UCO — 긴급 · UCO 50% 관세 (9/15 발효)</title>
+<style>
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+  background: #f0f4f0;
+  color: #1c2e1c;
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── Report Switch Badge ── */
+.report-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.report-switch:hover { background: rgba(255,255,255,0.25); }
+.report-switch .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #fbbf24; flex-shrink: 0;
+}
+
+/* ── PDF Button ── */
+.pdf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.pdf-btn:hover { background: rgba(255,255,255,0.22); }
+.pdf-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Print styles ── */
+@media print {
+  .week-nav, .report-switch, .pdf-btn, .nav-dots { display: none !important; }
+  .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: white; }
+  .container { padding: 0; }
+  .card { break-inside: avoid; }
+  a { text-decoration: none; color: inherit; }
+}
+
+/* ── Header ── */
+.header {
+  background: linear-gradient(135deg, #1a5c1a 0%, #2e8b2e 100%);
+  color: white;
+  padding: 18px 24px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.header-left h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 7px; }
+.header-left .sub { font-size: 11px; opacity: 0.75; margin-top: 3px; letter-spacing: 0.3px; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.updated-badge { font-size: 10px; opacity: 0.65; }
+
+/* ── Week Navigator ── */
+.week-nav {
+  background: white;
+  border-bottom: 1px solid #e0e8e0;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.nav-btn {
+  background: none;
+  border: 1px solid #c8dcc8;
+  border-radius: 8px;
+  padding: 5px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #2e8b2e;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+.nav-btn:hover { background: #eaf4ea; border-color: #2e8b2e; }
+.nav-btn.disabled { opacity: 0.3; pointer-events: none; }
+.nav-center { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+.nav-week-label { font-size: 14px; font-weight: 700; color: #1c2e1c; }
+.nav-week-sub { font-size: 10px; color: #999; }
+.nav-dots { display: flex; gap: 5px; margin-top: 4px; flex-wrap: wrap; justify-content: center; }
+.nav-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #d0e4d0; cursor: pointer; transition: background 0.15s;
+  display: block; text-decoration: none;
+}
+.nav-dot.active { background: #2e8b2e; }
+.nav-dot:hover { background: #7cb87c; }
+
+/* ── Container ── */
+.container { max-width: 920px; margin: 0 auto; padding: 18px 16px 32px; }
+
+/* ── Alert bar ── */
+/* ── One-line "Why" Summary (맨 위 한 줄 요약) ── */
+/* 방향 클래스: .up = 지표 상승(빨강) / .down = 지표 하락(파랑). 색을 직접 쓰지 말 것. */
+.why-line {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border-radius: 12px;
+  padding: 13px 17px;
+  margin-bottom: 14px;
+  border: 1px solid #e2e8f0;
+  border-left: 5px solid #94a3b8;
+  background: #f8fafc;
+  flex-wrap: wrap;
+}
+.why-line.up   { border-color: #fecaca; border-left-color: #dc2626; background: linear-gradient(135deg, #fef2f2 0%, #fff7f7 100%); }
+.why-line.down { border-color: #bfdbfe; border-left-color: #1d4ed8; background: linear-gradient(135deg, #eff6ff 0%, #f7fbff 100%); }
+.why-move {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  padding: 5px 11px;
+  border-radius: 8px;
+  color: white;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.why-line.up   .why-move { background: #dc2626; }
+.why-line.down .why-move { background: #1d4ed8; }
+.why-text { font-size: 14px; line-height: 1.55; color: #1a2a4a; flex: 1; min-width: 240px; }
+.why-text strong { font-weight: 700; }
+.why-line.up   .why-text strong { color: #b91c1c; }
+.why-line.down .why-text strong { color: #1d4ed8; }
+@media (max-width: 560px) { .why-text { font-size: 13px; } }
+
+.alert-bar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.pill {
+  display: flex; align-items: center; gap: 6px;
+  background: white; border-radius: 20px; padding: 5px 13px;
+  font-size: 11px; font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.pill.red   { border-left: 3px solid #e53e3e; color: #c53030; }
+.pill.amber { border-left: 3px solid #d69e2e; color: #975a16; }
+.pill.green { border-left: 3px solid #38a169; color: #22543d; }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.dot.red   { background: #e53e3e; }
+.dot.amber { background: #d69e2e; }
+.dot.green { background: #38a169; }
+
+/* ── Card ── */
+.card { background: white; border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.card-header { display: flex; align-items: center; gap: 9px; margin-bottom: 13px; padding-bottom: 10px; border-bottom: 1px solid #eaf2ea; }
+.card-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.icon-summary { background: #edfaed; }
+.icon-canada  { background: #fff0f0; }
+.icon-export  { background: #eef2ff; }
+.icon-market  { background: #fff8ec; }
+.icon-risk    { background: #fff5f5; }
+.icon-sources { background: #f5f5f5; }
+.icon-prov    { background: #fff3e0; }
+.card-title { font-size: 14px; font-weight: 700; color: #1c2e1c; }
+.card-title span { font-size: 10px; font-weight: 400; color: #888; margin-left: 5px; }
+
+/* ── Two-col ── */
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+@media (max-width: 620px) { .row2 { grid-template-columns: 1fr; } }
+
+/* ── Summary ── */
+.summary-list { list-style: none; }
+.summary-list li { padding: 7px 0 7px 18px; position: relative; border-bottom: 1px solid #f4f4f4; color: #2d3e2d; font-size: 13px; }
+.summary-list li:last-child { border-bottom: none; }
+.summary-list li::before { content: '▸'; position: absolute; left: 0; top: 8px; color: #2e8b2e; font-size: 10px; }
+
+/* ── Sub-label ── */
+.sub-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: #999; margin-bottom: 9px; }
+
+/* ── News item ── */
+.news-item { padding: 9px 0; border-bottom: 1px solid #f4f4f4; }
+.news-item:last-child { border-bottom: none; }
+a.news-item { text-decoration: none; color: inherit; display: block; border-radius: 7px; padding: 9px 8px; margin: 0 -8px; transition: background 0.15s; }
+a.news-item:hover { background: #edf6ed; }
+a.news-item .news-title::after { content: ' ↗'; font-size: 10px; color: #2e8b2e; opacity: 0.6; }
+.tag { display: inline-block; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 3px; }
+.tag-cfr      { background: #e6f4ea; color: #137333; }
+.tag-carbon   { background: #e8f0fe; color: #1558d6; }
+.tag-prov     { background: #fce8e6; color: #c5221f; }
+.tag-prov-politics { background: #fce8e6; color: #c5221f; }
+.tag-eu       { background: #ede7f6; color: #5e35b1; }
+.tag-us       { background: #e8eaed; color: #3c4043; }
+.tag-market   { background: #fff3e0; color: #e65100; }
+.tag-cert     { background: #e0f7fa; color: #006064; }
+.tag-trade    { background: #fce4ec; color: #880e4f; }
+.tag-politics { background: #e8eaf6; color: #283593; }
+.news-title { font-size: 12px; font-weight: 600; color: #1c2e1c; margin-bottom: 2px; }
+.news-body  { font-size: 11px; color: #5a6e5a; line-height: 1.5; }
+
+/* ── Risk radar ── */
+.risk-grid { display: flex; flex-direction: column; gap: 10px; }
+.risk-col { border-radius: 9px; padding: 12px 16px; }
+.risk-col.red   { background: #fff5f5; border: 1px solid #fed7d7; }
+.risk-col.amber { background: #fffbf0; border: 1px solid #fefcbf; }
+.risk-col.green { background: #f0fff4; border: 1px solid #c6f6d5; }
+.risk-col-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+.risk-col.red   .risk-col-title { color: #c53030; }
+.risk-col.amber .risk-col-title { color: #975a16; }
+.risk-col.green .risk-col-title { color: #22543d; }
+.risk-entry { font-size: 12px; color: #4a5568; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.05); line-height: 1.5; }
+.risk-entry:last-child { border-bottom: none; }
+
+/* ── Sources ── */
+.source-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f4f4f4; align-items: flex-start; }
+.source-row:last-child { border-bottom: none; }
+.src-num { width: 20px; height: 20px; flex-shrink: 0; background: #eaf2ea; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #2e8b2e; margin-top: 1px; }
+.src-link { font-size: 12px; font-weight: 600; color: #1a6b3c; text-decoration: none; }
+.src-link:hover { text-decoration: underline; }
+.src-meta { font-size: 10px; color: #aaa; margin-top: 1px; }
+
+/* ── Empty ── */
+.empty { background: #f9f9f9; border-radius: 7px; padding: 14px; text-align: center; color: #bbb; font-size: 12px; font-style: italic; }
+
+/* ── Footer ── */
+.footer { text-align: center; font-size: 10px; color: #bbb; padding: 8px 0 4px; letter-spacing: 0.2px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-left">
+    <h1>🌿 Green Oil Inc.</h1>
+    <div class="sub">주간 정책 &amp; 시장 인텔리전스 리포트 · Weekly Intelligence Report</div>
+  </div>
+  <div class="header-right">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="pdf-btn" onclick="downloadPDF()">
+        <svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><rect x="6" y="13" width="12" height="8" rx="1"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/></svg>
+        <span id="pdfBtnLabel">PDF 저장</span>
+      </button>
+      <a class="report-switch" href="../index.html">&#8592; 인덱스</a>
+      <a class="report-switch" href="../canola/2026-09-08.html"><span class="dot"></span>카놀라 리포트 →</a>
+    </div>
+    <div class="updated-badge">마지막 업데이트: 2026.09.10</div>
+  </div>
+</div>
+
+<div class="week-nav">
+  <a class="nav-btn disabled" href="#">&#8592; 최신</a>
+  <div class="nav-center">
+    <div class="nav-week-label">🚨 긴급 · UCO 50% 관세 9/15 발효</div>
+    <div class="nav-week-sub">2026.09.10 기준 · 정기 회차 아님</div>
+    <div class="nav-dots">
+<a class="nav-dot active" href="./2026-09-10.html" title=""></a>
+<a class="nav-dot" href="./2026-09-08.html" title=""></a>
+<a class="nav-dot" href="./2026-09-07.html" title=""></a>
+<a class="nav-dot" href="./2026-09-04.html" title=""></a>
+<a class="nav-dot" href="./2026-08-31.html" title=""></a>
+<a class="nav-dot" href="./2026-08-24.html" title=""></a>
+<a class="nav-dot" href="./2026-08-17.html" title=""></a>
+<a class="nav-dot" href="./2026-08-10.html" title=""></a>
+<a class="nav-dot" href="./2026-08-03.html" title=""></a>
+<a class="nav-dot" href="./2026-07-27.html" title=""></a>
+<a class="nav-dot" href="./2026-07-20.html" title=""></a>
+<a class="nav-dot" href="./2026-07-13.html" title=""></a>
+<a class="nav-dot" href="./2026-07-06.html" title=""></a>
+<a class="nav-dot" href="./2026-06-29.html" title=""></a>
+<a class="nav-dot" href="./2026-06-22.html" title=""></a>
+<a class="nav-dot" href="./2026-06-15.html" title=""></a>
+<a class="nav-dot" href="./2026-06-08.html" title=""></a>
+<a class="nav-dot" href="./2026-06-01.html" title=""></a>
+<a class="nav-dot" href="./2026-05-25.html" title=""></a>
+<a class="nav-dot" href="./2026-05-18.html" title=""></a>
+<a class="nav-dot" href="./2026-05-11.html" title=""></a>
+<a class="nav-dot" href="./2026-05-05.html" title=""></a>
+<a class="nav-dot" href="./2026-04-28.html" title=""></a>
+<a class="nav-dot" href="./2026-04-21.html" title=""></a>
+<a class="nav-dot" href="./2026-04-14.html" title=""></a>
+<a class="nav-dot" href="./2026-04-07.html" title=""></a>
+<a class="nav-dot" href="./2026-03-30.html" title=""></a>
+<a class="nav-dot" href="./2026-03-23.html" title=""></a>
+<a class="nav-dot" href="./2026-03-16.html" title=""></a>
+<a class="nav-dot" href="./2026-03-09.html" title=""></a>
+<a class="nav-dot" href="./2026-03-02.html" title=""></a>
+<a class="nav-dot" href="./2026-02-23.html" title=""></a>
+<a class="nav-dot" href="./2026-02-16.html" title=""></a>
+<a class="nav-dot" href="./2026-02-09.html" title=""></a>
+<a class="nav-dot" href="./2026-02-02.html" title=""></a>
+<a class="nav-dot" href="./2026-01-26.html" title=""></a>
+<a class="nav-dot" href="./2026-01-19.html" title=""></a>
+<a class="nav-dot" href="./2026-01-12.html" title=""></a>
+<a class="nav-dot" href="./2026-01-05.html" title=""></a>
+    </div>
+  </div>
+  <a class="nav-btn" href="./2026-09-08.html">이전 &#8594;</a>
+</div>
+
+<div class="container">
+
+  <div class="why-line down">
+    <div class="why-move" style="background:#c53030;">▼ UCO 50% 관세 &nbsp;9/15 발효 · D−5</div>
+    <div class="why-text">왜? <strong>9월 8일 미국이 캐나다 보복관세에 대한 재보복으로 제338조 포고 5건에 서명하면서, UCO가 분류되는 <strong>HS 1518.00.40</strong>을 50% 관세 대상에 새로 넣었습니다.</strong> 지난 회차까지 "15류 0건 · UCO 대상 아님"이던 결론이 이번에 뒤집혔습니다. 적용 기준은 선적일이 아니라 <strong>미국 통관(반입신고) 시점</strong>이며, 경과규정은 없습니다.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-summary">📌</div>
+      <div class="card-title">이 회차에 대하여 <span>정기 회차(9/8) 이후 발생한 단일 사안 긴급 보고</span></div>
+    </div>
+    <div style="background:#fff5f5;border:1px solid #fed7d7;border-radius:9px;padding:13px 15px;font-size:12px;color:#4a5568;line-height:1.65;">
+      이 회차는 주간 정기 리포트가 아니라 <strong>사안 하나만 다루는 긴급 보고</strong>입니다.
+      9월 8일 미국이 서명한 재보복 포고문의 부속서를 코드 단위로 직접 판독한 결과,
+      <strong>UCO가 속한 HS 1518.00.40이 50% 관세 대상에 신규 편입</strong>된 사실을 확인했기 때문입니다.
+      직전 정기 회차는 <a href="./2026-09-08.html" style="color:#1a6b3c;font-weight:600;">9월 8일자 리포트</a>이며,
+      그 회차까지의 판단(“UCO는 제338조 관세 대상이 아님”)은 <strong>7월 20일자 부속서 기준으로는 정확했고, 이번 9월 8일 조치로 바뀐 것</strong>입니다.
+      다음 정기 회차는 9월 14일(월)입니다.
+    </div>
+  </div>
+
+  <div class="alert-bar">
+    <div class="pill red">  <div class="dot red"></div>  <span>3</span> 관심 요망</div>
+    <div class="pill amber"><div class="dot amber"></div><span>2</span> 모니터링 필요</div>
+    <div class="pill green"><div class="dot green"></div><span>1</span> 기회 요인</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-summary">📋</div>
+      <div class="card-title">핵심 요약 <span>Executive Summary · 2026.09.10 긴급</span></div>
+    </div>
+    <ul class="summary-list">
+      <li><strong>UCO가 미국 제338조 50% 추가관세 대상에 새로 포함됐습니다 — 9월 15일 0시 1분(미 동부시간) 이후 통관분부터입니다.</strong> 9월 8일 서명된 「주류 관련 대상품목 범위 수정」 포고문의 <strong>Annex I Part A(신규 과세 대상)</strong>에 <strong>1518.00.40</strong>이 들어갔고, 같은 포고문 Annex II가 이를 HTSUS 제99류 U.S. note 51(b)(1)에 <strong>삽입(inserting)</strong>하도록 지시하고 있습니다. 품명은 “기타 산화·탈수 또는 그 밖에 화학적으로 변성한 동물성·식물성·미생물성 유지; <strong>식용에 적합하지 않은 동물성·식물성·미생물성 유지의 혼합물</strong>”로, 폐식용유가 미국 통관에서 통상 분류되는 바로 그 호입니다.</li>
+      <li><strong>대체 분류로 피할 수 있는 구조가 아닙니다.</strong> 미국 관세율표상 1518.00 아래에는 하위 호가 <strong>단 두 개</strong>뿐입니다 — <strong>1518.00.20(아마씨유)</strong>와 <strong>1518.00.40(그 밖의 것)</strong>. UCO는 아마씨유가 아니므로 1518.00에 분류되는 한 <strong>정의상 1518.00.40</strong>입니다. 미국 국제무역위원회 관세율표를 직접 조회해 확인했습니다.</li>
+      <li><strong>적용 기준이 선적일이 아니라 “통관 반입신고 시점”이라는 점이 가장 중요합니다.</strong> 포고문 문구는 “<strong>9월 15일 0시 1분 이후 소비용으로 반입신고되거나 보세창고에서 반출되는 물품</strong>”입니다. 즉 <strong>이미 선적돼 운송 중인 화물도 9월 15일 이후에 통관되면 과세됩니다.</strong> 포고문 본문을 전문 검색한 결과 <strong>운송 중 예외(in transit)·관세환급(drawback)·CUSMA 면제 조항이 하나도 없습니다.</strong> 캐나다 보복관세가 “발효일에 운송 중이면 예외”를 둔 것과 정반대입니다.</li>
+      <li><strong>수입금지(9월 29일 발효) 대상에는 UCO가 없습니다.</strong> 같은 날 서명된 금지 포고 3건(주류·유제품·자동차)의 부속서를 전부 판독한 결과 <strong>총 68개 코드, 챕터는 04·17·22·87뿐</strong>이며 15류는 0건입니다. 금지 품목은 유청·당밀·무알코올맥주(유제품 포고), 맥주·와인·증류주 등 주류, 배기량 800cc 초과 오토바이입니다. 즉 <strong>UCO는 “금지”가 아니라 “50% 과세”</strong>이며, 수출 자체는 계속 가능합니다.</li>
+      <li><strong>캐나다 보복관세 목록에는 UCO가 없고, 애초에 방향도 다릅니다.</strong> 9월 8일 발효된 캐나다 부가관세명령의 공식 목록 <strong>629개 품목을 전수 판독한 결과 15류는 0건</strong>이며 1518·1514·2306 모두 없습니다. 더 중요한 점은 이 조치가 <strong>미국산 물품이 캐나다로 들어올 때 매기는 수입 부가관세</strong>라는 것으로, Green Oil의 대미 수출에는 구조적으로 적용되지 않습니다. 개발자께서 들으신 “UCO가 보복관세에 포함된다”는 이야기는 <strong>캐나다 보복 목록이 아니라 미국의 재보복 조치를 가리키는 것으로 보이며, 그 부분은 사실입니다.</strong></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-risk">⭐</div>
+      <div class="card-title">부속서 코드 단위 판독 결과 <span>4개 문서군 · 826개 코드 직접 대조</span></div>
+    </div>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:11.5px;min-width:660px;">
+        <thead>
+          <tr style="background:#f7fafc;">
+            <th style="text-align:left;padding:8px 9px;border-bottom:2px solid #e2e8f0;">문서 / 조치</th>
+            <th style="text-align:center;padding:8px 9px;border-bottom:2px solid #e2e8f0;">발효</th>
+            <th style="text-align:center;padding:8px 9px;border-bottom:2px solid #e2e8f0;">코드 수</th>
+            <th style="text-align:left;padding:8px 9px;border-bottom:2px solid #e2e8f0;">포함 챕터</th>
+            <th style="text-align:center;padding:8px 9px;border-bottom:2px solid #e2e8f0;">UCO(1518) 포함?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:#fff5f5;">
+            <td style="padding:8px 9px;border-bottom:1px solid #edf2f7;"><strong>미국 — 관세 대상 범위 수정</strong><br><span style="color:#718096;">주류 포고 Annex I Part A</span></td>
+            <td style="text-align:center;padding:8px 9px;border-bottom:1px solid #edf2f7;"><strong style="color:#c53030;">9/15</strong></td>
+            <td style="text-align:center;padding:8px 9px;border-bottom:1px solid #edf2f7;">34</td>
+            <td style="padding:8px 9px;border-bottom:1px solid #edf2f7;">04 · <strong style="color:#c53030;">15</strong> · 41 · 43 · 89</td>
+            <td style="text-align:center;padding:8px 9px;border-bottom:1px solid #edf2f7;"><strong style="color:#c53030;">🔴 예 — 1518.00.40</strong></td>
+          </tr>
+          <tr>
+            <td style="padding:8px 9px;border-bottom:1px solid #edf2f7;"><strong>미국 — 관세 대상 범위 수정</strong><br><span style="color:#718096;">자동차 포고 Annex I·II</span></td>
+            <td style="text-align:center;padding:8px 9px;border-bottom:1px solid #edf2f7;">9/15</td>
+            <td style="text-align:center;padding:8px 9px;border-bottom:1px solid #edf2f7;">95</td>
+            <td style="padding:8px 9px;border-bottom:1px solid #edf2f7;">04 · 25 · 29 · 48 · 73 · 76 · 78 · 83 · 85 · 87 · 89 · 94 · 95</td>
+            <td style="text-align:center;padding:8px 9px;border-bottom:1px solid #edf2f7;">아니오</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 9px;border-bottom:1px solid #edf2f7;"><strong>미국 — 수입금지</strong><br><span style="color:#718096;">주류·유제품·자동차 3건</span></td>
+            <td style="text-align:center;padding:8px 9px;border-bottom:1px solid #edf2f7;">9/29</td>
+            <td style="text-align:center;padding:8px 9px;border-bottom:1px solid #edf2f7;">68</td>
+            <td style="padding:8px 9px;border-bottom:1px solid #edf2f7;">04 · 17 · 22 · 87</td>
+            <td style="text-align:center;padding:8px 9px;border-bottom:1px solid #edf2f7;">아니오</td>
+          </tr>
+          <tr style="background:#f0fff4;">
+            <td style="padding:8px 9px;"><strong>캐나다 — 보복 부가관세</strong><br><span style="color:#718096;">재무부 공식 목록(수입 방향)</span></td>
+            <td style="text-align:center;padding:8px 9px;">9/8 시행중</td>
+            <td style="text-align:center;padding:8px 9px;">629</td>
+            <td style="padding:8px 9px;">04 · 17 · 19 · 33 · 35 · 39 · 44 · 47 · 48 · 49 · 57 · 61 · 62 · 68 · 70 · 72 · 73 · 74 · 76 · 82 · 83 · 84 · 85 · 86 · 87 · 94 · 95</td>
+            <td style="text-align:center;padding:8px 9px;"><strong style="color:#22543d;">아니오 (15류 0건)</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:11px;font-size:11px;color:#718096;line-height:1.6;">
+      판독 방법: 각 부속서 PDF를 내려받아 <strong>텍스트 추출 후 8자리 코드를 전수 대조</strong>했습니다.
+      이번 9월 부속서는 7월분과 달리 <strong>스캔 이미지가 아닌 텍스트 PDF</strong>여서 판독 신뢰도가 높습니다(7월분은 도판이라 OCR이 필요했습니다).
+      캐나다 목록은 추출된 품목 수가 <strong>공식 발표 수치 629건과 정확히 일치</strong>해 누락이 없음을 확인했습니다.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-export">🇺🇸</div>
+      <div class="card-title">미국 재보복 조치 <span>9월 8일 서명 포고 5건</span></div>
+    </div>
+
+    <a class="news-item" href="https://www.whitehouse.gov/presidential-actions/2026/09/modifying-the-scope-of-products-of-canada-subject-to-the-additional-duties-imposed-to-offset-canadian-discrimination-against-the-commerce-of-the-united-states-with-respect-to-alcoholic-beverages/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-us">9/8 미국 · 🔴 직접 영향</span>
+      <div class="news-title">UCO(1518.00.40)가 제338조 50% 관세 대상에 신규 편입 — 9월 15일 0시 1분 통관분부터</div>
+      <div class="news-body">9월 8일 서명된 「캐나다산 물품 중 주류 관련 추가관세 대상 범위 수정」 포고문이 <strong>Annex I Part A “신규 과세 대상(New Products Covered by Section 338 Tariffs)”</strong>에 <strong>1518.00.40</strong>을 포함시켰습니다. 품명은 “기타 산화·탈수 또는 그 밖에 화학적으로 변성한 동물성·식물성·미생물성 유지, 그 밖의 것; <strong>식용에 적합하지 않은 동물성·식물성·미생물성 유지의 혼합물</strong>”입니다. 같은 포고문 Annex II는 이 호를 <strong>HTSUS 제99류 subchapter III의 U.S. note 51(b)(1)에 삽입</strong>하도록 지시하며, 적용 시점을 <strong>“2026년 9월 15일 0시 1분(미 동부시간) 이후 소비용으로 반입신고되거나 보세창고에서 반출되는 물품”</strong>으로 명시했습니다. 세율은 <strong>50% 종가세</strong>이고, 포고문은 이 관세가 <strong>제232조 관세에 더해서(in addition to) 부과</strong>된다고 규정합니다. 같은 부속서 Part B(과세 제외)에는 위스키·리큐어 대용량 2건만 있어 상쇄 효과는 없습니다. Green Oil 관점: <strong>이번 조치의 명분은 주류 분야 차별이지만 보복 대상 품목은 그와 무관하게 선정되므로, “우리는 주류와 관계없다”는 논리는 성립하지 않습니다.</strong> 지난 회차까지의 “UCO 비대상” 결론은 7월 20일자 부속서 기준으로는 정확했고, 이번에 바뀐 것입니다.</div>
+    </a>
+
+    <a class="news-item" href="https://hts.usitc.gov/reststop/search?keyword=1518" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-us">9/8 미국 · 분류 확인</span>
+      <div class="news-title">대체 분류 여지 없음 — 미국 관세율표 1518.00 아래 하위 호는 아마씨유와 “그 밖의 것” 둘뿐</div>
+      <div class="news-body">미국 국제무역위원회 관세율표를 직접 조회한 결과 <strong>1518.00 아래 하위 호는 두 개뿐</strong>입니다 — <strong>1518.00.20.00(아마씨유의 것)</strong>과 <strong>1518.00.40.00(그 밖의 것)</strong>. UCO는 아마씨유가 아니므로 <strong>1518.00에 분류되는 한 자동으로 1518.00.40</strong>이 됩니다. 즉 같은 호 안에서 다른 하위 호로 옮겨 관세를 피할 구조적 여지가 없습니다. Green Oil 관점: 지금 확인해야 할 것은 <strong>실제 미국 통관에서 우리 화물에 어떤 코드가 쓰이고 있는가</strong> 하나입니다. 1518.00.40으로 신고되고 있다면 9월 15일부터 50%가 붙습니다. <strong>다만 관세를 피할 목적으로 분류를 바꾸는 것은 허위신고에 해당하므로 검토 대상이 아닙니다</strong> — 확인해야 할 것은 “우리 제품의 성상에 비추어 원래 맞는 분류가 무엇인가”이며, 이는 통관사와 필요하면 CBP 사전심사로 확정할 사안입니다.</div>
+    </a>
+
+    <a class="news-item" href="https://www.whitehouse.gov/presidential-actions/2026/09/modifying-the-scope-of-products-of-canada-subject-to-the-additional-duties-imposed-to-offset-canadian-discrimination-against-the-commerce-of-the-united-states-with-respect-to-alcoholic-beverages/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-trade">9/8 미국 · 경과규정</span>
+      <div class="news-title">운송 중 예외·관세환급·CUSMA 면제 조항이 모두 없음 — 이미 배에 실린 화물도 15일 이후 통관되면 과세</div>
+      <div class="news-body">포고문 본문을 전문 검색한 결과 <strong>“in transit”(운송 중), “drawback”(관세환급), “CUSMA”, “exempt”(면제) 문구가 하나도 없습니다.</strong> 규정된 것은 오직 <strong>“9월 15일 0시 1분 이후 소비용 반입신고 또는 보세창고 반출”</strong>이라는 시점 기준뿐입니다. 이는 캐나다 보복관세가 “발효일에 운송 중인 물품은 예외”를 둔 것과 <strong>정반대</strong>입니다. Green Oil 관점: 판단 기준이 <strong>출항일이 아니라 미국 도착 후 통관일</strong>이라는 뜻입니다. 지금 항해 중이거나 이번 주 선적 예정인 화물이라도 <strong>미국에서 9월 15일 이후에 통관되면 50%가 부과됩니다.</strong> 보세창고에 이미 들어가 있는 재고도 <strong>반출 시점</strong>이 기준이므로, 15일 이전 반출이 가능한지 확인이 필요합니다.</div>
+    </a>
+
+    <a class="news-item" href="https://www.whitehouse.gov/wp-content/uploads/2026/09/ANNEX-I-DAIRY.pdf" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-us">9/8 미국 · 금지 조치</span>
+      <div class="news-title">수입금지 3건(9월 29일 발효)에 UCO는 없음 — 유청·당밀·주류·800cc 초과 오토바이 68개 코드</div>
+      <div class="news-body">같은 날 서명된 금지 포고 3건의 부속서를 전부 판독한 결과 <strong>총 68개 코드</strong>이며 챕터는 <strong>04·17·22·87</strong>뿐입니다. 구체적으로 유제품 포고는 유청(0404.10 계열 8건)·당밀(1702.90.35, 1703 계열 4건)·무알코올맥주(2202.91.00) 14건, 주류 포고는 맥주·와인·브랜디·위스키·럼 등 53건, 자동차 포고는 <strong>배기량 800cc 초과 오토바이(8711.50.00) 1건</strong>입니다. <strong>15류는 0건으로 UCO는 금지 대상이 아닙니다.</strong> Green Oil 관점: 최악의 시나리오(수출 자체 차단)는 피했습니다. <strong>UCO는 “팔 수 없는 것”이 아니라 “50% 관세를 물고 파는 것”</strong>이며, 이는 가격·계약 문제이지 판로 소멸이 아닙니다. 다만 금지 조치가 9월 29일 별도로 발효되는 만큼, 확전이 이어질 경우 다음 라운드에서 품목이 더 추가될 가능성은 열려 있습니다.</div>
+    </a>
+
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-canada">🍁</div>
+      <div class="card-title">캐나다 보복관세 <span>9월 8일 시행 · UCO 포함 여부 확인</span></div>
+    </div>
+
+    <a class="news-item" href="https://www.canada.ca/en/department-finance/news/2026/08/list-of-products-from-the-united-states-subject-to-counter-tariffs-effective-september-8-2026.html" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-trade">9/8 캐나다 · 확인 결과</span>
+      <div class="news-title">캐나다 보복관세 629개 품목 전수 판독 — 15류 0건, UCO·카놀라유·유박 모두 없음</div>
+      <div class="news-body">캐나다 재무부가 공표한 공식 대상 목록을 내려받아 전수 판독한 결과 <strong>고유 관세품목 629건</strong>이 확인됐고, 이는 <strong>정부 발표 수치와 정확히 일치</strong>합니다(파싱 누락 없음). 포함 챕터는 04·17·19·33·35·39·44·47·48·49·57·61·62·68·70·72·73·74·76·82·83·84·85·86·87·94·95이며 <strong>15류는 0건, 1518·1514·2306 모두 없습니다.</strong> 본문에서 “used cooking oil”, “vegetable oil”, “canola” 등 관련 표현도 전혀 검색되지 않았습니다. Green Oil 관점: 더 근본적으로, 이 조치는 <strong>미국산 물품이 캐나다로 수입될 때 부과하는 부가관세</strong>입니다. Green Oil은 캐나다에서 수거해 미국으로 수출하는 구조이므로 <strong>방향이 반대여서 구조적으로 적용 대상이 아닙니다.</strong> 영향이 있다면 미국산 설비·자재를 들여올 때 원가가 오르는 간접 경로인데, 위 챕터 목록에 해당 품목이 있는지는 별도 확인이 필요합니다.</div>
+    </a>
+
+    <a class="news-item" href="https://www.cbsa-asfc.gc.ca/publications/cn-ad/cn26-23-eng.html" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-trade">9/7 캐나다 · 실무</span>
+      <div class="news-title">CBSA 고시 26-23 — 부가관세는 15·25·50% 3단계, “발효일 운송 중” 예외는 증빙 보유가 조건</div>
+      <div class="news-body">국경서비스청 9월 7일자 고시 26-23 「미국 부가관세명령(2026)」은 9월 8일부터 미국을 원산지로 하는 특정 물품에 <strong>과세가격의 15%·25% 또는 50%</strong>를 부가한다고 규정합니다. 원산지 판정은 <strong>CUSMA 원산지 표시규정</strong>에 따르며, 대상 품목 전체 목록은 명령의 부속서에 있습니다. 고시는 이 조치가 <strong>미국의 제338조 관세에 대한 대응</strong>이고 대상 품목이 미국 제338조·제232조 관세 대상에서 선정됐으며 세율도 대체로 미국 세율에 대응한다고 명시했습니다. Green Oil 관점: 직전 회차에서 짚은 대로 <strong>부가관세가 GST 과세표준에 포함</strong>되므로 미국산 자재를 들여오는 경우 실효 부담이 표시 요율보다 큽니다. 다만 UCO 자체는 이 목록에 없어 수출 사업에 직접 영향은 없습니다.</div>
+    </a>
+
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-risk">⚡</div>
+      <div class="card-title">리스크 &amp; 기회 레이더 <span>Action Radar · 발효까지 D−5</span></div>
+    </div>
+    <div class="risk-grid">
+      <div class="risk-col red">
+          <div class="risk-col-title">🔴 관심 요망</div>
+          <div class="risk-entry"><strong>9월 15일 0시 1분부터 대미 UCO 수출에 50% 관세가 붙습니다 — 남은 시간은 통관 기준으로 나흘 남짓입니다.</strong> 기준이 <strong>선적일이 아니라 미국 통관(반입신고) 시점</strong>이라는 점이 핵심입니다. 포고문에 운송 중 예외·관세환급·CUSMA 면제가 전혀 없어, 이미 항해 중인 화물도 15일 이후 통관되면 과세됩니다. <strong>Green Oil 조치:</strong> ① <strong>오늘 중</strong> 통관사에 연락해 (ㄱ) 현재 우리 화물에 적용 중인 HTSUS 코드가 1518.00.40인지 (ㄴ) 미국 항구에 도착했거나 도착 예정인 화물 중 <strong>9월 14일까지 반입신고를 완료할 수 있는 물량</strong>이 얼마인지 (ㄷ) 보세창고 재고가 있다면 15일 이전 반출이 가능한지를 확인하십시오. ② 통관 가능한 물량은 <strong>주말 전에 서류를 넘겨야</strong> 합니다 — 9월 15일은 화요일이고 그 전 영업일은 9월 14일 월요일 하루뿐입니다. ③ 위 확인 결과를 <strong>서면으로</strong> 받아 두십시오.</div>
+          <div class="risk-entry"><strong>계약상 관세 부담 주체를 지금 확인하지 않으면 50%를 우리가 떠안게 될 수 있습니다.</strong> 인코텀즈가 <strong>DDP(관세지급인도)</strong>라면 수입 관세는 매도인 부담이므로 50%가 그대로 Green Oil 손실이 됩니다. <strong>FOB·CIF·DAP</strong>라면 원칙적으로 매수인 부담이지만, 실무에서는 바이어가 단가 인하를 요구해 오는 형태로 전가될 가능성이 높습니다. <strong>Green Oil 조치:</strong> ① 대미 계약서에서 <strong>인코텀즈 조항과 관세·조세 부담 조항, 그리고 무역조치(trade measure)·법령변경(change in law) 조항</strong>을 오늘 중 전부 확인하십시오. ② 해당 조항이 재협상 사유를 규정하고 있다면 <strong>15일 이전에</strong> 발동 통지를 보내는 편이 유리합니다 — 발효 후에 꺼내면 협상력이 떨어집니다. ③ 바이어와의 대화에서는 <strong>“관세를 누가 부담하는가”를 먼저 확정</strong>한 뒤 단가를 논의하십시오.</div>
+          <div class="risk-entry"><strong>이번 조치는 확전 국면의 일부이므로 추가 라운드를 전제로 관리해야 합니다.</strong> 경과는 7월 20일 제338조 관세 → 8월 18일 3일 유예 → 8월 21일 캐나다가 약속을 철회했다는 미국 측 주장 → 8월 22일 발효 → 9월 8일 캐나다 보복관세 시행 → <strong>같은 날 미국 재보복 포고 5건</strong> 순입니다. 9월 15일 관세 확대와 9월 29일 수입금지가 <strong>단계적으로 예정</strong>돼 있고, 협상 재개 일정은 확인되지 않습니다. <strong>Green Oil 조치:</strong> 다음 라운드에서 <strong>15류의 나머지 호나 UCO 유래 연료(3826)</strong>가 추가될 가능성을 시나리오에 넣어 두십시오. 9월 29일 금지 발효 전후로 부속서가 다시 나올 수 있으므로, 그 시점에 코드 단위 재판독을 하겠습니다.</div>
+        </div>
+      <div class="risk-col amber">
+          <div class="risk-col-title">🟡 모니터링 필요</div>
+          <div class="risk-entry"><strong>EU·역내 판로의 상대적 가치가 올라갔으므로 물량 배분을 다시 계산할 시점입니다.</strong> 대미 수출에 50%가 붙으면 같은 물량이라도 <strong>EU향이나 캐나다 국내 정제 경로의 순실현가격이 상대적으로 유리해질 수 있습니다.</strong> 직전 회차에서 정리한 대로 EU는 바이오연료 의무 상향으로 역내 유지 원료 수요가 조여지고 있고, 독일 채종유 수출이 14.4% 감소하는 등 원료가 당겨지는 국면입니다. <strong>Green Oil 조치:</strong> ① 대미·대EU·국내 세 경로의 <strong>관세·운임 반영 후 순실현가격</strong>을 이번 주 안에 나란히 계산해 보십시오. ② 8월에 확인한 <strong>ISCC EU의 캘리포니아 LCFS 적격 인정</strong>은 미국 서부 판로에 관한 것이므로 이번 관세와는 별개로 유효하나, <strong>관세는 인증과 무관하게 부과</strong>되므로 인증만으로 상쇄되지 않는다는 점을 유의하십시오.</div>
+          <div class="risk-entry"><strong>미국 내 UCO 수요 자체는 여전히 강하다는 점이 협상 지렛대입니다.</strong> 직전 회차에서 확인한 대로 미국은 늘어나는 UCO 수요의 <strong>59%를 수입에 의존</strong>할 전망이고, D4 크레딧이 236센트까지 회복되며 2026/27년 UCO 바이오연료 수요 전망은 <strong>+35.4%</strong>입니다. <strong>즉 미국 바이어 입장에서도 캐나다산 UCO를 대체할 공급원이 마땅치 않습니다.</strong> <strong>Green Oil 조치:</strong> 단가 협상에서 이 수급 구조를 근거로 <strong>관세 부담의 분담</strong>을 요구하는 것이 현실적입니다. 50%를 일방적으로 흡수하지도, 전부 전가하지도 못할 가능성이 높으므로 <strong>분담 비율을 먼저 제안하는 쪽이 유리</strong>합니다.</div>
+        </div>
+      <div class="risk-col green">
+          <div class="risk-col-title">🟢 기회 요인</div>
+          <div class="risk-entry"><strong>수출 자체는 막히지 않았습니다 — UCO는 금지 목록에 없습니다.</strong> 9월 29일 발효되는 수입금지 3건의 부속서 68개 코드를 전부 판독한 결과 <strong>15류는 0건</strong>이며, 금지 대상은 유청·당밀·무알코올맥주·주류·800cc 초과 오토바이에 한정됩니다. <strong>즉 이번 사안은 판로 소멸이 아니라 가격 문제</strong>이며, 관세를 반영한 조건으로 거래를 계속할 수 있습니다. 또한 캐나다 보복관세 목록에도 UCO가 없어 <strong>양방향 모두에서 “금지”나 “수입 원가 급등”은 발생하지 않았습니다.</strong> <strong>Green Oil 조치:</strong> 바이어에게 먼저 연락해 <strong>“공급은 계속되며 조건만 재협의하자”</strong>는 메시지를 내는 편이 침묵하다 15일에 청구서로 알리는 것보다 관계 유지에 유리합니다.</div>
+        </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-sources">🔗</div>
+      <div class="card-title">출처 <span>Sources · 원문·부속서 직접 판독</span></div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">1</div>
+      <div>
+        <a class="src-link" href="https://www.whitehouse.gov/presidential-actions/2026/09/modifying-the-scope-of-products-of-canada-subject-to-the-additional-duties-imposed-to-offset-canadian-discrimination-against-the-commerce-of-the-united-states-with-respect-to-alcoholic-beverages/" target="_blank">Modifying the Scope of Products of Canada Subject to the Additional Duties … With Respect to Alcoholic Beverages</a>
+        <div class="src-meta">백악관 포고문 (본문 직접 확인 — 50% 종가세, 9/15 0시 1분 반입신고 기준, 운송중·환급·CUSMA 예외 문구 없음) · 2026-09-08</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">2</div>
+      <div>
+        <a class="src-link" href="https://www.whitehouse.gov/wp-content/uploads/2026/09/Alcohol-Scope-Modification-Annex-I.pdf" target="_blank">Alcohol Scope Modification — Annex I (Part A 신규 과세 34개 품목 / Part B 제외 2건)</a>
+        <div class="src-meta">백악관 부속서 PDF (직접 판독 — 1518.00.40 Part A 포함, 품명 “inedible mixtures of animal, vegetable or microbial fats and oils, nesoi”) · 2026-09-08</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">3</div>
+      <div>
+        <a class="src-link" href="https://www.whitehouse.gov/wp-content/uploads/2026/09/Alcohol-Scope-Modification-Annex-II.pdf" target="_blank">Alcohol Scope Modification — Annex II (HTSUS 제99류 U.S. note 51(b)(1) 수정 지시)</a>
+        <div class="src-meta">백악관 부속서 PDF (직접 판독 — 1518.00.40을 inserting 목록에 명시, 9/15 0시 1분 발효) · 2026-09-08</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">4</div>
+      <div>
+        <a class="src-link" href="https://www.whitehouse.gov/wp-content/uploads/2026/09/ANNEX-II-AUTO.pdf" target="_blank">Modifying the Scope … With Respect to Motor Vehicles / Annex II</a>
+        <div class="src-meta">백악관 포고문·부속서 (직접 판독 — note 51(b)(3) 수정, 2501.00.00·2523.29.00 등 삭제, 15류 없음) · 2026-09-08</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">5</div>
+      <div>
+        <a class="src-link" href="https://www.whitehouse.gov/wp-content/uploads/2026/09/ANNEX-I-DAIRY.pdf" target="_blank">Excluding Certain Canadian Products … With Respect to Dairy / Annex I</a>
+        <div class="src-meta">백악관 포고문·부속서 (직접 판독 — 9/29 수입금지 14건: 유청 8·당밀 5·무알코올맥주 1, 15류 0건) · 2026-09-08</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">6</div>
+      <div>
+        <a class="src-link" href="https://www.whitehouse.gov/presidential-actions/2026/09/excluding-certain-canadian-alcoholic-beverages-from-importation-into-the-united-states-in-response-to-continued-discrimination-against-the-commerce-of-the-united-states-with-respect-to-alcoholic-bever/" target="_blank">Excluding Certain Canadian Alcoholic Beverages from Importation into the United States</a>
+        <div class="src-meta">백악관 포고문 (9/29 수입금지 — 주류 53개 코드) · 2026-09-08</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">7</div>
+      <div>
+        <a class="src-link" href="https://www.whitehouse.gov/presidential-actions/2026/09/excluding-certain-canadian-products-from-importation-into-the-united-states-in-response-to-continued-discrimination-against-the-commerce-of-the-united-states-with-respect-to-motor-vehicles/" target="_blank">Excluding Certain Canadian Products … With Respect to Motor Vehicles</a>
+        <div class="src-meta">백악관 포고문 (9/29 수입금지 — 8711.50.00 배기량 800cc 초과 오토바이 1건) · 2026-09-08</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">8</div>
+      <div>
+        <a class="src-link" href="https://www.whitehouse.gov/fact-sheets/2026/09/fact-sheet-president-donald-j-trump-responds-to-canadas-retaliation/" target="_blank">Fact Sheet: President Donald J. Trump Responds to Canada’s Retaliation</a>
+        <div class="src-meta">백악관 (포고 5건 개요 — 금지 9/29·품목 조정 9/15) · 2026-09-08</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">9</div>
+      <div>
+        <a class="src-link" href="https://hts.usitc.gov/reststop/search?keyword=1518" target="_blank">Harmonized Tariff Schedule — heading 1518 조회 결과</a>
+        <div class="src-meta">미국 국제무역위원회 (직접 조회 — 1518.00 하위는 1518.00.20 아마씨유 / 1518.00.40 그 밖의 것 둘뿐) · 2026-09-10</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">10</div>
+      <div>
+        <a class="src-link" href="https://www.canada.ca/en/department-finance/news/2026/08/list-of-products-from-the-united-states-subject-to-counter-tariffs-effective-september-8-2026.html" target="_blank">List of products from the United States subject to counter-tariffs effective September 8, 2026</a>
+        <div class="src-meta">캐나다 재무부 (전수 판독 — 629개 품목이 공식 수치와 일치, 15류 0건) · 2026-08-25</div>
+      </div>
+    </div>
+    <div class="source-row">
+      <div class="src-num">11</div>
+      <div>
+        <a class="src-link" href="https://www.cbsa-asfc.gc.ca/publications/cn-ad/cn26-23-eng.html" target="_blank">Customs Notice 26-23: United States Surtax Order (2026)</a>
+        <div class="src-meta">캐나다 국경서비스청 (직접 확인 — 15·25·50% 3단계, CUSMA 원산지 표시규정 기준) · 2026-09-07</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Green Oil Inc. Internal Use Only &nbsp;·&nbsp; Powered by Claude AI &nbsp;·&nbsp; <a href="../index.html" style="color:#bbb;">← 인덱스</a></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+  const btn = document.getElementById('pdfBtnLabel');
+  btn.textContent = '생성 중...';
+  html2pdf().set({
+    margin: [8, 8, 8, 8],
+    filename: 'GreenOil-UCO-2026-09-10-urgent.pdf',
+    image: { type: 'jpeg', quality: 0.95 },
+    html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: 'avoid-all' }
+  }).from(document.body).save().then(() => { btn.textContent = 'PDF 저장'; });
+}
+</script>
+</body>
+</html>
