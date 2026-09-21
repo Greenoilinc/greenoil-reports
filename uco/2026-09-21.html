@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Oil UCO — 2026년 9/14 – 9/20 주</title>
+<style>
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+  background: #f0f4f0;
+  color: #1c2e1c;
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── Report Switch Badge ── */
+.report-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.report-switch:hover { background: rgba(255,255,255,0.25); }
+.report-switch .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #fbbf24; flex-shrink: 0;
+}
+
+/* ── PDF Button ── */
+.pdf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.pdf-btn:hover { background: rgba(255,255,255,0.22); }
+.pdf-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Print styles ── */
+@media print {
+  .week-nav, .report-switch, .pdf-btn, .nav-dots { display: none !important; }
+  .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: white; }
+  .container { padding: 0; }
+  .card { break-inside: avoid; }
+  a { text-decoration: none; color: inherit; }
+}
+
+/* ── Header ── */
+.header {
+  background: linear-gradient(135deg, #1a5c1a 0%, #2e8b2e 100%);
+  color: white;
+  padding: 18px 24px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.header-left h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 7px; }
+.header-left .sub { font-size: 11px; opacity: 0.75; margin-top: 3px; letter-spacing: 0.3px; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.updated-badge { font-size: 10px; opacity: 0.65; }
+
+/* ── Week Navigator ── */
+.week-nav {
+  background: white;
+  border-bottom: 1px solid #e0e8e0;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.nav-btn {
+  background: none;
+  border: 1px solid #c8dcc8;
+  border-radius: 8px;
+  padding: 5px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #2e8b2e;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+.nav-btn:hover { background: #eaf4ea; border-color: #2e8b2e; }
+.nav-btn.disabled { opacity: 0.3; pointer-events: none; }
+.nav-center { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+.nav-week-label { font-size: 14px; font-weight: 700; color: #1c2e1c; }
+.nav-week-sub { font-size: 10px; color: #999; }
+.nav-dots { display: flex; gap: 5px; margin-top: 4px; flex-wrap: wrap; justify-content: center; }
+.nav-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #d0e4d0; cursor: pointer; transition: background 0.15s;
+  display: block; text-decoration: none;
+}
+.nav-dot.active { background: #2e8b2e; }
+.nav-dot:hover { background: #7cb87c; }
+
+/* ── Container ── */
+.container { max-width: 920px; margin: 0 auto; padding: 18px 16px 32px; }
+
+/* ── Alert bar ── */
+/* ── One-line "Why" Summary (맨 위 한 줄 요약) ── */
+/* 방향 클래스: .up = 지표 상승(빨강) / .down = 지표 하락(파랑). 색을 직접 쓰지 말 것. */
+.why-line {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border-radius: 12px;
+  padding: 13px 17px;
+  margin-bottom: 14px;
+  border: 1px solid #e2e8f0;
+  border-left: 5px solid #94a3b8;
+  background: #f8fafc;
+  flex-wrap: wrap;
+}
+.why-line.up   { border-color: #fecaca; border-left-color: #dc2626; background: linear-gradient(135deg, #fef2f2 0%, #fff7f7 100%); }
+.why-line.down { border-color: #bfdbfe; border-left-color: #1d4ed8; background: linear-gradient(135deg, #eff6ff 0%, #f7fbff 100%); }
+.why-move {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  padding: 5px 11px;
+  border-radius: 8px;
+  color: white;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.why-line.up   .why-move { background: #dc2626; }
+.why-line.down .why-move { background: #1d4ed8; }
+.why-text { font-size: 14px; line-height: 1.55; color: #1a2a4a; flex: 1; min-width: 240px; }
+.why-text strong { font-weight: 700; }
+.why-line.up   .why-text strong { color: #b91c1c; }
+.why-line.down .why-text strong { color: #1d4ed8; }
+@media (max-width: 560px) { .why-text { font-size: 13px; } }
+
+.alert-bar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.pill {
+  display: flex; align-items: center; gap: 6px;
+  background: white; border-radius: 20px; padding: 5px 13px;
+  font-size: 11px; font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.pill.red   { border-left: 3px solid #e53e3e; color: #c53030; }
+.pill.amber { border-left: 3px solid #d69e2e; color: #975a16; }
+.pill.green { border-left: 3px solid #38a169; color: #22543d; }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.dot.red   { background: #e53e3e; }
+.dot.amber { background: #d69e2e; }
+.dot.green { background: #38a169; }
+
+/* ── Card ── */
+.card { background: white; border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.card-header { display: flex; align-items: center; gap: 9px; margin-bottom: 13px; padding-bottom: 10px; border-bottom: 1px solid #eaf2ea; }
+.card-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.icon-summary { background: #edfaed; }
+.icon-canada  { background: #fff0f0; }
+.icon-export  { background: #eef2ff; }
+.icon-market  { background: #fff8ec; }
+.icon-risk    { background: #fff5f5; }
+.icon-sources { background: #f5f5f5; }
+.icon-prov    { background: #fff3e0; }
+.card-title { font-size: 14px; font-weight: 700; color: #1c2e1c; }
+.card-title span { font-size: 10px; font-weight: 400; color: #888; margin-left: 5px; }
+
+/* ── Two-col ── */
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+@media (max-width: 620px) { .row2 { grid-template-columns: 1fr; } }
+
+/* ── Summary ── */
+.summary-list { list-style: none; }
+.summary-list li { padding: 7px 0 7px 18px; position: relative; border-bottom: 1px solid #f4f4f4; color: #2d3e2d; font-size: 13px; }
+.summary-list li:last-child { border-bottom: none; }
+.summary-list li::before { content: '▸'; position: absolute; left: 0; top: 8px; color: #2e8b2e; font-size: 10px; }
+
+/* ── Sub-label ── */
+.sub-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: #999; margin-bottom: 9px; }
+
+/* ── News item ── */
+.news-item { padding: 9px 0; border-bottom: 1px solid #f4f4f4; }
+.news-item:last-child { border-bottom: none; }
+a.news-item { text-decoration: none; color: inherit; display: block; border-radius: 7px; padding: 9px 8px; margin: 0 -8px; transition: background 0.15s; }
+a.news-item:hover { background: #edf6ed; }
+a.news-item .news-title::after { content: ' ↗'; font-size: 10px; color: #2e8b2e; opacity: 0.6; }
+.tag { display: inline-block; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 3px; }
+.tag-cfr      { background: #e6f4ea; color: #137333; }
+.tag-carbon   { background: #e8f0fe; color: #1558d6; }
+.tag-prov     { background: #fce8e6; color: #c5221f; }
+.tag-prov-politics { background: #fce8e6; color: #c5221f; }
+.tag-eu       { background: #ede7f6; color: #5e35b1; }
+.tag-us       { background: #e8eaed; color: #3c4043; }
+.tag-market   { background: #fff3e0; color: #e65100; }
+.tag-cert     { background: #e0f7fa; color: #006064; }
+.tag-trade    { background: #fce4ec; color: #880e4f; }
+.tag-politics { background: #e8eaf6; color: #283593; }
+.news-title { font-size: 12px; font-weight: 600; color: #1c2e1c; margin-bottom: 2px; }
+.news-body  { font-size: 11px; color: #5a6e5a; line-height: 1.5; }
+
+/* ── Risk radar ── */
+.risk-grid { display: flex; flex-direction: column; gap: 10px; }
+.risk-col { border-radius: 9px; padding: 12px 16px; }
+.risk-col.red   { background: #fff5f5; border: 1px solid #fed7d7; }
+.risk-col.amber { background: #fffbf0; border: 1px solid #fefcbf; }
+.risk-col.green { background: #f0fff4; border: 1px solid #c6f6d5; }
+.risk-col-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+.risk-col.red   .risk-col-title { color: #c53030; }
+.risk-col.amber .risk-col-title { color: #975a16; }
+.risk-col.green .risk-col-title { color: #22543d; }
+.risk-entry { font-size: 12px; color: #4a5568; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.05); line-height: 1.5; }
+.risk-entry:last-child { border-bottom: none; }
+
+/* ── Sources ── */
+.source-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f4f4f4; align-items: flex-start; }
+.source-row:last-child { border-bottom: none; }
+.src-num { width: 20px; height: 20px; flex-shrink: 0; background: #eaf2ea; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #2e8b2e; margin-top: 1px; }
+.src-link { font-size: 12px; font-weight: 600; color: #1a6b3c; text-decoration: none; }
+.src-link:hover { text-decoration: underline; }
+.src-meta { font-size: 10px; color: #aaa; margin-top: 1px; }
+
+/* ── Empty ── */
+.empty { background: #f9f9f9; border-radius: 7px; padding: 14px; text-align: center; color: #bbb; font-size: 12px; font-style: italic; }
+
+/* ── Footer ── */
+.footer { text-align: center; font-size: 10px; color: #bbb; padding: 8px 0 4px; letter-spacing: 0.2px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-left">
+    <h1>🌿 Green Oil Inc.</h1>
+    <div class="sub">주간 정책 &amp; 시장 인텔리전스 리포트 · Weekly Intelligence Report</div>
+  </div>
+  <div class="header-right">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="pdf-btn" onclick="downloadPDF()">
+        <svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><rect x="6" y="13" width="12" height="8" rx="1"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/></svg>
+        <span id="pdfBtnLabel">PDF 저장</span>
+      </button>
+      <a class="report-switch" href="../index.html">&#8592; 인덱스</a>
+      <a class="report-switch" href="../canola/2026-09-21.html"><span class="dot"></span>카놀라 리포트 →</a>
+    </div>
+    <div class="updated-badge">마지막 업데이트: 2026.09.21</div>
+  </div>
+</div>
+
+<div class="week-nav">
+  <a class="nav-btn disabled" href="#">&#8592; 최신</a>
+  <div class="nav-center">
+    <div class="nav-week-label">이번 주 · 2026년 9/14 – 9/20 주</div>
+    <div class="nav-week-sub">2026.09.21 기준</div>
+    <div class="nav-dots">
+<a class="nav-dot active" href="./2026-09-21.html" title=""></a>
+<a class="nav-dot" href="./2026-09-14.html" title=""></a>
+<a class="nav-dot" href="./2026-09-10.html" title=""></a>
+<a class="nav-dot" href="./2026-09-08.html" title=""></a>
+<a class="nav-dot" href="./2026-09-07.html" title=""></a>
+<a class="nav-dot" href="./2026-09-04.html" title=""></a>
+<a class="nav-dot" href="./2026-08-31.html" title=""></a>
+<a class="nav-dot" href="./2026-08-24.html" title=""></a>
+<a class="nav-dot" href="./2026-08-17.html" title=""></a>
+<a class="nav-dot" href="./2026-08-10.html" title=""></a>
+<a class="nav-dot" href="./2026-08-03.html" title=""></a>
+<a class="nav-dot" href="./2026-07-27.html" title=""></a>
+<a class="nav-dot" href="./2026-07-20.html" title=""></a>
+<a class="nav-dot" href="./2026-07-13.html" title=""></a>
+<a class="nav-dot" href="./2026-07-06.html" title=""></a>
+<a class="nav-dot" href="./2026-06-29.html" title=""></a>
+<a class="nav-dot" href="./2026-06-22.html" title=""></a>
+<a class="nav-dot" href="./2026-06-15.html" title=""></a>
+<a class="nav-dot" href="./2026-06-08.html" title=""></a>
+<a class="nav-dot" href="./2026-06-01.html" title=""></a>
+<a class="nav-dot" href="./2026-05-25.html" title=""></a>
+<a class="nav-dot" href="./2026-05-18.html" title=""></a>
+<a class="nav-dot" href="./2026-05-11.html" title=""></a>
+<a class="nav-dot" href="./2026-05-05.html" title=""></a>
+<a class="nav-dot" href="./2026-04-28.html" title=""></a>
+<a class="nav-dot" href="./2026-04-21.html" title=""></a>
+<a class="nav-dot" href="./2026-04-14.html" title=""></a>
+<a class="nav-dot" href="./2026-04-07.html" title=""></a>
+<a class="nav-dot" href="./2026-03-30.html" title=""></a>
+<a class="nav-dot" href="./2026-03-23.html" title=""></a>
+<a class="nav-dot" href="./2026-03-16.html" title=""></a>
+<a class="nav-dot" href="./2026-03-09.html" title=""></a>
+<a class="nav-dot" href="./2026-03-02.html" title=""></a>
+<a class="nav-dot" href="./2026-02-23.html" title=""></a>
+<a class="nav-dot" href="./2026-02-16.html" title=""></a>
+<a class="nav-dot" href="./2026-02-09.html" title=""></a>
+<a class="nav-dot" href="./2026-02-02.html" title=""></a>
+<a class="nav-dot" href="./2026-01-26.html" title=""></a>
+<a class="nav-dot" href="./2026-01-19.html" title=""></a>
+<a class="nav-dot" href="./2026-01-12.html" title=""></a>
+<a class="nav-dot" href="./2026-01-05.html" title=""></a>
+    </div>
+  </div>
+  <a class="nav-btn" href="./2026-09-14.html">이전 &#8594;</a>
+</div>
+
+<div class="container">
+
+  <!-- ── 맨 위 한 줄 요약: 왜 이렇게 움직였나 ── -->
+  <div class="why-line up">
+    <div class="why-move">▲ 미국 UCO 관세 50% &nbsp;9/15 0시 발효</div>
+    <div class="why-text"><strong>왜?</strong> 9월 15일 0시 1분부로 UCO가 들어가는 미국 관세분류 <strong>1518.00.40</strong>에 제338조 <strong>50%</strong> 추가관세가 예고대로 실제 발효돼 미국향 직수출 원가가 단숨에 올라갔고 바로 다음 날 미국 업계에서는 <strong>캐나다산 UCO의 환적 의혹</strong>까지 공개 제기됐습니다만, 반대 방향으로 <strong>미국 8월 재생연료 크레딧 발행량이 전년 동월 대비 6% 늘어</strong> 현지 수요 자체는 오히려 견조했습니다.</div>
+  </div>
+
+  <div class="alert-bar">
+    <div class="pill red">  <div class="dot red"></div>  <span>3</span> 관심 요망</div>
+    <div class="pill amber"><div class="dot amber"></div><span>3</span> 모니터링 필요</div>
+    <div class="pill green"><div class="dot green"></div><span>3</span> 기회 요인</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-summary">📋</div>
+      <div class="card-title">이번 주 핵심 요약 <span>Executive Summary · 9/14 – 9/20</span></div>
+    </div>
+    <ul class="summary-list">
+      <li><strong>예고됐던 관세가 이번 주에 실제로 발효됐습니다 — 9월 15일 0시 1분(미국 동부시간)부터 <span style="white-space:nowrap;">1518.00.40</span>에 50% 추가관세가 붙습니다.</strong> 미국 세관 통관지침 <strong>CSMS 제69851916호</strong>(9월 11일)와 첨부 품목표를 다시 판독한 결과, 이번에 새로 과세 대상이 된 <strong>122개</strong> 품목 가운데 <strong>15류(유지류)에 해당하는 것은 <span style="white-space:nowrap;">1518.00.40</span> 단 하나</strong>였습니다. 지침 원문은 <strong>"9903.03.12부터 9903.03.14까지의 항에 부과되는 추가관세는 2026년 9월 15일 0시 1분(미국 동부시간) 이후 소비용으로 반입신고되거나 보세창고에서 반출되는 물품에 적용된다"</strong>고 적고 있어, 기준은 선적일이 아니라 <strong>미국 통관 시점</strong>이며 운송 중 예외는 없습니다. 다만 같은 지침은 <strong>이 추가관세가 환급(drawback) 대상</strong>임을 함께 명시했습니다.</li>
+      <li><strong>발효 다음 날, 미국 업계가 공개 석상에서 캐나다산 UCO를 직접 거론했습니다 — 환적 의혹입니다.</strong> 9월 16일 Agri-Pulse 보도에서 곡물·원료 거래사 Scoular의 특별프로젝트 담당 선임부사장 에드 프로서는 <strong>"캐나다에서 들어오는 UCO 가운데 일부에 대해 우려가 커지고 있는데, 거기에 환적이 섞여 있지는 않은가"</strong>라고 말했습니다. 같은 기사에서 Clean Fuels Alliance America의 커트 코배릭 연방담당 대표는 <strong>원료에는 관세가 붙고 완제품 재생디젤에는 붙지 않는 비대칭</strong>을 지적하며, 해외 생산자가 값싸진 원료를 사다 해외에서 가공해 완제품으로 되팔면 미국 내 생산자가 밀린다고 경고했습니다. <strong>Green Oil 관점에서 이 발언은 관세보다 더 오래 갈 수 있는 위험입니다</strong> — 관세는 정치적으로 풀릴 수 있지만 <strong>원산지 의심은 서류로만 풀립니다.</strong></li>
+      <li><strong>미국 내 수요 지표는 오히려 좋았습니다 — 9월 17일 환경보호청이 8월 재생연료 크레딧 발행량을 <span style="white-space:nowrap;">20억 2,000만 개</span>로 발표했고, 이는 전년 동월 대비 6% 증가입니다.</strong> 올해 1~8월 누적 발행량은 <strong>163억 4,000만 개</strong>에 이릅니다. 같은 날 공개된 소규모 정제사 면제(SRE) 자료에서는 <strong>최근 한 달간 신규 신청 2건</strong>이 접수돼 <strong>현재 계류 중인 신청이 8건</strong>인 것으로 확인됐습니다. <strong>발행량 증가는 우리 쪽에 유리한 재료이지만, 계류 중인 면제 8건은 그 수요를 나중에 되돌릴 수 있는 변수</strong>이므로 두 숫자를 함께 보셔야 합니다.</li>
+      <li>⭐ <strong>캐나다 청정연료규정(CFR) 개정안은 이번 주에도 관보에 오르지 않았습니다 — 9월 19일자 Part I을 직접 열어 수록 항목 전부를 확인했습니다.</strong> <strong>제160권 제38호</strong>의 정부 공고란에 실린 환경부 항목은 <strong>「비국내물질목록 개정 명령 2026-87-11-02」 단 한 건</strong>으로 청정연료규정과 무관하며, 나머지는 국세청 자선단체 등록 취소, 국제무역심판소 공고, 공직위원회, 주요프로젝트사무소의 사용후핵연료 심층처분장 공고, 추밀원 임명, 보험회사 설립 신청, 의회 항목이 전부입니다. 정부가 목표 개정 의사를 밝힌 <strong>2025년 9월 5일</strong>로부터 <strong>1년 2주</strong>가, 의견수렴이 끝난 <strong>2026년 1월 15일</strong>로부터 <strong>8개월</strong>이 지났습니다. 연방관보도 <strong>9월 14일~20일</strong> 발행일 조건으로 조회한 결과 <strong>바이오연료·재생연료·청정연료·식용유 관련 문서가 0건</strong>이었습니다.</li>
+      <li><strong>국내에서는 온타리오 청정연료 설비에 사고가 있었고, 원료 시세는 전반적으로 눌렸습니다.</strong> 9월 16일 새벽 온타리오주 채텀의 그린필드 글로벌 에탄올 공장 저장탱크에 <strong>낙뢰</strong>가 떨어져 약 <strong>5시간</strong> 화재가 이어졌습니다. 인명 피해는 없었고 회사는 <strong>"화재는 저장탱크 구역에 국한됐고 공장의 다른 구역에는 손상이 없는 것으로 보인다"</strong>, <strong>증류 설비에는 영향이 없다</strong>고 밝혔으나, <strong>9월 20일</strong>에는 소화약제 사용에 따라 <strong>인근 템스강까지 정화 작업을 확대</strong>했다고 발표했습니다. 시세 쪽에서는 9월 16일 캐나다 통계청이 <strong>2026년 카놀라 생산량을 2,210만 톤</strong>(전년 대비 −0.8%)으로 추정했고, 유럽에서는 <strong>9월 10일 대비 9월 17일</strong> 채종유가 톤당 <strong>1,236유로에서 1,223유로</strong>로, 조유 팜유가 <strong>1,460달러에서 1,420달러</strong>로 각각 내렸습니다.</li>
+    </ul>
+  </div>
+
+  <div class="card" style="border-left:4px solid #e53e3e;">
+    <div class="card-header">
+      <div class="card-icon icon-risk">⭐</div>
+      <div class="card-title">최우선 감시 2건 — 이번 주 직접 확인 결과 <span>45Z 증빙요건 · CFR 개정안 · 근거 원문 조회</span></div>
+    </div>
+    <div style="overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;min-width:520px;">
+      <tbody>
+        <tr>
+          <td style="padding:8px;font-size:11px;color:#4a5568;border-bottom:1px solid #f4f4f4;vertical-align:top;width:118px;"><strong>미국 45Z<br>증빙요건</strong></td>
+          <td style="padding:8px;font-size:11px;color:#4a5568;border-bottom:1px solid #f4f4f4;vertical-align:top;"><strong>적격성은 지난주에 결론이 났고, 이번 주에 남은 것은 증빙요건입니다.</strong> 9월 8일 국세청 지침 2026-53이 <strong>캐나다산 UCO를 45Z 적격 원료로 확정</strong>하고 배출계수를 <strong>2025년 1월 1일까지 소급</strong>했으며, 그 밖의 수입 UCO는 <strong>2025년 12월 31일 이후 생산분부터 부적격</strong>입니다. 다만 이것은 <strong>지침(notice)</strong>이지 <strong>최종규칙(final rule)</strong>이 아니며, <strong>캐나다·멕시코산 원료의 원산지 증빙 방법은 최종규칙으로 미뤄져</strong> <strong>"납세자는 공제 청구를 뒷받침하기에 충분한 기록을 보관해야 한다"</strong>는 원칙만 남아 있습니다. 이번 주 연방관보를 <strong>9월 14일~20일</strong> 발행일 조건으로 조회한 결과 <strong>바이오연료·재생연료·청정연료·식용유 관련 문서가 0건</strong>이었습니다(같은 조건으로 '캐나다' 조회 시 29건이 나와 조회 자체는 정상 작동함을 함께 확인했습니다). <strong>2026년 2월 4일 게재된 제안규칙은 아직 최종 확정되지 않았습니다.</strong> 한편 이번 주 제기된 <strong>환적 의혹 대응 자료와 45Z 증빙 자료는 사실상 같은 자료</strong>이므로, 한 벌을 제대로 만들어 두시면 두 곳에 모두 쓰실 수 있습니다.</td>
+        </tr>
+        <tr>
+          <td style="padding:8px;font-size:11px;color:#4a5568;border-bottom:1px solid #f4f4f4;vertical-align:top;"><strong>캐나다 CFR<br>개정안</strong></td>
+          <td style="padding:8px;font-size:11px;color:#4a5568;border-bottom:1px solid #f4f4f4;vertical-align:top;"><strong>9월 19일자 Part I을 직접 열어 수록 항목 전부를 확인했습니다 — 청정연료규정은 없습니다.</strong> <strong>제160권 제38호</strong>의 수록 내역은 위원회 공고(국세청 자선단체 등록 취소, 국제무역심판소의 항소·조사선 용선·장갑차량·강재 선반·채소류 관련 공고, 공직위원회 허가 3건), 정부 공고(<strong>환경부 「비국내물질목록 개정 명령 2026-87-11-02」</strong>, 주요프로젝트사무소의 사용후핵연료 심층처분장 사업 공고, 추밀원 임명 공고), 기타 공고(ARAG Canada Holdings 보험회사 설립 신청), 의회 항목(하원 사적법안 신청)이 전부입니다. <strong>환경부 항목은 단 한 건이며 신규화학물질 목록 관리로 청정연료규정과 무관합니다.</strong> 정부가 목표 개정 의사를 발표한 <strong>2025년 9월 5일</strong>로부터 <strong>1년 2주</strong>, 의견수렴이 종료된 <strong>2026년 1월 15일</strong>로부터 <strong>8개월</strong>이 지났으나 초안 게재가 없습니다. 참고로 초안은 <strong>Part I</strong>에 실리게 되어 있으므로 Part II 확인만으로는 판정할 수 없습니다.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-canada">🍁</div>
+      <div class="card-title">연방 정책 &amp; 정치 <span>Federal</span></div>
+    </div>
+
+    <a class="news-item" href="https://www.pm.gc.ca/en/news/speeches/2026/09/15/prime-minister-carney-delivers-remarks-media-2026-canada-investment-summit" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-politics">9/15 연방</span>
+      <div class="news-title">9월 15일 카니 총리가 캐나다 투자정상회의에서 약 5,000억 달러 규모 투자 약정을 발표하고 설비투자 즉시상각 제도를 내놓았습니다</div>
+      <div class="news-body">9월 15일 토론토에서 열린 <strong>2026 캐나다 투자정상회의</strong>에서 카니 총리가 <strong>"거의 5,000억 달러에 이르는 신규 투자"</strong> 약정을 발표했습니다. 연기금·보험사 등 기관투자자가 <strong>약 1,000억 달러</strong>, 캐나다 은행권이 <strong>약 3,250억 달러</strong>의 신규 대출을, 투자펀드가 캐나다 기업과 인프라에 <strong>140억 달러 이상</strong>을 각각 약정했습니다. 정책 쪽에서는 <strong>생산성 대규모 공제(Productivity Mega Deduction)</strong>를 도입해 즉시 상각이 가능한 자산 범위를 <strong>약 15%에서 3분의 2 가까이로</strong> 넓히겠다고 밝혔고, 이를 통해 신규 투자에 대한 실효세율이 <strong>주요국 가운데 가장 낮아지고 미국의 절반 이하가 된다</strong>고 설명했습니다. 인허가는 <strong>캐나다건설법</strong>에 따라 <strong>"하나의 사업, 하나의 심사, 1년"</strong> 원칙으로 처리하겠다고 했습니다. <strong>Green Oil 관점:</strong> 이번 발표에 <strong>청정연료·바이오연료를 직접 겨냥한 항목은 없었습니다.</strong> 다만 설비투자 즉시상각은 업종을 가리지 않는 제도이므로, <strong>정제·저장 설비 증설을 검토 중이시라면 적용 대상 자산 범위가 확정되는 시점을 확인해 두실 필요가 있습니다.</strong> 미국향 관세로 수익이 눌리는 구간에 국내 설비투자 쪽 세제가 열리는 그림이라, 자본지출 일정을 조정할 여지가 생겼습니다.</div>
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-prov">🏛️</div>
+      <div class="card-title">주정부 정책 &amp; 정치 <span>Provincial</span></div>
+    </div>
+
+    <a class="news-item" href="https://www.cbc.ca/news/canada/windsor/chatham-greenfield-global-ethanol-plant-fire-9.7350733" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-prov">9/16 – 9/20 온타리오</span>
+      <div class="news-title">9월 16일 새벽 온타리오 채텀의 에탄올 공장 저장탱크에 낙뢰로 화재가 발생했고, 9월 20일에는 정화 작업이 템스강까지 확대됐습니다</div>
+      <div class="news-body"><strong>9월 16일</strong> 자정 직후 온타리오주 채텀 블룸필드로에 있는 <strong>그린필드 글로벌</strong>의 옥수수 기반 에탄올 공장 저장탱크에 낙뢰가 떨어져 대형 화재가 발생했고, 소방대가 새벽까지 진화 작업을 벌여 <strong>오전 8시 직전</strong>에 진화했습니다. 약 <strong>5시간</strong>가량 탔습니다. 인명 피해는 없었고, 회사는 <strong>"화재는 저장탱크 구역에 국한됐고 진화됐으며 공장의 다른 구역에는 손상이 없는 것으로 보인다"</strong>, <strong>"현장에 있던 전 직원과 인원의 소재가 확인됐고 안전하다"</strong>고 밝혔습니다. 같은 날 저녁에는 이번 손상이 <strong>증류 능력에는 영향을 주지 않을 것</strong>이라고 덧붙였습니다. 피해 규모는 공개되지 않았습니다. 이후 <strong>9월 20일 금요일 저녁</strong> 회사는 <strong>소화용 거품약제를 사용한 데 따라 인근 템스강까지 정화 작업을 확대</strong>하고 있으며 <strong>온타리오주 환경보전공원부</strong>와 함께 대응 중이라고 발표했습니다. 채텀켄트시는 <strong>지역 식수에는 영향이 없다</strong>고 확인했습니다. <strong>Green Oil 관점:</strong> 우리 사업과 직접 겹치는 설비는 아닙니다. 다만 두 가지를 눈여겨볼 만합니다 — ㉠ <strong>온타리오 청정연료 생산 설비 한 곳이 예고 없이 멈출 수 있다는 사례</strong>이고, ㉡ 무엇보다 <strong>소화약제로 인한 수계 오염이 곧바로 주 환경당국 사안이 됐다</strong>는 점입니다. 저희 수거·정제 설비도 유지류를 대량 보관하므로, <strong>소화 방식과 유출 차단 설비를 보험사·소방서와 한 번 점검하실 것을 권합니다.</strong></div>
+    </a>
+
+    <a class="news-item" href="https://www.gx94radio.com/2026/09/19/scott-moes-approval-rating-ties-for-second-highest-among-canadian-premiers/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-prov-politics">9/19 주정부 정치</span>
+      <div class="news-title">9월 19일 공개된 주총리 지지율 조사에서 매니토바 키뉴 63%, 사스카추완 모 48%로 나타났고 모 주총리는 18개월 만의 최저치를 기록했습니다</div>
+      <div class="news-body"><strong>9월 19일</strong> 앵거스리드연구소의 주총리 지지율 조사 결과가 공개됐습니다. 조사는 <strong>9월 8일부터 15일까지</strong> 성인 <strong>4,310명</strong>(사스카추완 325명)을 대상으로 이뤄졌습니다. <strong>매니토바 키뉴 주총리가 63%</strong>로 전국 1위이자 2025년 6월 이후 자신의 최고치를 기록했고, <strong>사스카추완 모 주총리는 48%</strong>로 뉴펀들랜드 웨이크햄 주총리와 함께 공동 2위였습니다. 다만 모 주총리는 <strong>지지율과 부정평가가 48%로 같아졌고 이는 18개월 만의 최저 수준</strong>입니다. <strong>앨버타 스미스 주총리는 38%</strong>로 9명 가운데 7위였으며, <strong>온타리오 포드 주총리와 BC 이비 주총리는 6월 대비 각각 10%포인트</strong> 올랐습니다. <strong>Green Oil 관점:</strong> 지지율 자체가 정책은 아니지만 <strong>연방 청정연료규정을 둘러싼 주정부들의 발언 강도를 가늠하는 선행지표</strong>입니다. 읽을 대목은 두 가지입니다 — ㉠ 연방 청정연료규정에 가장 앞장서 저항해 온 <strong>사스카추완·앨버타 두 주의 주총리가 나란히 약세</strong>라는 점은 주정부발 반대 압력이 단기적으로 세지기 어려운 국면임을 시사합니다. ㉡ 반대로 <strong>관세 대응을 전면에 내세운 온타리오·BC 두 주총리가 동시에 10%포인트씩 올랐다</strong>는 것은 <strong>관세 대응 지원책이 정치적으로 수익이 나는 상태</strong>라는 뜻이므로, 온타리오 지원 프로그램 확대를 요청하기에 조건이 나쁘지 않습니다.</div>
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-export">🚢</div>
+      <div class="card-title">수출 시장 <span>미국 · EU</span></div>
+    </div>
+
+    <a class="news-item" href="https://content.govdelivery.com/bulletins/gd/USDHSCBP-429db0c" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-trade">9/15 미국</span>
+      <div class="news-title">9월 15일 0시 1분부로 UCO 관세분류 1518.00.40에 대한 50% 추가관세가 예고대로 발효됐습니다 — 기준은 미국 반입신고 시점입니다</div>
+      <div class="news-body">미국 세관의 통관지침 <strong>CSMS 제69851916호</strong>(9월 11일 발신)와 첨부 품목표 「Section 338 Canada Modified HTS List eff 091526」에 따라, <strong>9월 15일 0시 1분(미국 동부시간)</strong>부터 캐나다산 <span style="white-space:nowrap;">1518.00.40</span>에 <strong>50% 추가관세</strong>가 적용되기 시작했습니다. 이 세번은 미국 관세율표상 <strong>"동물성·식물성·미생물성 유지와 그 분획물로서 끓이거나 산화·탈수·황화·취입·진공 또는 불활성 기체 중에서 가열 중합하거나 그 밖의 방법으로 화학적으로 변성시킨 것, 제1516호의 것은 제외, 식용에 적합하지 않은 동물성·식물성·미생물성 유지의 혼합물 또는 조제품"</strong> 가운데 <strong>아마인유 외의 것</strong>에 해당하며, <strong>미국이 UCO 수입을 잡는 바로 그 줄</strong>입니다. 지침 원문은 적용 시점을 <strong>"소비용으로 반입신고되거나 보세창고에서 반출되는 물품"</strong>으로 못박아 <strong>선적일이 아니라 통관일이 기준</strong>이며 <strong>운송 중 예외 조항이 없습니다.</strong> 이번에 추가된 품목은 모두 <strong>122개</strong>이고, <strong>15류 전체에서 대상이 된 것은 <span style="white-space:nowrap;">1518.00.40</span> 한 줄뿐</strong>입니다. 완화 장치는 두 가지가 확인됩니다 — 지침은 <strong>이 추가관세가 환급(drawback) 대상</strong>이라고 명시했고, 제98류 규정을 제대로 적용하면 관세를 피할 수 있으나 <strong>제9802.00.40·9802.00.50·9802.00.60·9802.00.80호는 예외</strong>로 <strong>수리·개조·가공에 해당하는 가액에 추가관세가 붙습니다.</strong> <strong>Green Oil 조치:</strong> ① <strong>9월 15일 이후 신고분은 9903.03.12 + <span style="white-space:nowrap;">1518.00.40</span> 조합으로 신고</strong>되고 있는지 통관사를 통해 실제 신고서로 확인하시기 바랍니다. ② <strong>미국 수입자가 제3국으로 재수출하는 물량</strong>을 파악하시고, 있다면 <strong>환급 신청 주체와 환급금 귀속을 계약서에 명시</strong>하실 것을 권합니다. ③ 4분기 가격 협의는 <strong>관세가 유지된다는 전제</strong>로 진행하시는 편이 안전합니다.</div>
+    </a>
+
+    <a class="news-item" href="https://www.agri-pulse.com/articles/25251-us-trade-war-with-canada-and-beyond-triggers-biofuel-worries" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-us">9/16 미국</span>
+      <div class="news-title">9월 16일 미국 업계가 캐나다산 UCO의 환적 의혹을 공개 거론했습니다 — 원료에만 관세가 붙는 비대칭도 함께 지적됐습니다</div>
+      <div class="news-body"><strong>9월 16일</strong> Agri-Pulse는 미국의 무역 조치가 자국 바이오연료 산업에 불러온 우려를 다루면서 <strong>캐나다산 UCO를 직접 거명</strong>했습니다. 곡물·원료 거래사 <strong>Scoular</strong>의 특별프로젝트 담당 선임부사장 <strong>에드 프로서</strong>는 <strong>"캐나다에서 들어오는 UCO 가운데 일부에 대해 우려가 커지고 있는데, 거기에 환적이 섞여 있지는 않은가"</strong>라고 말했습니다. 같은 기사에서 <strong>Clean Fuels Alliance America</strong>의 연방담당 대표 <strong>커트 코배릭</strong>은 <strong>원료에는 관세가 붙는 반면 완제품 재생디젤에는 붙지 않는 구조</strong>를 문제로 지적하며, 해외 생산자가 값이 낮아진 미국산 원료를 사들여 해외에서 가공한 뒤 더 싼 재생디젤로 되팔아 미국 내 생산자를 밀어낼 수 있다고 경고했습니다. 프로서 부사장은 캐나다산 <strong>카놀라유와 카놀라박</strong> 수입량도 무역 갈등의 영향권에 있다고 언급했습니다. 기사는 재생연료 의무혼합량 등 워싱턴의 정책 자체는 바이오연료에 우호적이나 <strong>무역 정책이 그 성과를 갉아먹을 수 있다</strong>고 정리했습니다. <strong>Green Oil 관점:</strong> 이 발언은 <strong>관세보다 오래 갈 수 있는 위험</strong>입니다. 관세는 정치 일정에 따라 풀릴 수 있지만, <strong>원산지 의심은 서류로만 풀립니다.</strong> <strong>조치:</strong> ① <strong>수거처 소재지·수거 일자·선적 단위를 잇는 이력 자료</strong>를 지금 형식을 갖춰 남기시기 바랍니다 — 나중에 소급해서 만들 수 없는 성격의 자료입니다. ② 4분기 바이어 협의 자료에 <strong>캐나다 국내 수거 이력을 스스로 먼저 제시</strong>하시면, 의혹이 업계 전반으로 번질 때 우리 물량이 함께 묶이는 것을 막는 방패가 됩니다.</div>
+    </a>
+
+    <a class="news-item" href="https://biodieselmagazine.com/articles/epa-2-sre-petitions-filed-8-sre-petitions-currently-pending" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-us">9/17 미국</span>
+      <div class="news-title">9월 17일 환경보호청 자료에서 소규모 정제사 면제 신규 신청 2건이 확인됐고 계류 중인 신청은 8건입니다</div>
+      <div class="news-body"><strong>9월 17일</strong> 미국 환경보호청이 재생연료의무혼합제도 관련 자료를 갱신해, <strong>최근 한 달 사이 소규모 정제사 면제(SRE) 신규 신청 2건</strong>이 접수됐고 <strong>현재 계류 중인 신청이 모두 8건</strong>이라고 밝혔습니다. 배경을 함께 보셔야 합니다 — 환경보호청은 <strong>8월 31일</strong> 2025년 이행연도분 34건의 신청을 처리해 <strong>18개 정제소에 전부 면제, 11개 정제소에 50% 면제</strong>를 내주고 3건을 기각, 2건을 대상 외로 판정했으며, 이로 인해 면제된 크레딧이 <strong>17억 6,000만 개</strong>에 달했습니다. 당시 환경보호청은 <strong>10월 말 이전에 면제 물량 100%를 2026·2027년 의무혼합량으로 재배분하는 보충 규칙을 제안하겠다</strong>고 밝혔습니다. <strong>Green Oil 관점:</strong> 면제는 곧 <strong>그만큼의 바이오디젤·재생디젤 수요가 사라지는 것</strong>이고, 재배분은 그것을 되돌리는 장치입니다. 이번에 확인된 <strong>계류 8건</strong>은 그 위에 얹히는 추가 변수입니다. <strong>조치:</strong> <strong>10월 말로 예고된 보충 규칙</strong>이 실제로 나오는지, 그리고 <strong>재배분 비율이 100%로 유지되는지</strong>를 4분기 판매 계획의 분기점으로 잡아 두시기 바랍니다. 재배분이 100% 미만으로 후퇴하면 미국 내 원료 수요 자체가 줄어 <strong>관세와 겹쳐 이중으로 작용합니다.</strong></div>
+    </a>
+
+    <a class="news-item" href="https://biodieselmagazine.com/articles/neste-and-united-airlines-extended-agreements-for-saf-supply-in-the-us-and-the-netherlands" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-eu">9/18 미국 · EU</span>
+      <div class="news-title">9월 18일 네스테와 유나이티드항공이 미국·네덜란드 지속가능항공연료 공급 계약을 연장했습니다</div>
+      <div class="news-body"><strong>9월 18일</strong> 네스테와 유나이티드항공이 기존 <strong>지속가능항공연료(SAF)</strong> 공급 계약을 연장했다고 발표했습니다. 대상은 <strong>미국 시카고 오헤어 국제공항</strong>과 <strong>네덜란드 암스테르담 스히폴 공항</strong>에서 출발하는 항공편에 급유되는, 기존 항공유와 혼합된 SAF입니다. <strong>Green Oil 관점:</strong> 네스테는 <strong>폐식용유와 동물성 유지를 주원료로 쓰는 세계 최대 재생연료 생산사</strong>이므로, 이 회사의 장기 공급 계약이 연장된다는 것은 <strong>UCO 수요의 바닥이 계약으로 묶여 유지된다</strong>는 뜻입니다. 특히 대상 공항이 <strong>미국과 유럽에 하나씩</strong> 걸려 있다는 점이 우리에게 중요합니다 — 미국향에는 관세가 붙었지만 <strong>유럽향에는 붙지 않았고</strong>, 유럽 쪽 수요는 계약으로 뒷받침되고 있습니다. <strong>조치:</strong> 미국향 채산성이 관세로 눌리는 구간이므로 <strong>유럽향 물량 비중을 재검토하기에 조건이 맞는 시기</strong>입니다. 다만 유럽은 <strong>2025/2181 규정에 따라 2027년 11월 19일부터 수입 UCO에 대해 수출국 내 승인·등록 시설 출처와 수거부터 인도까지 전 구간 이력 증빙을 요구</strong>하므로, 유럽향을 늘리실 계획이라면 <strong>인증 준비를 물량 확대보다 먼저 시작하셔야 합니다.</strong></div>
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-market">📈</div>
+      <div class="card-title">UCO 시장 <span>원료 시세 · 수급</span></div>
+    </div>
+
+    <a class="news-item" href="https://biodieselmagazine.com/articles/epa-202-billion-rins-generated-in-august" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-market">9/17 미국</span>
+      <div class="news-title">9월 17일 환경보호청 발표 — 8월 재생연료 크레딧 발행량이 20억 2,000만 개로 전년 동월 대비 6% 늘었습니다</div>
+      <div class="news-body"><strong>9월 17일</strong> 미국 환경보호청은 재생연료의무혼합제도에 따라 <strong>8월 한 달 동안 발행된 재생연료 크레딧(RIN)이 20억 2,000만 개</strong>로 <strong>전년 같은 달 대비 6% 증가</strong>했다고 발표했습니다. <strong>올해 1월부터 8월까지 누적 발행량은 163억 4,000만 개</strong>입니다. <strong>Green Oil 관점:</strong> 크레딧 발행량은 <strong>실제로 생산·혼합된 바이오연료의 양</strong>을 나타내므로, 원료 수요의 가장 직접적인 대리지표입니다. 전년 대비 증가는 <strong>3월 27일 확정된 2026~2027년 의무혼합량 상향</strong>이 실물 생산으로 이어지고 있다는 뜻이며, <strong>미국 정제사가 원료에 지불할 수 있는 금액의 상한을 밀어 올리는 방향</strong>으로 작용합니다. <strong>조치:</strong> 이 숫자는 <strong>50% 관세를 바이어와 나눠 부담하자고 설득할 때 쓸 수 있는 근거</strong>입니다 — 관세로 우리 가격이 올라도 <strong>미국 내 원료 수요 자체는 줄지 않고 오히려 늘고 있다</strong>는 점을 협의 자료에 함께 제시하시기 바랍니다.</div>
+    </a>
+
+    <a class="news-item" href="https://www150.statcan.gc.ca/n1/daily-quotidien/260916/dq260916b-eng.htm" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-market">9/16 캐나다</span>
+      <div class="news-title">9월 16일 캐나다 통계청이 2026년 카놀라 생산량을 2,210만 톤으로 추정했습니다 — 수확면적은 사상 최대이나 단수가 8.3% 줄었습니다</div>
+      <div class="news-body"><strong>9월 16일</strong> 캐나다 통계청이 위성영상과 농업기후 자료를 이용한 모형 추정치를 발표했습니다. <strong>2026년 카놀라 생산량은 2,210만 톤</strong>으로 전년 대비 <strong>0.8% 감소</strong>가 예상됩니다. <strong>수확면적은 2,320만 에이커로 8.0% 늘어 사상 최대</strong>인 반면, <strong>단수가 에이커당 41.8부셸로 8.3% 줄어</strong> 면적 증가분을 상쇄했습니다. 주별로는 <strong>사스카추완 1,270만 톤(+1.8%)</strong>, <strong>앨버타 610만 톤(−3.8%)</strong>, <strong>매니토바 310만 톤(−4.8%)</strong>입니다. 같은 발표에서 <strong>대두는 750만 톤(+7.8%)</strong>, <strong>옥수수는 1,650만 톤(+11.3%)으로 사상 최대</strong>가 예상됐습니다. <strong>Green Oil 관점:</strong> 카놀라유는 북미에서 <strong>UCO와 같은 바이오연료 원료 자리를 놓고 경쟁</strong>합니다. 생산량이 전년 수준을 지킨다는 것은 <strong>경쟁 원료의 공급이 줄지 않는다</strong>는 뜻이므로, 이 방향만 보면 UCO 가격에 눌림으로 작용합니다. 다만 <strong>미국의 45Z 세액공제에서 캐나다산 카놀라유와 UCO는 나란히 적격</strong>이므로, 두 원료가 함께 미국 시장에서 관세와 세액공제를 같은 조건으로 마주하고 있다는 점도 함께 보셔야 합니다.</div>
+    </a>
+
+    <a class="news-item" href="https://www.fastmarkets.com/insights/european-vegetable-oil-prices-diverge-as-sunflower-oil-rises-while-rapeseed-and-palm-oil-fall/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-market">9/10 → 9/17 EU</span>
+      <div class="news-title">9월 10일 대비 9월 17일 유럽 식물유 시세가 엇갈렸습니다 — 채종유와 팜유는 내리고 해바라기유는 올랐습니다</div>
+      <div class="news-body">유럽 식물유 시장에서 <strong>9월 10일 목요일 대비 9월 17일 목요일</strong> 가격이 품목별로 갈렸습니다. <strong>채종유(네덜란드 착유공장 본선인도 기준)</strong>는 톤당 <strong>1,236유로에서 1,223유로로 13유로</strong> 내렸고, <strong>조유 팜유(로테르담 운임보험료포함 기준)</strong>는 <strong>1,460달러에서 1,420달러로 40달러</strong>, <strong>조유 팜핵유</strong>는 <strong>2,085달러에서 2,000달러로 85달러</strong> 각각 내렸습니다. 반대로 <strong>해바라기유(6개 항구 본선인도 기준)</strong>는 <strong>1,381달러에서 1,391달러로</strong>, <strong>조유 코코넛유</strong>는 <strong>1,995달러에서 2,010달러로</strong> 올랐습니다. 하락 요인으로는 <strong>9월 16일 캐나다 통계청의 카놀라 생산 추정치가 전년 수준을 지킨 점</strong>과 대초원 지역의 건조한 날씨로 수확 여건이 나아진 점, 주 후반 원유 가격이 내린 점이 함께 꼽혔습니다. <strong>Green Oil 관점:</strong> 채종유와 팜유는 UCO의 <strong>대체 원료이자 가격 기준점</strong>입니다. 이들이 내리면 <strong>UCO가 받을 수 있는 가격의 천장도 함께 내려옵니다.</strong> 미국향에 50% 관세가 붙은 주에 유럽 쪽 대체 원료 시세까지 약세였다는 점은 <strong>두 판로가 동시에 눌린 구간</strong>이라는 뜻이므로, <strong>4분기 물량을 한 번에 확정하기보다 분할해 두시는 편이 안전합니다.</strong> (이 시세는 9월 21일 발행된 주간 시장분석에 실린 <strong>9월 10일·17일 관측치</strong>입니다.)</div>
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-risk">⚡</div>
+      <div class="card-title">리스크 &amp; 기회 레이더 <span>Action Radar · 9/14 – 9/20</span></div>
+    </div>
+    <div class="risk-grid">
+      <div class="risk-col red">
+        <div class="risk-col-title">🔴 관심 요망</div>
+        <div class="risk-entry"><strong>50% 관세가 9월 15일 0시 1분부로 실제 발효됐습니다 — 이제는 대비가 아니라 운영의 문제입니다.</strong> 기준은 선적일이 아니라 <strong>미국 반입신고 시점</strong>이며 운송 중 예외가 없습니다. <strong>조치:</strong> ① 9월 15일 이후 통관된 건들이 <strong>9903.03.12 + <span style="white-space:nowrap;">1518.00.40</span></strong> 조합으로 신고됐는지 <strong>실제 신고서로</strong> 확인하시기 바랍니다 — 분류가 잘못되면 나중에 가산세로 돌아옵니다. ② 제98류 적용 가능성을 검토하시되 <strong>제9802.00.40·50·60·80호는 예외</strong>라 <strong>수리·개조·가공 가액에 추가관세가 붙는다</strong>는 점을 반영하시기 바랍니다. ③ 4분기 가격 협의는 <strong>관세 유지를 전제</strong>로 진행하실 것을 권합니다.</div>
+        <div class="risk-entry"><strong>캐나다산 UCO의 환적 의혹이 미국 업계 공개 발언으로 올라왔습니다 — 관세보다 풀기 어려운 위험입니다.</strong> 9월 16일 Scoular 임원이 <strong>"캐나다에서 들어오는 UCO에 환적이 섞여 있지 않은가"</strong>라고 공개 거론했습니다. 관세는 정치 일정에 따라 풀릴 수 있으나 <strong>원산지 의심은 서류로만 풀립니다.</strong> <strong>조치:</strong> ① <strong>수거처 소재지·수거 일자·선적 단위를 잇는 이력 자료</strong>를 지금부터 형식을 갖춰 남기시기 바랍니다 — 소급 작성이 불가능한 성격의 자료입니다. ② 4분기 바이어 협의에서 <strong>캐나다 국내 수거 이력을 먼저 제시</strong>하셔서, 의혹이 업계 전반으로 번질 때 우리 물량이 함께 묶이는 것을 미리 막으실 것을 권합니다.</div>
+        <div class="risk-entry"><strong>미국 소규모 정제사 면제 신청 8건이 계류 중이며, 재배분 규칙은 아직 제안 단계입니다.</strong> 9월 17일 자료에서 최근 한 달 <strong>신규 2건</strong>이 더해져 계류가 <strong>8건</strong>이 됐습니다. 앞서 8월 31일 처리분에서 이미 <strong>17억 6,000만 개</strong>의 크레딧이 면제됐고, 환경보호청은 <strong>10월 말 이전</strong>에 면제분 <strong>100%</strong>를 2026·2027년 의무혼합량으로 되돌리는 보충 규칙을 제안하겠다고 밝힌 상태입니다. <strong>조치:</strong> <strong>보충 규칙의 실제 게재 여부와 재배분 비율</strong>을 4분기 판매 계획의 분기점으로 잡아 두시기 바랍니다. 재배분이 100% 미만으로 후퇴하면 <strong>미국 내 원료 수요 감소가 관세와 겹쳐 이중으로 작용합니다.</strong></div>
+      </div>
+      <div class="risk-col amber">
+        <div class="risk-col-title">🟡 모니터링 필요</div>
+        <div class="risk-entry">⭐ <strong>캐나다 청정연료규정(CFR) 개정안은 이번 주에도 관보에 오르지 않았습니다 — 9월 19일자 Part I을 직접 열어 확인했습니다.</strong> <strong>제160권 제38호</strong>의 환경부 항목은 <strong>「비국내물질목록 개정 명령 2026-87-11-02」 한 건뿐</strong>으로 청정연료규정과 무관합니다. 정부가 목표 개정 의사를 밝힌 지 <strong>1년 2주</strong>, 의견수렴이 끝난 지 <strong>8개월</strong>이 지났습니다. <strong>조치:</strong> 국내 수요를 늘려 줄 유일한 정책 지렛대이므로 주간 점검 대상으로 계속 둡니다. 다만 <strong>연내 시행을 전제로 한 국내 판로 계획은 세우지 않으시는 편이 안전합니다.</strong></div>
+        <div class="risk-entry">⭐ <strong>45Z 증빙·기록보존 요건은 이번 주에도 나오지 않았습니다 — 지침은 났으나 최종규칙이 남아 있습니다.</strong> 9월 8일 지침 2026-53이 캐나다산 UCO의 적격성을 확정하고 <strong>2025년 1월 1일까지 소급</strong>했으나, <strong>원산지 증빙 방법은 최종규칙으로 미뤄졌고</strong> <strong>"충분한 기록을 보관해야 한다"</strong>는 원칙만 남아 있습니다. 연방관보를 <strong>9월 14일~20일</strong> 발행일 조건으로 조회한 결과 <strong>바이오연료·재생연료·청정연료·식용유 관련 문서가 0건</strong>이었습니다. <strong>조치:</strong> 환적 의혹 대응과 <strong>같은 자료</strong>가 45Z 증빙에도 쓰입니다 — 한 벌을 제대로 만들어 두시면 두 곳에 모두 쓸 수 있으므로, <strong>지금 착수하시는 것이 가장 효율이 높습니다.</strong></div>
+        <div class="risk-entry"><strong>유럽 대체 원료 시세가 약세라 UCO 가격의 천장이 함께 내려왔습니다.</strong> 9월 10일 대비 <strong>9월 17일</strong> 채종유가 톤당 <strong>1,236유로에서 1,223유로</strong>로, 조유 팜유가 <strong>1,460달러에서 1,420달러</strong>로 내렸습니다. 9월 16일 캐나다 통계청이 카놀라 생산량을 <strong>2,210만 톤</strong>(전년 대비 −0.8%)으로 추정해 <strong>경쟁 원료의 공급이 줄지 않는다</strong>는 점이 확인된 것도 눌림 요인입니다. <strong>조치:</strong> 미국향에 관세가 붙은 주에 유럽 쪽 대체 원료까지 약세였으므로 <strong>두 판로가 동시에 눌린 구간</strong>입니다. <strong>4분기 물량을 한 번에 확정하지 마시고 분할해 두실 것을 권합니다.</strong></div>
+      </div>
+      <div class="risk-col green">
+        <div class="risk-col-title">🟢 기회 요인</div>
+        <div class="risk-entry"><strong>미국 내 원료 수요 자체는 늘고 있습니다 — 8월 크레딧 발행량이 전년 대비 6% 증가했습니다.</strong> 9월 17일 환경보호청 발표 기준 8월 발행량은 <strong>20억 2,000만 개</strong>, 1~8월 누적은 <strong>163억 4,000만 개</strong>입니다. 3월 27일 확정된 <strong>2026~2027년 의무혼합량 상향</strong>이 실물 생산으로 이어지고 있다는 뜻입니다. <strong>조치:</strong> 이 숫자는 <strong>관세를 바이어와 나눠 부담하자고 설득할 때 쓸 근거</strong>입니다 — <strong>관세로 우리 가격이 올라도 미국 내 수요는 오히려 늘고 있다</strong>는 점을 4분기 협의 자료에 함께 넣으시기 바랍니다.</div>
+        <div class="risk-entry"><strong>추가관세는 환급(drawback) 대상입니다 — 재수출 경로가 있는 물량에는 완충장치가 남아 있습니다.</strong> 9월 11일 세관 지침은 <strong>"9903.03.12부터 9903.03.14까지의 항에 부과되는 추가관세는 환급 대상이 됩니다"</strong>라고 명시했고, 이 조항은 9월 15일 발효 이후에도 그대로 유효합니다. <strong>조치:</strong> 미국 수입자가 제3국으로 재수출하는 물량이 있는지 확인하시고, 있다면 <strong>환급 신청 주체와 환급금 귀속을 계약서에 명시</strong>하실 것을 권합니다. 관세율이 50%이므로 <strong>환급 가능 물량 한 건의 금액 규모가 작지 않습니다.</strong></div>
+        <div class="risk-entry"><strong>유럽 쪽 지속가능항공연료 수요가 장기 계약으로 뒷받침됐습니다.</strong> 9월 18일 <strong>네스테와 유나이티드항공</strong>이 <strong>시카고 오헤어</strong>와 <strong>암스테르담 스히폴</strong> 출발편에 대한 공급 계약을 연장했습니다. 네스테는 <strong>폐식용유와 동물성 유지를 주원료로 쓰는 세계 최대 재생연료 생산사</strong>이므로 UCO 수요의 바닥이 계약으로 묶인다는 뜻이며, <strong>유럽향에는 미국 관세가 걸리지 않습니다.</strong> <strong>조치:</strong> 유럽향 비중 확대를 검토하시되, 유럽은 <strong>2027년 11월 19일부터 수입 UCO에 수출국 내 승인·등록 시설 출처와 전 구간 이력 증빙을 요구</strong>하므로 <strong>인증 준비를 물량 확대보다 먼저 시작하셔야 합니다.</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-sources">🔗</div>
+      <div class="card-title">출처 <span>Sources · 발행일 개별 확인 완료</span></div>
+    </div>
+    <div class="source-row"><div class="src-num">1</div><div><a class="src-link" href="https://content.govdelivery.com/bulletins/gd/USDHSCBP-429db0c" target="_blank" rel="noopener noreferrer">CSMS # 69851916 — Modifying Section 338 Additional Duties on Certain Goods of Canada (9/15 발효 통관지침)</a><div class="src-meta">U.S. Customs and Border Protection · 2026-09-11</div></div></div>
+    <div class="source-row"><div class="src-num">2</div><div><a class="src-link" href="https://content.govdelivery.com/attachments/USDHSCBP/2026/09/11/file_attachments/3777938/Section%20338%20Canada%20Modified%20HTS%20LIST%20eff%20091526%20%28003%29%20Final.docx" target="_blank" rel="noopener noreferrer">Section 338 Canada Modified HTS List eff 091526 (첨부 품목표 · 신규 122개 중 15류는 1518.00.40 단 하나)</a><div class="src-meta">U.S. Customs and Border Protection · 2026-09-11</div></div></div>
+    <div class="source-row"><div class="src-num">3</div><div><a class="src-link" href="https://hts.usitc.gov/search?query=1518.00" target="_blank" rel="noopener noreferrer">HTSUS 1518.00 — 세번 설명 원문 조회 (1518.00.40 = Other)</a><div class="src-meta">U.S. International Trade Commission · 2026-09-21 조회</div></div></div>
+    <div class="source-row"><div class="src-num">4</div><div><a class="src-link" href="https://www.agri-pulse.com/articles/25251-us-trade-war-with-canada-and-beyond-triggers-biofuel-worries" target="_blank" rel="noopener noreferrer">US trade war with Canada and beyond triggers biofuel worries (캐나다산 UCO 환적 의혹 · 원료·완제품 관세 비대칭)</a><div class="src-meta">Agri-Pulse (Kim Chipman) · 2026-09-16</div></div></div>
+    <div class="source-row"><div class="src-num">5</div><div><a class="src-link" href="https://biodieselmagazine.com/articles/epa-202-billion-rins-generated-in-august" target="_blank" rel="noopener noreferrer">EPA: 2.02 billion RINs generated in August (8월 크레딧 발행량 +6%)</a><div class="src-meta">Biodiesel Magazine · 2026-09-17</div></div></div>
+    <div class="source-row"><div class="src-num">6</div><div><a class="src-link" href="https://biodieselmagazine.com/articles/epa-2-sre-petitions-filed-8-sre-petitions-currently-pending" target="_blank" rel="noopener noreferrer">EPA: 2 SRE petitions filed, 8 SRE petitions currently pending</a><div class="src-meta">Biodiesel Magazine · 2026-09-17</div></div></div>
+    <div class="source-row"><div class="src-num">7</div><div><a class="src-link" href="https://biodieselmagazine.com/articles/neste-and-united-airlines-extended-agreements-for-saf-supply-in-the-us-and-the-netherlands" target="_blank" rel="noopener noreferrer">Neste and United Airlines extended agreements for SAF supply in the US and the Netherlands</a><div class="src-meta">Biodiesel Magazine / Neste Corp. · 2026-09-18</div></div></div>
+    <div class="source-row"><div class="src-num">8</div><div><a class="src-link" href="https://www.epa.gov/renewable-fuel-standard/august-31-2026-decisions-petitions-rfs-small-refinery-exemptions" target="_blank" rel="noopener noreferrer">August 31, 2026 Decisions on Petitions for RFS Small Refinery Exemptions (배경 · 17억 6,000만 개 면제)</a><div class="src-meta">U.S. Environmental Protection Agency · 2026-08-31</div></div></div>
+    <div class="source-row"><div class="src-num">9</div><div><a class="src-link" href="https://www.pm.gc.ca/en/news/speeches/2026/09/15/prime-minister-carney-delivers-remarks-media-2026-canada-investment-summit" target="_blank" rel="noopener noreferrer">Prime Minister Carney delivers remarks to media at the 2026 Canada Investment Summit</a><div class="src-meta">Prime Minister of Canada · 2026-09-15</div></div></div>
+    <div class="source-row"><div class="src-num">10</div><div><a class="src-link" href="https://www.cbc.ca/news/canada/windsor/chatham-ethanol-fire-plant-9.7345853" target="_blank" rel="noopener noreferrer">Cleanup now underway after lightning strike at Chatham's ethanol facility ignited fire</a><div class="src-meta">CBC News · 2026-09-16</div></div></div>
+    <div class="source-row"><div class="src-num">11</div><div><a class="src-link" href="https://www.cbc.ca/news/canada/windsor/chatham-greenfield-global-ethanol-plant-fire-9.7350733" target="_blank" rel="noopener noreferrer">Remediation expands to Thames River after Chatham ethanol facility fire, company says</a><div class="src-meta">CBC News · 2026-09-20</div></div></div>
+    <div class="source-row"><div class="src-num">12</div><div><a class="src-link" href="https://www.gx94radio.com/2026/09/19/scott-moes-approval-rating-ties-for-second-highest-among-canadian-premiers/" target="_blank" rel="noopener noreferrer">Scott Moe's approval rating ties for second-highest among Canadian premiers (앵거스리드 · 조사기간 9/8–9/15)</a><div class="src-meta">GX94 Radio / Angus Reid Institute · 2026-09-19</div></div></div>
+    <div class="source-row"><div class="src-num">13</div><div><a class="src-link" href="https://www150.statcan.gc.ca/n1/daily-quotidien/260916/dq260916b-eng.htm" target="_blank" rel="noopener noreferrer">The Daily — Model-based principal field crop estimates, August 2026 (카놀라 2,210만 톤)</a><div class="src-meta">Statistics Canada · 2026-09-16</div></div></div>
+    <div class="source-row"><div class="src-num">14</div><div><a class="src-link" href="https://www.fastmarkets.com/insights/european-vegetable-oil-prices-diverge-as-sunflower-oil-rises-while-rapeseed-and-palm-oil-fall/" target="_blank" rel="noopener noreferrer">European vegetable oil prices diverge as sunflower oil rises while rapeseed and palm oil fall (9/10·9/17 관측치)</a><div class="src-meta">Fastmarkets · 2026-09-21</div></div></div>
+    <div class="source-row"><div class="src-num">15</div><div><a class="src-link" href="https://gazette.gc.ca/rp-pr/p1/2026/2026-09-19/html/index-eng.html" target="_blank" rel="noopener noreferrer">Canada Gazette, Part I, Volume 160, Number 38 — Index (청정연료규정 게재 없음 직접 확인)</a><div class="src-meta">Canada Gazette · 2026-09-19</div></div></div>
+    <div class="source-row"><div class="src-num">16</div><div><a class="src-link" href="https://www.federalregister.gov/documents/search?conditions%5Bpublication_date%5D%5Bgte%5D=2026-09-14&conditions%5Bpublication_date%5D%5Blte%5D=2026-09-20&conditions%5Bterm%5D=biofuel" target="_blank" rel="noopener noreferrer">Federal Register 발행일 2026-09-14 ~ 2026-09-20 조회 — 바이오연료·재생연료·청정연료·식용유 0건</a><div class="src-meta">Federal Register API · 2026-09-21 조회</div></div></div>
+    <div class="source-row"><div class="src-num">17</div><div><a class="src-link" href="https://www.irs.gov/newsroom/irs-issues-notice-on-45z-clean-fuel-production-tax-credit-to-support-domestic-biofuel-production-and-american-agriculture" target="_blank" rel="noopener noreferrer">IRS issues notice on 45Z Clean Fuel Production Tax Credit (IR-2026-108 · 배경)</a><div class="src-meta">Internal Revenue Service · 2026-09-08</div></div></div>
+  </div>
+
+  <div class="footer">Green Oil Inc. Internal Use Only &nbsp;·&nbsp; Powered by Claude AI &nbsp;·&nbsp; <a href="../index.html" style="color:#bbb;">← 인덱스</a></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+  const btn = document.getElementById('pdfBtnLabel');
+  btn.textContent = '생성 중...';
+  html2pdf().set({
+    margin: [8, 8, 8, 8],
+    filename: 'GreenOil-UCO-2026-09-21.pdf',
+    image: { type: 'jpeg', quality: 0.95 },
+    html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: 'avoid-all' }
+  }).from(document.body).save().then(() => { btn.textContent = 'PDF 저장'; });
+}
+</script>
+</body>
+</html>
