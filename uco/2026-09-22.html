@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Oil UCO — 2026년 9/21 – 9/22 중간 업데이트</title>
+<style>
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+  background: #f0f4f0;
+  color: #1c2e1c;
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── Report Switch Badge ── */
+.report-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.report-switch:hover { background: rgba(255,255,255,0.25); }
+.report-switch .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #fbbf24; flex-shrink: 0;
+}
+
+/* ── PDF Button ── */
+.pdf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.pdf-btn:hover { background: rgba(255,255,255,0.22); }
+.pdf-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Print styles ── */
+@media print {
+  .week-nav, .report-switch, .pdf-btn, .nav-dots { display: none !important; }
+  .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: white; }
+  .container { padding: 0; }
+  .card { break-inside: avoid; }
+  a { text-decoration: none; color: inherit; }
+}
+
+/* ── Header ── */
+.header {
+  background: linear-gradient(135deg, #1a5c1a 0%, #2e8b2e 100%);
+  color: white;
+  padding: 18px 24px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.header-left h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 7px; }
+.header-left .sub { font-size: 11px; opacity: 0.75; margin-top: 3px; letter-spacing: 0.3px; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.updated-badge { font-size: 10px; opacity: 0.65; }
+
+/* ── Week Navigator ── */
+.week-nav {
+  background: white;
+  border-bottom: 1px solid #e0e8e0;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.nav-btn {
+  background: none;
+  border: 1px solid #c8dcc8;
+  border-radius: 8px;
+  padding: 5px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #2e8b2e;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+.nav-btn:hover { background: #eaf4ea; border-color: #2e8b2e; }
+.nav-btn.disabled { opacity: 0.3; pointer-events: none; }
+.nav-center { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+.nav-week-label { font-size: 14px; font-weight: 700; color: #1c2e1c; }
+.nav-week-sub { font-size: 10px; color: #999; }
+.nav-dots { display: flex; gap: 5px; margin-top: 4px; flex-wrap: wrap; justify-content: center; }
+.nav-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #d0e4d0; cursor: pointer; transition: background 0.15s;
+  display: block; text-decoration: none;
+}
+.nav-dot.active { background: #2e8b2e; }
+.nav-dot:hover { background: #7cb87c; }
+
+/* ── Container ── */
+.container { max-width: 920px; margin: 0 auto; padding: 18px 16px 32px; }
+
+/* ── Alert bar ── */
+/* ── One-line "Why" Summary (맨 위 한 줄 요약) ── */
+/* 방향 클래스: .up = 지표 상승(빨강) / .down = 지표 하락(파랑). 색을 직접 쓰지 말 것. */
+.why-line {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border-radius: 12px;
+  padding: 13px 17px;
+  margin-bottom: 14px;
+  border: 1px solid #e2e8f0;
+  border-left: 5px solid #94a3b8;
+  background: #f8fafc;
+  flex-wrap: wrap;
+}
+.why-line.up   { border-color: #fecaca; border-left-color: #dc2626; background: linear-gradient(135deg, #fef2f2 0%, #fff7f7 100%); }
+.why-line.down { border-color: #bfdbfe; border-left-color: #1d4ed8; background: linear-gradient(135deg, #eff6ff 0%, #f7fbff 100%); }
+.why-move {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  padding: 5px 11px;
+  border-radius: 8px;
+  color: white;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.why-line.up   .why-move { background: #dc2626; }
+.why-line.down .why-move { background: #1d4ed8; }
+.why-text { font-size: 14px; line-height: 1.55; color: #1a2a4a; flex: 1; min-width: 240px; }
+.why-text strong { font-weight: 700; }
+.why-line.up   .why-text strong { color: #b91c1c; }
+.why-line.down .why-text strong { color: #1d4ed8; }
+@media (max-width: 560px) { .why-text { font-size: 13px; } }
+
+.alert-bar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.pill {
+  display: flex; align-items: center; gap: 6px;
+  background: white; border-radius: 20px; padding: 5px 13px;
+  font-size: 11px; font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.pill.red   { border-left: 3px solid #e53e3e; color: #c53030; }
+.pill.amber { border-left: 3px solid #d69e2e; color: #975a16; }
+.pill.green { border-left: 3px solid #38a169; color: #22543d; }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.dot.red   { background: #e53e3e; }
+.dot.amber { background: #d69e2e; }
+.dot.green { background: #38a169; }
+
+/* ── Card ── */
+.card { background: white; border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.card-header { display: flex; align-items: center; gap: 9px; margin-bottom: 13px; padding-bottom: 10px; border-bottom: 1px solid #eaf2ea; }
+.card-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.icon-summary { background: #edfaed; }
+.icon-canada  { background: #fff0f0; }
+.icon-export  { background: #eef2ff; }
+.icon-market  { background: #fff8ec; }
+.icon-risk    { background: #fff5f5; }
+.icon-sources { background: #f5f5f5; }
+.icon-prov    { background: #fff3e0; }
+.card-title { font-size: 14px; font-weight: 700; color: #1c2e1c; }
+.card-title span { font-size: 10px; font-weight: 400; color: #888; margin-left: 5px; }
+
+/* ── Two-col ── */
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+@media (max-width: 620px) { .row2 { grid-template-columns: 1fr; } }
+
+/* ── Summary ── */
+.summary-list { list-style: none; }
+.summary-list li { padding: 7px 0 7px 18px; position: relative; border-bottom: 1px solid #f4f4f4; color: #2d3e2d; font-size: 13px; }
+.summary-list li:last-child { border-bottom: none; }
+.summary-list li::before { content: '▸'; position: absolute; left: 0; top: 8px; color: #2e8b2e; font-size: 10px; }
+
+/* ── Sub-label ── */
+.sub-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: #999; margin-bottom: 9px; }
+
+/* ── News item ── */
+.news-item { padding: 9px 0; border-bottom: 1px solid #f4f4f4; }
+.news-item:last-child { border-bottom: none; }
+a.news-item { text-decoration: none; color: inherit; display: block; border-radius: 7px; padding: 9px 8px; margin: 0 -8px; transition: background 0.15s; }
+a.news-item:hover { background: #edf6ed; }
+a.news-item .news-title::after { content: ' ↗'; font-size: 10px; color: #2e8b2e; opacity: 0.6; }
+.tag { display: inline-block; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 3px; }
+.tag-cfr      { background: #e6f4ea; color: #137333; }
+.tag-carbon   { background: #e8f0fe; color: #1558d6; }
+.tag-prov     { background: #fce8e6; color: #c5221f; }
+.tag-prov-politics { background: #fce8e6; color: #c5221f; }
+.tag-eu       { background: #ede7f6; color: #5e35b1; }
+.tag-us       { background: #e8eaed; color: #3c4043; }
+.tag-market   { background: #fff3e0; color: #e65100; }
+.tag-cert     { background: #e0f7fa; color: #006064; }
+.tag-trade    { background: #fce4ec; color: #880e4f; }
+.tag-politics { background: #e8eaf6; color: #283593; }
+.news-title { font-size: 12px; font-weight: 600; color: #1c2e1c; margin-bottom: 2px; }
+.news-body  { font-size: 11px; color: #5a6e5a; line-height: 1.5; }
+
+/* ── Risk radar ── */
+.risk-grid { display: flex; flex-direction: column; gap: 10px; }
+.risk-col { border-radius: 9px; padding: 12px 16px; }
+.risk-col.red   { background: #fff5f5; border: 1px solid #fed7d7; }
+.risk-col.amber { background: #fffbf0; border: 1px solid #fefcbf; }
+.risk-col.green { background: #f0fff4; border: 1px solid #c6f6d5; }
+.risk-col-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+.risk-col.red   .risk-col-title { color: #c53030; }
+.risk-col.amber .risk-col-title { color: #975a16; }
+.risk-col.green .risk-col-title { color: #22543d; }
+.risk-entry { font-size: 12px; color: #4a5568; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.05); line-height: 1.5; }
+.risk-entry:last-child { border-bottom: none; }
+
+/* ── Sources ── */
+.source-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f4f4f4; align-items: flex-start; }
+.source-row:last-child { border-bottom: none; }
+.src-num { width: 20px; height: 20px; flex-shrink: 0; background: #eaf2ea; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #2e8b2e; margin-top: 1px; }
+.src-link { font-size: 12px; font-weight: 600; color: #1a6b3c; text-decoration: none; }
+.src-link:hover { text-decoration: underline; }
+.src-meta { font-size: 10px; color: #aaa; margin-top: 1px; }
+
+/* ── Empty ── */
+.empty { background: #f9f9f9; border-radius: 7px; padding: 14px; text-align: center; color: #bbb; font-size: 12px; font-style: italic; }
+
+/* ── Footer ── */
+.footer { text-align: center; font-size: 10px; color: #bbb; padding: 8px 0 4px; letter-spacing: 0.2px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-left">
+    <h1>🌿 Green Oil Inc.</h1>
+    <div class="sub">주간 정책 &amp; 시장 인텔리전스 리포트 · Weekly Intelligence Report</div>
+  </div>
+  <div class="header-right">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="pdf-btn" onclick="downloadPDF()">
+        <svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><rect x="6" y="13" width="12" height="8" rx="1"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/></svg>
+        <span id="pdfBtnLabel">PDF 저장</span>
+      </button>
+      <a class="report-switch" href="../index.html">&#8592; 인덱스</a>
+      <a class="report-switch" href="../canola/2026-09-21.html"><span class="dot"></span>카놀라 리포트 →</a>
+    </div>
+    <div class="updated-badge">마지막 업데이트: 2026.09.22</div>
+  </div>
+</div>
+
+<div class="week-nav">
+  <a class="nav-btn disabled" href="#">&#8592; 최신</a>
+  <div class="nav-center">
+    <div class="nav-week-label">중간 업데이트 · 2026년 9/21 – 9/22</div>
+    <div class="nav-week-sub">2026.09.22 기준 · 다음 정기 리포트 9/28</div>
+    <div class="nav-dots">
+<a class="nav-dot active" href="./2026-09-22.html" title=""></a>
+<a class="nav-dot" href="./2026-09-21.html" title=""></a>
+<a class="nav-dot" href="./2026-09-14.html" title=""></a>
+<a class="nav-dot" href="./2026-09-10.html" title=""></a>
+<a class="nav-dot" href="./2026-09-08.html" title=""></a>
+<a class="nav-dot" href="./2026-09-07.html" title=""></a>
+<a class="nav-dot" href="./2026-09-04.html" title=""></a>
+<a class="nav-dot" href="./2026-08-31.html" title=""></a>
+<a class="nav-dot" href="./2026-08-24.html" title=""></a>
+<a class="nav-dot" href="./2026-08-17.html" title=""></a>
+<a class="nav-dot" href="./2026-08-10.html" title=""></a>
+<a class="nav-dot" href="./2026-08-03.html" title=""></a>
+<a class="nav-dot" href="./2026-07-27.html" title=""></a>
+<a class="nav-dot" href="./2026-07-20.html" title=""></a>
+<a class="nav-dot" href="./2026-07-13.html" title=""></a>
+<a class="nav-dot" href="./2026-07-06.html" title=""></a>
+<a class="nav-dot" href="./2026-06-29.html" title=""></a>
+<a class="nav-dot" href="./2026-06-22.html" title=""></a>
+<a class="nav-dot" href="./2026-06-15.html" title=""></a>
+<a class="nav-dot" href="./2026-06-08.html" title=""></a>
+<a class="nav-dot" href="./2026-06-01.html" title=""></a>
+<a class="nav-dot" href="./2026-05-25.html" title=""></a>
+<a class="nav-dot" href="./2026-05-18.html" title=""></a>
+<a class="nav-dot" href="./2026-05-11.html" title=""></a>
+<a class="nav-dot" href="./2026-05-05.html" title=""></a>
+<a class="nav-dot" href="./2026-04-28.html" title=""></a>
+<a class="nav-dot" href="./2026-04-21.html" title=""></a>
+<a class="nav-dot" href="./2026-04-14.html" title=""></a>
+<a class="nav-dot" href="./2026-04-07.html" title=""></a>
+<a class="nav-dot" href="./2026-03-30.html" title=""></a>
+<a class="nav-dot" href="./2026-03-23.html" title=""></a>
+<a class="nav-dot" href="./2026-03-16.html" title=""></a>
+<a class="nav-dot" href="./2026-03-09.html" title=""></a>
+<a class="nav-dot" href="./2026-03-02.html" title=""></a>
+<a class="nav-dot" href="./2026-02-23.html" title=""></a>
+<a class="nav-dot" href="./2026-02-16.html" title=""></a>
+<a class="nav-dot" href="./2026-02-09.html" title=""></a>
+<a class="nav-dot" href="./2026-02-02.html" title=""></a>
+<a class="nav-dot" href="./2026-01-26.html" title=""></a>
+<a class="nav-dot" href="./2026-01-19.html" title=""></a>
+<a class="nav-dot" href="./2026-01-12.html" title=""></a>
+<a class="nav-dot" href="./2026-01-05.html" title=""></a>
+    </div>
+  </div>
+  <a class="nav-btn" href="./2026-09-21.html">이전 &#8594;</a>
+</div>
+
+<div class="container">
+
+  <div style="background:#eef4ff;border:1px solid #c7d9f7;border-left:5px solid #2563eb;border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:12px;color:#1e3a5f;line-height:1.7;">
+    <strong>📌 중간 업데이트 회차입니다.</strong> 정기 회차(9월 21일자, 보고 주간 9/14–9/20) 발행 <strong>이후</strong> 새로 확인된 사항만 담았습니다.
+    대상 기간은 <strong>9월 21일~22일</strong>이며, <strong>다음 정기 리포트는 9/28</strong>입니다.
+    가장 큰 변화는 <strong>9월 22일 법안 C-39의 본문이 공개돼 조문을 직접 읽을 수 있게 된 것</strong>입니다.
+  </div>
+
+  <!-- ── 맨 위 한 줄 요약: 왜 이렇게 움직였나 ── -->
+  <div class="why-line down">
+    <div class="why-move">▼ −16% &nbsp;D4 RIN $1.93</div>
+    <div class="why-text"><strong>왜?</strong> 9월 들어 미국 경유 정제마진이 치솟으면서 바이오디젤 채산성 자체는 좋아졌지만 그만큼 크레딧이 덜 필요해져 <strong>D4 크레딧 값이 9월 1일 대비 18일까지 16% 빠진 1.9275달러</strong>가 됐고 이는 <strong>미국 정제사가 우리 UCO에 지불할 수 있는 금액의 상한을 그만큼 끌어내립니다</strong> — 다만 반대 방향으로 <strong>9월 21일 캐나다 정부가 항만 수수료와 수출 통관 전산화를 손보는 법안 C-39를 제출</strong>해 수출 물류 쪽 여건은 열렸습니다.</div>
+  </div>
+
+  <div class="alert-bar">
+    <div class="pill red">  <div class="dot red"></div>  <span>3</span> 관심 요망</div>
+    <div class="pill amber"><div class="dot amber"></div><span>4</span> 모니터링 필요</div>
+    <div class="pill green"><div class="dot green"></div><span>4</span> 기회 요인</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-summary">📋</div>
+      <div class="card-title">핵심 요약 <span>Executive Summary · 9/21</span></div>
+    </div>
+    <ul class="summary-list">
+      <li><strong>9월 22일 법안 본문이 공개돼 조문을 직접 읽었고, 정부 발표문보다 훨씬 큰 묶음이었습니다.</strong> <strong>법안 C-39 「Building Canada Strong Act」</strong>는 <strong>3개 부 19개 절</strong>로 영향평가법·캐나다건설법·에너지규제청법·수운법·<strong>환경보호법</strong>·멸종위기종법·수산법·교통부법·캐나다교통법·<strong>해운법</strong>·해사책임법·연안무역법·국제교량터널법·<strong>노동법</strong>을 고치고, <strong>「디지털무역촉진법」을 새로 만들며</strong> <strong>「1987년 해운동맹 면제법」을 폐지</strong>합니다. 어제 시점에는 의회 시스템이 <strong>"이 법안의 본문은 이용할 수 없습니다"</strong>로 막혀 있어 정부 발표문으로만 전해 드렸던 대목입니다.</li>
+      <li><strong>⭐우리에게 값어치가 있는 조항은 Part 2 「Keep Canada Moving」에 몰려 있습니다.</strong> 첫째 <strong>「디지털무역촉진법」 신설</strong>이 <strong>전자무역문서를 종이 문서와 동등한 효력</strong>으로 인정하고 <strong>물품의 수출입과 관련해 정부에 서류를 물리적 형태로 제출할 의무를 없앱니다.</strong> 둘째 <strong>항만공사가 수수료를 정할 때 지켜야 할 원칙이 새로 들어가고 캐나다교통청에 이의를 제기할 수 있는 사유가 넓어집니다</strong> — 지금까지 사실상 받아들일 수밖에 없던 항목에 다툴 근거가 생기는 것입니다. 셋째 교통부 장관이 <strong>지리적 구역을 무역회랑으로 지정</strong>하고 <strong>국가무역회랑위원회</strong>가 물류 교란을 감시합니다. 이 밖에 <strong>정기선 해운동맹의 담합 면제가 폐지</strong>돼 해상운임 경쟁 구조가 바뀝니다.</li>
+      <li><strong>🔴발표문에 없던 대목 하나를 확인했습니다 — 개정 대상에 「환경보호법(CEPA)」이 들어 있습니다.</strong> <strong>청정연료규정(CFR)이 바로 이 법을 근거로 만들어진 규정</strong>이라 곧바로 확인했는데, <strong>규정 실체가 아니라 집행권한 쪽</strong>이었습니다. 법안 전문에서 <strong>"fuel"과 "Clean Fuel"은 0건</strong>입니다. 내용은 준수명령을 <strong>비계속범과 위반 수입품에까지</strong> 발할 수 있게 하고, 집행관이 위반 수입품을 <strong>원산지로 반송하거나 캐나다 밖으로 반출</strong>하도록 명령할 수 있게 하며, 일부 허가의 <strong>유효기간을 1년 초과</strong>로 두는 것입니다. <strong>CFR 개정안의 시기·내용과는 무관하므로 기존 감시 항목은 그대로 유지합니다.</strong></li>
+      <li><strong>시장은 반대 방향으로 움직였습니다 — 경유가 너무 좋아서 크레딧 값이 빠졌습니다.</strong> <strong>9월 1일 대비 18일까지 D4 크레딧이 16% 내린 1.9275달러</strong>가 됐고, 대두유-난방유 격차는 <strong>9월 18일 갤런당 마이너스 6.83센트</strong>로 <strong>2019년 5월 이후 최저</strong>입니다. 배경은 경유 강세로, <strong>걸프만 초저유황경유-서부텍사스산 크랙이 9월 18일 배럴당 103.19달러</strong>로 <strong>1년 전 대비 224%</strong> 뛰었고 미국 경유 생산은 <strong>하루 503만 6,000배럴</strong>(5년 평균 461만 5,000배럴)에 이릅니다. <strong>정제사 수익은 좋아지는데 크레딧 값이 빠지면 원료 지불 여력의 상한은 내려갑니다</strong> — 4분기 협의에서 유의하셔야 할 조합입니다.</li>
+      <li><strong>⭐최우선 감시 2건은 이번 이틀 동안 변화가 없었고, 그 사실을 근거로 확인했습니다.</strong> 연방관보를 <strong>9월 21일~22일</strong> 발행일 조건으로 조회한 결과 <strong>바이오연료·재생연료·청정연료·식용유·45Z 관련 문서가 0건</strong>이었습니다(같은 조건 '캐나다' 조회는 7건이 나와 조회 자체가 정상임을 함께 확인). 캐나다 관보는 <strong>다음 호가 아직 발행 전</strong>입니다 — <strong>Part II는 9월 23일, Part I은 9월 26일</strong>이 다음 차례이며, 직전에 확인한 <strong>9월 19일자 Part I 제160권 제38호에 청정연료규정은 없었습니다.</strong> ⚠️관보 사이트는 존재하지 않는 날짜에도 <strong>HTTP 200</strong>을 돌려주므로 상태코드가 아니라 <strong>수록 내용</strong>으로 판정했습니다.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-canada">🍁</div>
+      <div class="card-title">연방 정책 &amp; 정치 <span>Federal</span></div>
+    </div>
+
+    <a class="news-item" href="https://www.parl.ca/DocumentViewer/en/45-1/bill/C-39/first-reading" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-politics">9/21 – 9/22 연방</span>
+      <div class="news-title">⭐ 9월 21일 제출된 법안 C-39의 본문이 9월 22일 공개됐습니다 — 14개 법률을 고치고 「디지털무역촉진법」을 신설하는 묶음 법안입니다</div>
+      <div class="news-body"><strong>9월 21일 오전 11시 17분</strong> 정부가 <strong>법안 C-39 「Building Canada Strong Act」</strong>(정식 제목 「경제 강화를 위한 특정 조치에 관한 법률」)를 하원에 제출해 <strong>1독</strong>을 마쳤고 현재 <strong>2독 대기</strong>입니다. 제출 당일에는 의회 시스템이 <strong>"이 법안의 본문은 이용할 수 없습니다"</strong>로 표시하고 본문 열람 주소가 <strong>404</strong>였으나, <strong>9월 22일 본문이 공개</strong>돼 조문을 직접 판독했습니다.<br><br><strong>구성은 3개 부 19개 절</strong>입니다. <strong>Part 1 「Build Canada Now」</strong>는 영향평가법·캐나다건설법·에너지규제청법·수운법·<strong>환경보호법</strong>·멸종위기종법·수산법을 고쳐 <strong>연방 심사·결정을 1년 이내</strong>로 맞추고 송유관·지정 송전선·해상재생에너지에 대해 <strong>위원회를 단일 심사기관</strong>으로 세웁니다. <strong>Part 2 「Keep Canada Moving」</strong>은 교통 쪽 8개 절, <strong>Part 3 「Canada Strong for All」</strong>은 노동법 쪽 4개 절입니다.<br><br><strong>Green Oil 관점 — 실익은 Part 2에 몰려 있습니다.</strong> ㉠ <strong>「디지털무역촉진법」 신설</strong>: <strong>전자무역문서를 종이 문서와 동등한 효력</strong>으로 인정하고, <strong>물품의 수출입과 관련해 정부에 서류를 물리적 형태로 제출해야 하는 의무를 없애며</strong>, 부처 간 수출입 정보 공유를 허용합니다. 서류가 많은 우리 수출 실무에 직접 닿고, <strong>EU가 2027년 11월부터 요구하는 전 구간 이력 증빙</strong>을 전자문서로 꾸리는 데에도 같은 방향입니다. ㉡ <strong>항만 수수료</strong>: 항만공사가 수수료를 정할 때 <strong>지켜야 할 원칙이 새로 들어가고</strong>, <strong>수수료에 대해 캐나다교통청에 이의를 제기할 수 있는 사유가 넓어집니다.</strong> ㉢ <strong>무역회랑</strong>: 장관이 <strong>지리적 구역을 무역회랑으로 지정</strong>하고 <strong>국가무역회랑위원회</strong>를 두어 물류 흐름과 교란을 감시·권고하며, <strong>4년 한시로 매니토바·사스카추완·앨버타에 교통청이 요율을 정하는 상호전철 구역</strong>이 생깁니다. 여기에 <strong>「1987년 해운동맹 면제법」 폐지</strong>로 정기선 담합 면제가 사라져 해상운임 경쟁 구조가 바뀌고, <strong>교통 보안심사</strong>를 장관이 부여·정지·취소하는 권한이 신설됩니다.<br><br><strong>조치:</strong> ① <strong>수출 서류의 전자화 가능 범위</strong>를 통관사와 미리 정리해 두시면 시행 즉시 효과를 보실 수 있습니다. ② 항만 수수료는 <strong>지난 1년치 청구 내역을 정리해 두셨다가</strong> 새 원칙이 시행되면 이의 제기 여지를 검토하시기 바랍니다. ③ <strong>대부분 절의 시행일이 총독령에 위임</strong>돼 있어 통과 시점과 절별 시행일을 따로 확인해야 합니다.</div>
+    </a>
+
+    <a class="news-item" href="https://www.parl.ca/DocumentViewer/en/45-1/bill/C-39/first-reading" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-cfr">9/22 연방 · 확인</span>
+      <div class="news-title">법안 C-39가 「환경보호법」도 고칩니다 — 청정연료규정의 근거법이라 확인했고, 규정 실체가 아니라 집행권한 개정이었습니다</div>
+      <div class="news-body">법안 <strong>Part 1 제5절</strong>이 <strong>「캐나다 환경보호법(CEPA) 1999」</strong>을 개정합니다. <strong>청정연료규정(CFR)이 바로 이 법을 근거로 만들어진 규정</strong>이라 곧바로 조문을 확인했습니다. 결과는 <strong>규정의 실체가 아니라 집행권한 쪽</strong>이었습니다 — <strong>법안 전문에서 "fuel"과 "Clean Fuel"은 각각 0건</strong>입니다.<br><br>개정 내용은 세 가지입니다. ㉠ <strong>환경보호 준수명령</strong>을 이 법이 적용되는 <strong>모든 대상</strong>과 <strong>비계속범</strong>에까지, <strong>위반 수입품을 포함해</strong> 발할 수 있게 합니다. ㉡ 명령의 범위를 넓혀 집행관이 <strong>위반 수입품을 지정한 방식으로 관리하거나, 원산지로 반송하거나, 캐나다 밖으로 반출</strong>하도록 지시할 수 있게 합니다. ㉢ 이 법에 따른 <strong>일부 허가의 유효기간을 1년 초과</strong>로 둘 수 있게 합니다.<br><br><strong>Green Oil 관점:</strong> <strong>CFR 개정안의 시기나 내용과는 무관하므로 기존 감시 항목은 그대로 유지합니다.</strong> 다만 두 가지는 적어 둘 만합니다 — ㉠ <strong>환경보호법 집행이 수입품 쪽으로 확실히 무게를 옮기고 있습니다.</strong> 원산지 반송·반출 명령은 강한 수단이고, 이는 <strong>같은 주 미국에서 제기된 캐나다산 UCO 환적 의혹과 방향이 겹칩니다</strong> — 양국이 동시에 <strong>원료의 출처</strong>를 들여다보는 국면입니다. ㉡ <strong>허가 유효기간 연장</strong>은 우리처럼 갱신 부담이 있는 사업자에게 순수한 행정 완화입니다. <strong>조치:</strong> 보유 허가 가운데 <strong>환경보호법 근거 허가가 있는지</strong> 확인해 두시고, 있다면 다음 갱신 때 연장 가능 여부를 문의하시기 바랍니다.</div>
+    </a>
+
+    <a class="news-item" href="https://www.canada.ca/en/one-canadian-economy/services/simplifying-canada-process/cabinet.html" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-carbon">9/21 연방</span>
+      <div class="news-title">🔴 법안과 별개로 내각 지침이 같은 날 이미 발령됐습니다 — 그리고 「2024년 청정성장 사업」 전용 지침을 대체합니다</div>
+      <div class="news-body">정부는 법안 제출과 <strong>같은 날 별도로 「캐나다 내 사업 건설에 관한 내각 지침」</strong>을 발령했습니다. <strong>법안 통과를 기다릴 필요가 없다</strong>는 점이 핵심입니다. 내용은 <strong>연방 규제 결정을 1년 이내</strong>에 내리는 것이며, 기산점은 <strong>"사업자가 완전한 신청서와 필요한 정보·조사를 모두 제출한 때"</strong>입니다. 적용 범위에서 <strong>캐나다에너지규제청·원자력안전위원회 같은 독립 규제기관은 제외</strong>되고, <strong>이미 심사가 진행 중인 사업은 건별로 판단</strong>합니다. 부처에는 <strong>"절차상 중복을 없애고 협력하며 신속히 행동할 것"</strong>, <strong>"사업자에 대한 정보 요구를 자제할 것"</strong>을 요구합니다.<br><br><strong>⚠️가장 중요한 한 줄은 지침 원문에만 있습니다</strong> — <strong>"이 지침은 2024년 청정성장 사업 규제·허가 효율화 내각지침을 대체한다"</strong>. 보도자료에는 없는 문장입니다.<br><br><strong>Green Oil 관점:</strong> <strong>청정연료·청정성장 사업 전용 지침이 사라지고 일반 사업 지침으로 흡수된 것</strong>입니다. 읽는 방식은 둘로 갈립니다 — 속도 면에서는 <strong>1년 기한이 업종을 가리지 않고 적용</strong>되므로 나쁘지 않지만, 우선순위 면에서는 <strong>우리 업종이 별도 우대를 받던 통로가 없어졌습니다.</strong> <strong>조치:</strong> 정제·저장 설비 증설처럼 연방 허가가 걸리는 계획이 있으시다면, <strong>"청정성장이라서 빨리 된다"는 전제는 빼고</strong> 일반 절차 기준으로 일정을 잡으시는 편이 안전합니다.</div>
+    </a>
+
+    <a class="news-item" href="https://www.parl.ca/legisinfo/en/bill/45-1/c-38" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-politics">9/21 연방</span>
+      <div class="news-title">의회가 복귀했고 연료 소비세 연장 법안(C-38)도 같은 날 제출됐습니다 — 자유당은 보궐 3곳을 모두 이겨 과반을 늘렸습니다</div>
+      <div class="news-body"><strong>9월 21일</strong> 하원이 여름 휴회를 마치고 가을 회기를 시작했습니다. 같은 날 <strong>오전 11시 16분</strong>, C-39보다 1분 앞서 <strong>법안 C-38 「Canadian Fuel Affordability Act」</strong>(소비세법 개정 — 연방 연료 소비세 경감 연장)가 <strong>재무·국세부 장관</strong> 발의로 1독을 마쳤습니다. 이 법안은 <strong>9월 2일 발표된 조치를 입법으로 확정</strong>하는 것으로, <strong>4월 20일부터 유예된 연방 연료 소비세</strong>를 <strong>2027년 1월 31일까지 연장</strong>하고 <strong>2월 1일부터 3월 31일까지는 정상 세율의 50%</strong>를 적용합니다. 유예 폭은 <strong>휘발유 리터당 10센트</strong>, <strong>경유와 항공유 리터당 4센트</strong>이며, 50% 구간에서는 각각 5센트·2센트가 됩니다. 연장에 따른 추가 재정 영향은 <strong>약 29억 달러</strong>, 2026-27년 총 세금 경감은 <strong>53억 달러</strong>로 추산됐습니다.<br><br>정치 구도도 바뀌었습니다. 여름 이후 <strong>의원 9명이 사퇴</strong>하고 <strong>보궐선거 3곳</strong>이 치러졌는데 <strong>자유당이 3곳을 모두 이겨</strong>(토론토·노스밴쿠버 수성, 퀘벡에서 보수당 의석 탈환) <strong>과반을 늘렸습니다.</strong> 아직 <strong>6석이 공석</strong>으로 남아 추가 보궐이 예정돼 있습니다. 재무장관은 <strong>가을 예산</strong>도 준비 중입니다.<br><br><strong>Green Oil 관점:</strong> ㉠ <strong>소비세 유예는 우리 수거 차량 연료비에 직접 걸립니다</strong> — 경유 리터당 4센트가 <strong>2027년 1월 31일까지</strong> 유지되고 이후 두 달은 절반입니다. <strong>2027년 4월 1일부터 정상 세율로 복귀</strong>한다고 보고 내년 예산을 잡으시기 바랍니다. ㉡ 바이오디젤은 <strong>이미 경유 정의에 포함돼 과세 대상</strong>이므로 이 유예는 화석경유와 바이오디젤 <strong>양쪽에 같이 적용</strong>되며, 둘 사이의 상대 경제성에는 영향이 없습니다. ㉢ <strong>과반이 늘어난 여당</strong>은 C-39·C-38 처리 속도가 빨라진다는 뜻이므로, <strong>시행 시점을 앞당겨 잡아 두셔도 무리가 아닙니다.</strong></div>
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-export">🚢</div>
+      <div class="card-title">수출 시장 <span>미국 · EU</span></div>
+    </div>
+
+    <a class="news-item" href="https://biodieselmagazine.com/articles/emerson-selected-to-automate-europes-first-greenfield-facility-dedicated-to-saf" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-eu">9/21 EU</span>
+      <div class="news-title">9월 21일 유럽 최초의 지속가능항공연료 전용 신설 공장 자동화 계약이 발표됐습니다</div>
+      <div class="news-body"><strong>9월 21일</strong> 에머슨이 테크닙 에너지스로부터 <strong>SkyNRG의 지속가능항공연료(SAF) 공장</strong>에 자동화 기술을 공급하는 계약을 따냈다고 발표됐습니다. 이 공장은 <strong>유럽 최초의 SAF 전용 신설(그린필드) 생산시설</strong>입니다.<br><br><strong>Green Oil 관점:</strong> 개별 계약 자체보다 <strong>무엇을 뜻하는지</strong>가 중요합니다. SAF 전용 신설 설비가 유럽에 들어선다는 것은 <strong>유럽 내 폐유지 원료 수요가 설비 단위로 고정된다</strong>는 뜻입니다. 지난주 네스테-유나이티드항공 공급계약 연장에 이어 <strong>이틀 만에 유럽 쪽 SAF 수요 신호가 또 나온 것</strong>이고, <strong>미국향에 50% 관세가 걸린 상황에서 유럽 수요가 설비로 뒷받침되는 흐름</strong>은 우리 판로 재조정 논거를 강하게 합니다. <strong>조치:</strong> 다만 유럽은 <strong>관세가 아니라 서류로 들어가는 시장</strong>입니다 — <strong>규정 2025/2181이 2027년 11월 19일부터 수출국 내 승인·등록 시설 출처와 수거부터 인도까지 전 구간 이력 증빙을 요구</strong>하므로, <strong>수요를 좇기 전에 인증 준비 일정을 먼저 잡으시기 바랍니다.</strong></div>
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-market">📈</div>
+      <div class="card-title">UCO 시장 <span>크레딧 · 원료 시세</span></div>
+    </div>
+
+    <a class="news-item" href="https://www.agbull.com/diesel-squeeze-lifts-biofuel-economics-pressures-rin-prices/" target="_blank" rel="noopener noreferrer">
+      <span class="tag tag-market">9/22 미국</span>
+      <div class="news-title">9월 22일 보도 — 경유 강세가 바이오연료 채산성은 올렸지만 D4 크레딧 값을 16% 끌어내렸습니다</div>
+      <div class="news-body"><strong>9월 22일</strong> 보도에 따르면 <strong>D4 재생연료 크레딧이 9월 1일 대비 18일까지 16% 내린 개당 1.9275달러</strong>가 됐습니다(약 36.75센트 하락). 같은 날 기준 <strong>대두유-난방유(BO-HO) 격차는 갤런당 마이너스 6.83센트</strong>로 <strong>2019년 5월 이후 가장 낮습니다.</strong><br><br>배경은 <strong>경유 강세</strong>입니다. <strong>걸프만 초저유황경유-서부텍사스산 크랙이 9월 18일 배럴당 103.19달러</strong>로 <strong>1년 전 대비 224%</strong> 올랐고, 미국 경유 생산은 <strong>하루 503만 6,000배럴</strong>로 5년 계절 평균 <strong>461만 5,000배럴</strong>을 크게 웃돕니다. <strong>9월 초저유황경유 수출은 하루 평균 163만 5,000배럴</strong>로 8월의 사상 최고치를 넘어설 기세입니다.<br><br><strong>Green Oil 관점 — 이 조합을 정확히 읽으셔야 합니다.</strong> 경유값이 높으면 바이오디젤·재생디젤을 만들 이유가 커지므로 <strong>생산 자체는 늘어나는 방향</strong>입니다. 그런데 바로 그 이유로 <strong>크레딧이라는 보조 장치가 덜 필요해져 D4 값이 빠집니다.</strong> 문제는 <strong>미국 정제사가 원료에 지불할 수 있는 금액의 상한을 정하는 것이 바로 이 크레딧 값</strong>이라는 점입니다. 즉 <strong>수요는 튼튼한데 우리가 받을 수 있는 가격의 천장은 내려간 구간</strong>이고, 여기에 <strong>9월 15일 발효된 50% 관세</strong>가 그대로 얹혀 있습니다.<br><br><strong>조치:</strong> ① 4분기 미국향 협의에서 <strong>"수요가 좋으니 값도 좋을 것"이라는 전제를 버리시기 바랍니다</strong> — 지표가 정반대로 움직이고 있습니다. ② 가격을 <strong>D4 연동으로 묶는 방식은 지금 구간에서 불리</strong>하므로, 고정가 또는 하한가 조항을 검토하시기 바랍니다. ③ <strong>10월 31일로 예고된 환경보호청의 재배분 제안</strong>이 D4를 되돌릴 수 있는 가장 큰 변수이므로 그 시점 전후로 계약 시기를 나누시는 편이 유리합니다.</div>
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-risk">⚡</div>
+      <div class="card-title">리스크 &amp; 기회 레이더 <span>Action Radar · 9/21</span></div>
+    </div>
+    <div class="risk-grid">
+      <div class="risk-col red">
+        <div class="risk-col-title">🔴 관심 요망</div>
+        <div class="risk-entry"><strong>D4 크레딧이 빠지면서 미국 정제사의 원료 지불 여력 상한이 내려갔습니다 — 관세와 겹칩니다.</strong> <strong>9월 1일 대비 18일까지 16% 하락한 1.9275달러</strong>이고, 여기에 <strong>9월 15일 발효된 50% 추가관세</strong>가 그대로 얹혀 있습니다. 경유 강세로 <strong>수요 자체는 튼튼</strong>하다는 점이 오히려 크레딧을 눌렀습니다. <strong>조치:</strong> ① 4분기 협의에서 <strong>D4 연동 가격 방식을 피하시고</strong> 고정가 또는 하한가 조항을 검토하시기 바랍니다. ② <strong>10월 31일 환경보호청 재배분 제안</strong>을 분기점으로 잡아 계약 시기를 나누시기 바랍니다 — 미배분분 <strong>약 7억 7,000만 개</strong>가 되돌아오면 D4가 반등할 여지가 있습니다.</div>
+        <div class="risk-entry"><strong>양국이 동시에 원료의 출처를 들여다보는 국면에 들어갔습니다.</strong> 미국에서는 지난주 <strong>캐나다산 UCO 환적 의혹</strong>이 업계 공개 발언으로 나왔고, 이번 주 캐나다에서는 법안 C-39가 <strong>환경보호법 집행권한을 위반 수입품 쪽으로 확대</strong>해 <strong>원산지 반송·캐나다 밖 반출 명령</strong>까지 가능하게 했습니다. <strong>방향이 같습니다.</strong> <strong>조치:</strong> <strong>수거처 소재지·수거 일자·선적 단위를 잇는 이력 자료</strong>를 지금 형식을 갖춰 남기시기 바랍니다 — <strong>같은 자료가 45Z 증빙과 EU 2025/2181 인증에도 그대로 쓰입니다.</strong> 나중에 소급해서 만들 수 없는 성격의 자료입니다.</div>
+        <div class="risk-entry"><strong>청정연료 전용 내각지침이 폐지되고 일반 지침으로 흡수됐습니다.</strong> 9월 21일 발령된 새 지침 원문에 <strong>"이 지침은 2024년 청정성장 사업 규제·허가 효율화 내각지침을 대체한다"</strong>고 명시돼 있으며, 이 문장은 <strong>보도자료에는 없습니다.</strong> 속도(1년 기한)는 업종 불문 적용되지만 <strong>우대 통로는 사라졌습니다.</strong> <strong>조치:</strong> 연방 허가가 걸리는 설비 계획이 있으시다면 <strong>"청정성장이라 빠르다"는 전제를 빼고</strong> 일반 절차 기준으로 일정을 다시 잡으시기 바랍니다.</div>
+      </div>
+      <div class="risk-col amber">
+        <div class="risk-col-title">🟡 모니터링 필요</div>
+        <div class="risk-entry">⭐ <strong>캐나다 청정연료규정(CFR) 개정안 — 이번 이틀은 확인할 관보 자체가 없었습니다.</strong> <strong>Part II는 9월 23일, Part I은 9월 26일</strong>이 다음 발행 차례입니다. 직전 확인분인 <strong>9월 19일자 Part I 제160권 제38호</strong>에는 청정연료규정이 없었고 환경부 항목은 비국내물질목록 1건뿐이었습니다. ⚠️<strong>관보 사이트는 존재하지 않는 날짜에도 HTTP 200을 돌려주므로</strong> 상태코드가 아니라 수록 내용으로 판정해야 합니다. <strong>조치:</strong> <strong>9월 23일과 26일 두 호를 다음 정기 회차에서 직접 열어</strong> 확인하겠습니다.</div>
+        <div class="risk-entry">⭐ <strong>45Z 증빙·기록보존 요건도 이번 이틀 변화가 없었습니다.</strong> 연방관보를 <strong>9월 21일~22일</strong> 발행일 조건으로 조회한 결과 <strong>바이오연료·재생연료·청정연료·식용유·45Z 관련 문서가 0건</strong>이었습니다. 같은 조건으로 '캐나다'를 조회하면 <strong>7건</strong>이 나와 <strong>조회 자체는 정상 작동</strong>함을 함께 확인했습니다. 9월 8일 지침 2026-53이 캐나다산 UCO 적격성은 확정했으나 <strong>원산지 증빙 방법은 최종규칙으로 미뤄진 상태</strong>가 그대로입니다. <strong>조치:</strong> 환적 의혹 대응 자료와 한 벌로 묶어 준비하시면 됩니다.</div>
+        <div class="risk-entry"><strong>C-39는 대부분의 절이 시행일을 총독령에 맡겨 두었습니다 — 통과가 곧 시행이 아닙니다.</strong> 현재 <strong>2독 대기</strong>이고, 우리에게 값어치 있는 <strong>「디지털무역촉진법」과 항만 수수료 조항도 별도 시행일</strong>을 따릅니다. 여당이 보궐 3승으로 과반을 늘려 <strong>처리 속도는 빨라질 전망</strong>이나 시행일은 별개입니다. <strong>조치:</strong> <strong>통과 시점과 절별 시행일을 분리해서</strong> 추적하시고, 전자무역문서 전환 준비는 시행일 확정 전에 <strong>통관사와 범위만 먼저 정리</strong>해 두시기 바랍니다.</div>
+        <div class="risk-entry"><strong>노동법 개정은 연방 관할 대상이라 원칙적으로 우리와 무관하나, 한 가지만 확인이 필요합니다.</strong> C-39 Part 3은 단체교섭 시한·최초 단체협약·<strong>노동법 제107조 조치 요건</strong> 등을 고치는데 대상이 <strong>연방 규제 산업</strong>입니다. 우리는 <strong>온타리오 고용기준법</strong> 적용 주 관할입니다. <strong>조치:</strong> 다만 <strong>주 경계나 국경을 넘는 운송 인력은 연방 관할이 될 수 있으므로</strong>, 수거 차량의 <strong>실제 운행 범위</strong>를 기준으로 한 번 확인해 두시기 바랍니다.</div>
+      </div>
+      <div class="risk-col green">
+        <div class="risk-col-title">🟢 기회 요인</div>
+        <div class="risk-entry">⭐ <strong>「디지털무역촉진법」 신설이 이번 회차에서 가장 값어치 있는 대목입니다.</strong> <strong>전자무역문서를 종이 문서와 동등한 효력</strong>으로 인정하고, <strong>물품의 수출입과 관련해 정부에 서류를 물리적 형태로 제출해야 하는 의무를 없앱니다.</strong> 서류 부담이 큰 우리 수출 실무에 직접 닿고, <strong>EU가 2027년 11월부터 요구하는 전 구간 이력 증빙</strong>을 전자문서로 구성하는 것과도 방향이 같습니다. <strong>조치:</strong> <strong>지금 종이로 처리 중인 수출 서류 목록을 뽑아</strong> 통관사와 전자화 가능 범위를 정리해 두시면, 시행과 동시에 효과를 보실 수 있습니다.</div>
+        <div class="risk-entry"><strong>항만 수수료에 다툴 근거가 생깁니다.</strong> C-39가 항만공사의 <strong>수수료 책정 시 지켜야 할 원칙을 새로 넣고</strong>, <strong>캐나다교통청에 수수료 관련 이의를 제기할 수 있는 사유를 넓힙니다.</strong> 지금까지는 사실상 통보받는 항목이었습니다. <strong>조치:</strong> <strong>최근 1년치 항만 청구 내역을 항목별로 정리</strong>해 두셨다가, 시행 후 <strong>원칙에 어긋나는 항목이 있는지</strong> 검토하시기 바랍니다. 수출 물량이 늘수록 금액 차이가 커지는 항목입니다.</div>
+        <div class="risk-entry"><strong>유럽 쪽 지속가능항공연료 수요 신호가 이틀 만에 또 나왔습니다.</strong> <strong>9월 21일 유럽 최초의 SAF 전용 신설 공장</strong>(SkyNRG) 자동화 계약이 발표됐습니다. 지난주 <strong>네스테-유나이티드항공 공급계약 연장</strong>에 이은 것으로, <strong>유럽 내 폐유지 수요가 설비 단위로 고정</strong>되는 흐름입니다. <strong>미국향에만 관세가 걸려 있다는 점</strong>과 겹쳐 판로 재조정 논거가 됩니다. <strong>조치:</strong> 다만 유럽은 <strong>관세가 아니라 서류로 들어가는 시장</strong>이므로, <strong>인증 준비 예산을 올해 안에 확보</strong>하시는 근거로 쓰시기 바랍니다.</div>
+        <div class="risk-entry"><strong>연료 소비세 유예가 입법으로 확정되는 중이며, 우리 수거 차량 연료비에 직접 걸립니다.</strong> 법안 C-38이 <strong>9월 21일 1독</strong>을 마쳤고, <strong>경유 리터당 4센트 유예가 2027년 1월 31일까지</strong> 이어진 뒤 <strong>2월 1일~3월 31일은 절반(2센트)</strong>입니다. <strong>조치:</strong> <strong>2027년 4월 1일 정상 세율 복귀</strong>를 전제로 내년 연료비 예산을 잡으시기 바랍니다. 참고로 바이오디젤은 이미 경유 정의에 포함돼 과세 대상이므로 <strong>이 유예는 양쪽에 같이 적용</strong>되며 상대 경제성에는 영향이 없습니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-sources">🔗</div>
+      <div class="card-title">출처 <span>Sources · 발행일 개별 확인 완료</span></div>
+    </div>
+    <div class="source-row"><div class="src-num">1</div><div><a class="src-link" href="https://www.parl.ca/DocumentViewer/en/45-1/bill/C-39/first-reading" target="_blank" rel="noopener noreferrer">법안 C-39 Building Canada Strong Act — 1독 본문 전문 (3부 19절 · 조문 직접 판독)</a><div class="src-meta">Parliament of Canada · 2026-09-22 본문 게재</div></div></div>
+    <div class="source-row"><div class="src-num">2</div><div><a class="src-link" href="https://www.parl.ca/legisinfo/en/bill/45-1/c-39" target="_blank" rel="noopener noreferrer">LEGISinfo — C-39 (1독 2026-09-21 11:17 · 현재 2독 대기)</a><div class="src-meta">Parliament of Canada · 2026-09-21</div></div></div>
+    <div class="source-row"><div class="src-num">3</div><div><a class="src-link" href="https://www.parl.ca/legisinfo/en/bill/45-1/c-38" target="_blank" rel="noopener noreferrer">LEGISinfo — C-38 Canadian Fuel Affordability Act (1독 2026-09-21 11:16)</a><div class="src-meta">Parliament of Canada · 2026-09-21</div></div></div>
+    <div class="source-row"><div class="src-num">4</div><div><a class="src-link" href="https://www.canada.ca/en/one-canadian-economy/news/2026/09/government-of-canada-introduces-legislation-to-transform-how-canada-builds.html" target="_blank" rel="noopener noreferrer">Government of Canada introduces legislation to transform how Canada builds (정부 발표문)</a><div class="src-meta">One Canadian Economy / Government of Canada · 2026-09-21</div></div></div>
+    <div class="source-row"><div class="src-num">5</div><div><a class="src-link" href="https://www.canada.ca/en/one-canadian-economy/services/simplifying-canada-process/cabinet.html" target="_blank" rel="noopener noreferrer">Cabinet Directive on Getting Projects Built in Canada (1년 기한 · 2024 청정성장 지침 대체 명시)</a><div class="src-meta">Government of Canada · 2026-09-21</div></div></div>
+    <div class="source-row"><div class="src-num">6</div><div><a class="src-link" href="https://www.cp24.com/news/canada/2026/09/21/mps-return-to-parliament-after-drama-filled-summer/" target="_blank" rel="noopener noreferrer">Parliament returns with some new MPs, more vacant seats and a major economic bill</a><div class="src-meta">CP24 / The Canadian Press · 2026-09-21</div></div></div>
+    <div class="source-row"><div class="src-num">7</div><div><a class="src-link" href="https://www.canada.ca/en/department-finance/news/2026/09/the-government-of-canada-extends-the-federal-fuel-excise-tax-relief-on-gasoline-diesel-and-aviation-fuels-for-canadians.html" target="_blank" rel="noopener noreferrer">The Government of Canada extends the federal fuel excise tax relief on gasoline, diesel, and aviation fuels</a><div class="src-meta">Department of Finance Canada · 2026-09-02</div></div></div>
+    <div class="source-row"><div class="src-num">8</div><div><a class="src-link" href="https://www.agbull.com/diesel-squeeze-lifts-biofuel-economics-pressures-rin-prices/" target="_blank" rel="noopener noreferrer">Diesel Squeeze Lifts Biofuel Economics, Pressures RIN Prices (D4 −16% $1.9275 · BO-HO −6.83c · 크랙 $103.19)</a><div class="src-meta">Ag Bull Trading · 2026-09-22</div></div></div>
+    <div class="source-row"><div class="src-num">9</div><div><a class="src-link" href="https://www.agbull.com/epa-sre-notice-omits-reallocation-putting-focus-on-october-rulemaking/" target="_blank" rel="noopener noreferrer">EPA SRE Notice Omits Reallocation, Putting Focus on October Rulemaking (미배분 약 7.7억 RIN · 10/31 제안 기한)</a><div class="src-meta">Ag Bull Trading · 2026-09-02</div></div></div>
+    <div class="source-row"><div class="src-num">10</div><div><a class="src-link" href="https://biodieselmagazine.com/articles/emerson-selected-to-automate-europes-first-greenfield-facility-dedicated-to-saf" target="_blank" rel="noopener noreferrer">Emerson selected to automate Europe's first greenfield facility dedicated to SAF</a><div class="src-meta">Biodiesel Magazine · 2026-09-21</div></div></div>
+    <div class="source-row"><div class="src-num">11</div><div><a class="src-link" href="https://www.federalregister.gov/documents/search?conditions%5Bpublication_date%5D%5Bgte%5D=2026-09-21&conditions%5Bpublication_date%5D%5Blte%5D=2026-09-22&conditions%5Bterm%5D=biofuel" target="_blank" rel="noopener noreferrer">Federal Register 발행일 2026-09-21 ~ 2026-09-22 조회 — 바이오연료·재생연료·청정연료·식용유·45Z 0건 (대조군 '캐나다' 7건으로 조회 정상 확인)</a><div class="src-meta">Federal Register API · 2026-09-22 조회</div></div></div>
+    <div class="source-row"><div class="src-num">12</div><div><a class="src-link" href="https://gazette.gc.ca/rp-pr/p1/2026/2026-09-19/html/index-eng.html" target="_blank" rel="noopener noreferrer">Canada Gazette, Part I, Volume 160, Number 38 — Index (직전 확인분 · 청정연료규정 없음)</a><div class="src-meta">Canada Gazette · 2026-09-19</div></div></div>
+    <div class="source-row"><div class="src-num">13</div><div><a class="src-link" href="https://content.govdelivery.com/bulletins/gd/USDHSCBP-429db0c" target="_blank" rel="noopener noreferrer">CSMS # 69851916 — Modifying Section 338 Additional Duties on Certain Goods of Canada (9/15 발효 · 배경)</a><div class="src-meta">U.S. Customs and Border Protection · 2026-09-11</div></div></div>
+    <div class="source-row"><div class="src-num">14</div><div><a class="src-link" href="https://www.agri-pulse.com/articles/25251-us-trade-war-with-canada-and-beyond-triggers-biofuel-worries" target="_blank" rel="noopener noreferrer">US trade war with Canada and beyond triggers biofuel worries (캐나다산 UCO 환적 의혹 · 배경)</a><div class="src-meta">Agri-Pulse · 2026-09-16</div></div></div>
+  </div>
+
+  <div class="footer">Green Oil Inc. Internal Use Only &nbsp;·&nbsp; Powered by Claude AI &nbsp;·&nbsp; <a href="../index.html" style="color:#bbb;">← 인덱스</a></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+  const btn = document.getElementById('pdfBtnLabel');
+  btn.textContent = '생성 중...';
+  html2pdf().set({
+    margin: [8, 8, 8, 8],
+    filename: 'GreenOil-UCO-2026-09-22.pdf',
+    image: { type: 'jpeg', quality: 0.95 },
+    html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: 'avoid-all' }
+  }).from(document.body).save().then(() => { btn.textContent = 'PDF 저장'; });
+}
+</script>
+</body>
+</html>
