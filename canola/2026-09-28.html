@@ -694,17 +694,25 @@ a.news-item .news-title::after { content: ' ↗'; font-size: 10px; color: #c49a0
 <script>
 function downloadPDF() {
   const btn = document.getElementById('pdfBtnLabel');
-  if (typeof html2pdf === 'undefined') { alert('PDF 라이브러리 로딩 실패. 브라우저 인쇄(Ctrl+P)를 이용해 주세요.'); return; }
+  // 라이브러리가 안 불러와졌거나(확장 프로그램·네트워크 차단) 생성이 실패·지연되면
+  // 버튼이 '생성 중...'에 멈추지 않도록 브라우저 인쇄 창(PDF로 저장)으로 넘긴다
+  let settled = false, timer = null;
+  const finish = (print) => { if (settled) return; settled = true; clearTimeout(timer); restore(); if (print) window.print(); };
+  const restore = () => { btn.textContent = 'PDF 저장'; };
+  if (typeof html2pdf !== 'function') { finish(true); return; }
   btn.textContent = '생성 중...';
+  timer = setTimeout(() => finish(true), 45000);
   const opt = {
     margin: [8, 8, 8, 8], filename: 'GreenOil-Canola-2026-09-28.pdf',
     image: { type: 'jpeg', quality: 0.92 },
     html2canvas: { scale: 2, useCORS: true, logging: false },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
-  html2pdf().set(opt).from(document.body).save()
-    .then(() => { btn.textContent = 'PDF 저장'; })
-    .catch(() => { btn.textContent = 'PDF 저장'; alert('PDF 생성 실패. 브라우저 인쇄(Ctrl+P → PDF 저장)를 이용해 주세요.'); });
+  try {
+    html2pdf().set(opt).from(document.body).save()
+      .then(() => finish(false))
+      .catch((e) => { console.error('PDF 생성 실패', e); finish(true); });
+  } catch (e) { console.error('PDF 생성 실패', e); finish(true); }
 }
 </script>
 </body>

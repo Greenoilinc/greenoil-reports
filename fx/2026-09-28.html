@@ -936,11 +936,20 @@ makeSubChart('chartLongtermSub',
 // ── PDF ──
 function downloadPDF() {
   const btn = document.getElementById('pdfBtnLabel');
-  btn.textContent = '생성 중...';
+  // 라이브러리가 안 불러와졌거나(확장 프로그램·네트워크 차단) 생성이 실패·지연되면
+  // 버튼이 '생성 중...'에 멈추지 않도록 브라우저 인쇄 창(PDF로 저장)으로 넘긴다
+  let settled = false, timer = null;
+  const finish = (print) => { if (settled) return; settled = true; clearTimeout(timer); restore(); if (print) window.print(); };
   // 한 번도 열지 않은 탭의 차트 캔버스는 0x0으로 남아 있습니다.
   // html2canvas가 DOM 복제 단계에서 이를 drawImage로 복사하다 예외를 던지므로
   // (html2canvas의 ignoreElements로는 막지 못한다) 생성하는 동안만 1x1로 채우고 끝나면 되돌립니다.
   const patched = [];
+  const restore = () => {
+    patched.forEach(([c, w, h]) => { c.width = w; c.height = h; });
+    btn.textContent = 'PDF 저장';
+  };
+  if (typeof html2pdf !== 'function') { finish(true); return; }
+  btn.textContent = '생성 중...';
   document.querySelectorAll('canvas').forEach(c => {
     if (c.width === 0 || c.height === 0) {
       patched.push([c, c.width, c.height]);
@@ -948,24 +957,19 @@ function downloadPDF() {
       c.height = c.height || 1;
     }
   });
-  const restore = () => {
-    patched.forEach(([c, w, h]) => { c.width = w; c.height = h; });
-    btn.textContent = 'PDF 저장';
-  };
-  html2pdf().set({
-    margin: [8, 8, 8, 8],
-    filename: 'GreenOil-FX-USD-CAD-2026-09-28.pdf',
-    image: { type: 'jpeg', quality: 0.95 },
-    html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak: { mode: 'avoid-all' }
-  }).from(document.body).save()
-    .then(restore)
-    .catch(err => {
-      restore();
-      console.error('PDF 생성 실패:', err);
-      alert('PDF 생성에 실패했습니다. 페이지를 새로고침한 뒤 다시 시도해 주세요.');
-    });
+  timer = setTimeout(() => finish(true), 45000);
+  try {
+    html2pdf().set({
+      margin: [8, 8, 8, 8],
+      filename: 'GreenOil-FX-USD-CAD-2026-09-28.pdf',
+      image: { type: 'jpeg', quality: 0.95 },
+      html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: 'avoid-all' }
+    }).from(document.body).save()
+      .then(() => finish(false))
+      .catch((e) => { console.error('PDF 생성 실패', e); finish(true); });
+  } catch (e) { console.error('PDF 생성 실패', e); finish(true); }
 }
 
 // ── Live rate fetch ──
