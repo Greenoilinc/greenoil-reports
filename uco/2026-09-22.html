@@ -575,15 +575,26 @@ a.news-item .news-title::after { content: ' ↗'; font-size: 10px; color: #2e8b2
 <script>
 function downloadPDF() {
   const btn = document.getElementById('pdfBtnLabel');
+  const reset = () => { btn.textContent = 'PDF 저장'; };
+  // 라이브러리가 안 불러와졌거나(확장 프로그램·네트워크 차단) 생성이 실패·지연되면
+  // 버튼이 '생성 중...'에 멈추지 않도록 브라우저 인쇄 창(PDF로 저장)으로 넘긴다
+  let settled = false;
+  const fallback = () => { if (settled) return; settled = true; reset(); window.print(); };
+  if (typeof html2pdf !== 'function') { fallback(); return; }
   btn.textContent = '생성 중...';
-  html2pdf().set({
-    margin: [8, 8, 8, 8],
-    filename: 'GreenOil-UCO-2026-09-22.pdf',
-    image: { type: 'jpeg', quality: 0.95 },
-    html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak: { mode: 'avoid-all' }
-  }).from(document.body).save().then(() => { btn.textContent = 'PDF 저장'; });
+  const timer = setTimeout(fallback, 45000);
+  try {
+    html2pdf().set({
+      margin: [8, 8, 8, 8],
+      filename: 'GreenOil-UCO-2026-09-22.pdf',
+      image: { type: 'jpeg', quality: 0.95 },
+      html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: 'avoid-all' }
+    }).from(document.body).save()
+      .then(() => { clearTimeout(timer); if (!settled) { settled = true; reset(); } })
+      .catch((e) => { clearTimeout(timer); console.error('PDF 생성 실패', e); fallback(); });
+  } catch (e) { clearTimeout(timer); console.error('PDF 생성 실패', e); fallback(); }
 }
 </script>
 </body>
