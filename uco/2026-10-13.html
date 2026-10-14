@@ -252,6 +252,25 @@ a.news-item .news-title::after { content: ' ↗'; font-size: 10px; color: #2e8b2
 
 /* ── Footer ── */
 .footer { text-align: center; font-size: 10px; color: #bbb; padding: 8px 0 4px; letter-spacing: 0.2px; }
+
+/* ── 10/14 작성 기준: 근거 표시·개정 상자·표 ── */
+.lb { display:inline-block; font-size:9.5px; font-weight:700; padding:1px 6px; border-radius:4px; vertical-align:1px; white-space:nowrap; }
+.lb-fact { background:#e6f4ea; color:#137333; } .lb-prop { background:#e8f0fe; color:#1558d6; }
+.lb-ind { background:#fff3e0; color:#b45309; } .lb-anal { background:#f3e8ff; color:#6b21a8; } .lb-ai { background:#eef0f3; color:#475569; }
+.legend { font-size:11px; color:#5a6e5a; margin:0 0 12px; line-height:1.9; }
+.upd-box { background:#fffbeb; border:1px solid #fde68a; border-left:5px solid #d97706; border-radius:10px; padding:12px 15px; margin-bottom:12px; }
+.upd-title { font-weight:800; font-size:13px; color:#92400e; margin-bottom:4px; } .upd-body { font-size:12px; color:#4a3b14; line-height:1.65; }
+.upd-body a, .kv a, .item a, .short a { color:#1a6b3c; }
+ol.judge, ol.chg { margin:0 0 12px 18px; font-size:13px; color:#2d3e2d; } ol.judge li, ol.chg li { padding:4px 0; line-height:1.6; }
+table.act, table.kv { width:100%; border-collapse:collapse; font-size:12px; } .act th, .act td, .kv th, .kv td { border-bottom:1px solid #eef2ee; padding:8px 7px; vertical-align:top; text-align:left; line-height:1.6; }
+.act th { font-size:10.5px; color:#667; background:#f7faf7; } .kv th { width:96px; color:#2d3e2d; font-size:11.5px; white-space:nowrap; }
+.act td:nth-child(2), .act td:nth-child(3) { white-space:nowrap; }
+@media (max-width:640px){ .act td:nth-child(2), .act td:nth-child(3){ white-space:normal; } .kv th{ white-space:normal; width:70px; } }
+.note { font-size:11px; color:#777; margin-top:8px; line-height:1.6; }
+.item { padding:10px 0; border-bottom:1px solid #f1f1f1; } .item:last-child{ border-bottom:none; }
+.item-h { font-weight:700; font-size:12.5px; color:#1c2e1c; margin-bottom:4px; } .item p { font-size:12px; color:#4a5568; line-height:1.65; margin:4px 0; }
+ul.short { list-style:none; font-size:12px; color:#4a5568; } ul.short li { padding:6px 0; border-bottom:1px solid #f4f4f4; line-height:1.65; } ul.short li:last-child{ border-bottom:none; }
+.card { overflow-x:auto; }
 </style>
 </head>
 <body>
@@ -269,7 +288,7 @@ a.news-item .news-title::after { content: ' ↗'; font-size: 10px; color: #2e8b2
       <a class="report-switch" href="../index.html">&#8592; 인덱스</a>
       <a class="report-switch" href="../canola/2026-10-12.html"><span class="dot"></span>카놀라 리포트 →</a>
     </div>
-    <div class="updated-badge">마지막 업데이트: 2026.10.13</div>
+    <div class="updated-badge">마지막 업데이트: 2026.10.13 · 10/14 개정</div>
   </div>
 </div>
 
@@ -332,165 +351,141 @@ a.news-item .news-title::after { content: ' ↗'; font-size: 10px; color: #2e8b2
 
 <div class="container">
 
-  <!-- ── 맨 위 한 줄 요약: 왜 이렇게 움직였나 ── -->
+  <!-- ── 개정 안내(발행 후 업데이트) ── -->
+  <div class="upd-box">
+    <div class="upd-title">📝 10/14 개정판 — 발행 후 업데이트</div>
+    <div class="upd-body">
+      이 페이지는 10/13 발행본을 <strong>공통 작성 기준(10/14)</strong>에 맞춰 다시 쓴 것입니다. <strong>발행본은 <a href="./2026-10-13-v1.html">여기</a>에 그대로 보존</strong>했습니다.<br>
+      바뀐 점: ① 요약을 판단 3문장·주요 변화 3개·권고 3개로 줄였습니다. ② 항목마다 근거 종류를 표시했습니다. ③ <strong>환급 관련 판단 두 가지를 원문과 대조해 정정</strong>했습니다(아래 「최대 현안」 ④). ④ 「지난주 권고 점검」과 「검증 기록」을 넣었습니다.<br>
+      새 사실은 더하지 않았습니다. 수치와 사건은 발행본과 같습니다. 환급 정정은 10/14에 원문을 대조한 결과입니다.
+    </div>
+  </div>
+
+  <div class="legend">근거 표시: <span class="lb lb-fact">확정</span> 공식 원문으로 확인 · <span class="lb lb-prop">제안</span> 정부 제안·초안 · <span class="lb lb-ind">업계 요구</span> 단체·기업 요청 · <span class="lb lb-anal">분석가 의견</span> 시장 해설 · <span class="lb lb-ai">AI 추론</span> 이 리포트의 판단</div>
+
+  <!-- ── 맨 위 한 줄 요약 ── -->
   <div class="why-line up">
-    <div class="why-move">▲ EPA 면제분 7.7억 RIN 100% 재배분안 &nbsp;· 10/12 백악관 심사 통과 → 10/13 제안</div>
-    <div class="why-text"><strong>왜?</strong> 8월 정유사 면제로 빠진 약 7억 7천만 RIN 물량을 2026·2027년 의무량에 다시 얹는 환경보호청 규칙안이 10월 12일 백악관 심사를 통과해(10월 13일 공식 제안) D4·UCO 수요 쪽 재료가 커졌지만, 10월 5일 경유세 유예 행정명령·10월 9일 러시아 경유 공급 합의·10월 11일 캐나다의 대미 경유 수출 최대 유지 약속으로 미국 경유 소매가가 6.28달러로 내려오고 대두유 선물도 한 주간 0.60센트 밀려 가격 쪽은 반대로 눌렸습니다.</div>
+    <div class="why-move">▲ EPA 재배분안 약 7억 7천만 RIN &nbsp;· 10/13 제안</div>
+    <div class="why-text"><strong>왜?</strong> 미국 환경보호청이 8월 정유사 면제로 빠진 약 7억 7천만 RIN(전체 RIN 기준, D4 몫은 발표에 없음)을 2026·2027년 의무량에 다시 얹는 안을 10월 13일 제안해 의무량 수요 쪽 재료가 생겼지만, 같은 주 미국의 경유세 유예·러시아 경유 공급 합의·캐나다의 대미 경유 수출 확대 약속으로 미국 경유 소매가(AAA 전국 평균)가 10월 9일 갤런당 6.28달러로 내려와 가격 쪽은 반대로 눌렸습니다.</div>
   </div>
 
   <div class="alert-bar">
     <div class="pill red">  <div class="dot red"></div>  <span>2</span> 관심 요망</div>
-    <div class="pill amber"><div class="dot amber"></div><span>6</span> 모니터링 필요</div>
-    <div class="pill green"><div class="dot green"></div><span>3</span> 기회 요인</div>
+    <div class="pill amber"><div class="dot amber"></div><span>4</span> 모니터링 필요</div>
+    <div class="pill green"><div class="dot green"></div><span>2</span> 기회 요인</div>
   </div>
 
+  <!-- ── 결정 요약 ── -->
   <div class="card">
     <div class="card-header">
       <div class="card-icon icon-summary">📋</div>
-      <div class="card-title">이번 주 핵심 요약 <span>Executive Summary · 10/6 – 10/12</span></div>
+      <div class="card-title">이번 주 결정 요약 <span>판단 · 주요 변화 · 권고 · 10/6 – 10/12</span></div>
     </div>
-    <ul class="summary-list">
-      <li>🔴 <strong>이번 주에도 가장 먼저 보셔야 할 것은 9월 15일부터 우리 UCO 수출에 붙고 있는 50% 관세입니다.</strong> 미국은 UCO가 분류되는 <strong>1518.00.40</strong>에 제338조 <strong>50% 추가관세</strong>를 물리고 있고, <strong>100만 달러 선적이면 50만 달러</strong>입니다. <strong>이번 주 이 관세에 관한 새 포고·지침은 없었습니다</strong> — 연방관보 대통령 문서(10/5~10/12)는 「제조업의 날」 포고와 경유세 행정명령 14435호 2건뿐이었습니다. 공식 의견 창구는 그대로 <strong>11월 9일 국제무역위원회 제338조(g)</strong>와 <strong>2027년 1월 12일 무역대표부 CUSMA 공동검토</strong>(사건번호 USTR-2026-0595) 두 곳입니다.</li>
-      <li><strong>⛽ 미국이 경유값을 직접 누르는 조치를 세 갈래로 더 내놨습니다 — UCO 값의 바탕인 경유 쪽 지지가 또 약해지는 방향입니다.</strong> ① <strong>10월 5일</strong> 트럼프 대통령이 <strong>행정명령 14435호「경유 긴급 세금 감면」</strong>에 서명했습니다(10월 9일 관보 게재). <strong>10월 5일~12월 31일</strong> 사이 <strong>착색(면세) 경유를 도로에서 써도 벌칙을 물리지 않고</strong>, 해당 경유세 납부를 <strong>벌칙·이자 없이 유예</strong>하도록 재무부에 지시한 것입니다(면제가 아니라 유예). ② <strong>10월 9일</strong>에는 <strong>러시아가 경유 최대 480만 톤을 시장에 풀기로 합의</strong>했다고 발표했고, 재무부는 이를 위한 <strong>임시 일반허가</strong>를 냈습니다. 다만 즉시 물량은 30만 톤이고 300만 톤은 러시아 정제 여건에 달려 있습니다. ③ <strong>10월 11일</strong> 카니 총리는 트럼프 대통령과 통화한 뒤 <strong>캐나다의 대미 원유·경유 수출을 계속 늘리겠다</strong>고 밝혔습니다. 미국 경유 소매가는 <strong>10월 7일 6.30달러, 10월 9일 6.28달러</strong>(AAA)로 내려왔습니다.</li>
-      <li><strong>🏛 환경보호청 「면제분 100% 재배분」이 이번 주 백악관 심사를 통과했고, 다음 날 공식 제안됐습니다 — D4·UCO 수요를 받치는 재료입니다.</strong> 환경보호청이 <strong>10월 2일</strong> 백악관 관리예산처에 넘긴 규칙안이 <strong>10월 12일 심사를 마쳤고</strong>(약 <strong>7억 7천만 RIN</strong> 규모), <strong>10월 13일</strong>(보고 주간 다음 날) 젤딘 청장이 아이오와에서 <strong>100% 재배분안</strong>을 공식 제안했습니다. 방식은 ① <strong>2026·2027년에 절반씩</strong> ② <strong>전량 2027년</strong> 두 가지 중 의견을 받으며, <strong>의견 마감은 12월 4일</strong>입니다. 앞서 <strong>10월 8일</strong>에는 미 하원의원 39명이 <strong>10월 16일까지 제안하라</strong>는 초당적 서한을 냈습니다.</li>
-      <li><strong>📉 시세 — 대두유는 한 주간 밀렸고, UCO·D4는 이번 주 공개 시세가 확인되지 않았습니다.</strong> 시카고 <strong>대두유 12월물은 10월 9일 파운드당 68.02센트</strong>로 마감해 <strong>한 주간 0.60센트 하락</strong>했습니다(앞 주 0.78센트 상승분의 약 77% 반납). 10월 9일 미 농무부 10월 수급 전망은 <strong>사상 최대 대두 생산</strong>을 내놨습니다. 마지막으로 확인된 수치는 <strong>걸프 UCO 71센트(9/24)</strong>·<strong>D4 1.9275달러(9/18)</strong>이며, 이번 주에는 숫자를 추정하지 않고 비워 둡니다.</li>
-      <li><strong>⭐ 최우선 감시 2건 — 이번 주에도 공식 문서는 없었고, CFR은 업계 압박이 커졌습니다.</strong> ① <strong>CFR 개정 초안:</strong> <strong>10월 10일 관보 Part I(제160권 제41호)</strong>의 「제안규정」은 <strong>멸종위기종법 부칙 개정·전파법 면제명령</strong>뿐이었고, <strong>10월 7일 Part II 제20호</strong>(SOR/2026-193~203)에도 CFR은 없었습니다. 그 사이 <strong>10월 6일</strong> 농민·에탄올 업계 연합(Farms and Fuels Alliance)이 총리에게 서한을 보내 <strong>「약속한 CFR 개정을 연말까지 확정하라」</strong>고 요구했습니다(국산 에탄올 크레딧 <strong>1.4배 가산</strong>). ② <strong>45Z:</strong> 연방관보를 <strong>10월 5일~13일</strong> 발행일로 <strong>'45Z'·'renewable fuel'·'used cooking oil'·'clean fuel production credit'</strong> 어구별로 조회해 <strong>모두 0건</strong>이었습니다.</li>
-      <li><strong>🗳 정치 — 퀘벡에 주권파 소수정부가 섰고, 앨버타는 10월 19일 분리 관련 주민투표를 치릅니다.</strong> <strong>10월 5일 밤 개표된</strong> 퀘벡 총선에서(10월 6일 보도) <strong>퀘벡당이 59석(득표 28%)으로 소수정부</strong>를 세웠고, 생피에르 플라몽동 차기 주총리는 <strong>국민투표를 트럼프 대통령 퇴임 뒤(빨라야 2028년)</strong>로 미루겠다고 밝혔습니다. 직전 집권당 CAQ는 <strong>0석</strong>입니다. <strong>10월 9일</strong> 스미스 앨버타 주총리는 주민들이 잔류를 택하면 <strong>「내가 주총리인 동안 두 번째 분리 투표는 없다」</strong>고 했습니다. <strong>10월 7일</strong> 모 사스카추완 주총리는 머스크의 분리 권유에 <strong>「No」</strong> 한 마디로 답했습니다. 연방에서는 <strong>10월 8일</strong> 카니 총리가 <strong>20억 달러 규모 주택 100만 호 개보수·열펌프 보조금</strong>을 발표했습니다.</li>
-    </ul>
+
+    <div class="sub-label">판단</div>
+    <ol class="judge">
+      <li>Green Oil 손익에 가장 큰 변수는 여전히 <strong>미국의 UCO 50% 추가관세</strong>이고, 이번 주 관세 자체에는 변화가 없었습니다. <span class="lb lb-fact">확정</span></li>
+      <li>미국 정부가 같은 주에 <strong>RFS 의무량을 지키는 조치</strong>(재배분 제안)와 <strong>경유값을 내리는 조치</strong>(세금 유예·공급 확대)를 함께 내놨습니다. 그래서 UCO 수요는 받쳐지고 가격은 눌리는 방향으로 판단합니다. <span class="lb lb-ai">AI 추론</span></li>
+      <li>지난 리포트의 환급 판단 두 가지가 원문과 맞지 않았습니다. 그래서 환급 관련 권고를 <strong>「신청 구조와 원산지를 확인한 뒤 협상」</strong>으로 바꿉니다. <span class="lb lb-ai">AI 추론</span></li>
+    </ol>
+
+    <div class="sub-label">주요 변화</div>
+    <ol class="chg">
+      <li><span class="lb lb-prop">제안</span> <strong>EPA 면제분 재배분안</strong> — 10/12 백악관 심사를 통과했고, 10/13 공식 제안됐습니다. 약 7억 7천만 RIN(전체 RIN 기준)을 ① 2026·2027년에 절반씩, 또는 ② 전량 2027년에 다시 얹는 안이며, 의견 마감은 12/4입니다. → <em>영향:</em> 확정되면 바이오매스 기반 디젤 의무량이 늘어나는 방향입니다. ②안이면 효과가 2027년에 몰립니다. <span class="lb lb-ai">AI 추론</span></li>
+      <li><span class="lb lb-fact">확정</span> <strong>미국 경유값 대책 세 가지</strong> — 행정명령 14435호(10/5 서명·10/9 관보, 착색 경유 도로 사용 허용·경유세 납부 유예, 12/31까지), 러시아 경유 최대 480만 t 공급 합의 발표(10/9, 물량 약 3분의 2가 조건부), 캐나다의 대미 원유·경유 수출 확대 약속(10/11)이 나왔습니다. 미국 경유 소매가는 US$6.37/갤런(10/2)에서 US$6.28/갤런(10/9)으로 내렸습니다(AAA 전국 평균). → <em>영향:</em> 재생디젤 판매가와 UCO 매입 여력에 하방 압력입니다. <span class="lb lb-ai">AI 추론</span></li>
+      <li><span class="lb lb-ind">업계 요구</span> <strong>캐나다 CFR 개정 「연말 확정」 요구</strong> — 10/6 농민·에탄올 업계 연합이 총리에게 서한을 보냈습니다(국산 에탄올 크레딧 1.4배 가산 요구). 관보에는 이번 주에도 개정안이 없었습니다. <span class="lb lb-fact">확정</span> → <em>영향:</em> 요구가 에탄올 전용이라, 그대로 반영되면 바이오디젤·재생디젤 원료 쪽은 혜택이 없을 수 있습니다. <span class="lb lb-ai">AI 추론</span></li>
+    </ol>
+
+    <div class="sub-label">권고 조치</div>
+    <table class="act">
+      <thead><tr><th>권고</th><th>담당 기능</th><th>기한</th><th>선행 확인</th></tr></thead>
+      <tbody>
+        <tr><td><strong>① 미국향 계약의 환급 구조 확인</strong> — 바이어별로 누가 수입자로 신고하는지, 재생디젤을 수출하는지, 환급을 누가 신청하는지 확인하신 뒤 가격 협상에 반영하실 것을 권합니다. <span class="lb lb-ai">AI 추론</span></td><td>영업(수출 계약) + 외부 통관·환급 전문가</td><td>11/6</td><td>바이어별 미국 수입신고 명의(IOR) · 바이어의 재생디젤 수출 여부·행선지 · 우리 UCO의 CUSMA 원산지 충족 증빙</td></tr>
+        <tr><td><strong>② 대외 의견 제출 여부 결정</strong> — 창구가 셋입니다. 미국 국제무역위원회 제338조(g) 절차(11/9), EPA 재배분안(12/4), 무역대표부 CUSMA 공동검토(2027-01-12)이며, 같은 자료 한 벌로 대응할 수 있습니다. <span class="lb lb-ai">AI 추론</span></td><td>경영기획·대외협력(업계 단체 경유 포함)</td><td>11/2 내부 결정</td><td>미국향 연간 물량·이력 자료 · 재배분 ①·②안이 우리 2026·2027년 물량에 주는 영향</td></tr>
+        <tr><td><strong>③ 4분기 가격 협상 조건 정리</strong> — 시세 하락분과 관세 부담분을 따로 다루시고, 재배분안이 확정될 때까지는 장기 고정가를 피하시는 편이 낫다고 봅니다. 계약 자료를 확인한 뒤 적용 여부를 판단하실 사안입니다. <span class="lb lb-ai">AI 추론</span></td><td>영업</td><td>다음 계약 갱신 전</td><td>계약별 가격 연동 조건(D4·대두유·경유 연동 여부) · 관세 부담 주체 · 계약 기간</td></tr>
+      </tbody>
+    </table>
+    <div class="note">회사의 실제 미국향 물량·계약 조건·관세 부담 자료가 이 리포트에는 없습니다. 그래서 금액 영향은 계산하지 않았고, 권고는 위 선행 확인 결과에 따라 달라집니다.</div>
   </div>
 
+  <!-- ── 최대 현안 ── -->
   <div class="card" style="border-left:5px solid #dc2626;">
     <div class="card-header">
       <div class="card-icon icon-risk">🔴</div>
-      <div class="card-title">최대 현안 — UCO 수출 50% 관세, 지금 쓸 수 있는 수단 <span>Top Issue · 9/15 발효, 현재진행 · 이번 주 점검 10/6 – 10/12</span></div>
+      <div class="card-title">최대 현안 — 미국 UCO 50% 추가관세 <span>9/15 발효 · 이번 주 변화 없음 · 환급 판단 정정</span></div>
     </div>
-    <div style="font-size:11px;color:#4a5568;padding:0 8px 12px;line-height:1.75;">이 칸은 특정 날짜의 뉴스가 아니라 <strong>지금 우리 손익에 가장 크게 작용하고 있는 한 가지</strong>를 따로 세운 것입니다. 아래 다른 항목들보다 <strong>금액의 자릿수가 다릅니다.</strong><br><strong>이번 주(10/6~10/12) 달라진 점:</strong> 제338조 관세 자체에 관한 <strong>새 포고·지침은 없었습니다</strong>(연방관보 대통령 문서 10/5~10/13은 「제조업의 날」 포고와 경유세 행정명령 14435호뿐). 계속 <strong>「반입 가능, 50% 과세」</strong>이며, 국제무역위원회 제338조(g) 의견 마감 <strong>11월 9일까지 4주</strong> 남았습니다.</div>
-    <div style="overflow-x:auto;">
-    <table style="width:100%;border-collapse:collapse;min-width:520px;">
-      <tbody>
-        <tr>
-          <td style="padding:9px;font-size:11px;color:#4a5568;border-bottom:1px solid #f4f4f4;vertical-align:top;width:120px;"><strong>① 크기와<br>성격</strong></td>
-          <td style="padding:9px;font-size:11px;color:#4a5568;border-bottom:1px solid #f4f4f4;vertical-align:top;"><strong>9월 15일 0시 1분부터 우리 수출 세번 <span style="white-space:nowrap;">1518.00.40</span>에 제338조 50% 추가관세가 붙고 있습니다.</strong> 관세평가액의 <strong>절반</strong>이므로 <strong>100만 달러 선적이면 50만 달러</strong>입니다. 적용 기준은 선적일이 아니라 <strong>미국 반입신고 시점</strong>이고 <strong>운송 중 예외가 조문에 없습니다.</strong><br><br><strong>🔑부과 사유가 우리와 무관하다는 점이 대응 방향을 정합니다.</strong> 포고문이 든 이유는 <strong>캐나다가 미국산 주류를 매대에서 뺀 것</strong>이고, 전문 검색 결과 <strong>China·transship·circumvent·origin·evasion이 모두 0건</strong>입니다. 즉 <strong>이것은 환적 대응이 아니라 주류 보복이고, UCO는 "때리기 좋은 물건"으로 골라진 것</strong>입니다(같은 부속서에 매트리스·모터보트가 나란히 있습니다). <strong>따라서 원산지 증빙을 아무리 잘 갖춰도 이 관세는 내려가지 않습니다</strong> — 원산지 서류가 진짜 돈이 되는 곳은 <strong>45Z와 EU 인증</strong>이지 이쪽이 아닙니다.</td>
-        </tr>
-        <tr>
-          <td style="padding:9px;font-size:11px;color:#4a5568;border-bottom:1px solid #f4f4f4;vertical-align:top;"><strong>② 안 되는 것<br>(먼저 정리)</strong></td>
-          <td style="padding:9px;font-size:11px;color:#4a5568;border-bottom:1px solid #f4f4f4;vertical-align:top;"><strong>🔴제338조에는 품목 제외(exclusion) 절차가 존재하지 않습니다.</strong> 제301조에는 제외 신청 포털이 있고 제232조에는 상무부가 운영하는 포함·제외 절차가 있지만, <strong>제338조 포고문은 제외 장치를 만들지 않았고 조사 절차도 요구하지 않습니다.</strong> <strong>"우리 품목만 빼 달라"고 낼 곳이 없습니다.</strong> 해제는 <strong>대통령의 조치, 주류 분쟁 타결, 정책 변경</strong>으로만 옵니다.<br><br><strong>🔴보세구역(FTZ)으로 미루는 길도 막혀 있습니다.</strong> 세관 지침은 <strong>"국내물품 자격으로 반입될 수 있는 물품을 제외하고는 특권외국물품 자격으로만 반입되며, 소비용 반입신고 시 해당 세번의 종가세율이 적용된다"</strong>고 못박았습니다.<br><br><strong>⚠️제98류 활용도 제한적입니다</strong> — 제98류를 제대로 적용하면 피할 수 있으나 <strong>제9802.00.40·50·60·80호는 예외</strong>로, <strong>수리·개조·가공에 해당하는 가액에는 추가관세가 그대로 붙습니다.</strong></td>
-        </tr>
-        <tr>
-          <td style="padding:9px;font-size:11px;color:#4a5568;border-bottom:1px solid #f4f4f4;vertical-align:top;"><strong>③ 🟢되는 것 —<br>환급(drawback)</strong></td>
-          <td style="padding:9px;font-size:11px;color:#4a5568;border-bottom:1px solid #f4f4f4;vertical-align:top;"><strong>미국 세관이 이 관세를 환급 대상으로 확인했습니다</strong> — 지침 원문은 <strong>"9903.03.12부터 9903.03.14까지의 항에 부과되는 추가관세는 환급 대상이 됩니다"</strong>입니다. 포고문 조문에는 없고 <strong>실무 지침에만</strong> 있는 내용입니다.<br><br><strong>🔑구조가 중요합니다.</strong> 우리 UCO는 미국에서 <strong>그대로 재수출되는 것이 아니라 재생디젤·지속가능항공연료로 가공</strong>됩니다. 따라서 해당하는 것은 미사용 재수출 환급이 아니라 <strong>제조환급</strong>이며, <strong>그 제품을 미국 밖으로 수출하는 만큼</strong> 납부한 관세를 되찾는 구조입니다.<br><br><strong>🔑그리고 이 고리가 실제로 존재합니다</strong> — 미국 에너지정보청 기준 <strong>2025년 하반기 미국의 재생디젤·바이오연료 수출은 하루 약 5만 배럴</strong>이었고 <strong>그 가운데 절반가량이 캐나다행</strong>입니다. <strong>우리 UCO가 미국에서 재생디젤이 되어 캐나다로 되돌아오는 흐름</strong>이 있고, 그 부분은 <strong>바이어가 관세를 회수할 수 있다</strong>는 뜻입니다.<br><br><strong>⚠️다만 우리 세번에는 기술적 제약이 하나 붙습니다.</strong> 대체환급(substitution)은 수입품의 <strong>8자리 세번 설명이 "Other"이면 10자리로 내려가 판단</strong>하는데, <span style="white-space:nowrap;">1518.00.40</span>은 <strong>8자리도 10자리(1518.00.40.00)도 설명이 모두 "Other"</strong>입니다. 즉 <strong>대체 방식은 막히고 직접확인(direct identification) 방식으로 가야 할 가능성이 큽니다.</strong> 직접확인은 <strong>수입 로트를 수출 제품까지 추적</strong>해야 하므로 <strong>이력 자료가 곧 환급액</strong>이 됩니다. <strong>최종 판단은 반드시 환급 전문가·통관사의 서면 확인을 받으시기 바랍니다.</strong></td>
-        </tr>
-        <tr>
-          <td style="padding:9px;font-size:11px;color:#4a5568;border-bottom:1px solid #f4f4f4;vertical-align:top;"><strong>④ 협상에서<br>쓸 논거</strong></td>
-          <td style="padding:9px;font-size:11px;color:#4a5568;border-bottom:1px solid #f4f4f4;vertical-align:top;"><strong>㉠ "50%를 전액 우리 가격에 얹지 마시라"는 근거가 생겼습니다.</strong> 바이어가 제품을 수출하는 비중만큼 <strong>관세는 회수 가능한 비용</strong>이지 매몰비용이 아닙니다. <strong>바이어의 수출 비중을 물어보시고</strong>, 그 부분에 대해서는 관세 전가를 받아들이지 않으시는 것이 맞습니다.<br><br><strong>㉡ 누가 수입자인지부터 확인하십시오.</strong> 인코텀즈가 <strong>DDP 계열이면 우리가 관세를 내고 있는 것</strong>이고, <strong>FOB·CIF 계열이면 바이어가 납세의무자</strong>입니다. 납세의무자가 바이어라면 <strong>환급 신청 주체도 바이어</strong>이므로, <strong>환급금의 귀속을 계약서에 명시</strong>하셔야 합니다 — 안 적어 두면 바이어가 환급받고 가격은 그대로 눌러 두는 구도가 됩니다.<br><br><strong>㉢ 45Z를 표에 올리십시오.</strong> 2026년부터 미국 정제사가 45Z를 받으며 쓸 수 있는 수입 UCO는 <strong>캐나다산과 멕시코산뿐</strong>이고, 그 밖의 수입 UCO는 <strong>2025년 12월 31일 이후 생산분부터 부적격</strong>입니다. <strong>바이어의 대체재는 관세는 없지만 45Z도 없습니다.</strong> 관세 부담과 세액공제 가치를 <strong>한 장에 나란히 놓은 자료</strong>를 만들어 협상에 들고 가시기 바랍니다.</td>
-        </tr>
-        <tr>
-          <td style="padding:9px;font-size:11px;color:#4a5568;border-bottom:1px solid #f4f4f4;vertical-align:top;"><strong>⑤ 이력 자료<br>한 벌이 세 곳에</strong></td>
-          <td style="padding:9px;font-size:11px;color:#4a5568;border-bottom:1px solid #f4f4f4;vertical-align:top;"><strong>수거처 소재지·수거 일자·선적 단위를 잇는 이력 자료를 지금 형식을 갖춰 남기시면 세 곳에 모두 쓰입니다.</strong><br>&nbsp;&nbsp;㉠ <strong>환급</strong> — 직접확인 방식에서 <strong>추적이 곧 환급액</strong>입니다.<br>&nbsp;&nbsp;㉡ <strong>45Z</strong> — 캐나다산 적격성은 확정됐으나 <strong>원산지 증빙 방법은 최종규칙으로 미뤄져</strong> 지금은 <strong>"충분한 기록을 보관해야 한다"</strong>는 원칙만 있습니다.<br>&nbsp;&nbsp;㉢ <strong>EU 인증</strong> — 규정 2025/2181이 <strong>2027년 11월 19일</strong>부터 <strong>수출국 내 승인·등록 시설 출처와 수거부터 인도까지 전 구간 이력</strong>을 요구합니다.<br><br><strong>🔑세 요건이 요구하는 자료가 사실상 같습니다.</strong> 게다가 <strong>소급해서 만들 수 없는 성격</strong>이므로, <strong>착수 시점이 늦어질수록 되돌릴 수 없는 손실</strong>이 됩니다. 9월 16일 미국 업계에서 제기된 <strong>캐나다산 UCO 환적 의혹</strong>에 대한 방어 자료도 같은 자료입니다.</td>
-        </tr>
-        <tr>
-          <td style="padding:9px;font-size:11px;color:#4a5568;border-bottom:1px solid #f4f4f4;vertical-align:top;"><strong>⑥ 정책 쪽<br>의견 창구 2곳</strong></td>
-          <td style="padding:9px;font-size:11px;color:#4a5568;border-bottom:1px solid #f4f4f4;vertical-align:top;">품목 제외 절차가 없으므로 <strong>공식적으로 의견을 낼 수 있는 자리는 이제 둘</strong>입니다.<br><br><strong>㉠ 11월 9일 — 미국 국제무역위원회 제338조(g) 운영절차 의견수렴</strong>(사건번호 MISC-053, 9월 9일 개시). 위원회는 <strong>"확립된 관행이 없다"</strong>고 인정하며 <strong>대상 품목이 추가·제외되는 절차 자체</strong>를 만들겠다고 밝혔습니다 — 제338조가 <strong>상설 제도로 굳어지는 방향</strong>이라는 신호입니다.<br><br><strong>㉡ 2027년 1월 12일 — 무역대표부 CUSMA 공동검토 의견수렴·공청회</strong>(10월 2일 개시, 사건번호 USTR-2026-0595·0596). 제338조 관세는 협정 밖에서 부과된 것이라 <strong>여기서 직접 풀리지는 않지만</strong>, 의견 범위에 <strong>「북미 경쟁력·경제안보」</strong>가 들어 있어 <strong>캐나다산 UCO → 미국 재생디젤 → 캐나다 재수출</strong> 고리를 공식 기록으로 남길 수 있습니다.<br><br><strong>조치:</strong> 두 곳에 <strong>같은 자료 한 벌</strong>(물량·이력·재수출 고리)로 대응하시고, 업계 단체나 미국 측 바이어와 함께 내는 방안을 검토하시기 바랍니다. 4분기 이후 계획은 계속 <strong>"이 관세가 유지된다"는 전제로 한 벌 더</strong> 만들어 두시는 편이 안전합니다.</td>
-        </tr>
-      </tbody>
+    <table class="kv">
+      <tr><th>① 사실</th><td><span class="lb lb-fact">확정</span> 2026-09-15 0시 1분(미 동부) 반입분부터 HTSUS <strong>1518.00.40</strong>에 제338조 50% 추가관세가 붙고 있습니다(구간 9903.03.12). 근거는 <a href="https://www.federalregister.gov/documents/2026/09/14/2026-18838/modifying-the-scope-of-products-of-canada-subject-to-the-additional-duties-imposed-to-offset" target="_blank" rel="noopener noreferrer">포고 11064호(FR 2026-18838, 9/14 게재)</a>와 <a href="https://content.govdelivery.com/accounts/USDHSCBP/bulletins/429db0c" target="_blank" rel="noopener noreferrer">CBP CSMS #69851916(9/11)</a>입니다. 세율은 관세평가액의 50%입니다. 예시로 관세평가액 US$100만이면 추가관세는 US$50만입니다(Green Oil 실제 선적액은 반영하지 않은 예시).<br>이번 주(10/5~10/13 연방관보 대통령 문서)에 이 관세를 바꾸는 포고·지침은 <strong>확인한 출처와 기간에서 발견되지 않았습니다.</strong></td></tr>
+      <tr><th>② 환급 가능성<br>(제도)</th><td><span class="lb lb-fact">확정</span> CSMS #69851916은 9903.03.12~9903.03.14의 추가관세가 <strong>환급 대상</strong>이라고 적었습니다. 우리 UCO는 미국에서 재생디젤로 가공되므로 해당 제도는 제조환급입니다(<a href="https://www.law.cornell.edu/uscode/text/19/1313" target="_blank" rel="noopener noreferrer">19 U.S.C. §1313(a) 직접확인·§1313(b) 대체</a>). 수출되거나 감독하에 폐기된 제품분만 해당합니다.</td></tr>
+      <tr><th>③ 회수 가능액<br>· 귀속액</th><td><span class="lb lb-fact">확정</span> <strong>신청권자는 원칙적으로 제품 수출자</strong>입니다. 수출자가 서면으로 포기·양도하면 제조자·수입자 등이 신청할 수 있습니다(<a href="https://www.ecfr.gov/current/title-19/chapter-I/part-190/subpart-H/section-190.82" target="_blank" rel="noopener noreferrer">19 CFR §190.82</a>). 캐나다 판매자인 Green Oil은 이 규정상 신청권자가 아니므로 <strong>Green Oil 귀속액은 계약으로 정하지 않는 한 0</strong>입니다.<br><span class="lb lb-fact">확정</span> 제품이 <strong>CUSMA 국가(캐나다·멕시코)로 수출</strong>되면 환급액은 「미국에서 낸 관세」와 「상대국에서 낸 관세」 중 적은 쪽으로 제한됩니다(<a href="https://www.law.cornell.edu/uscode/text/19/1313" target="_blank" rel="noopener noreferrer">§1313(n)(2)</a>). 다만 CUSMA 원산지 규정을 충족하는 물품을 재료로 쓴 경우는 이 제한 대상에서 빠집니다(<a href="https://www.law.cornell.edu/uscode/text/19/4534" target="_blank" rel="noopener noreferrer">19 U.S.C. §4534(a)(5)</a>).<br><span class="lb lb-ai">AI 추론</span> 따라서 캐나다로 되돌아오는 재생디젤분의 환급은 <strong>우리 UCO의 CUSMA 원산지 충족 여부</strong>에 따라 전액이 될 수도, 사실상 0이 될 수도 있습니다. 이 부분은 원문 판독이며 <strong>환급 전문가의 서면 확인이 필요</strong>합니다.</td></tr>
+      <tr><th>④ 정정<br>(10/14)</th><td><span class="lb lb-ai">AI 추론</span> 지난 리포트(9/21~10/13 발행본)의 두 판단을 정정합니다.<br>㉠ 「인코텀즈가 DDP면 우리가, FOB·CIF면 바이어가 납세의무자·환급 신청 주체」라고 썼습니다. 수입신고 명의는 실제 신고 기록으로(<a href="https://www.law.cornell.edu/uscode/text/19/1484" target="_blank" rel="noopener noreferrer">19 U.S.C. §1484</a>), 환급 신청권은 §190.82로 정해지므로 <strong>인코텀즈만으로는 단정할 수 없습니다.</strong><br>㉡ 「1518.00.40은 설명이 'Other'라 대체환급이 막힌다」고 썼습니다. 그 제한 조문은 §1313(j)(5)로, <strong>미사용 물품 환급</strong>(§1313(j)(2))에 관한 것입니다. 제조환급 대체(§1313(b)) 조문에는 같은 문구가 없습니다. 하위 규정(19 CFR Part 190)상 제한이 있는지는 확인하지 못했습니다.<br>㉢ 「원산지 증빙으로는 이 관세가 내려가지 않는다」는 판단은 <strong>관세 부과 자체</strong>에 대해서는 유지합니다. 다만 위 ③처럼 <strong>환급액에는 원산지가 영향을 줄 수 있습니다.</strong></td></tr>
+      <tr><th>⑤ 그대로인 것</th><td><span class="lb lb-fact">확정</span> 보세구역 반입은 특권외국물품 지위로만 허용됩니다(CSMS #69851916). 제338조 포고문에는 품목 제외 신청 절차가 없습니다. 공식 의견 창구 일정은 「권고 ②」에 적었습니다. 상세 배경은 <a href="./2026-10-05.html">10/5 리포트</a>에 있습니다.</td></tr>
     </table>
-    </div>
   </div>
 
-  <div class="card">
-    <div class="card-header">
-      <div class="card-icon icon-canada">🍁</div>
-      <div class="card-title">연방 정책 &amp; 정치 <span>Federal</span></div>
-    </div>
-
-    <a class="news-item" href="https://www.bnnbloomberg.ca/press-releases/2026/10/06/farms-and-fuels-alliance-calls-for-overdue-clean-fuel-regulation-amendments-for-canadian-made-ethanol-by-year-end/" target="_blank" rel="noopener noreferrer">
-      <span class="tag tag-cfr">10/6 연방 · CFR</span>
-      <div class="news-title">10월 6일 농민·에탄올 업계 연합이 총리에게 「약속한 CFR 개정을 연말까지 확정하라」고 요구했습니다 — 개정 의사 발표 1년이 넘도록 초안이 나오지 않았다는 공개 압박입니다</div>
-      <div class="news-body"><strong>10월 6일</strong> 캐나다 농민·연료 연합(Farms and Fuels Alliance, 온타리오·퀘벡 옥수수 농가와 국내 에탄올 생산자 단체)이 <strong>총리에게 서한</strong>을 보내, 캐나다재생산업협회(Renewable Industries Canada)와 함께 <strong>청정연료규정(CFR) 표적 개정</strong>을 이행하라고 요구했다고 발표했습니다. 요구의 핵심은 <strong>국산 에탄올에 최소 1.4배 크레딧 가산(multiplier)</strong>을 <strong>2026년 말까지 발표·확정</strong>하라는 것입니다. 연합은 미국산 에탄올이 <strong>45Z 생산세액공제</strong>를 받으면서 캐나다 시장에서 국산과 같은 조건으로 경쟁해 <strong>캐나다 정책이 만든 수요가 수입으로 빠져나간다</strong>고 주장했고, <strong>「정부가 약속한 해결책은 아직 공표되지 않았다」</strong>고 적었습니다.<br><br><strong>Green Oil 관점:</strong> CFR 개정을 기다리는 쪽이 <strong>에탄올 업계까지 공개적으로 시한을 걸기 시작했다</strong>는 점이 이번 주의 변화입니다. 다만 이 요구는 <strong>에탄올 전용 가산</strong>이라, 그대로 반영되면 <strong>바이오디젤·재생디젤 원료(UCO) 쪽 혜택은 별도로 챙겨야</strong> 합니다. <strong>조치:</strong> 업계 단체(Advanced Biofuels Canada 등)를 통해 <strong>국내 바이오매스 기반 디젤·국내 원료에도 같은 가산이나 국내 함량 기준이 적용돼야 한다</strong>는 의견을 같은 시점에 내 두시기를 권합니다.</div>
-    </a>
-
-    <a class="news-item" href="https://www.pm.gc.ca/en/news/readouts/2026/10/11/prime-minister-carney-speaks-president-united-states-donald-j-trump" target="_blank" rel="noopener noreferrer">
-      <span class="tag tag-politics">10/11 연방 · 대미</span>
-      <div class="news-title">10월 11일 카니 총리가 트럼프 대통령과 통화하고 「캐나다의 대미 원유·경유 수출을 계속 늘리겠다」고 밝혔습니다 — 같은 날 미·러 경유 합의에는 반대 입장을 냈습니다</div>
-      <div class="news-body"><strong>10월 11일</strong> 카니 총리가 트럼프 대통령과 통화했다고 총리실이 발표했습니다. 카니 총리는 트럼프 대통령이 이끈 <strong>러시아·우크라이나 에너지 휴전</strong>을 지지하면서 러시아의 이행을 촉구했고, <strong>캐나다가 미국으로 가는 원유·경유 수출을 계속 늘리겠다</strong>고 밝혔습니다. 총리실은 이 수출이 <strong>하루 100만 배럴이 훨씬 넘는 경유</strong> 생산·공급을 받친다고 설명했는데, 분석 기사는 이 숫자가 <strong>캐나다산 원유로 미국에서 정제한 경유까지 포함</strong>한 것이고 <strong>추가 물량이나 일정은 제시되지 않았다</strong>고 봤습니다. 같은 날 젤렌스키 대통령과의 통화에서는 <strong>미·러 경유 공급 합의가 평화 노력과 정면으로 어긋난다</strong>고 말했습니다.<br><br><strong>Green Oil 관점:</strong> 대미 통상 갈등 속에서 정부가 <strong>캐나다를 「믿을 만한 에너지 공급국」으로 내세우는 협상 틀</strong>이 다시 확인됐습니다. 캐나다산 UCO가 미국 재생디젤의 원료라는 점도 <strong>같은 틀(북미 에너지 공급망)</strong>로 설명할 수 있어, CUSMA·제338조 의견서에 이 논리를 쓰시기를 권합니다. 경유값 쪽으로는 UCO 값의 바탕을 누르는 재료가 하나 더 붙은 셈입니다.</div>
-    </a>
-
-    <a class="news-item" href="https://www.pm.gc.ca/en/news/news-releases/2026/10/08/prime-minister-carney-announces-landmark-investment-retrofit-one" target="_blank" rel="noopener noreferrer">
-      <span class="tag tag-politics">10/8 연방</span>
-      <div class="news-title">10월 8일 카니 총리가 20억 달러 규모 주택 100만 호 개보수 계획을 발표했습니다 — 저소득 가구 열펌프 보조금 최대 1만 달러입니다</div>
-      <div class="news-body"><strong>10월 8일</strong> 카니 총리가 퀘벡 셔브룩에서 <strong>20억 달러로 주택 100만 호를 개보수</strong>하는 계획을 발표했습니다. <strong>「국가 열펌프 보조금」</strong>으로 최대 <strong>82만 가구</strong>의 전기 열펌프 전환을 돕고, 보조금은 <strong>중위소득 이하 가구 최대 1만 달러</strong>, 그 밖의 가구 <strong>2천 달러</strong>입니다. 공동주택은 <strong>8년간 28만 호</strong>(주택공사 25만·인프라은행 3만)를 지원합니다. 정부는 기름·전기 난방 가구가 <strong>연평균 1,400달러</strong>를 아끼고 <strong>배출량 2,500만 톤 이상</strong>이 줄 것으로 봤습니다.<br><br><strong>Green Oil 관점:</strong> <strong>우리 사업에 직접 닿는 조치는 아닙니다.</strong> 이번 주 연방 정부의 주요 기후·에너지 발표가 <strong>난방 전기화</strong> 쪽이었고, <strong>CFR 개정이나 바이오연료에 관한 연방 발표는 확인되지 않았다</strong>는 기록으로 남깁니다.</div>
-    </a>
-
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <div class="card-icon icon-prov">🏛️</div>
-      <div class="card-title">주정부 정책 &amp; 정치 <span>Provincial</span></div>
-    </div>
-
-    <a class="news-item" href="https://www.courthousenews.com/separatists-win-quebec-election-but-vow-to-wait-on-referendum/" target="_blank" rel="noopener noreferrer">
-      <span class="tag tag-prov-politics">10/5 퀘벡 · 총선 결과</span>
-      <div class="news-title">10월 5일 퀘벡 총선에서 퀘벡당이 소수정부를 세웠습니다 — 국민투표는 트럼프 대통령 퇴임 뒤로 미루겠다고 밝혔습니다</div>
-      <div class="news-body"><strong>10월 5일</strong> 퀘벡 총선에서 주권파 <strong>퀘벡당(PQ)이 59석</strong>을 얻어 과반(64석)에 5석 모자란 <strong>소수정부</strong>를 세웠습니다. 득표율 <strong>28%</strong>는 퀘벡 집권당으로는 역대 최저이고, 2022년 3석에서 크게 늘었습니다. <strong>자유당이 40석(24.4%)으로 제1야당</strong>이 됐습니다. 차기 주총리 <strong>폴 생피에르 플라몽동</strong>은 주권 국민투표를 <strong>트럼프 대통령이 물러난 뒤</strong>에 치르겠다고 해 <strong>빨라야 2028년</strong>이 됩니다. 현지 학자는 퀘벡 소수정부의 수명을 <strong>평균 18~24개월</strong>로 봤습니다.<br><br><strong>Green Oil 관점:</strong> 당장 우리 사업에 걸리는 조치는 없습니다. 다만 <strong>대미 통상 갈등 한가운데서 연방 통합에 새 변수</strong>가 생겼고, 퀘벡의 <strong>탄소시장·연료 정책에 관한 새 정부 입장은 이번 주 확인되지 않았습니다.</strong> 조각·시정연설에서 나오는 대로 정리하겠습니다.</div>
-    </a>
-
-    <a class="news-item" href="https://www.cbc.ca/news/canada/calgary/alberta-premier-danielle-smith-referendum-vote-9.7376571" target="_blank" rel="noopener noreferrer">
-      <span class="tag tag-prov-politics">10/9 앨버타 · 주민투표</span>
-      <div class="news-title">10월 19일 앨버타 주민투표를 앞두고 10월 9일 스미스 주총리가 「잔류로 나오면 내가 주총리인 동안 두 번째 분리 투표는 없다」고 밝혔습니다</div>
-      <div class="news-body"><strong>10월 9일</strong> 다니엘 스미스 앨버타 주총리가 CBC 인터뷰에서, <strong>10월 19일</strong> 주민투표에서 다수가 캐나다 잔류를 택하면 <strong>「내가 주총리인 동안」 분리 주민투표를 다시 하지 않겠다</strong>고 말했습니다. 이번 투표에는 <strong>10개 문항</strong>이 올라가며, 그중 하나가 <strong>캐나다에 남을지, 아니면 구속력 있는 두 번째 분리 투표 절차를 시작할지</strong>를 묻습니다(나머지는 이민 5개·헌법 4개). 분리 운동 지도부는 결과와 관계없이 <strong>운동을 이어 가겠다</strong>는 입장입니다.<br><br><strong>Green Oil 관점:</strong> 앨버타는 <strong>연방 CFR에 반대해 온 주</strong>입니다. 투표 결과는 직접적인 연료 규제 변화는 아니지만, <strong>연방-앨버타 관계와 연방의 에너지·기후 정책 여력</strong>에 영향을 줍니다. 결과는 다음 주에 정리하겠습니다.</div>
-    </a>
-
-    <a class="news-item" href="https://www.ctvnews.ca/regina/article/no-moe-shuts-down-elon-musks-calls-for-saskatchewan-to-separate/" target="_blank" rel="noopener noreferrer">
-      <span class="tag tag-prov-politics">10/7 사스카추완</span>
-      <div class="news-title">10월 7일 모 사스카추완 주총리가 머스크의 「사스카추완 분리」 권유를 「No」 한 마디로 거절했습니다</div>
-      <div class="news-body"><strong>10월 7일</strong> 스콧 모 사스카추완 주총리가 일론 머스크가 X에 올린 <strong>사스카추완 등의 분리 권유</strong>에 대해 X에 <strong>「No」</strong> 한 마디로 답해 공개적으로 거절했습니다.<br><br><strong>Green Oil 관점:</strong> <strong>바이오연료·CFR과 직접 관련은 없습니다.</strong> 연방 CFR에 가장 강하게 반대해 온 주정부가 <strong>분리론과는 선을 그었다</strong>는 기록으로 남깁니다. 이번 주 사스카추완 정부가 <strong>CFR이나 카놀라 공급망에 관해 낸 발표는 확인되지 않았습니다.</strong> 매니토바(키뉴 주총리)도 이번 주 바이오연료·카놀라 관련 발표는 확인되지 않았습니다.</div>
-    </a>
-
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <div class="card-icon icon-export">🚢</div>
-      <div class="card-title">수출 시장 <span>미국 · EU</span></div>
-    </div>
-
-    <div class="empty">이번 주(10/6 – 10/12) 이 분야에서 발행일이 확인된 새 발표·보도는 없었습니다.</div>
-
-  </div>
-
+  <!-- ── 이번 주 변화 상세 ── -->
   <div class="card">
     <div class="card-header">
       <div class="card-icon icon-market">📈</div>
-      <div class="card-title">UCO 시장 <span>크레딧 · 원료 시세</span></div>
+      <div class="card-title">이번 주 변화 상세 <span>사실 → 사업 영향 → 권고</span></div>
     </div>
 
-    <a class="news-item" href="https://www.federalregister.gov/documents/2026/10/09/2026-20855/emergency-tax-relief-on-diesel-fuel" target="_blank" rel="noopener noreferrer">
-      <span class="tag tag-us">10/5 미국 · 경유세</span>
-      <div class="news-title">10월 5일 트럼프 대통령이 행정명령 14435호에 서명했습니다 — 12월 31일까지 착색 경유의 도로 사용에 벌칙을 물리지 않고 경유세 납부를 유예합니다</div>
-      <div class="news-body"><strong>10월 5일</strong> 서명되고 <strong>10월 9일</strong> 연방관보에 실린 <strong>행정명령 14435호 「경유 긴급 세금 감면」</strong>은 재무장관에게 <strong>5일 안에</strong> ① 국세법 7508A조에 따른 구제 요건을 판단해 <strong>10월 5일~12월 31일</strong>에 발생한 해당 경유세 납부를 <strong>벌칙·이자 없이 유예</strong>하고, ② <strong>착색(면세) 경유를 도로용으로 팔거나 써도</strong> 국세법 6715조 <strong>벌칙을 물리지 않는다</strong>고 국세청이 발표하도록 지시했습니다. 유예액을 아예 없애는 방안(입법 포함)은 <strong>「검토」</strong>로만 적혀 있습니다. 연방 경유세는 <strong>갤런당 24.4센트</strong>이고, 주(州) 세금·벌칙은 이 명령과 무관합니다. 10월 6일 연료유통업계는 <strong>「시행 지침이 아직 없어 실제 적용은 불분명하다」</strong>고 밝혔습니다.<br><br><strong>Green Oil 관점:</strong> 경유 소매가를 끌어내리는 조치라 <strong>재생디젤 판매가와 UCO 매입 여력에는 하방 재료</strong>입니다. 착색 경유 도로 사용 허용이 <strong>RFS 의무량 산정</strong>에 어떤 영향을 주는지는 이번 명령에 언급이 없어 <strong>확인하지 못했습니다.</strong></div>
-    </a>
+    <div class="item">
+      <div class="item-h"><span class="tag tag-us">10/12 → 10/13 · RFS</span> <span class="lb lb-prop">제안</span> EPA 면제분 재배분안</div>
+      <p><strong>사실:</strong> EPA가 10/2 백악관 관리예산처에 넘긴 규칙안이 10/12 심사를 마쳤습니다(<a href="https://www.agbull.com/omb-clears-review-of-epa-plan-to-restore-waived-biofuel-obligations/" target="_blank" rel="noopener noreferrer">Ag Bull 10/12</a>). 10/13에는 EPA가 8/31 2025년분 소규모 정유사 면제로 빠진 <strong>약 7억 7천만 RIN</strong>을 100% 다시 배분하는 안을 제안했습니다. 방식은 ① 2026·2027년에 절반씩 ② 전량 2027년 중 하나이고, 의견 마감은 12/4입니다(<a href="https://www.biobased-diesel.com/post/us-epa-proposes-100-reallocation-for-additional-2025-sre-volumes" target="_blank" rel="noopener noreferrer">Biobased Diesel Daily 10/13, EPA 발표 인용</a>). 7억 7천만은 <strong>전체 RIN 기준</strong>이며, D4(바이오매스 기반 디젤) 몫은 확인한 발표문에 없었습니다. 10/8에는 미 하원의원 39명이 10/16까지 제안하라는 초당적 서한을 냈습니다. <span class="lb lb-ind">요구(의회)</span></p>
+      <p><strong>사업 영향:</strong> 확정되면 의무량이 늘어 D4·UCO 수요를 받치는 방향입니다. 다만 ②안이면 2026년 효과가 거의 없습니다. 실제 UCO 매입량이 얼마나 늘지는 이 자료만으로 단정할 수 없습니다. <span class="lb lb-ai">AI 추론</span></p>
+      <p><strong>권고:</strong> 「권고 ②」에서 의견 제출 여부를 정하실 때, ①안이 우리 2026년 물량에 더 빨리 반영된다는 점을 함께 검토하시기를 권합니다. <span class="lb lb-ai">AI 추론</span></p>
+    </div>
 
-    <a class="news-item" href="https://www.agbull.com/trump-says-putin-agrees-to-diesel-deal-delivery-details-will-determine-relief/" target="_blank" rel="noopener noreferrer">
-      <span class="tag tag-us">10/9 미국 · 경유 공급</span>
-      <div class="news-title">10월 9일 트럼프 대통령이 「푸틴이 경유 최대 480만 톤 공급에 합의했다」고 발표했고 재무부가 임시 일반허가를 냈습니다 — 즉시 물량은 30만 톤입니다</div>
-      <div class="news-body"><strong>10월 9일</strong> 트럼프 대통령이 푸틴 대통령과 통화한 뒤 <strong>러시아가 경유 최대 480만 톤</strong>을 세계 시장에 공급하기로 했다고 발표했습니다. 일정은 <strong>즉시 30만 톤 → 11월 50만 톤 → 이어서 100만 톤</strong>, 그리고 <strong>러시아 정제 여건에 따라 300만 톤</strong>입니다. 같은 날 <strong>재무부가 러시아산 경유 공급을 허용하는 임시 일반허가</strong>를 즉시 발급했다고 보도됐습니다. 미국 경유 소매가는 <strong>10월 9일 갤런당 약 6.28달러</strong>(AAA)로, 이틀 전 <strong>6.30달러</strong>에서 소폭 내려왔습니다. 분석 기사는 <strong>약 3분의 2가 조건부</strong>이고, 러시아가 우크라이나의 정유시설 공격으로 <strong>경유 수출을 10월까지 제한</strong>해 온 점을 들어 실제 물량은 선적으로 확인해야 한다고 봤습니다.<br><br><strong>Green Oil 관점:</strong> 실제 선적이 이어지면 <strong>북미 경유값 하락 → 재생디젤 마진·UCO 입찰가에 하방 압력</strong>이 커집니다. 반대로 물량이 대부분 조건부라 <strong>단기 효과는 제한적</strong>일 수 있습니다.</div>
-    </a>
+    <div class="item">
+      <div class="item-h"><span class="tag tag-us">10/5 · 10/9 · 10/11 · 경유</span> <span class="lb lb-fact">확정</span> 미국 경유값 대책 세 가지</div>
+      <p><strong>사실:</strong> ① <a href="https://www.federalregister.gov/documents/2026/10/09/2026-20855/emergency-tax-relief-on-diesel-fuel" target="_blank" rel="noopener noreferrer">행정명령 14435호</a>(10/5 서명, 10/9 관보): 10/5~12/31 착색(면세) 경유를 도로에서 써도 국세법 §6715 벌칙을 물리지 않습니다. 해당 경유세 납부는 §7508A에 따라 유예하도록 재무부에 지시했습니다(면제가 아니라 유예이고, 면제는 「검토」로만 적혀 있습니다). ② 10/9 러시아 경유 최대 480만 t 공급 합의 발표: 즉시 30만 t이고, 300만 t은 러시아 정제 여건에 달려 있습니다(<a href="https://www.agbull.com/trump-says-putin-agrees-to-diesel-deal-delivery-details-will-determine-relief/" target="_blank" rel="noopener noreferrer">Ag Bull 10/9</a>, 물량 해석은 분석가 의견). ③ 10/11 카니 총리가 트럼프 대통령과 통화한 뒤 대미 원유·경유 수출을 계속 늘리겠다고 밝혔습니다(<a href="https://www.pm.gc.ca/en/news/readouts/2026/10/11/prime-minister-carney-speaks-president-united-states-donald-j-trump" target="_blank" rel="noopener noreferrer">총리실 발표</a>, 추가 물량·일정은 없음). 미국 경유 <strong>소매가</strong>(AAA 전국 평균, US$/갤런): 6.37(10/2) → 6.30(10/7) → 6.28(10/9). <strong>도매가</strong>는 이번 주 확인하지 않았습니다.</p>
+      <p><strong>사업 영향:</strong> 재생디젤 판매가에 하방 압력이고, 바이어의 UCO 가격 인하 요구 근거가 될 수 있습니다. 착색 경유 도로 사용 허용이 RFS 의무량 산정에 미치는 영향은 명령문에 언급이 없어 확인하지 못했습니다. <span class="lb lb-ai">AI 추론</span></p>
+      <p><strong>권고:</strong> 「권고 ③」 참고. 미국 세금 유예는 캐나다 수거 차량에는 적용되지 않습니다.</p>
+    </div>
 
-    <a class="news-item" href="https://www.agbull.com/omb-clears-review-of-epa-plan-to-restore-waived-biofuel-obligations/" target="_blank" rel="noopener noreferrer">
-      <span class="tag tag-us">10/12 미국 · RFS</span>
-      <div class="news-title">10월 12일 환경보호청의 면제분 재배분 규칙안이 백악관 심사를 통과했습니다 — 10월 13일 약 7억 7천만 RIN을 100% 재배분하는 안이 공식 제안됐습니다</div>
-      <div class="news-body"><strong>10월 2일</strong> 환경보호청이 백악관 관리예산처에 넘긴 RFS 재배분 규칙안이 <strong>10월 12일 심사를 마쳤습니다</strong>. 8월 31일 2025년분 소규모 정유사 면제 결정이 예상보다 커서 <strong>약 7억 7천만 RIN</strong>어치 의무가 빠졌는데, 이를 다시 배분하는 안입니다. <strong>10월 8일</strong>에는 미 하원의원 39명(초당적)이 <strong>10월 16일까지 보완 규칙을 제안하라</strong>는 서한을 보냈습니다.<br><br><strong>⚡ 10월 13일 속보(보고 주간 다음 날):</strong> 젤딘 환경보호청장이 아이오와에서 <strong>차이분 100% 재배분</strong>을 공식 제안했습니다. 방식은 <strong>① 2026·2027년에 절반씩</strong> 또는 <strong>② 전량 2027년</strong> 두 가지이고, <strong>의견 마감은 12월 4일</strong>입니다. 2026년분 준수 보고 기한(2027년 3월 31일)이 늦춰질 수 있다고도 밝혔습니다.<br><br><strong>Green Oil 관점:</strong> 확정되면 <strong>바이오매스 기반 디젤 의무량이 그만큼 늘어 D4·UCO 수요를 받칩니다.</strong> 다만 <strong>②안(전량 2027년)</strong>이면 <strong>내년 물량 효과는 거의 없고 2027년에 몰립니다</strong> — 2026년 계약 가격에 미리 반영하지 마시고, 최종 확정 방식을 보고 2027년 물량 조건을 협상하시는 편이 낫습니다.</div>
-    </a>
+    <div class="item">
+      <div class="item-h"><span class="tag tag-market">10/9 · 시세</span> <span class="lb lb-fact">확정</span> 대두유 선물 주간 하락</div>
+      <p><strong>사실:</strong> CBOT 대두유 12월물 선물 종가는 <strong>68.02 US¢/lb(10/9)</strong>로, 한 주간 0.60 US¢ 내렸습니다. 같은 날 미 농무부 10월 수급 전망은 대두 생산을 사상 최대로 내놨습니다(<a href="https://www.agbull.com/usda-yield-shock-sinks-corn-and-wheat-as-soybeans-cotton-and-cattle-close-higher/" target="_blank" rel="noopener noreferrer">Ag Bull 10/10</a>). <strong>UCO·황색 그리스·D4의 이번 주 공개 시세는 확인한 출처와 기간에서 발견되지 않았습니다.</strong> 마지막 확인치는 걸프 UCO 71 US¢/lb(9/24, 인도가 평가)와 D4 US$1.9275/RIN(9/18)입니다.</p>
+      <p><strong>사업 영향:</strong> 대두유는 재생디젤 원료 시장에서 UCO의 대체재라, 약세는 UCO 매입가 인하 논거가 될 수 있습니다. 대두유 가격만으로 UCO 실거래가를 추정하지는 않았습니다. <span class="lb lb-ai">AI 추론</span></p>
+    </div>
 
-    <a class="news-item" href="https://www.agbull.com/usda-yield-shock-sinks-corn-and-wheat-as-soybeans-cotton-and-cattle-close-higher/" target="_blank" rel="noopener noreferrer">
-      <span class="tag tag-market">10/9 미국 · 시세</span>
-      <div class="news-title">10월 9일 시카고 대두유 12월물이 파운드당 68.02센트로 마감해 한 주간 0.60센트 내렸습니다 — 같은 날 미 농무부는 사상 최대 대두 생산을 전망했습니다</div>
-      <div class="news-body"><strong>10월 9일</strong> 시카고 <strong>대두유 12월물은 파운드당 68.02센트</strong>로 마감했습니다. 금요일 하루는 0.10센트 올랐지만 <strong>한 주간 0.60센트 하락</strong>해 앞 주 0.78센트 상승분의 약 77%를 되돌렸습니다. 같은 날 발표된 <strong>미 농무부 10월 수급 전망</strong>은 옥수수 생산을 사상 두 번째, <strong>대두 생산을 사상 최대</strong>로 올렸습니다. 이번 주 <strong>UCO·황색 그리스·D4 크레딧의 공개 시세는 확인되지 않았습니다.</strong><br><br><strong>Green Oil 관점:</strong> 대두유는 <strong>재생디젤 원료 시장에서 UCO의 기준 대체재</strong>입니다. 대두유가 약하면 바이어의 <strong>UCO 매입가 인하 논거</strong>가 됩니다.</div>
-    </a>
-
+    <div class="item">
+      <div class="item-h"><span class="tag tag-cfr">10/6 · CFR</span> <span class="lb lb-ind">업계 요구</span> 에탄올 업계 「CFR 개정 연말 확정」 요구</div>
+      <p><strong>사실:</strong> Farms and Fuels Alliance가 캐나다재생산업협회와 함께 총리에게 서한을 보내, 국산 에탄올 크레딧 <strong>최소 1.4배 가산</strong>을 2026년 말까지 확정하라고 요구했습니다(<a href="https://www.bnnbloomberg.ca/press-releases/2026/10/06/farms-and-fuels-alliance-calls-for-overdue-clean-fuel-regulation-amendments-for-canadian-made-ethanol-by-year-end/" target="_blank" rel="noopener noreferrer">보도자료 10/6</a>). 관보에는 개정안이 없었습니다(아래 「변화 없는 감시 항목」).</p>
+      <p><strong>사업 영향:</strong> 요구 내용이 에탄올 전용이라, 그대로 반영되면 UCO 기반 연료에는 혜택이 없을 수 있습니다. <span class="lb lb-ai">AI 추론</span></p>
+      <p><strong>권고:</strong> 업계 단체를 통해 바이오매스 기반 디젤·국내 원료도 같은 틀에 넣어 달라는 의견을 낼지 검토하실 것을 권합니다(담당: 대외협력, 기한: 연말 전). <span class="lb lb-ai">AI 추론</span></p>
+    </div>
   </div>
 
+  <!-- ── 캐나다 정치 ── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-prov">🏛️</div>
+      <div class="card-title">캐나다 정치 <span>사업 직접 영향 낮음 · 기록용</span></div>
+    </div>
+    <ul class="short">
+      <li><span class="lb lb-fact">확정</span> <strong>퀘벡</strong> — 10/5 총선에서 퀘벡당이 59석(득표 28%)으로 소수정부를 세웠습니다. 차기 주총리는 국민투표를 트럼프 대통령 퇴임 뒤(빨라야 2028년)로 미루겠다고 밝혔습니다(<a href="https://www.courthousenews.com/separatists-win-quebec-election-but-vow-to-wait-on-referendum/" target="_blank" rel="noopener noreferrer">Courthouse News 10/6</a>). 탄소시장 입장은 확인하지 못했습니다.</li>
+      <li><span class="lb lb-fact">확정</span> <strong>앨버타</strong> — 10/19 주민투표(10개 문항, 분리 절차 개시 여부 포함)를 앞두고, 10/9 스미스 주총리는 잔류가 나오면 자신의 재임 중 재투표는 없다고 했습니다(<a href="https://www.cbc.ca/news/canada/calgary/alberta-premier-danielle-smith-referendum-vote-9.7376571" target="_blank" rel="noopener noreferrer">CBC 10/9</a>).</li>
+      <li><span class="lb lb-fact">확정</span> <strong>사스카추완</strong> — 10/7 모 주총리가 머스크의 분리 권유에 「No」라고 답했습니다(<a href="https://www.ctvnews.ca/regina/article/no-moe-shuts-down-elon-musks-calls-for-saskatchewan-to-separate/" target="_blank" rel="noopener noreferrer">CTV 10/7</a>). 매니토바를 포함해 CFR·카놀라 관련 주정부 발표는 확인한 출처에서 발견되지 않았습니다.</li>
+      <li><span class="lb lb-fact">확정</span> <strong>연방</strong> — 10/8 카니 총리가 C$20억 규모 주택 개보수·열펌프 보조금(중위소득 이하 가구 최대 C$1만)을 발표했습니다(<a href="https://www.pm.gc.ca/en/news/news-releases/2026/10/08/prime-minister-carney-announces-landmark-investment-retrofit-one" target="_blank" rel="noopener noreferrer">총리실 10/8</a>). 바이오연료 관련 연방 발표는 발견되지 않았습니다.</li>
+    </ul>
+  </div>
+
+  <!-- ── 변화 없는 감시 항목 ── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-canada">⭐</div>
+      <div class="card-title">변화 없는 감시 항목 <span>한 줄 · 상세는 직전 리포트</span></div>
+    </div>
+    <ul class="short">
+      <li><strong>CFR 개정안</strong> — 관보 Part I 제160권 제41호(10/10)와 Part II 제20호(10/7)에서 발견되지 않았습니다. 개정 의사 발표(2025-09-05)로부터 1년 5주가 지났습니다. 상세: <a href="./2026-10-05.html">10/5 리포트</a></li>
+      <li><strong>45Z 최종규칙·증빙 요건</strong> — 연방관보 10/5~10/13 발행분에서 '45Z'·'renewable fuel'·'used cooking oil'·'clean fuel production credit' 어구로 찾은 결과 발견되지 않았습니다. 캐나다산 UCO의 적격은 <a href="https://www.irs.gov/pub/irs-drop/n-26-53.pdf" target="_blank" rel="noopener noreferrer">IRS Notice 2026-53 §4.02(2)</a>와 §45Z(f)(1)(A)(iii)에 근거합니다. UCO 증빙 요건은 최종규칙(제안 §1.45Z-4(g))으로 미뤄져 있습니다.</li>
+      <li><strong>BC 총선(10/24)</strong> — 저탄소연료기준(LCFS) 관련 공약은 발견되지 않았습니다. TV 토론은 10/14에 열립니다.</li>
+    </ul>
+  </div>
+
+  <!-- ── 리스크 레이더 ── -->
   <div class="card">
     <div class="card-header">
       <div class="card-icon icon-risk">⚡</div>
@@ -499,31 +494,63 @@ a.news-item .news-title::after { content: ' ↗'; font-size: 10px; color: #2e8b2
     <div class="risk-grid">
       <div class="risk-col red">
         <div class="risk-col-title">🔴 관심 요망</div>
-        <div class="risk-entry">🔴 <strong>우리 사업의 최대 현안입니다 — UCO 수출에 50% 관세가 계속 붙고 있고, 품목 제외 절차는 존재하지 않습니다.</strong> 관세평가액의 <strong>절반</strong>이라 <strong>100만 달러 선적이면 50만 달러</strong>입니다. 이번 주 이 관세에 관한 <strong>새 포고·지침은 없었습니다</strong>. <strong>조치:</strong> ① <strong>제조환급 구조</strong>를 바이어와 확정하고 <strong>환급금 귀속을 계약서에 명시</strong>하실 것을 권합니다. ② <strong>수거처·수거일·선적 단위를 잇는 이력 자료</strong>를 지금 형식대로 남기십시오(환급·45Z·EU 인증에 모두 쓰이며 소급 작성이 안 됩니다). ③ 공식 의견 창구 두 곳 — <strong>11월 9일 국제무역위원회 제338조(g)</strong>(마감까지 4주)와 <strong>2027년 1월 12일 무역대표부 CUSMA 공동검토</strong> — 을 한 벌의 자료로 준비하실 것을 권합니다.</div>
-        <div class="risk-entry"><strong>경유값을 누르는 조치가 한 주에 세 건 더 나왔습니다 — 4분기 UCO 가격 협상에 불리한 재료입니다.</strong> <strong>행정명령 14435호(10/5, 착색 경유 도로 사용·경유세 유예, 12/31까지)</strong>와 <strong>러시아 경유 최대 480만 톤 공급 합의(10/9)</strong>·<strong>캐나다 대미 경유 수출 최대 유지(10/11)</strong>로 미국 경유 소매가가 <strong>6.37달러(10/2) → 6.28달러(10/9)</strong>로 내려왔고, 대두유 12월물도 <strong>주간 0.60센트</strong> 밀렸습니다. <strong>조치:</strong> 협상에서 <strong>시세 하락분과 관세 부담분을 분리</strong>하시고, 10월 13일 제안된 환경보호청 재배분안이 <strong>확정(의견 마감 12/4 이후)</strong>되기 전까지는 <strong>현 수준에서 장기 고정가를 피하고 단기·연동 계약</strong>을 유지하시는 편이 낫습니다.</div>
+        <div class="risk-entry">미국 UCO 50% 추가관세 유지. 환급 귀속은 계약·원산지에 달려 있습니다 → 권고 ①</div>
+        <div class="risk-entry">경유값 대책 세 가지로 UCO 가격 하방 압력이 생겼습니다 → 권고 ③</div>
       </div>
       <div class="risk-col amber">
         <div class="risk-col-title">🟡 모니터링 필요</div>
-        <div class="risk-entry">⭐ <strong>캐나다 청정연료규정(CFR) 개정안 — 이번 주에도 게재되지 않았습니다.</strong> <strong>10월 10일 Part I 제160권 제41호</strong>의 「제안규정」은 <strong>멸종위기종법 부칙 개정·전파법 면제명령</strong>뿐이었고, <strong>10월 7일 Part II 제20호</strong>(SOR/2026-193~203)에도 CFR은 없었습니다. 개정 의사 발표(2025년 9월 5일)로부터 <strong>1년 5주</strong>가 지났습니다. <strong>10월 6일 에탄올 업계가 「연말까지 확정」을 공개 요구</strong>해 압박은 커졌지만, 요구 내용이 <strong>에탄올 전용 1.4배 가산</strong>이라는 점에 유의하십시오. <strong>조치:</strong> 업계 단체를 통해 <strong>바이오매스 기반 디젤·국내 원료도 같은 틀에 넣어 달라</strong>는 의견을 지금 내 두시기를 권합니다.</div>
-        <div class="risk-entry">⭐ <strong>45Z 최종규칙·증빙 요건 — 이번 주 새 문서가 없었습니다.</strong> 연방관보를 <strong>10월 5일~13일</strong> 발행일로 <strong>'45Z'·'renewable fuel'·'used cooking oil'·'clean fuel production credit'</strong> 어구별 조회해 <strong>모두 0건</strong>이었습니다. 캐나다산 UCO의 적격은 <strong>9월 8일 고시 2026-53으로 확정</strong>돼 있고, 남은 것은 <strong>증빙·기록보존 요건</strong>입니다. 10월 9일 한 업계 컨소시엄이 <strong>「곡물 원료의 장부 의무는 소유권을 가진 주체에 붙는다」</strong>는 해석을 내고 재무부에 같은 방향의 최종규칙을 요청했는데, <strong>곡물 대상 해석이고 정부 검토를 거치지 않은 것</strong>입니다. <strong>조치:</strong> 우리 이력 자료도 <strong>소유권 이전 시점(수거·판매) 단위</strong>로 끊어 두시면 어느 쪽으로 확정돼도 쓰기 쉽습니다.</div>
-        <div class="risk-entry"><strong>UCO·D4 크레딧 — 이번 주 공개적으로 확인되는 시세가 없었습니다.</strong> 마지막 확인치는 <strong>걸프 UCO 71센트(9/24)</strong>, <strong>D4 1.9275달러(9/18)</strong>입니다. 시세를 확인하지 못한 주에는 <strong>숫자를 추정하지 않고 비워 둡니다.</strong></div>
-        <div class="risk-entry"><strong>앨버타 주민투표(10월 19일)</strong> — 캐나다 잔류 여부와 두 번째 분리 투표 절차 개시를 묻는 문항이 포함됩니다. 결과에 따라 <strong>연방-앨버타 관계와 연방 CFR 운용</strong>에 변수가 생길 수 있습니다. 결과는 다음 주에 정리하겠습니다.</div>
-        <div class="risk-entry"><strong>BC 조기 총선(10월 24일)</strong> — BC 저탄소연료기준(LCFS, 경유 8%·휘발유 5%)은 국내 재생디젤 수요를 받치는 제도입니다. 이번 주 공약에서 <strong>LCFS 언급은 확인되지 않았고</strong>, 유일한 TV 토론이 <strong>10월 14일</strong>에 열립니다.</div>
-        <div class="risk-entry"><strong>퀘벡 주권파 소수정부(10월 5일)</strong> — 국민투표는 <strong>빨라야 2028년</strong>이지만, 대미 통상 갈등 중 연방 통합에 새 변수가 생겼습니다. 새 정부의 <strong>탄소시장·연료 정책 입장은 아직 확인되지 않았습니다.</strong></div>
+        <div class="risk-entry">CFR 개정안 미게재(1년 5주)</div>
+        <div class="risk-entry">45Z 증빙 요건 미확정</div>
+        <div class="risk-entry">UCO·D4 이번 주 시세 미확인</div>
+        <div class="risk-entry">앨버타 주민투표 10/19 · BC 총선 10/24</div>
       </div>
       <div class="risk-col green">
         <div class="risk-col-title">🟢 기회 요인</div>
-        <div class="risk-entry"><strong>환경보호청의 면제분 100% 재배분이 앞당겨 제안됐습니다.</strong> 규칙안이 <strong>10월 12일 백악관 심사를 통과</strong>했고 <strong>10월 13일 공식 제안</strong>됐습니다(약 7억 7천만 RIN, 의견 마감 12월 4일). 확정되면 <strong>D4 수요가 늘어 UCO 수요를 받칩니다.</strong> <strong>조치:</strong> 두 방식 중 <strong>①안(2026·2027년 절반씩)</strong>이 우리 물량에 더 빨리 반영되니, 업계 단체를 통한 의견 제출 여부를 검토하실 것을 권합니다(캐나다 기업도 의견 제출 가능).</div>
-        <div class="risk-entry"><strong>CFR 개정을 앞당길 업계 목소리가 커졌습니다.</strong> 10월 6일 농민·에탄올 업계가 총리 앞 서한으로 <strong>「연말 확정」</strong>을 요구했습니다. 정부가 움직일 때 <strong>바이오디젤·재생디젤 원료도 함께 다뤄지도록</strong> 지금 의견을 보태면 효과가 큽니다.</div>
-        <div class="risk-entry"><strong>수거 차량 연료비 부담이 줄어드는 방향입니다.</strong> 미국 경유 소매가가 <strong>6.37달러(10/2) → 6.30달러(10/7) → 6.28달러(10/9)</strong>로 내려왔고, 10월 11일 캐나다 정부가 대미 경유 수출 최대 유지를 약속했고, 러시아 물량이 실제로 선적되면 북미 경유 시장 전반에 하방 압력이 더해집니다(미국 행정명령의 세금 유예 자체는 캐나다 차량에는 적용되지 않습니다).</div>
+        <div class="risk-entry">EPA 재배분안 제안. 의견 마감 12/4 → 권고 ②</div>
+        <div class="risk-entry">CUSMA 원산지 충족 시 캐나다향 재생디젤분 환급 상한이 적용되지 않을 수 있습니다(전문가 확인 필요) → 권고 ①</div>
       </div>
     </div>
+  </div>
+
+  <!-- ── 지난주 권고 점검 ── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-summary">🔁</div>
+      <div class="card-title">지난주 권고 점검 <span>10/5 리포트 권고 기준</span></div>
+    </div>
+    <table class="act">
+      <thead><tr><th>지난주 권고</th><th>실행 여부</th><th>판단 변경과 이유</th></tr></thead>
+      <tbody>
+        <tr><td>제조환급 구조를 바이어와 확정하고 환급금 귀속을 계약서에 명시</td><td>미확인(회사 확인 필요)</td><td><strong>수정</strong>했습니다. 신청권자가 원칙적으로 수출자이고(§190.82) 캐나다향은 상한이 있을 수 있어(§1313(n)(2)), 귀속을 정하기 전에 신청 구조와 원산지부터 확인하는 순서로 바꿨습니다 → 권고 ①</td></tr>
+        <tr><td>수거처·수거일·선적 단위 이력 자료를 지금 형식대로 보관</td><td>미확인(회사 확인 필요)</td><td><strong>유지</strong>합니다. 45Z 증빙(Notice 2026-53)과 환급 직접확인에 모두 필요하고, CUSMA 원산지 증빙에도 쓰입니다.</td></tr>
+        <tr><td>11/9 국제무역위원회·2027-01-12 무역대표부 의견 준비</td><td>미확인(회사 확인 필요)</td><td><strong>확대</strong>했습니다. 10/13 EPA 재배분안(12/4 마감)이 추가돼 창구가 셋입니다 → 권고 ②</td></tr>
+        <tr><td>시세 하락분과 관세 부담분 분리, 저점 장기 고정 회피</td><td>미확인(회사 확인 필요)</td><td><strong>유지</strong>합니다. 경유 하방 재료가 더해졌습니다 → 권고 ③</td></tr>
+        <tr><td>EPA 재배분 제안 전 D4 연동 계약의 하한 점검</td><td>미확인(회사 확인 필요)</td><td><strong>상황 변화</strong>가 있습니다. 10/13 제안이 나와 하방 위험이 일부 줄었습니다. 확정 방식(①·②안)을 보고 다시 판단하시기를 권합니다.</td></tr>
+        <tr><td>업계 단체를 통한 CFR 의견 전달</td><td>미확인(회사 확인 필요)</td><td><strong>유지</strong>합니다. 10/6 에탄올 업계 요구로 지금이 시점상 맞다고 봅니다.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── 검증 기록 ── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-sources">🧾</div>
+      <div class="card-title">검증 기록 <span>검색 범위 · 확인 시각 · 일관성 검사</span></div>
+    </div>
+    <ul class="short">
+      <li><strong>미국 연방관보 API</strong> — 발행일 10/5~10/12(10/12 08:20 EDT), 10/10~10/13(10/13 확인) 범위에서 어구 '45Z'·'renewable fuel'·'used cooking oil'·'clean fuel production credit'·'biodiesel'·'Renewable Fuel Standard'·'biofuel'로 찾았고 모두 0건이었습니다. 대통령 문서는 「제조업의 날」 포고와 행정명령 14435호뿐이었습니다.</li>
+      <li><strong>캐나다 관보</strong> — Part I 제41호(10/10) 색인과 Part II 연도 색인·제20호(10/7) 색인을 직접 열었습니다(10/12 확인). CFR은 발견되지 않았습니다.</li>
+      <li><strong>업계 피드</strong> — ISCC RSS, Biobased Diesel Daily RSS, Ag Bull RSS, Advanced Biofuels Canada RSS를 확인했습니다(10/12·10/13). 10/8~10/13 ISCC의 UCO 관련 발표는 발견되지 않았습니다.</li>
+      <li><strong>원문 대조(10/14)</strong> — CSMS #69851916 본문(환급·보세구역 문단), IRS Notice 2026-53 §4.02(2), 19 U.S.C. §1313(a)(b)(j)(5)(n)(2)·§4534(a)·§1484, 19 CFR §190.82(eCFR API), HTS 1518.00.40.00 설명('Other')을 대조했습니다.</li>
+      <li><strong>발행일 확인</strong> — 출처의 기사·보도자료는 모두 페이지 메타(<code>datePublished</code>·<code>article:published_time</code>) 또는 본문 날짜로 발행일을 확인했습니다.</li>
+      <li><strong>일관성 검사</strong> — 제목·파일명·날짜(2026-10-13)·주간(10/6–10/12)·단위를 확인했습니다. 외부 링크 28개를 10/14에 점검했고, 27개가 정상(HTTP 200)이었습니다. Courthouse News 1개는 스크립트 접근이 막혔지만(403) 10/12 본문을 열어 확인했습니다. 같은 주 카놀라 리포트(10/12)와 대조했습니다. 45Z(새 지침 없음)·CFR(관보 미게재, 에탄올 업계 요구)·권고 방향(바이오디젤 원료도 국산 우대에 넣도록 의견)이 일치합니다. 다만 업계 서한의 수신자는 카놀라 리포트가 「환경기후변화부 장관」(Manitoba Co-operator 10/9), 이 리포트가 「총리」(연합 보도자료 10/6)로 적었습니다. 출처가 달라 각각 원문대로 두었습니다. FX 리포트(10/12)의 제338조 경과(8/22 발효·9/15 UCO 편입·9/29 수입금지·10/2 CUSMA 의견수렴)도 이 리포트와 일치합니다.</li>
+    </ul>
   </div>
 
   <div class="card">
     <div class="card-header">
       <div class="card-icon icon-sources">🔗</div>
-      <div class="card-title">출처 <span>Sources · 발행일 개별 확인 완료</span></div>
+      <div class="card-title">출처 <span>Sources · 발행일 개별 확인 · 법령은 10/14 원문 대조</span></div>
     </div>
     <div class="source-row"><div class="src-num">1</div><div><a class="src-link" href="https://www.federalregister.gov/documents/2026/10/09/2026-20855/emergency-tax-relief-on-diesel-fuel" target="_blank" rel="noopener noreferrer">Emergency Tax Relief on Diesel Fuel (Executive Order 14435, FR 2026-20855)</a><div class="src-meta">Federal Register · 2026-10-09</div></div></div>
     <div class="source-row"><div class="src-num">2</div><div><a class="src-link" href="https://www.energymarketersofamerica.org/regulatoryreport/archives/2026/rr_10_06_26.html" target="_blank" rel="noopener noreferrer">President Trump Directs Diesel Tax Relief; Federal and State Implementation Remains Unclear</a><div class="src-meta">Energy Marketers of America · 2026-10-06</div></div></div>
@@ -546,6 +573,13 @@ a.news-item .news-title::after { content: ' ↗'; font-size: 10px; color: #2e8b2
     <div class="source-row"><div class="src-num">19</div><div><a class="src-link" href="https://www.courthousenews.com/separatists-win-quebec-election-but-vow-to-wait-on-referendum/" target="_blank" rel="noopener noreferrer">Separatists win Quebec election but vow to wait on referendum</a><div class="src-meta">Courthouse News Service · 2026-10-06</div></div></div>
     <div class="source-row"><div class="src-num">20</div><div><a class="src-link" href="https://www.cbc.ca/news/canada/calgary/alberta-premier-danielle-smith-referendum-vote-9.7376571" target="_blank" rel="noopener noreferrer">'Not as long as I'm premier': Danielle Smith rules out 2nd separation referendum if Albertans vote to remain</a><div class="src-meta">CBC News · 2026-10-09</div></div></div>
     <div class="source-row"><div class="src-num">21</div><div><a class="src-link" href="https://www.ctvnews.ca/regina/article/no-moe-shuts-down-elon-musks-calls-for-saskatchewan-to-separate/" target="_blank" rel="noopener noreferrer">'No': Moe shuts down Elon Musk's calls for Saskatchewan to separate</a><div class="src-meta">CTV News · 2026-10-07</div></div></div>
+    <div class="source-row"><div class="src-num">22</div><div><a class="src-link" href="https://www.federalregister.gov/documents/2026/09/14/2026-18838/modifying-the-scope-of-products-of-canada-subject-to-the-additional-duties-imposed-to-offset" target="_blank" rel="noopener noreferrer">Proclamation 11064 — Modifying the Scope of Products of Canada Subject to the Additional Duties (FR 2026-18838)</a><div class="src-meta">Federal Register (원문) · 2026-09-14</div></div></div>
+    <div class="source-row"><div class="src-num">23</div><div><a class="src-link" href="https://content.govdelivery.com/accounts/USDHSCBP/bulletins/429db0c" target="_blank" rel="noopener noreferrer">CSMS # 69851916 — Modifying Section 338 Additional Duties on Certain Goods of Canada (환급·보세구역 문단)</a><div class="src-meta">U.S. Customs and Border Protection (원문) · 2026-09-11</div></div></div>
+    <div class="source-row"><div class="src-num">24</div><div><a class="src-link" href="https://www.irs.gov/pub/irs-drop/n-26-53.pdf" target="_blank" rel="noopener noreferrer">IRS Notice 2026-53 — Section 45Z Clean Fuel Production Credit; Emissions Rates (§4.02(2))</a><div class="src-meta">Internal Revenue Service (원문) · 2026-09-08</div></div></div>
+    <div class="source-row"><div class="src-num">25</div><div><a class="src-link" href="https://www.law.cornell.edu/uscode/text/19/1313" target="_blank" rel="noopener noreferrer">19 U.S.C. §1313 — Drawback and refunds ((a)(b)(j)(5)(n)(2))</a><div class="src-meta">LII (법령 원문) · 10/14 열람</div></div></div>
+    <div class="source-row"><div class="src-num">26</div><div><a class="src-link" href="https://www.law.cornell.edu/uscode/text/19/4534" target="_blank" rel="noopener noreferrer">19 U.S.C. §4534 — USMCA drawback ((a)(5))</a><div class="src-meta">LII (법령 원문) · 10/14 열람</div></div></div>
+    <div class="source-row"><div class="src-num">27</div><div><a class="src-link" href="https://www.law.cornell.edu/uscode/text/19/1484" target="_blank" rel="noopener noreferrer">19 U.S.C. §1484 — Entry of merchandise (importer of record)</a><div class="src-meta">LII (법령 원문) · 10/14 열람</div></div></div>
+    <div class="source-row"><div class="src-num">28</div><div><a class="src-link" href="https://www.ecfr.gov/current/title-19/chapter-I/part-190/subpart-H/section-190.82" target="_blank" rel="noopener noreferrer">19 CFR §190.82 — Person entitled to claim drawback</a><div class="src-meta">eCFR (규정 원문) · 10/14 열람</div></div></div>
   </div>
 
   <div class="footer">Green Oil Inc. Internal Use Only &nbsp;·&nbsp; Powered by Claude AI &nbsp;·&nbsp; <a href="../index.html" style="color:#bbb;">← 인덱스</a></div>
