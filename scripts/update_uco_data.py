@@ -28,6 +28,7 @@ DRIVER_MAP = {
     'S.K': ('김성민',    'Downtown 1'),
     'S.L': ('Samuel Lee','Downtown 2'),
     'Y.S': ('송윤섭',    ''),
+    'Y.L': ('이영욱',    'Downtown 2'),
 }
 DRIVER_REGION = {v[0]: v[1] for v in DRIVER_MAP.values()}
 
