@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Oil Inc. — USD/CAD 환율 동향 2026.10.26</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.6; }
+
+/* ── Header ── */
+.header {
+  background: linear-gradient(135deg, #0f1f4a 0%, #1a3a6a 100%);
+  color: white;
+  padding: 14px 24px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 2px solid #1e40af;
+}
+.header-left h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 7px; }
+.header-left .sub { font-size: 11px; opacity: 0.75; margin-top: 3px; letter-spacing: 0.3px; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.updated-badge { font-size: 10px; opacity: 0.65; }
+
+/* ── PDF Button ── */
+.pdf-btn {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 8px;
+  padding: 5px 11px;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 0.15s;
+}
+.pdf-btn:hover { background: rgba(255,255,255,0.22); }
+.pdf-btn svg { width: 13px; height: 13px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Report Switch ── */
+.report-switch {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 7px;
+  padding: 3px 10px;
+  text-decoration: none;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.report-switch:hover { background: rgba(255,255,255,0.2); color: white; }
+.report-switch .dot { width: 7px; height: 7px; border-radius: 50%; background: #f6ad55; }
+
+/* ── Week Navigator ── */
+.week-nav {
+  background: white;
+  border-bottom: 1px solid #dbeafe;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.nav-btn {
+  background: none;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 5px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1d4ed8;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+.nav-btn:hover { background: #eff6ff; border-color: #1d4ed8; }
+.nav-btn.disabled { opacity: 0.3; pointer-events: none; }
+.nav-center { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+.nav-week-label { font-size: 14px; font-weight: 700; color: #0f1f4a; }
+.nav-week-sub { font-size: 10px; color: #999; }
+.nav-dots { display: flex; gap: 5px; margin-top: 4px; flex-wrap: wrap; justify-content: center; }
+.nav-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #bfdbfe; cursor: pointer; transition: background 0.15s;
+  display: block; text-decoration: none;
+}
+.nav-dot.active { background: #1d4ed8; }
+.nav-dot:hover { background: #60a5fa; }
+
+/* ── Container ── */
+.container { max-width: 920px; margin: 0 auto; padding: 18px 16px 32px; }
+
+/* ── One-line "Why" Summary (맨 위 한 줄 요약) ── */
+/* 방향에 따라 .up(CAD 약세·USD/CAD 상승) / .down(CAD 강세·USD/CAD 하락)을 붙입니다. */
+.why-line {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border-radius: 12px;
+  padding: 13px 17px;
+  margin-bottom: 14px;
+  border: 1px solid #e2e8f0;
+  border-left: 5px solid #94a3b8;
+  background: #f8fafc;
+  flex-wrap: wrap;
+}
+.why-line.up   { border-color: #fecaca; border-left-color: #dc2626; background: linear-gradient(135deg, #fef2f2 0%, #fff7f7 100%); }
+.why-line.down { border-color: #bfdbfe; border-left-color: #1d4ed8; background: linear-gradient(135deg, #eff6ff 0%, #f7fbff 100%); }
+.why-move {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  padding: 5px 11px;
+  border-radius: 8px;
+  color: white;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.why-line.up   .why-move { background: #dc2626; }
+.why-line.down .why-move { background: #1d4ed8; }
+.why-text { font-size: 14px; line-height: 1.55; color: #1a2a4a; flex: 1; min-width: 240px; }
+.why-text strong { font-weight: 700; }
+.why-line.up   .why-text strong { color: #b91c1c; }
+.why-line.down .why-text strong { color: #1d4ed8; }
+@media (max-width: 560px) { .why-text { font-size: 13px; } }
+
+/* ── Rate Hero ── */
+.rate-hero {
+  background: linear-gradient(135deg, #0f1f4a 0%, #1e3a8a 100%);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 14px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.rate-main { font-size: 38px; font-weight: 800; letter-spacing: -1px; font-variant-numeric: tabular-nums; }
+.rate-label { font-size: 11px; opacity: 0.65; margin-bottom: 4px; letter-spacing: 0.5px; }
+.rate-change { font-size: 14px; font-weight: 700; margin-top: 2px; }
+.rate-change.up { color: #fca5a5; }
+.rate-change.down { color: #86efac; }
+.rate-stats { display: flex; gap: 24px; flex-wrap: wrap; }
+.rate-stat { text-align: center; }
+.rate-stat-val { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.rate-stat-lbl { font-size: 10px; opacity: 0.6; margin-top: 2px; }
+
+/* ── Alert bar ── */
+.alert-bar { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.pill {
+  display: flex; align-items: center; gap: 6px;
+  background: white; border-radius: 20px; padding: 5px 13px;
+  font-size: 11px; font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.pill.blue   { border-left: 3px solid #1d4ed8; color: #1e40af; }
+.pill.amber  { border-left: 3px solid #d69e2e; color: #975a16; }
+.pill.green  { border-left: 3px solid #38a169; color: #22543d; }
+.pill.red    { border-left: 3px solid #dc2626; color: #991b1b; }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.dot.blue   { background: #1d4ed8; }
+.dot.amber  { background: #d69e2e; }
+.dot.green  { background: #38a169; }
+.dot.red    { background: #dc2626; }
+
+/* ── Card ── */
+.card { background: white; border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.card-header { display: flex; align-items: center; gap: 9px; margin-bottom: 13px; padding-bottom: 10px; border-bottom: 1px solid #eff6ff; }
+.card-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.icon-chart   { background: #eff6ff; }
+.icon-driver  { background: #f0fdf4; }
+.icon-risk    { background: #fff5f5; }
+.icon-sources { background: #f5f5f5; }
+.card-title { font-size: 14px; font-weight: 700; color: #0f1f4a; }
+.card-title span { font-size: 10px; font-weight: 400; color: #888; margin-left: 5px; }
+
+/* ── Period Tabs ── */
+.period-tabs { display: flex; gap: 4px; margin-bottom: 16px; background: #f0f4f8; border-radius: 10px; padding: 4px; }
+.period-tab {
+  flex: 1; padding: 7px 4px; border: none; background: none;
+  border-radius: 7px; font-size: 12px; font-weight: 600; color: #64748b;
+  cursor: pointer; transition: all 0.15s; text-align: center;
+}
+.period-tab.active { background: white; color: #1d4ed8; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.period-tab:hover:not(.active) { background: rgba(255,255,255,0.6); color: #1e3a8a; }
+
+/* ── Period Panel ── */
+.period-panel { display: none; }
+.period-panel.active { display: block; }
+
+/* ── Chart Container ── */
+.chart-wrap { position: relative; height: 220px; margin-bottom: 0; }
+.chart-sub-label {
+  font-size: 10px; font-weight: 700; color: #16a34a;
+  letter-spacing: 0.4px; margin: 8px 0 4px;
+  display: flex; align-items: center; gap: 5px;
+}
+.chart-wrap-sub { position: relative; height: 90px; margin-bottom: 16px; }
+
+/* ── Driver List ── */
+.driver-list { list-style: none; }
+.driver-item { padding: 10px 0 10px 20px; position: relative; border-bottom: 1px solid #f4f4f4; }
+.driver-item:last-child { border-bottom: none; }
+.driver-item::before {
+  content: '';
+  position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 10px; height: 10px; border-radius: 50%; background: #1d4ed8;
+  flex-shrink: 0;
+}
+.driver-rank { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.7px; color: #1d4ed8; margin-bottom: 3px; }
+.driver-title { font-size: 13px; font-weight: 700; color: #0f1f4a; margin-bottom: 3px; }
+.driver-body { font-size: 12px; color: #4a5568; line-height: 1.5; }
+
+/* ── Risk grid ── */
+.risk-grid { display: flex; flex-direction: column; gap: 10px; }
+.risk-col { border-radius: 9px; padding: 12px 16px; }
+.risk-col.red   { background: #fff5f5; border: 1px solid #fed7d7; }
+.risk-col.amber { background: #fffbf0; border: 1px solid #fefcbf; }
+.risk-col.green { background: #f0fff4; border: 1px solid #c6f6d5; }
+.risk-col-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+.risk-col.red   .risk-col-title { color: #c53030; }
+.risk-col.amber .risk-col-title { color: #975a16; }
+.risk-col.green .risk-col-title { color: #22543d; }
+.risk-entry { font-size: 12px; color: #4a5568; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.05); line-height: 1.5; }
+.risk-entry:last-child { border-bottom: none; }
+
+/* ── Data note ── */
+.data-note {
+  background: #fffbf0; border: 1px solid #fefcbf; border-radius: 9px;
+  padding: 10px 14px; margin-bottom: 14px; font-size: 11.5px; color: #744210; line-height: 1.55;
+}
+.data-note strong { color: #975a16; }
+.data-note.finding { background: #f0fff4; border-color: #9ae6b4; color: #22543d; }
+.data-note.finding strong { color: #1e7e46; }
+.data-note.finding .caveat { display: block; margin-top: 7px; padding-top: 7px; border-top: 1px dashed #9ae6b4; color: #4a6b57; }
+.code-chip {
+  display: inline-block; background: rgba(30,126,70,0.09); border: 1px solid #9ae6b4;
+  border-radius: 5px; padding: 0 5px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px; font-weight: 700; color: #1e7e46; letter-spacing: -0.2px;
+}
+
+/* ── Summary list ── */
+.summary-list { list-style: none; }
+.summary-list li { padding: 7px 0 7px 18px; position: relative; border-bottom: 1px solid #f4f4f4; color: #1a2a4a; font-size: 13px; }
+.summary-list li:last-child { border-bottom: none; }
+.summary-list li::before { content: '▸'; position: absolute; left: 0; top: 8px; color: #1d4ed8; font-size: 10px; }
+
+/* ── Sources ── */
+.source-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f4f4f4; align-items: flex-start; }
+.source-row:last-child { border-bottom: none; }
+.src-num { width: 20px; height: 20px; flex-shrink: 0; background: #eff6ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #1d4ed8; margin-top: 1px; }
+.src-link { font-size: 12px; font-weight: 600; color: #1d4ed8; text-decoration: none; }
+.src-link:hover { text-decoration: underline; }
+.src-meta { font-size: 10px; color: #aaa; margin-top: 1px; }
+
+/* ── Stats row ── */
+.stats-row { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.stat-box { flex: 1; min-width: 90px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 9px; padding: 10px 12px; }
+.stat-box-val { font-size: 16px; font-weight: 800; color: #0f1f4a; font-variant-numeric: tabular-nums; }
+.stat-box-lbl { font-size: 10px; color: #94a3b8; margin-top: 2px; }
+
+/* ── Footer ── */
+.footer { text-align: center; font-size: 10px; color: #bbb; padding: 8px 0 4px; letter-spacing: 0.2px; }
+.tag { display:inline-block; font-size:10.5px; font-weight:700; padding:1px 6px; border-radius:4px; background:#e2e8f0; color:#334155; margin-right:2px; vertical-align:1px; }
+.fix-mark { display:inline-block; font-size:10.5px; font-weight:700; padding:1px 6px; border-radius:4px; background:#fee2e2; color:#b91c1c; margin-left:4px; }
+.fix-mark a { color:#b91c1c; }
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="header">
+  <div class="header-left">
+    <h1>🌿 Green Oil Inc.</h1>
+    <div class="sub">USD/CAD 환율 동향 리포트 · FX Intelligence Report</div>
+  </div>
+  <div class="header-right">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="pdf-btn" onclick="downloadPDF()">
+        <svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><rect x="6" y="13" width="12" height="8" rx="1"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/></svg>
+        <span id="pdfBtnLabel">PDF 저장</span>
+      </button>
+      <a class="report-switch" href="../index.html">&#8592; 인덱스</a>
+      <a class="report-switch" href="../uco/2026-10-26.html">🌿 UCO →</a>
+      <a class="report-switch" href="../canola/2026-10-26.html"><span class="dot"></span>카놀라 →</a>
+    </div>
+    <div class="updated-badge">발행 2026.10.26 · 업데이트 2026.10.26</div>
+  </div>
+</div>
+
+<!-- ── Week Navigator ── -->
+<div class="week-nav">
+  <a class="nav-btn disabled" href="#">&#8592; 최신</a>
+  <div class="nav-center">
+    <div class="nav-week-label">이번 주 · 2026년 10/19 – 10/23 주</div>
+    <div class="nav-week-sub">2026.10.26 발행 · 10/23 BOC 참고환율 기준 · 5영업일</div>
+    <div class="nav-dots">
+<a class="nav-dot active" href="./2026-10-26.html" title="2026-10-26"></a>
+<a class="nav-dot" href="./2026-10-19.html" title="2026-10-19"></a>
+<a class="nav-dot" href="./2026-10-12.html" title="2026-10-12"></a>
+<a class="nav-dot" href="./2026-10-05.html" title="2026-10-05"></a>
+<a class="nav-dot" href="./2026-09-28.html" title="2026-09-28"></a>
+<a class="nav-dot" href="./2026-09-21.html" title="2026-09-21"></a>
+<a class="nav-dot" href="./2026-09-14.html" title="2026-09-14"></a>
+<a class="nav-dot" href="./2026-09-07.html" title="2026-09-07"></a>
+<a class="nav-dot" href="./2026-08-31.html" title="2026-08-31"></a>
+<a class="nav-dot" href="./2026-08-24.html" title="2026-08-24"></a>
+<a class="nav-dot" href="./2026-08-17.html" title="2026-08-17"></a>
+<a class="nav-dot" href="./2026-08-10.html" title="2026-08-10"></a>
+<a class="nav-dot" href="./2026-08-03.html" title="2026-08-03"></a>
+<a class="nav-dot" href="./2026-07-28.html" title="2026-07-28"></a>
+    </div>
+  </div>
+  <a class="nav-btn" href="./2026-10-19.html">이전 &#8594;</a>
+</div>
+
+<div class="container">
+
+  <!-- ── 맨 위 한 줄 요약: 왜 이렇게 움직였나 ── -->
+  <div class="why-line down">
+    <div class="why-move">▼ −1.14% &nbsp;CAD 강세</div>
+    <div class="why-text"><strong>왜?</strong> 10/19 BOC 기업·소비자 기대조사 뒤 <strong>10/28 BOC 인상 확률이 약 70%→87%</strong>로 뛰어 캐나다 2년물이 하루 <strong>+12bp</strong> 오르고, 10/22 인공지능 관련 주식 매도로 <strong>미 2년물이 −16bp</strong> 내려 금리차가 <strong>153→143bp</strong>로 좁혀지면서 CAD가 9/17 이후 가장 강해졌고, <strong>근원물가 둔화(절사평균 1.8%)</strong>라는 반대 재료는 묻혔습니다.</div>
+  </div>
+
+  <!-- ── 경영진 요약 — 첫 화면 ── -->
+  <div class="data-note" style="border-left:4px solid #1d4ed8;background:#f8fbff;">
+    <strong>🧭 경영진 요약 — 2026.10.26 기준</strong> <span style="font-size:11px;color:#64748b;">(10/19–10/23, 5영업일 · 환율은 BOC 일평균 참고환율)</span><br><br>
+    <strong>판단</strong><br>
+    1. <span class="tag">확정</span> USD/CAD BOC 참고환율은 <strong>10/16 1.4154 → 10/23 1.3993</strong>(−0.0161, −1.14%)로 <strong>2주 연속 하락(CAD 강세)</strong>했고, 9/17(1.3988) 이후 가장 낮으며 <strong>Q3 평균(1.3993)과 같은 자리</strong>로 돌아왔습니다.<br>
+    2. <span class="tag">AI 추론</span> 지난주 CAD 강세는 유가·미국 금리 덕이었지만, 이번 주는 달러지수가 거의 그대로인데도(101.84→약 101.81) CAD만 강해져 <strong>BOC 인상 기대라는 캐나다 고유 재료</strong>가 주도했다고 판단합니다.<br>
+    3. <span class="tag">AI 추론</span> 10/28 BOC 인상은 이미 <strong>약 85%</strong> 반영돼 있어(보도, 10/26), <strong>인상 자체보다 동결 쪽이 더 큰 놀람</strong>입니다 — 동결이면 CAD 약세로 되돌아갈 위험이 큽니다. 다만 이번 주 변화(USD 100만 달러당 C$16,100)는 UCO 50% 추가관세보다 여전히 작습니다.
+    <br><br>
+    <strong>주요 변화</strong><br>
+    1. <span class="tag">보도</span> 10/19 BOC 기업전망조사·소비자기대조사 발표 뒤 오버나이트 스와프의 10/28 인상 확률이 <strong>약 70% → 87%</strong>(블룸버그, 10/19 14:45 오타와)로 올랐고, <span class="tag">확정</span> 캐나다 2년물은 <strong>10/16 3.21% → 10/19 3.33%</strong>(BOC)로 뛰었습니다 → <span class="tag">AI 추론</span> 금리차 축소로 CAD 강세.<br>
+    2. <span class="tag">확정</span> 미 2년물 <strong>10/21 4.81% → 10/22 4.65%</strong>, 10년물 <strong>5.13% → 4.96%</strong>(재무부) — <span class="tag">보도</span> 인공지능 투자 지속성 우려로 주식이 밀리며 채권으로 돈이 몰렸고, 연준 10월 인상 확률은 <strong>7.2%</strong>(CME 페드워치, 10/22; 한 주 전 27.7%)로 내려갔습니다 → 미-캐 2년물 금리차 <strong>153bp(10/16) → 143bp(10/22)</strong>.<br>
+    3. <span class="tag">확정</span> 미국 대통령이 <strong>10/23 포고로 제338조 50% 관세 품목을 조정</strong>했습니다(부속서 I Part A 21개 해제 · Part B 96개 추가, <strong>10/30 00:01 ET 반입분부터</strong>). <strong>UCO <span class="code-chip">1518.00.40</span>과 카놀라 계열 <span class="code-chip">1205</span>·<span class="code-chip">1514</span>·<span class="code-chip">2306</span>은 두 목록 어디에도 없습니다</strong>(부속서 PDF 원문 대조) → UCO 50%는 그대로입니다. <a href="#legal-check" style="color:#1d4ed8;">원문 대조</a>
+    <br><br>
+    <strong>권고 조치</strong> <span style="font-size:11px;color:#64748b;">(회사의 실제 노출액·계약·헤지 자료를 받지 않았으므로 모두 조건부입니다)</span><br>
+    1. <strong>[재무 · 기한: 10/28 09:45 ET BOC 발표 전]</strong> 10/28 전후 USD 수취 예정액과 기존 환전·헤지 계약을 정리하시기를 권합니다. <em>선행 확인: 실제 노출액.</em> 확인되면, 현재 1.3993이 52주 범위의 <strong>약 63% 지점</strong>(지난주 85%)으로 내려왔고, 시장이 인상을 거의 다 반영해 <strong>동결 시 CAD 약세 반등 위험</strong>이 더 크다는 점을 고려해 환전 시점을 발표 전후로 나눌지 검토하실 수 있습니다.<br>
+    2. <strong>[대미 영업·통관 · 기한: 10/30 00:01 ET 시행 전]</strong> 미국으로 내보내는 <strong>UCO 외 품목</strong>(폐기물·부산물 등)이 있다면 그 HTS 번호를 10/23 부속서 Part B와 대조하시기를 권합니다. 새로 들어간 <span class="code-chip">3825.10~3825.30</span>(도시 폐기물·하수 슬러지·의료 폐기물)이 대표적입니다. <em>선행 확인: 회사의 미국행 품목별 HTS 분류(통관사).</em> UCO 환급(drawback) 귀속 협의(11/9 USITC 의견 마감 전)는 지난주와 같습니다 — 상세: <a href="./2026-10-19.html#legal-check" style="color:#1d4ed8;">10/19 회차</a><br>
+    3. <strong>[운영·재무 · 기한: 10월 말 마감 전]</strong> WTI 12월물이 <strong>US$103.60/배럴</strong>(10/23)로 $100 위에 머물러, 지난주 권고(수거 차량 경유비·UCO 가격 산식의 유가 연동 점검)를 그대로 유지합니다. <em>선행 확인: 연료 구매 단가·UCO 계약의 가격 산식.</em>
+  </div>
+
+  <!-- ── 읽는 법 ── -->
+  <div style="font-size:11.5px;color:#475569;margin:-6px 0 14px;line-height:1.6;">
+    <strong>표시 구분</strong> · <span class="tag">확정</span> 공식 발표·공표 자료 · <span class="tag">시장</span> 시장 가격에서 계산한 확률 · <span class="tag">보도</span> 언론 보도 · <span class="tag">분석가</span> 은행·기관 의견 · <span class="tag">제안</span> 정부 제안·의견수렴 · <span class="tag">업계</span> 업계 요구 · <span class="tag">AI 추론</span> 이 리포트의 판단(본문의 “Green Oil 관점”·“판단”·“조치” 문단은 모두 AI 추론입니다) · <strong>USD/CAD 수치는 BOC 일평균 참고환율</strong>이며 시장 종가나 실시간 체결환율이 아닙니다.
+  </div>
+
+  <!-- Rate Hero -->
+  <div class="rate-hero">
+    <div>
+      <div class="rate-label">USD/CAD 현재 환율 &nbsp;<span id="rateLiveBadge" style="font-size:9px;opacity:0.55;letter-spacing:0.3px;">로딩 중…</span></div>
+      <div class="rate-main" id="rateMain">1.3993</div>
+      <div class="rate-change down" id="rateChange">▼ 0.0161 (−1.14%) 10/16 대비 · CAD 강세</div>
+    </div>
+    <div class="rate-stats">
+      <div class="rate-stat">
+        <div class="rate-stat-val">1.3515</div>
+        <div class="rate-stat-lbl">52주 저점 (1/29)</div>
+      </div>
+      <div class="rate-stat">
+        <div class="rate-stat-val">1.4271</div>
+        <div class="rate-stat-lbl">52주 고점 (10/9)</div>
+      </div>
+      <div class="rate-stat">
+        <div class="rate-stat-val">1.3886</div>
+        <div class="rate-stat-lbl">52주 평균 (249영업일)</div>
+      </div>
+      <div class="rate-stat">
+        <div class="rate-stat-val">1.3993</div>
+        <div class="rate-stat-lbl">최신 BOC 참고환율 (10/23) · 주간 마지막 값</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alert bar -->
+  <div class="alert-bar">
+    <div class="pill blue"><div class="dot blue"></div><span>주간 <strong>−1.14% CAD 강세</strong>(1.4154→1.3993) · <strong>2주 연속 하락</strong> · 10/23 값은 <strong>9/17(1.3988) 이후 최저</strong>, 1.40 아래</span></div>
+    <div class="pill blue"><div class="dot blue"></div><span>🇨🇦 10/19 BOC 기대조사 → <strong>10/28 인상 확률 약 70%→87%</strong>(보도) · 캐나다 2년물 <strong>3.21→3.33%</strong>(하루 +12bp)</span></div>
+    <div class="pill blue"><div class="dot blue"></div><span>🇺🇸 10/22 인공지능 주식 매도 → 미 2년물 <strong>4.81→4.65%</strong> · 10년물 <strong>5% 아래(4.96%)</strong> · 연준 10월 인상 확률 <strong>7.2%</strong></span></div>
+    <div class="pill amber"><div class="dot amber"></div><span>📐 미-캐 2년물 금리차 <strong>153→143bp</strong>(10/16→10/22) · 💵 달러지수 <strong>거의 보합</strong>(101.84→약 101.81) — CAD 고유 강세</span></div>
+    <div class="pill amber"><div class="dot amber"></div><span>🇨🇦 9월 근원물가 <strong>절사평균 1.8%·중간값 1.9%</strong>(8월 1.9·2.0%) — 인상론과 반대 방향 · 8월 소매판매 <strong>+1.2%</strong>(10/23)</span></div>
+    <div class="pill red"><div class="dot red"></div><span>⏰ <strong>10/28 BOC(09:45 ET)·FOMC(14:00 ET) 같은 날</strong> · 🇺🇸 <strong>10/30 338조 품목 조정 시행</strong>(UCO 변화 없음) · 11/3 미 중간선거 · 11/5 캐나다 예산</span></div>
+  </div>
+
+  <!-- 이번 주 한눈에 -->
+  <div class="data-note">
+    <strong>📌 한 줄 요약 풀어 보기 — 월요일에는 BOC 인상 기대가, 목요일에는 미국 채권 매수가 CAD를 밀어 올렸습니다.</strong><br>
+    USD/CAD는 직전 참고환율 10/16 <strong>1.4154</strong>에서 10/23 <strong>1.3993</strong>으로 <strong>−0.0161(−1.14%)</strong> 내렸습니다. 일별로는 10/19 <strong>1.4097</strong>(−0.0057, 주중 고점) → 10/20 <strong>1.4054</strong>(−0.0043) → 10/21 <strong>1.4057</strong>(+0.0003) → 10/22 <strong>1.4021</strong>(−0.0036) → 10/23 <strong>1.3993</strong>(−0.0028, 주중 저점)입니다. 다섯 날 가운데 네 날 내렸습니다.
+    <br><br>
+    <strong>주 전반(10/19~10/20).</strong> 10/19 오전 캐나다 9월 물가가 <strong>전년 3.1%</strong>로 나왔고, 같은 날 BOC 기업전망조사·소비자기대조사에서 <strong>기업 절반가량이 유가·관세 비용을 가격에 넘기겠다</strong>고 답하고 소비자 장기 기대물가가 크게 올랐다고 보도됐습니다. 이후 10/28 인상 확률이 <strong>87%</strong>까지 올라 캐나다 2년물이 하루 <strong>+12bp</strong> 뛰었고 USD/CAD는 이번 주 가장 큰 <strong>−0.0057</strong>을 기록했습니다.
+    <br><br>
+    <strong>주 중후반(10/21~10/23).</strong> 10/21에는 거의 움직이지 않았고(+0.0003), 10/22 <strong>인공지능 관련 주식 매도</strong>로 미 2년물이 하루 <strong>−16bp</strong>(재무부 기준) 내리며 다시 −0.0036 내렸습니다. 10/23에는 WTI 12월물이 하루 <strong>+US$4.13</strong> 올라 <strong>US$103.60</strong>으로 마쳤고 USD/CAD는 1.40 아래로 들어섰습니다.
+    <br><br>
+    <strong>지난주와 무엇이 달라졌나.</strong> 지난 회차는 10/28 전까지 방향을 <strong>“양방향”</strong>으로 봤습니다. 이번 주는 <strong>캐나다 쪽 금리 기대가 움직여</strong> CAD 강세 쪽으로 기울었습니다. 다만 그 재료(BOC 인상)는 이제 거의 가격에 들어가 있어, 10/28 이후에는 <strong>BOC가 추가 인상을 시사하는지</strong>가 방향을 정할 것으로 봅니다.
+    <br><br>
+    <strong>Green Oil 관점:</strong> <span class="tag">AI 추론</span> USD 수취액의 CAD 환산은 지난주보다 <strong>USD 100만 달러당 C$16,100 줄었고</strong>, 올해 평균(1.3877)보다는 <strong>C$11,600</strong> 많은 수준으로 좁혀졌습니다. 두 주 동안 합치면 10/9 고점 대비 <strong>C$27,800</strong> 줄었습니다.
+  </div>
+
+  <!-- Period Chart + Drivers Card -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-chart">📈</div>
+      <div class="card-title">기간별 USD/CAD 환율 추이 <span>주간 · 월간 · 분기 · 연간 · 장기</span></div>
+    </div>
+
+    <div class="period-tabs">
+      <button class="period-tab active" onclick="switchPeriod('weekly', this)">주간</button>
+      <button class="period-tab"        onclick="switchPeriod('monthly', this)">월간</button>
+      <button class="period-tab"        onclick="switchPeriod('quarterly', this)">분기</button>
+      <button class="period-tab"        onclick="switchPeriod('annual', this)">연간</button>
+      <button class="period-tab"        onclick="switchPeriod('longterm', this)">장기 10Y</button>
+    </div>
+
+    <!-- ── 주간 ── -->
+    <div id="panel-weekly" class="period-panel active">
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-box-val">1.4154</div><div class="stat-box-lbl">직전 참고환율 (10/16)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.4097</div><div class="stat-box-lbl">주간 고점 (10/19)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3993</div><div class="stat-box-lbl">주간 저점 · 마지막 값 (10/23)</div></div>
+        <div class="stat-box"><div class="stat-box-val">−0.0161</div><div class="stat-box-lbl">주간 변동 · −1.14% CAD 강세</div></div>
+      </div>
+      <div class="chart-wrap"><canvas id="chartWeekly"></canvas></div>
+      <div class="chart-sub-label">📐 US 2Y − CA 2Y 금리차 (bp) &nbsp;·&nbsp; 클수록 USD 강세·CAD 약세 압력 → 10/16 <strong>153bp</strong>에서 10/22 <strong>143bp</strong>로 좁아졌습니다 · 10/23 캐나다 2년물은 아직 BOC 미공표 · WTI 근월물은 10/20 11월물 만기 뒤 10/21부터 12월물(월물이 달라 주간 % 비교는 하지 않습니다)</div>
+      <div class="chart-wrap-sub"><canvas id="chartWeeklySub"></canvas></div>
+      <div class="card-header" style="margin-top:4px;">
+        <div class="card-icon icon-driver">🔑</div>
+        <div class="card-title">주간 핵심 드라이버 3 <span>10/19–10/23</span></div>
+      </div>
+      <ul class="driver-list">
+
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 1 · BOC 인상 기대 · 이번 주 최대 재료</div>
+          <div class="driver-title">10/19 BOC 기업·소비자 기대조사가 물가 기대 상승을 보여 주자 10/28 인상 확률이 약 87%로 뛰었고, 캐나다 2년물이 하루 12bp 올랐습니다</div>
+          <div class="driver-body"><strong>사실.</strong> <span class="tag">보도</span> 10/19 BOC 기업전망조사에서 <strong>기업 절반가량이 유가·관세 비용 일부 또는 전부를 고객에게 넘길 계획</strong>이라고 답했고, 소비자 장기 기대물가는 코로나 시기 최고 수준 가까이 올랐다고 보도됐습니다. 오버나이트 스와프의 10/28 인상 확률은 그날 <strong>약 70% → 87%</strong>(10/19 14:45 오타와, 블룸버그 인용)로 올랐고, 10/21 로이터 보도로는 <strong>약 80%</strong>, 10/26 BBH 해설로는 <strong>85%</strong>입니다. 맥클럼 총재는 고유가 때문에 <strong>이달 물가 전망을 크게 올릴 것</strong>이라고 말했다고 전해졌습니다(로이터, 10/21). <span class="tag">확정</span> BOC 공표 캐나다 2년물은 <strong>10/16 3.21% → 10/19 3.33% → 10/20 3.32% → 10/21 3.32% → 10/22 3.22%</strong>입니다.<br><br><strong>반대 재료.</strong> <span class="tag">확정</span> 같은 날 나온 9월 근원물가는 오히려 낮아졌습니다 — <strong>절사평균 1.8%(8월 1.9%)</strong>, <strong>중간값 1.9%(8월 2.0%)</strong>, 공통요소 2.4%(8월 2.6%)(BOC Valet). <span class="tag">AI 추론</span> 시장은 근원물가보다 <strong>기대물가와 헤드라인(3.1%)</strong>을 더 무겁게 봤습니다. 10/28에 BOC가 근원물가를 이유로 동결하면 이번 주 CAD 강세가 되돌아갈 수 있습니다.<br><br><strong>Green Oil 관점:</strong> <span class="tag">AI 추론</span> BOC 인상은 CAD를 받쳐 <strong>USD 수취의 CAD 환산액을 줄이고</strong>, 동시에 회사의 변동금리 차입이 있다면 이자 부담을 늘립니다. 차입 조건은 이 리포트가 받지 않은 자료이므로 재무에서 확인하시기를 권합니다.</div>
+        </li>
+
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 2 · 미국 금리 · 인공지능 주식 매도와 채권 매수</div>
+          <div class="driver-title">10/22 인공지능 투자 지속성 우려로 주식이 밀리자 미 2년물이 하루 16bp, 10년물이 17bp 내려 5% 아래로 떨어졌고, 금리차가 143bp로 좁아졌습니다</div>
+          <div class="driver-body"><strong>사실.</strong> <span class="tag">확정</span> 재무부 공표치로 미 2년물 <strong>10/16 4.74% → 10/21 4.81% → 10/22 4.65% → 10/23 4.69%</strong>, 10년물 <strong>5.09% → 5.13% → 4.96% → 5.00%</strong>입니다. <span class="tag">보도</span> 로이터(글로브앤드메일 게재, 10/22)는 인공지능 지출 둔화 우려로 나스닥이 2% 넘게 내리고 메타 주가가 실적 발표 뒤 약 8% 빠지면서 국채 수요가 몰렸다고 전했고, 10년물 하루 하락폭은 <strong>2023년 3월 이후 최대</strong>였다고 보도됐습니다. <span class="tag">시장</span> 연준 10/28 인상 확률은 <strong>7.2%</strong>(CME 페드워치, 10/22; 한 주 전 27.7%, 한 달 전 55.4%)로 내려갔고, 다음 인상은 12월로 미뤄진 것으로 보도됩니다.<br><br><strong>달러.</strong> <span class="tag">보도</span> 달러지수는 10/23 약 <strong>101.81</strong>(Investing.com 등 집계)로 10/16(101.84)과 거의 같아, 두 주 연속 소폭 내렸지만 이번 주 변화는 미미합니다. <span class="tag">AI 추론</span> CAD 강세(1.14%)가 달러 약세보다 훨씬 커서, <strong>이번 주는 캐나다 고유 재료(BOC)가 주도한 주</strong>입니다.<br><br><strong>Green Oil 관점:</strong> <span class="tag">AI 추론</span> 미국 금리가 주식 불안으로 내린 것은 지난주(10/15)와 같은 흐름입니다. 이 불안이 가라앉고 미국 물가가 다시 주목받으면 금리차가 벌어져 CAD 약세로 돌아설 수 있습니다.</div>
+        </li>
+
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 3 · 유가와 캐나다 지표 · 받쳐 준 재료</div>
+          <div class="driver-title">WTI는 $97~$104 사이에서 출렁였고 10/23 하루 $4 넘게 올라 $103.60으로 마쳤습니다 — 캐나다 8월 소매판매 +1.2%, 9월 산업제품가격 +2.0%도 물가 압력 쪽 근거가 됐습니다</div>
+          <div class="driver-body"><strong>사실.</strong> <span class="tag">확정</span> WTI 근월물 정산가는 11월물 <strong>10/16 $101.41 → 10/19 $103.66 → 10/20 $101.79</strong>(만기), 12월물 <strong>10/21 $97.15 → 10/22 $99.47 → 10/23 $103.60</strong>(+$4.13)입니다(Brownfield 마감 시세 등). 월물이 바뀌어 주간 변동률은 계산하지 않았습니다. <span class="tag">확정</span> 캐나다 통계청: 9월 산업제품가격지수 <strong>전월 +2.0%·전년 +14.5%</strong>(경유 생산자가격 전월 +18.4%, 10/22), 8월 소매판매 <strong>C$746억, 전월 +1.2%</strong>, 9월 제조업 판매 속보 <strong>+0.1%</strong>(10/23).<br><br><strong>CAD 반응.</strong> <span class="tag">AI 추론</span> 10/20(WTI −$1.87)과 10/21(12월물로 바뀐 첫날)에는 유가가 내렸는데도 CAD가 버텼고, 10/23 유가 급등일에는 CAD가 더 강해졌습니다. 유가는 이번 주 CAD를 <strong>밀어 올렸다기보다 받쳐 준 재료</strong>로 봅니다.<br><br><strong>Green Oil 관점:</strong> <span class="tag">AI 추론</span> 유가 $100대는 UCO 원료 가치에 유리하지만, CAD 강세로 USD 판매 대금의 CAD 환산액이 줄고 수거 차량 경유비는 오릅니다. 세 경로가 상쇄되므로 “유가 상승 = 이익”으로 단정하지 마시기를 권합니다(지난주와 같음).</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ── 월간 ── -->
+    <div id="panel-monthly" class="period-panel">
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-box-val">1.4096</div><div class="stat-box-lbl">한 달 전 (9/23)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.4271</div><div class="stat-box-lbl">구간 고점 (10/9)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.4175</div><div class="stat-box-lbl">10월* 평균 (16영업일)</div></div>
+        <div class="stat-box"><div class="stat-box-val">−0.0103</div><div class="stat-box-lbl">1개월 변동 · −0.73% CAD 강세</div></div>
+      </div>
+      <div class="chart-wrap"><canvas id="chartMonthly"></canvas></div>
+      <div class="chart-sub-label">📐 US 2Y − CA 2Y 금리차 (bp) &nbsp;·&nbsp; 10/9 <strong>162bp</strong> 고점 뒤 두 주 동안 <strong>143bp</strong>(10/22)로 좁아졌습니다 · 10/23은 BOC 미공표</div>
+      <div class="chart-wrap-sub"><canvas id="chartMonthlySub"></canvas></div>
+      <div class="card-header" style="margin-top:4px;">
+        <div class="card-icon icon-driver">🔑</div>
+        <div class="card-title">월간 핵심 드라이버 3 <span>최근 1개월 · 9/23–10/23 (이동 구간)</span></div>
+      </div>
+      <ul class="driver-list">
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 1 · 금리차의 되돌림</div>
+          <div class="driver-title">한 달 전반에 162bp까지 벌어졌던 금리차가 후반 두 주 동안 19bp 좁아지며 USD/CAD도 1.4271에서 1.3993으로 내려왔습니다</div>
+          <div class="driver-body"><span class="tag">확정</span> 미-캐 2년물 금리차 <strong>9/24 148bp → 10/9 162bp → 10/16 153bp → 10/22 143bp</strong>(재무부·BOC 공표치로 산출). USD/CAD는 <strong>9/23 1.4096 → 10/9 1.4271 → 10/23 1.3993</strong>입니다. <span class="tag">AI 추론</span> 한 달 흐름은 여전히 <strong>“금리차가 좁아지면 CAD 강세”</strong>로 잘 설명됩니다.</div>
+        </li>
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 2 · BOC 기대의 전환</div>
+          <div class="driver-title">10/9 고용 감소 직후 “10월 동결·12월 인상”이던 기대가 2주 만에 “10월 인상”으로 바뀌었습니다</div>
+          <div class="driver-body"><span class="tag">확정</span> 9월 고용 <strong>−6만 8천 명</strong>(10/9) · 9월 물가 <strong>3.1%</strong>(10/19). <span class="tag">시장</span> 10/16 무렵 10월 동결이 기본값이었으나, 10/19 이후 10월 인상 <strong>80~87%</strong>로 바뀌었습니다(보도). <span class="tag">AI 추론</span> 고용 부진보다 <strong>에너지발 기대물가</strong>를 BOC가 더 경계할 것이라는 쪽으로 시장 해석이 옮겨 간 것이 한 달 후반 CAD 강세의 핵심입니다.</div>
+        </li>
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 3 · 유가</div>
+          <div class="driver-title">WTI는 10/7 $88.28 저점 뒤 $100 위로 돌아왔고, 10월 중순부터는 유가 상승이 CAD 강세 쪽으로 작동하고 있습니다</div>
+          <div class="driver-body"><span class="tag">확정</span> WTI 근월물 정산가 <strong>9/24 $94.61 → 10/7 $88.28 → 10/16 $101.41 → 10/23 $103.60</strong>(12월물), 10월* 근월물 평균 <strong>$95.44</strong>(17거래일). <span class="tag">AI 추론</span> 9월 중순과 달리 지금은 고유가가 <strong>BOC 인상 기대</strong>로도 이어져 CAD에 이중으로 유리하게 작동하고 있습니다.</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ── 분기 ── -->
+    <div id="panel-quarterly" class="period-panel">
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-box-val">1.3843</div><div class="stat-box-lbl">Q2 평균 (63영업일)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3993</div><div class="stat-box-lbl">Q3 평균 확정 (62영업일)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3962</div><div class="stat-box-lbl">9월 평균 (BOC 확정)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.4175</div><div class="stat-box-lbl">Q4 평균* (10/1–10/23, 16영업일)</div></div>
+      </div>
+      <div class="chart-wrap"><canvas id="chartQuarterly"></canvas></div>
+      <div class="chart-sub-label">📐 US 2Y − CA 2Y 금리차 (bp) · 월평균 &nbsp;·&nbsp; Q2 97~132bp → <strong>Q3 126~138bp</strong> → <strong>10월* 154bp</strong>(15영업일)</div>
+      <div class="chart-wrap-sub"><canvas id="chartQuarterlySub"></canvas></div>
+      <div class="card-header" style="margin-top:4px;">
+        <div class="card-icon icon-driver">🔑</div>
+        <div class="card-title">분기 핵심 드라이버 3 <span>2026년 Q4 · 4주차</span></div>
+      </div>
+      <ul class="driver-list">
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 1 · 분기 평균은 아직 높고, 현재 값은 Q3 평균으로 복귀</div>
+          <div class="driver-title">Q4 평균 1.4175는 Q3(1.3993)보다 182pip 높지만, 10/23 값 1.3993은 Q3 평균과 같아졌습니다</div>
+          <div class="driver-body"><span class="tag">확정</span> 월평균 USD/CAD 7월 1.4107 → 8월 1.3898 → 9월 1.3962 → 10월* 1.4175, 월평균 금리차 7월 138 → 8월 126 → 9월 137 → 10월* 154bp. <span class="tag">AI 추론</span> 분기 평균은 10월 초 고점 구간의 영향을 받은 값입니다. 10/28 결과에 따라 Q4 남은 두 달이 Q3 수준(1.39~1.40)에 머물지, 다시 1.41~1.42로 갈지가 갈립니다.</div>
+        </li>
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 2 · 미-캐 통상 — 338조 품목이 수시로 바뀝니다</div>
+          <div class="driver-title">9/15 UCO 포함 50% 관세에 이어 10/23 품목 조정(21개 해제·96개 추가)이 나왔고, UCO는 그대로입니다</div>
+          <div class="driver-body"><span class="tag">확정</span> UCO <span class="code-chip">1518.00.40</span>은 포고 11064 부속서 I로 <strong>9/15부터 50%</strong>, 10/23 포고(10/30 시행)에서도 해제·추가 목록 어디에도 없습니다(<a href="#legal-check" style="color:#1d4ed8;">원문 대조</a>). <span class="tag">확정</span> 캐나다·온타리오는 10/21 철강·자동차 중심 <strong>C$87억</strong> 관세 대응 계획을 냈습니다(UCO·바이오연료 조치 없음). <span class="tag">AI 추론</span> 품목 조정이 미국 쪽 판단으로 수시로 이뤄질 수 있다는 점이 확인돼, 통상 소식이 CAD에 주는 충격도 계속될 수 있습니다.</div>
+        </li>
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 3 · 10/28·12/9 두 번의 같은 날 결정</div>
+          <div class="driver-title">BOC와 FOMC가 10/28과 12/9 두 번 같은 날 결정합니다 — 이번에는 BOC가 먼저 움직일 것으로 시장이 봅니다</div>
+          <div class="driver-body"><span class="tag">시장</span> 현재 기본값은 10/28 <strong>BOC 인상(약 85%)·연준 동결(인상 약 7%)</strong>, 12월 연준 인상입니다(보도 기준). <span class="tag">AI 추론</span> 지난주 “한쪽만 움직이면 위험”이라고 썼던 시나리오 가운데 <strong>BOC 단독 인상</strong>이 기본값이 됐고, 이는 이미 환율에 상당 부분 들어가 있습니다.</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ── 연간 ── -->
+    <div id="panel-annual" class="period-panel">
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-box-val">1.3515</div><div class="stat-box-lbl">52주 저점 (2026/1/29)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.4271</div><div class="stat-box-lbl">52주 고점 (2026/10/9)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3886</div><div class="stat-box-lbl">52주 평균 (249영업일)</div></div>
+        <div class="stat-box"><div class="stat-box-val">63%</div><div class="stat-box-lbl">현재 레벨의 52주 레인지 위치</div></div>
+      </div>
+      <div class="chart-wrap"><canvas id="chartAnnual"></canvas></div>
+      <div class="chart-sub-label">📐 US 2Y − CA 2Y 금리차 (bp) · 월평균 &nbsp;·&nbsp; 1년 동안 <strong>111bp → 154bp</strong>(2025년 10월 → 2026년 10월*)로 확대</div>
+      <div class="chart-wrap-sub"><canvas id="chartAnnualSub"></canvas></div>
+      <div class="card-header" style="margin-top:4px;">
+        <div class="card-icon icon-driver">🔑</div>
+        <div class="card-title">연간 핵심 드라이버 3 <span>2025.10 – 2026.10</span></div>
+      </div>
+      <ul class="driver-list">
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 1 · 금리 사이클의 엇갈림</div>
+          <div class="driver-title">BOC는 2025년 10월부터 2.25%에 멈춰 있고, 연준은 9월에 다시 올렸습니다 — 1년간 금리차가 111bp에서 154bp로 벌어졌고, BOC 인상이 이 흐름을 처음 되돌릴 수 있습니다</div>
+          <div class="driver-body"><span class="tag">확정</span> 월평균 금리차 2025년 10월 111bp → 2026년 2월 98bp → 6월 132bp → 10월* 154bp. <span class="tag">AI 추론</span> 올해 하반기 USD/CAD가 1.39~1.42대로 올라선 가장 큰 이유이며, 10/28 BOC 인상은 1년 만에 이 격차를 캐나다 쪽에서 좁히는 첫 조치가 됩니다.</div>
+        </li>
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 2 · 중동 전쟁과 유가</div>
+          <div class="driver-title">2월 말 시작된 중동 전쟁으로 WTI 월평균이 2월 $64.52에서 4월 $98.36까지 뛰었고, 10월 다시 $100을 넘었습니다</div>
+          <div class="driver-body"><span class="tag">확정</span> WTI 근월물 월평균(CNBC 시세 이력·Brownfield 마감 시세에서 산출) 2월 $64.52 → 4월 $98.36 → 7월 $78.86 → 10월* $95.44. <span class="tag">AI 추론</span> 유가는 캐나다 교역조건에 유리하지만, 미국 물가를 통해 연준 인상을 부르면 CAD에 불리합니다. 10월 들어서는 캐나다 물가 기대를 통해 BOC 인상으로도 이어지고 있습니다.</div>
+        </li>
+        <li class="driver-item">
+          <div class="driver-rank">드라이버 3 · 미-캐 통상 재편</div>
+          <div class="driver-title">8월 협상 결렬로 관세가 “협상 중”에서 “부과 중”으로 바뀌었고, 품목 조정이 이어지며 CUSMA 검토 일정(USTR 의견 마감 2027-01-12)이 남아 있습니다</div>
+          <div class="driver-body"><span class="tag">확정</span> USTR 의견수렴 공고(10/5 관보) · 338조 50% 관세(9/15) · 품목 조정(10/23 포고, 10/30 시행). <span class="tag">AI 추론</span> 관세는 환율보다 Green Oil 수익에 훨씬 큰 변수입니다. 상세: <a href="./2026-10-12.html" style="color:#1d4ed8;">10/12 회차</a></div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ── 장기 ── -->
+    <div id="panel-longterm" class="period-panel">
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-box-val">1.3877</div><div class="stat-box-lbl">2026 YTD 평균 (203영업일)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3978</div><div class="stat-box-lbl">2025 연평균 (10년 최고)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.2535</div><div class="stat-box-lbl">2021 연평균 (10년 최저)</div></div>
+        <div class="stat-box"><div class="stat-box-val">1.3322</div><div class="stat-box-lbl">10년 평균 (2017–2026)</div></div>
+      </div>
+      <div class="chart-wrap"><canvas id="chartLongterm"></canvas></div>
+      <div class="chart-sub-label">📐 US 2Y − CA 2Y 금리차 (bp) · 연평균 &nbsp;·&nbsp; 2020–21 마이너스에서 <strong>2025–26년 117~120bp</strong>로 역전</div>
+      <div class="chart-wrap-sub"><canvas id="chartLongtermSub"></canvas></div>
+      <div class="data-note">
+        <strong>📊 10년 시야에서 현재 레벨의 위치</strong><br>
+        2026년 YTD 평균 <strong>1.3877</strong>은 10년 평균 <strong>1.3322</strong>보다 <strong>555pip 높고</strong>, 10/23 참고환율 <strong>1.3993</strong>은 <strong>2025년 연평균(1.3978)과 거의 같습니다</strong>(+15pip). 2021년 연평균(1.2535)과 비교하면 <strong>USD 100만 달러당 C$145,800</strong>이 더 들어오는 레벨입니다.
+        <br><br>
+        <strong>구조적 배경은 금리입니다.</strong> 2020–21년의 강한 CAD는 미국 2년물이 캐나다보다 낮았기 때문이고(연평균 −12bp, −21bp), 2025–26년의 약한 CAD는 그 관계가 <strong>117~120bp 역전</strong>됐기 때문입니다. 10월 평균 격차 <strong>154bp</strong>는 2026년 평균(117bp)보다 37bp 넓습니다.
+        <br><br>
+        <strong>Green Oil 관점:</strong> <span class="tag">AI 추론</span> 두 주 동안 CAD가 강해졌지만, 10년 시야에서 현재 레벨은 여전히 CAD 약세 쪽에 있습니다. 장기 환전·헤지 비중은 회사의 실제 노출액과 기존 계약을 확인한 뒤 정하시기를 권합니다.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Risk Radar -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-risk">⚡</div>
+      <div class="card-title">리스크 레이더 <span>Green Oil 수익에 직접 영향을 주는 환율 리스크와 기회</span></div>
+    </div>
+    <div class="risk-grid">
+
+      <div class="risk-col red">
+        <div class="risk-col-title">🔴 관심 요망 (2–4주)</div>
+
+        <div class="risk-entry"><strong>⏰ 10/28 BOC(09:45 ET, 통화정책보고서 함께)·FOMC(14:00 ET) 같은 날</strong> — <span class="tag">시장</span> 기본값은 <strong>BOC 25bp 인상(2.25→2.50%, 약 85%)</strong>·<strong>연준 동결</strong>입니다. <span class="tag">AI 추론</span> 인상은 상당 부분 반영돼 있어 <strong>동결이면 CAD 약세(1.40 위 복귀)</strong>, 인상과 함께 추가 인상을 시사하면 CAD 강세가 더 이어질 수 있습니다. 근원물가가 1.8~1.9%로 낮다는 점이 동결 가능성을 남깁니다.<br><br><strong>Green Oil 조치:</strong> <strong>[재무 · 10/28 09:45 ET 전]</strong> 선행 확인: 10/28 전후 USD 수취 예정액 → 확인되면 환전 시점을 발표 전후로 나눌지 검토하실 수 있습니다.</div>
+
+        <div class="risk-entry"><strong>🔴 338조 품목 조정(10/30 시행) — UCO 50%는 그대로</strong> — <span class="tag">확정</span> 10/23 포고 부속서 I Part A(21개 해제)·Part B(96개 추가)에 <span class="code-chip">1518.00.40</span>은 없습니다. 새로 들어간 것 가운데 폐기물 <span class="code-chip">3825.10.01</span>·<span class="code-chip">3825.20.00</span>·<span class="code-chip">3825.30.00</span>이 있습니다. <span class="tag">AI 추론</span> 이번 주 CAD 강세 1.14%는 50%p 관세와 비교할 수 없는 크기입니다.<br><br><strong>Green Oil 조치:</strong> <strong>[대미 영업·통관 · 10/30 전]</strong> 선행 확인: 미국행 품목별 HTS 분류 → UCO 외 품목이 Part B에 걸리는지 확인(경영진 요약 권고 2).</div>
+
+        <div class="risk-entry"><strong>📉 미국 주식 불안이 걷히면 금리차가 다시 벌어질 수 있습니다</strong> — <span class="tag">AI 추론</span> 10/22 미 금리 하락은 연준 기대 변화가 아니라 <strong>안전자산 수요</strong>였습니다. 10/23 2년물이 4.69%로 일부 되돌았듯, 주식이 안정되면 금리차가 다시 150bp 위로 갈 수 있습니다. 기술적으로 아래는 <strong>1.3988</strong>(9/17)·<strong>1.3947</strong>(9/16), 위는 <strong>1.4097</strong>(10/19)·<strong>1.4154</strong>(10/16)입니다.</div>
+      </div>
+
+      <div class="risk-col amber">
+        <div class="risk-col-title">🟡 모니터링 (1–3개월)</div>
+
+        <div class="risk-entry"><strong>🗳 11/3 미 중간선거 · 11/5 캐나다 연방 예산 · 11/6 캐나다 10월 고용</strong> — <span class="tag">확정</span> 예산 제출일은 재무부 발표(10/20). <span class="tag">AI 추론</span> 예산의 재정 규모·관세 대응 지원, 고용 반등 여부가 BOC 추가 인상 기대를 좌우합니다. 12/9에는 BOC·FOMC가 다시 같은 날 결정합니다.</div>
+
+        <div class="risk-entry"><strong>🇨🇦🇺🇸 통상 협상 재개 여부</strong> — 변화 없음. 8/22 결렬 이후 재개 소식은 확인한 출처에서 발견되지 않았습니다. USTR CUSMA 의견 마감 <strong>2027-01-12</strong>. 상세: <a href="./2026-10-19.html" style="color:#1d4ed8;">10/19 회차</a></div>
+
+        <div class="risk-entry"><strong>🌾 카놀라 종자 선물(ICE 11월물, C$/톤)</strong> — <span class="tag">보도</span> <strong>10/16 C$798.80 → 10/23 C$778.80</strong>(−C$20.00, −2.5%; 지역 방송 마감 시세 표, ICE 공식 정산가와 대조 못 함). <span class="tag">AI 추론</span> CAD 표시 선물은 CAD 강세 때 눌리는 구조라 이번 주 CAD 강세도 부담이었을 수 있습니다. 같은 날 <a href="../canola/2026-10-26.html" style="color:#1d4ed8;">카놀라 리포트</a>와 나란히 확인하시기 바랍니다.</div>
+      </div>
+
+      <div class="risk-col green">
+        <div class="risk-col-title">🟢 기회 요인</div>
+
+        <div class="risk-entry"><strong>💰 1.3993은 올해 평균보다 116pip 높은 자리입니다</strong> — <span class="tag">확정</span> USD 100만 달러 수취 기준 비교(10/23 BOC 참고환율 1.3993):<br>
+        · 직전 참고환율 10/16(1.4154) 대비 <strong>C$16,100 감소</strong><br>
+        · 52주 고점 10/9(1.4271) 대비 <strong>C$27,800 감소</strong><br>
+        · 2026 YTD 평균(1.3877) 대비 <strong>C$11,600 증가</strong><br>
+        · 52주 평균(1.3886) 대비 <strong>C$10,700 증가</strong><br>
+        · 9월 평균(1.3962) 대비 <strong>C$3,100 증가</strong><br>
+        · Q3 평균(1.3993) 대비 <strong>같음</strong><br>
+        · 2025 연평균(1.3978) 대비 <strong>C$1,500 증가</strong><br>
+        · 52주 저점 1/29(1.3515) 대비 <strong>C$47,800 증가</strong><br><br>
+        <span class="tag">AI 추론</span> 위 금액은 USD 100만 달러를 가정한 환산 예시이며 회사의 실제 노출액이 아닙니다.</div>
+
+        <div class="risk-entry"><strong>🛠 CAD 강세의 설비 조달 효과</strong> — <span class="tag">AI 추론</span> CAD 강세는 <strong>미국산 설비·부품의 CAD 환산 가격</strong>을 낮춥니다. 캐나다 보복관세 감면(SOR/2026-186 부수 개정 제5조, 제조·가공용 수입품)은 변화 없음 — 상세: <a href="./2026-10-19.html#legal-check" style="color:#1d4ed8;">10/19 회차 원문 대조 D</a>.</div>
+
+        <div class="risk-entry"><strong>✅ 카놀라 계열 코드는 10/23 품목 조정에도 없습니다</strong> — <span class="tag">확정</span> <span class="code-chip">1205</span>·<span class="code-chip">1514</span>·<span class="code-chip">2306</span> 모두 Part A·B에 없음(부속서 PDF 대조). 기존 상태 상세: <a href="./2026-10-12.html#legal-check" style="color:#1d4ed8;">10/12 회차 원문 대조 B</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 관세·환급 원문 대조 ── -->
+  <div class="card" id="legal-check">
+    <div class="card-header">
+      <div class="card-icon icon-risk">🔎</div>
+      <div class="card-title">관세·환급 원문 대조 <span>공식 원문과 조항 · 이번 주 새 문서 여부 포함</span></div>
+    </div>
+
+    <div class="source-row">
+      <div class="src-num">A</div>
+      <div>
+        <strong>미국 338조 50% 추가관세의 UCO 적용 — 그대로</strong> <span class="tag">확정</span><br>
+        <div class="src-meta">원문: <a href="https://www.federalregister.gov/documents/2026/09/14/2026-18838/modifying-the-scope-of-products-of-canada-subject-to-the-additional-duties-imposed-to-offset" target="_blank" style="color:#1d4ed8;">포고 11064(연방관보 2026-18838)</a> · 적용 조항: <strong>부속서 I</strong>에 <span class="code-chip">1518.00.40</span> 수록(<a href="https://www.govinfo.gov/content/pkg/FR-2026-09-14/pdf/2026-18838.pdf" target="_blank" style="color:#1d4ed8;">govinfo PDF</a>) · 시행: <strong>2026-09-15 00:01 ET 이후 소비용 반입·창고 반출분</strong>.</div>
+      </div>
+    </div>
+
+    <div class="source-row">
+      <div class="src-num">B</div>
+      <div>
+        <strong>10/23 포고 — 338조 대상 품목 조정(10/30 시행)</strong> <span class="tag">확정</span><br>
+        <div class="src-meta">원문: <a href="https://www.whitehouse.gov/presidential-actions/2026/10/further-modifying-the-scope-of-products-of-canada-subject-to-the-additional-duties-imposed-to-offset-canadian-discrimination-against-the-commerce-of-the-united-states-with-respect-to-motor-vehicles/" target="_blank" style="color:#1d4ed8;">백악관 「Further Modifying the Scope of Products of Canada…」(10/23 서명)</a> · <a href="https://www.whitehouse.gov/wp-content/uploads/2026/10/2026ModifyingAuto338.prc_.AnnexI-3.pdf" target="_blank" style="color:#1d4ed8;">부속서 I PDF</a>. 포고 11048(개정 포함)의 대상을 고쳐 <strong>Part A 21개 품목은 50% 해제</strong>(해초·폴리프로필렌 필름·플라스틱 포장재·합판 등), <strong>Part B 96개 품목은 50% 부과</strong>(코코아 분말·카펫·밸브·공구·폐기물 3825.10~30 등). 시행 <strong>2026-10-30 00:01 ET 이후 소비용 반입·창고 반출분</strong>, 232조 관세에 <strong>더해</strong> 부과. <strong>대조 결과:</strong> 부속서 텍스트(pdftotext)에서 <span class="code-chip">1518</span>·<span class="code-chip">1205</span>·<span class="code-chip">1514</span>·<span class="code-chip">2306</span> 검색 0건 — UCO·카놀라 계열 상태 변화 없음. 부속서 II(미국 주 개정)와 CBP 세부 지침은 이 리포트에서 확인하지 못했습니다.</div>
+      </div>
+    </div>
+
+    <div class="source-row">
+      <div class="src-num">C</div>
+      <div>
+        <strong>미국 환급(drawback) — 가능성 · 실제 회수액 · Green Oil 귀속액</strong> — 변화 없음<br>
+        <div class="src-meta"><span class="tag">확정</span> <strong>환급 가능성:</strong> <a href="https://content.govdelivery.com/accounts/USDHSCBP/bulletins/429db0c" target="_blank" style="color:#1d4ed8;">CBP CSMS #69851916</a> 원문 “The additional duties imposed by headings 9903.03.12 to 9903.03.14 are eligible for drawback.” — 세관 집행 지침(행정 지침)입니다. <br><span class="tag">AI 추론</span> <strong>실제 회수 가능액:</strong> 미산정. <strong>Green Oil 귀속액:</strong> 계약서·수입신고 명의 확인 전에는 가정하지 않습니다. 상세: <a href="./2026-10-19.html#legal-check" style="color:#1d4ed8;">10/19 회차 C</a></div>
+      </div>
+    </div>
+
+    <div class="source-row">
+      <div class="src-num">D</div>
+      <div>
+        <strong>캐나다 보복관세 감면(제조·가공용 수입품)</strong> — 변화 없음<br>
+        <div class="src-meta">원문: <a href="https://gazette.gc.ca/rp-pr/p2/2026/2026-09-23/html/sor-dors186-eng.html" target="_blank" style="color:#1d4ed8;">SOR/2026-186</a> 부수 개정 제5조가 「미국 부가관세 감면 명령(2025)」 제3조를 대체. 이번 주 개정 여부는 따로 확인하지 못했습니다. 상세: <a href="./2026-10-12.html#legal-check" style="color:#1d4ed8;">10/12 회차</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 지난주 권고 점검 ── -->
+  <div class="card" id="last-week-check">
+    <div class="card-header">
+      <div class="card-icon icon-driver">🔁</div>
+      <div class="card-title">지난주 권고 점검 <span>10/19 회차 권고의 실행 여부와 판단 변경</span></div>
+    </div>
+    <div class="src-meta" style="line-height:1.8;padding:0 4px 6px;">
+      1. <strong>[재무] 10/28 전 USD 수취 예정액·환전·헤지 계약 정리</strong> — <strong>미확인(회사 확인 필요)</strong>. 기한이 이틀 남아 이번 주 권고 1로 이어 갑니다. 판단 근거는 바뀌었습니다(52주 위치 85% → 63%, BOC 인상 기본값).<br>
+      2. <strong>[대미 영업·물류] 수입자·관세 납부자 확인, 환급 귀속 협의(11/9 전)</strong> — <strong>미확인(회사 확인 필요)</strong>. 이번 주 권고 2에 10/23 품목 조정 대조를 더해 이어 갑니다.<br>
+      3. <strong>[운영·재무] 수거 차량 경유비·UCO 가격 산식의 유가 연동 점검</strong> — <strong>미확인(회사 확인 필요)</strong>. WTI가 $100 위에 남아 그대로 유지합니다(권고 3).<br>
+      <strong>판단 변경:</strong> 지난주 “10/28 전까지 양방향”이라는 판단은 <strong>“이번 주는 CAD 강세 쪽으로 기울었고, 10/28 이후는 BOC 안내가 방향을 정한다”</strong>로 고칩니다. 이유: 10/19 기대조사 뒤 BOC 인상이 기본값이 됐고, 달러지수가 거의 그대로인데 CAD만 1.14% 강해졌기 때문입니다.<br>
+      <strong>지난 회차 잠정값 다시 받기:</strong> 10/19 회차 발행 때 빠졌던 <strong>10/16 캐나다 2년물은 3.21%</strong>로 공표돼 금리차는 <strong>153bp</strong>입니다. 지난 회차 서술(10/9 162bp → 10/15 157bp로 “좁아졌다”)과 방향이 같아 <strong>정정할 것이 없습니다</strong>.
+    </div>
+  </div>
+
+  <!-- ── 검증 기록 ── -->
+  <div class="card" id="verify-log">
+    <div class="card-header">
+      <div class="card-icon icon-sources">🧾</div>
+      <div class="card-title">검증 기록 <span>검색 범위 · 확인 시각(미 동부시간)</span></div>
+    </div>
+    <div class="src-meta" style="line-height:1.8;padding:0 4px 6px;">
+      · BOC Valet(FXUSDCAD·FXMUSDCAD·BD.CDN.2YR.DQ.YLD, 2025-10-01 이후 전량): 10/26 08:21 조회 — 참고환율은 10/23까지, 캐나다 2년물은 10/22까지 공표(10/23 미공표 → 다음 회차에 다시 받아 금리차 서술을 점검합니다). CPI_TRIM·CPI_MEDIAN·CPI_COMMON: 10/26 08:40 조회(9월분).<br>
+      · 미 재무부 일별 국채 금리 CSV(2025·2026): 10/26 08:22 조회(10/23까지).<br>
+      · WTI 근월물 정산가: 10/16·10/19·10/20·10/21·10/22·10/23 Brownfield 마감 시세(10/23 원문 직접 확인: “Dec. crude oil closed at $103.60, up $4.13”), 나머지 날은 같은 출처를 인용한 사내 데일리 브리프 값. CNBC 시세 API는 이번 조회에서 응답하지 않아 쓰지 못했습니다. 10월 평균·YTD 평균은 지난 회차 산출값에 이번 주 5거래일을 더해 다시 계산했습니다.<br>
+      · 달러지수: 공식 1차 출처를 열지 못해 집계 사이트 값(10/23 약 101.81)을 <span class="tag">보도</span>로만 썼습니다.<br>
+      · 연방관보·백악관: 10/23 포고 본문(백악관 게시)과 부속서 I PDF를 내려받아 pdftotext로 판독 — Part A 21개·Part B 96개, 1518·1205·1514·2306 검색 0건(10/26 08:24). 연방관보 API 조회(게재일 ≥10/19 대통령 문서)는 이번 조회에서 응답 오류로 확인하지 못했습니다 — 관보 게재본은 다음 회차에 대조합니다.<br>
+      · 발견되지 않음: 미-캐 통상 협상 재개 보도(10/19~10/26) · 10/23 포고에 대한 CBP 세부 지침 · 로이터 경제학자 설문(10/23) 원문(접속 시간 초과, 제목만 확인).<br>
+      · 언론 기사: 게재일을 확인한 기사만 썼습니다(블룸버그 인용 Canadian Mortgage Trends 10/19, 로이터 인용 글로브앤드메일 10/21·10/22, BBH 인용 FXStreet 10/26).<br>
+      · 리포트 간 대조: 같은 날 <a href="../uco/2026-10-26.html" style="color:#1d4ed8;">UCO 리포트</a>와 “10/23 품목 조정에서 UCO 변화 없음, 50% 유지”가 일치합니다. 다만 UCO 리포트는 해제 품목을 “22개”로 적었고, 이 리포트는 부속서 PDF에서 <strong>21개</strong>를 셌습니다(사내 데일리 브리프 10/26도 21개). 카놀라 리포트는 이 리포트 작성 시점에 아직 발행되지 않아 대조하지 못했습니다.<br>
+      · 일관성 점검: 제목·파일명·날짜(2026-10-26)·연도 · 단위(USD/CAD 소수 4자리, WTI US$/배럴 근월물 정산가, 금리차 bp) · USD 100만 달러 환산 계산 · 내부 링크를 확인했습니다.
+    </div>
+  </div>
+
+  <!-- ── 출처 ── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-sources">🔗</div>
+      <div class="card-title">주요 출처 <span>Sources · 모든 환율 수치는 1차 출처 기준</span></div>
+    </div>
+
+    <div class="source-row">
+      <div class="src-num">1</div>
+      <div>
+        <a class="src-link" href="https://www.bankofcanada.ca/valet/observations/FXUSDCAD/json?recent=30" target="_blank">Bank of Canada Valet API — FXUSDCAD 일평균 참고환율</a>
+        <div class="src-meta">모든 USD/CAD 수치의 단일 출처 · 이번 주: 10/19 <strong>1.4097</strong> · 10/20 <strong>1.4054</strong> · 10/21 <strong>1.4057</strong> · 10/22 <strong>1.4021</strong> · 10/23 <strong>1.3993</strong> · 직전 10/16 <strong>1.4154</strong> · <strong>주간 −0.0161(−1.14%)</strong> · 52주(2025-10-24~2026-10-23, 249영업일) 저점 <strong>1.3515</strong>(1/29) · 고점 <strong>1.4271</strong>(10/9) · 평균 <strong>1.3886</strong> · 9월 평균 <strong>1.3962</strong>(<a href="https://www.bankofcanada.ca/valet/observations/FXMUSDCAD/json?recent=14" target="_blank" style="color:#1d4ed8;">FXMUSDCAD</a>) · 10월* 평균 <strong>1.4175</strong>(16영업일 자체 산출) · Q3 <strong>1.3993</strong> · 2026 YTD <strong>1.3877</strong>(203영업일)</div>
+      </div>
+    </div>
+
+    <div class="source-row">
+      <div class="src-num">2</div>
+      <div>
+        <a class="src-link" href="https://www.bankofcanada.ca/valet/observations/BD.CDN.2YR.DQ.YLD/json?recent=20" target="_blank">Bank of Canada Valet API — 캐나다 2년물 국채 금리 · 근원물가</a>
+        <div class="src-meta">10/16 <strong>3.21%</strong> · 10/19 <strong>3.33%</strong> · 10/20 <strong>3.32%</strong> · 10/21 <strong>3.32%</strong> · 10/22 <strong>3.22%</strong> · 10/23 미공표 · 미-캐 격차 10/16 <strong>153</strong> → 10/19 <strong>144</strong> → 10/20 <strong>147</strong> → 10/21 <strong>149</strong> → 10/22 <strong>143bp</strong> · 9월 근원물가 <a href="https://www.bankofcanada.ca/valet/observations/CPI_TRIM/json?recent=3" target="_blank" style="color:#1d4ed8;">절사평균 1.8%</a> · <a href="https://www.bankofcanada.ca/valet/observations/CPI_MEDIAN/json?recent=3" target="_blank" style="color:#1d4ed8;">중간값 1.9%</a> · <a href="https://www.bankofcanada.ca/valet/observations/CPI_COMMON/json?recent=3" target="_blank" style="color:#1d4ed8;">공통요소 2.4%</a></div>
+      </div>
+    </div>
+
+    <div class="source-row">
+      <div class="src-num">3</div>
+      <div>
+        <a class="src-link" href="https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-yield-curve-rates" target="_blank">U.S. Treasury — 일별 국채 금리 (2년물·10년물)</a>
+        <div class="src-meta">2년물 10/16 <strong>4.74%</strong> · 10/19 <strong>4.77%</strong> · 10/20 <strong>4.79%</strong> · 10/21 <strong>4.81%</strong> · 10/22 <strong>4.65%</strong> · 10/23 <strong>4.69%</strong> · 10년물 10/16 <strong>5.09%</strong> → 10/21 <strong>5.13%</strong> → 10/22 <strong>4.96%</strong> → 10/23 <strong>5.00%</strong></div>
+      </div>
+    </div>
+
+    <div class="source-row">
+      <div class="src-num">4</div>
+      <div>
+        <a class="src-link" href="https://brownfieldagnews.com/news/closing-grain-and-livestock-futures-october-23-2026/" target="_blank">유가 — WTI 근월물 일별 정산가 (Brownfield 마감 시세)</a>
+        <div class="src-meta">11월물 10/16 <strong>$101.41</strong> · 10/19 <strong>$103.66</strong> · 10/20 <strong>$101.79</strong> · 12월물 10/21 <strong>$97.15</strong> · 10/22 <strong>$99.47</strong> · 10/23 <strong>$103.60</strong> · 10월* 근월물 평균 <strong>$95.44</strong>(17거래일) · 2026 YTD <strong>$84.57</strong>(201거래일) · 장기 차트의 2017–2025년 WTI는 <a href="https://www.eia.gov/dnav/pet/hist/RWTCD.htm" target="_blank" style="color:#1d4ed8;">EIA 현물</a> 연평균 · 달러지수 10/23 약 <strong>101.81</strong>(<a href="https://www.investing.com/indices/usdollar-historical-data" target="_blank" style="color:#1d4ed8;">Investing.com</a>, <span class="tag">보도</span>)</div>
+      </div>
+    </div>
+
+    <div class="source-row">
+      <div class="src-num">5</div>
+      <div>
+        <a class="src-link" href="https://www.canadianmortgagetrends.com/2026/10/bank-of-canada-hike-bets-grow-among-economists-traders/" target="_blank">Canadian Mortgage Trends(블룸버그) — BOC 인상 베팅 확대 (10/19)</a>
+        <div class="src-meta">2026-10-19 · 스와프 인상 확률 약 70% → 87% · 기업 절반가량 비용 전가 계획 · 함께 보기: <a href="https://www.theglobeandmail.com/investing/article-canadian-dollar-holds-near-four-week-high-as-investors-stick-to-rate/" target="_blank" style="color:#1d4ed8;">글로브앤드메일(로이터) 10/21</a> — 장중 1.4030(9/22 이후 최강) · 인상 확률 약 80% · 맥클럼 총재 물가 전망 상향 발언 · <a href="https://www.fxstreet.com/news/canadian-dollar-boc-rate-hike-bets-boost-support-against-usd-bbh-202610260821" target="_blank" style="color:#1d4ed8;">FXStreet(BBH) 10/26</a> — 인상 확률 85% · <a href="https://money.usnews.com/investing/news/articles/2026-10-23/bank-of-canada-to-raise-rates-to-2-50-on-october-28-and-once-again-by-end-march" target="_blank" style="color:#1d4ed8;">로이터 설문 (10/23, 제목만 확인)</a></div>
+      </div>
+    </div>
+
+    <div class="source-row">
+      <div class="src-num">6</div>
+      <div>
+        <a class="src-link" href="https://www.theglobeandmail.com/investing/article-us-bond-yields-plunge-as-fears-about-sustaining-ai-boom-resurface/" target="_blank">글로브앤드메일(로이터) — 인공지능 우려에 미 국채 금리 급락 (10/22)</a>
+        <div class="src-meta">2026-10-22 · 10년물 −19.3bp(시장 기준) · 나스닥 −2% 이상 · 메타 약 −8% · 연준 10월 인상 확률 7.2%(한 주 전 27.7%, CME 페드워치)</div>
+      </div>
+    </div>
+
+    <div class="source-row">
+      <div class="src-num">7</div>
+      <div>
+        <a class="src-link" href="https://www150.statcan.gc.ca/n1/daily-quotidien/261023/dq261023a-eng.htm" target="_blank">Statistics Canada — 8월 소매판매 (10/23)</a>
+        <div class="src-meta">C$746억, 전월 +1.2% · <a href="https://www150.statcan.gc.ca/n1/daily-quotidien/261023/dq261023b-eng.htm" target="_blank" style="color:#1d4ed8;">9월 제조업 속보 +0.1%</a> · <a href="https://www150.statcan.gc.ca/n1/daily-quotidien/261022/dq261022a-eng.htm" target="_blank" style="color:#1d4ed8;">9월 산업제품가격 +2.0%(10/22)</a> · <a href="https://www150.statcan.gc.ca/n1/daily-quotidien/261019/dq261019a-eng.htm" target="_blank" style="color:#1d4ed8;">9월 소비자물가 3.1%(10/19)</a> · <a href="https://www.canada.ca/en/department-finance/news/2026/10/government-of-canada-to-release-budget-2026-on-november-5-2026.html" target="_blank" style="color:#1d4ed8;">연방 예산 11/5</a></div>
+      </div>
+    </div>
+
+    <div class="source-row">
+      <div class="src-num">8</div>
+      <div>
+        <a class="src-link" href="https://www.whitehouse.gov/presidential-actions/2026/10/further-modifying-the-scope-of-products-of-canada-subject-to-the-additional-duties-imposed-to-offset-canadian-discrimination-against-the-commerce-of-the-united-states-with-respect-to-motor-vehicles/" target="_blank">White House — 338조 대상 품목 조정 포고 (10/23)</a>
+        <div class="src-meta">10/30 00:01 ET 시행 · <a href="https://www.whitehouse.gov/wp-content/uploads/2026/10/2026ModifyingAuto338.prc_.AnnexI-3.pdf" target="_blank" style="color:#1d4ed8;">부속서 I PDF</a> · <a href="https://www.canada.ca/en/innovation-science-economic-development/news/2026/10/prime-minister-carney-and-premier-ford-launch-new-action-plan-to-protect-workers-from-tariffs-and-strengthen-ontario-industries.html" target="_blank" style="color:#1d4ed8;">캐나다·온타리오 관세 대응 계획 (10/21)</a></div>
+      </div>
+    </div>
+
+    <div class="source-row">
+      <div class="src-num">9</div>
+      <div>
+        <a class="src-link" href="https://www.bankofcanada.ca/press/upcoming-events/" target="_blank">BOC 일정 · FOMC 일정</a>
+        <div class="src-meta">BOC 결정·통화정책보고서 10/28 09:45 ET · <a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank" style="color:#1d4ed8;">FOMC 10/27–28</a> · 캐나다 10월 고용 11/6</div>
+      </div>
+    </div>
+
+    <div class="source-row">
+      <div class="src-num">10</div>
+      <div>
+        <a class="src-link" href="./2026-10-19.html">Green Oil FX 리포트 (10/19) — 직전 회차</a>
+        <div class="src-meta">교차 확인용 · 이번 주 UCO 리포트: <a href="../uco/2026-10-26.html" style="color:#1d4ed8;">10/26</a> · 카놀라 리포트: <a href="../canola/2026-10-26.html" style="color:#1d4ed8;">10/26</a></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">Green Oil Inc. · USD/CAD FX Intelligence Report · 2026.10.26 · 모든 USD/CAD 수치는 Bank of Canada 일평균 참고환율 기준(시장 종가·실시간 체결환율 아님)</div>
+
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+function switchPeriod(id, btn) {
+  document.querySelectorAll('.period-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.period-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+  // 비활성 패널은 display:none이라 차트가 0x0 캔버스에 그려진 채로 남습니다.
+  // 탭이 보이게 된 시점에 다시 크기를 잡아 주지 않으면 그래프가 찌그러져 보입니다.
+  document.querySelectorAll('#panel-' + id + ' canvas').forEach(c => {
+    const ch = Chart.getChart(c);
+    if (ch) ch.resize();
+  });
+}
+
+// ── Chart defaults ──
+Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#64748b';
+
+// ── Dual-axis chart: USD/CAD (left) + WTI (right) ──
+function makeChart(id, labels, cadData, wtiData) {
+  const ctx = document.getElementById(id).getContext('2d');
+  const gradCAD = ctx.createLinearGradient(0, 0, 0, 240);
+  gradCAD.addColorStop(0, 'rgba(29,78,216,0.12)');
+  gradCAD.addColorStop(1, 'rgba(29,78,216,0.00)');
+  return new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'USD/CAD',
+          data: cadData,
+          yAxisID: 'yCAD',
+          borderColor: '#1d4ed8', borderWidth: 2,
+          backgroundColor: gradCAD, fill: true,
+          tension: 0.35, spanGaps: true,
+          pointBackgroundColor: '#1d4ed8', pointRadius: 3, pointHoverRadius: 5
+        },
+        {
+          label: 'WTI (USD/bbl)',
+          data: wtiData,
+          yAxisID: 'yWTI',
+          borderColor: '#f59e0b', borderWidth: 2,
+          backgroundColor: 'transparent', fill: false,
+          tension: 0.35, spanGaps: true,
+          pointBackgroundColor: '#f59e0b', pointRadius: 3, pointHoverRadius: 5,
+          borderDash: [4, 3]
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+          align: 'end',
+          labels: { boxWidth: 14, padding: 12, font: { size: 11 } }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              if (ctx.parsed.y === null) return null;
+              if (ctx.dataset.yAxisID === 'yCAD') return ' USD/CAD: ' + ctx.parsed.y.toFixed(4);
+              return ' WTI: $' + ctx.parsed.y.toFixed(2) + '/bbl';
+            }
+          }
+        }
+      },
+      scales: {
+        x: { grid: { color: '#f1f5f9' }, ticks: { maxRotation: 0 } },
+        yCAD: {
+          position: 'left',
+          grid: { color: '#f1f5f9' },
+          ticks: { callback: v => v.toFixed(4), color: '#1d4ed8', font: { size: 10 } },
+          title: { display: true, text: 'USD/CAD', color: '#1d4ed8', font: { size: 10 } }
+        },
+        yWTI: {
+          position: 'right',
+          grid: { drawOnChartArea: false },
+          ticks: { callback: v => '$' + v.toFixed(0), color: '#f59e0b', font: { size: 10 } },
+          title: { display: true, text: 'WTI ($/bbl)', color: '#f59e0b', font: { size: 10 } }
+        }
+      }
+    }
+  });
+}
+
+// ── Sub-chart: US 2Y − CA 2Y spread (bp) ──
+// 양수 = 미국 2년물이 캐나다보다 높음 → USD 강세·CAD 약세 압력 → USD/CAD 상승과 동행
+function makeSubChart(id, labels, spreadData) {
+  const ctx = document.getElementById(id).getContext('2d');
+  return new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'US 2Y − CA 2Y (bp)',
+        data: spreadData,
+        backgroundColor: spreadData.map(v => v >= 0 ? 'rgba(251,146,60,0.55)' : 'rgba(34,197,94,0.55)'),
+        borderColor:     spreadData.map(v => v >= 0 ? '#ea580c'              : '#16a34a'),
+        borderWidth: 1, borderRadius: 3
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y > 0 ? '+' : ''}${ctx.parsed.y}bp` } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 9 }, maxRotation: 0 } },
+        y: {
+          grid: { color: '#f1f5f9' },
+          ticks: { callback: v => v + 'bp', font: { size: 9 } },
+          border: { dash: [3,3] }
+        }
+      }
+    }
+  });
+}
+// ══════════════════════════════════════════════════════════════
+//  CHART DATA — 전량 1차 출처 산출값 (2026-10-26 재산출, 이월 없음)
+//  USD/CAD : Bank of Canada Valet API (FXUSDCAD) — 일별·월평균·연평균 모두 자체 산출
+//  WTI     : 근월물 일별 정산가(CNBC @CL.1 이력·Brownfield 마감 시세) 및 그 월평균 · 장기 차트의 2017–2025만 EIA 현물 연평균
+//  금리차   : U.S. Treasury 일별 2년물 − BOC BD.CDN.2YR.DQ.YLD (양측 공표일만 매칭)
+// ══════════════════════════════════════════════════════════════
+
+
+// ── 주간 (10/19–10/23, 기준선 = 직전 참고환율 10/16) ──
+// 10/19 = 캐나다 9월 물가 3.1% · BOC 기대조사 뒤 인상 확률 약 87% · CA 2Y +12bp (−0.0057)
+// 10/20 = 강세 지속 · WTI 11월물 만기(−0.0043)
+// 10/21 = 거의 보합(+0.0003) · WTI 근월물 12월물로 교체
+// 10/22 = 인공지능 주식 매도 · 미 2년물 −16bp (−0.0036)
+// 10/23 = WTI 12월물 +$4.13 · 9/17 이후 최저(−0.0028)
+const weeklyChart = makeChart('chartWeekly',
+  ['10/16 (금)', '10/19 (월)', '10/20 (화)', '10/21 (수)', '10/22 (목)', '10/23 (금)'],
+  [1.4154, 1.4097, 1.4054, 1.4057, 1.4021, 1.3993],
+  [101.41, 103.66, 101.79, 97.15, 99.47, 103.60]
+);
+
+// 10/23 캐나다 2년물은 BOC 미공표로 제외
+makeSubChart('chartWeeklySub',
+  ['10/16', '10/19', '10/20', '10/21', '10/22'],
+  [153, 144, 147, 149, 143]
+);
+
+// ── 월간 (최근 1개월 이동 구간 9/24–10/23) ──
+makeChart('chartMonthly',
+  ['9/24', '9/28', '10/1', '10/5', '10/7', '10/9', '10/13', '10/14', '10/15', '10/16', '10/19', '10/20', '10/21', '10/22', '10/23'],
+  [1.4136, 1.4168, 1.4243, 1.4254, 1.4257, 1.4271, 1.4222, 1.4263, 1.4196, 1.4154, 1.4097, 1.4054, 1.4057, 1.4021, 1.3993],
+  [94.61,  92.60,  92.87,  89.43,  88.28,  91.85,  94.14,  95.09,  97.97,  101.41, 103.66, 101.79, 97.15,  99.47,  103.60]
+);
+
+makeSubChart('chartMonthlySub',
+  ['9/24', '9/28', '10/1', '10/5', '10/7', '10/9', '10/13', '10/14', '10/15', '10/16', '10/19', '10/20', '10/21', '10/22'],
+  [148, 155, 151, 158, 154, 162, 160, 161, 157, 153, 144, 147, 149, 143]
+);
+
+// ── 분기 (2026 월별 평균 · 9월은 BOC 확정 · 10월*은 16영업일 자체 산출) ──
+makeChart('chartQuarterly',
+  ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월*'],
+  [1.3778, 1.3651, 1.3717, 1.3751, 1.3723, 1.4040, 1.4107, 1.3898, 1.3962, 1.4175],
+  [60.26,  64.52,  91.00,  98.36,  98.03,  81.79,  78.86,  82.45,  95.69,  95.44]
+);
+
+makeSubChart('chartQuarterlySub',
+  ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월*'],
+  [97, 98, 95, 97, 106, 132, 138, 126, 137, 154]
+);
+
+// ── 연간 (2025.10–2026.10 월별 평균) ──
+makeChart('chartAnnual',
+  ["'25 10월", "11월", "12월", "'26 1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월*"],
+  [1.3992, 1.4055, 1.3802, 1.3778, 1.3651, 1.3717, 1.3751, 1.3723, 1.4040, 1.4107, 1.3898, 1.3962, 1.4175],
+  [60.07,  59.48,  57.87,  60.26,  64.52,  91.00,  98.36,  98.03,  81.79,  78.86,  82.45,  95.69,  95.44]
+);
+
+makeSubChart('chartAnnualSub',
+  ["'25 10월", "11월", "12월", "'26 1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월*"],
+  [111, 111, 93, 97, 98, 95, 97, 106, 132, 138, 126, 137, 154]
+);
+
+// ── 장기 (연평균 2017–2026, 2026은 YTD 203영업일) ──
+// WTI 2017–2025는 EIA 현물 연평균, 2026*는 근월물 2026 YTD 평균(201거래일)
+makeChart('chartLongterm',
+  ['2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026*'],
+  [1.2986, 1.2957, 1.3269, 1.3415, 1.2535, 1.3013, 1.3497, 1.3698, 1.3978, 1.3877],
+  [50.80,  65.23,  56.99,  39.16,  68.14,  94.90,  77.58,  76.63,  65.39,  84.57]
+);
+
+makeSubChart('chartLongtermSub',
+  ['2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026*'],
+  [31, 54, 38, -12, -21, 9, 32, 70, 120, 117]
+);
+
+// ── PDF ──
+function downloadPDF() {
+  const btn = document.getElementById('pdfBtnLabel');
+  // 라이브러리가 안 불러와졌거나(확장 프로그램·네트워크 차단) 생성이 실패·지연되면
+  // 버튼이 '생성 중...'에 멈추지 않도록 브라우저 인쇄 창(PDF로 저장)으로 넘긴다
+  let settled = false, timer = null;
+  const finish = (print) => { if (settled) return; settled = true; clearTimeout(timer); restore(); if (print) window.print(); };
+  // 한 번도 열지 않은 탭의 차트 캔버스는 0x0으로 남아 있습니다.
+  // html2canvas가 DOM 복제 단계에서 이를 drawImage로 복사하다 예외를 던지므로
+  // (html2canvas의 ignoreElements로는 막지 못한다) 생성하는 동안만 1x1로 채우고 끝나면 되돌립니다.
+  const patched = [];
+  const restore = () => {
+    patched.forEach(([c, w, h]) => { c.width = w; c.height = h; });
+    btn.textContent = 'PDF 저장';
+  };
+  if (typeof html2pdf !== 'function') { finish(true); return; }
+  btn.textContent = '생성 중...';
+  document.querySelectorAll('canvas').forEach(c => {
+    if (c.width === 0 || c.height === 0) {
+      patched.push([c, c.width, c.height]);
+      c.width  = c.width  || 1;
+      c.height = c.height || 1;
+    }
+  });
+  timer = setTimeout(() => finish(true), 45000);
+  try {
+    html2pdf().set({
+      margin: [8, 8, 8, 8],
+      filename: 'GreenOil-FX-USD-CAD-2026-10-26.pdf',
+      image: { type: 'jpeg', quality: 0.95 },
+      html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: 'avoid-all' }
+    }).from(document.body).save()
+      .then(() => finish(false))
+      .catch((e) => { console.error('PDF 생성 실패', e); finish(true); });
+  } catch (e) { console.error('PDF 생성 실패', e); finish(true); }
+}
+
+// ── Live rate fetch ──
+// 정적 기준값 = 2026-10-23 BOC 참고환율 1.3993
+// 비교 기준(WEEK_OPEN) = 주간 시작 직전 참고환율 10/16 1.4154
+// Primary: @fawazahmed0/currency-api via jsDelivr CDN (CORS-safe)
+// Fallback: open.er-api.com
+// 실시간 소스가 참고환율보다 오래된 값을 반환하는 경우가 있어
+// 반환 날짜가 CONFIRMED_DATE보다 최신일 때만 헤드라인을 덮어씁니다.
+const WEEK_OPEN      = 1.4154;
+const CONFIRMED_RATE = 1.3993;
+const CONFIRMED_DATE = '2026-10-23';
+
+function renderRate(rate, dateStr, isLive) {
+  const badge  = document.getElementById('rateLiveBadge');
+  const main   = document.getElementById('rateMain');
+  const change = document.getElementById('rateChange');
+
+  const diff = rate - WEEK_OPEN;
+  const pct  = diff / WEEK_OPEN * 100;
+  const isUp = diff >= 0;
+
+  main.textContent   = rate.toFixed(4);
+  change.className   = 'rate-change ' + (isUp ? 'up' : 'down');
+  change.textContent = `${isUp ? '▲' : '▼'} ${Math.abs(diff).toFixed(4)} (${isUp ? '+' : ''}${pct.toFixed(2)}%) 10/16 대비 · CAD ${isUp ? '약세' : '강세'}`;
+  badge.textContent  = isLive ? `외부 API 참고값(체결환율 아님) · ${dateStr}` : `BOC 일평균 참고환율 · ${dateStr}`;
+}
+
+async function getRateFromCDN(dateTag) {
+  const url = `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@${dateTag}/v1/currencies/usd.json`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(res.status);
+  const data = await res.json();
+  return { rate: data.usd.cad, date: data.date };
+}
+
+async function fetchLiveRate() {
+  // 기본 표시 = 10/23 BOC 참고환율
+  renderRate(CONFIRMED_RATE, CONFIRMED_DATE, false);
+
+  try {
+    const now = await getRateFromCDN('latest');
+    // 참고환율보다 오래된 값이면 무시 (소스 지연 시 헤드라인 왜곡 방지)
+    if (now.date > CONFIRMED_DATE) {
+      renderRate(now.rate, now.date, true);
+    }
+  } catch(e) {
+    try {
+      const res  = await fetch('https://open.er-api.com/v6/latest/USD');
+      const data = await res.json();
+      renderRate(data.rates.CAD, data.time_last_update_utc.slice(0,16), true);
+    } catch(e2) {
+      /* 참고환율 표시 유지 */
+    }
+  }
+}
+fetchLiveRate();
+
+// ── History for future nav-dots ──
+// HISTORY_START
+const REPORT_HISTORY = [
+  { date: '2026-10-26', file: './2026-10-26.html', label: '2026년 10/19–10/23 주' },
+  { date: '2026-10-19', file: './2026-10-19.html', label: '2026년 10/13–10/16 주' },
+  { date: '2026-10-12', file: './2026-10-12.html', label: '2026년 10/5–10/9 주' },
+  { date: '2026-10-05', file: './2026-10-05.html', label: '2026년 9/28–10/2 주' },
+  { date: '2026-09-28', file: './2026-09-28.html', label: '2026년 9/21–9/25 주' },
+  { date: '2026-09-21', file: './2026-09-21.html', label: '2026년 9/14–9/18 주' },
+  { date: '2026-09-14', file: './2026-09-14.html', label: '2026년 9/8–9/11 주' },
+  { date: '2026-09-07', file: './2026-09-07.html', label: '2026년 8/31–9/4 주' },
+  { date: '2026-08-31', file: './2026-08-31.html', label: '2026년 8/24–8/28 주' },
+  { date: '2026-08-24', file: './2026-08-24.html', label: '2026년 8/17–8/21 주' },
+  { date: '2026-08-17', file: './2026-08-17.html', label: '2026년 8/10–8/14 주' },
+  { date: '2026-08-10', file: './2026-08-10.html', label: '2026년 8/3–8/7 주' },
+  { date: '2026-08-03', file: './2026-08-03.html', label: '2026년 7/27–7/31 주' },
+  { date: '2026-07-28', file: './2026-07-28.html', label: '2026년 7/21–7/27 주' }
+];
+// HISTORY_END
+</script>
+</body>
+</html>
