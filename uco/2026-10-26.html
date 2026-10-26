@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Oil UCO — 2026년 10/19 – 10/25 주</title>
+<style>
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+  background: #f0f4f0;
+  color: #1c2e1c;
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── Report Switch Badge ── */
+.report-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.report-switch:hover { background: rgba(255,255,255,0.25); }
+.report-switch .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #fbbf24; flex-shrink: 0;
+}
+
+/* ── PDF Button ── */
+.pdf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.pdf-btn:hover { background: rgba(255,255,255,0.22); }
+.pdf-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Print styles ── */
+@media print {
+  .week-nav, .report-switch, .pdf-btn, .nav-dots { display: none !important; }
+  .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: white; }
+  .container { padding: 0; }
+  .card { break-inside: avoid; }
+  a { text-decoration: none; color: inherit; }
+}
+
+/* ── Header ── */
+.header {
+  background: linear-gradient(135deg, #1a5c1a 0%, #2e8b2e 100%);
+  color: white;
+  padding: 18px 24px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.header-left h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 7px; }
+.header-left .sub { font-size: 11px; opacity: 0.75; margin-top: 3px; letter-spacing: 0.3px; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.updated-badge { font-size: 10px; opacity: 0.65; }
+
+/* ── Week Navigator ── */
+.week-nav {
+  background: white;
+  border-bottom: 1px solid #e0e8e0;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.nav-btn {
+  background: none;
+  border: 1px solid #c8dcc8;
+  border-radius: 8px;
+  padding: 5px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #2e8b2e;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+.nav-btn:hover { background: #eaf4ea; border-color: #2e8b2e; }
+.nav-btn.disabled { opacity: 0.3; pointer-events: none; }
+.nav-center { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+.nav-week-label { font-size: 14px; font-weight: 700; color: #1c2e1c; }
+.nav-week-sub { font-size: 10px; color: #999; }
+.nav-dots { display: flex; gap: 5px; margin-top: 4px; flex-wrap: wrap; justify-content: center; }
+.nav-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #d0e4d0; cursor: pointer; transition: background 0.15s;
+  display: block; text-decoration: none;
+}
+.nav-dot.active { background: #2e8b2e; }
+.nav-dot:hover { background: #7cb87c; }
+
+/* ── Container ── */
+.container { max-width: 920px; margin: 0 auto; padding: 18px 16px 32px; }
+
+/* ── Alert bar ── */
+/* ── One-line "Why" Summary (맨 위 한 줄 요약) ── */
+/* 방향 클래스: .up = 지표 상승(빨강) / .down = 지표 하락(파랑). 색을 직접 쓰지 말 것. */
+.why-line {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border-radius: 12px;
+  padding: 13px 17px;
+  margin-bottom: 14px;
+  border: 1px solid #e2e8f0;
+  border-left: 5px solid #94a3b8;
+  background: #f8fafc;
+  flex-wrap: wrap;
+}
+.why-line.up   { border-color: #fecaca; border-left-color: #dc2626; background: linear-gradient(135deg, #fef2f2 0%, #fff7f7 100%); }
+.why-line.down { border-color: #bfdbfe; border-left-color: #1d4ed8; background: linear-gradient(135deg, #eff6ff 0%, #f7fbff 100%); }
+.why-move {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  padding: 5px 11px;
+  border-radius: 8px;
+  color: white;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.why-line.up   .why-move { background: #dc2626; }
+.why-line.down .why-move { background: #1d4ed8; }
+.why-text { font-size: 14px; line-height: 1.55; color: #1a2a4a; flex: 1; min-width: 240px; }
+.why-text strong { font-weight: 700; }
+.why-line.up   .why-text strong { color: #b91c1c; }
+.why-line.down .why-text strong { color: #1d4ed8; }
+@media (max-width: 560px) { .why-text { font-size: 13px; } }
+
+.alert-bar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.pill {
+  display: flex; align-items: center; gap: 6px;
+  background: white; border-radius: 20px; padding: 5px 13px;
+  font-size: 11px; font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.pill.red   { border-left: 3px solid #e53e3e; color: #c53030; }
+.pill.amber { border-left: 3px solid #d69e2e; color: #975a16; }
+.pill.green { border-left: 3px solid #38a169; color: #22543d; }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.dot.red   { background: #e53e3e; }
+.dot.amber { background: #d69e2e; }
+.dot.green { background: #38a169; }
+
+/* ── Card ── */
+.card { background: white; border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.card-header { display: flex; align-items: center; gap: 9px; margin-bottom: 13px; padding-bottom: 10px; border-bottom: 1px solid #eaf2ea; }
+.card-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.icon-summary { background: #edfaed; }
+.icon-canada  { background: #fff0f0; }
+.icon-export  { background: #eef2ff; }
+.icon-market  { background: #fff8ec; }
+.icon-risk    { background: #fff5f5; }
+.icon-sources { background: #f5f5f5; }
+.icon-prov    { background: #fff3e0; }
+.card-title { font-size: 14px; font-weight: 700; color: #1c2e1c; }
+.card-title span { font-size: 10px; font-weight: 400; color: #888; margin-left: 5px; }
+
+/* ── Two-col ── */
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+@media (max-width: 620px) { .row2 { grid-template-columns: 1fr; } }
+
+/* ── Summary ── */
+.summary-list { list-style: none; }
+.summary-list li { padding: 7px 0 7px 18px; position: relative; border-bottom: 1px solid #f4f4f4; color: #2d3e2d; font-size: 13px; }
+.summary-list li:last-child { border-bottom: none; }
+.summary-list li::before { content: '▸'; position: absolute; left: 0; top: 8px; color: #2e8b2e; font-size: 10px; }
+
+/* ── Sub-label ── */
+.sub-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: #999; margin-bottom: 9px; }
+
+/* ── News item ── */
+.news-item { padding: 9px 0; border-bottom: 1px solid #f4f4f4; }
+.news-item:last-child { border-bottom: none; }
+a.news-item { text-decoration: none; color: inherit; display: block; border-radius: 7px; padding: 9px 8px; margin: 0 -8px; transition: background 0.15s; }
+a.news-item:hover { background: #edf6ed; }
+a.news-item .news-title::after { content: ' ↗'; font-size: 10px; color: #2e8b2e; opacity: 0.6; }
+.tag { display: inline-block; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 3px; }
+.tag-cfr      { background: #e6f4ea; color: #137333; }
+.tag-carbon   { background: #e8f0fe; color: #1558d6; }
+.tag-prov     { background: #fce8e6; color: #c5221f; }
+.tag-prov-politics { background: #fce8e6; color: #c5221f; }
+.tag-eu       { background: #ede7f6; color: #5e35b1; }
+.tag-us       { background: #e8eaed; color: #3c4043; }
+.tag-market   { background: #fff3e0; color: #e65100; }
+.tag-cert     { background: #e0f7fa; color: #006064; }
+.tag-trade    { background: #fce4ec; color: #880e4f; }
+.tag-politics { background: #e8eaf6; color: #283593; }
+.news-title { font-size: 12px; font-weight: 600; color: #1c2e1c; margin-bottom: 2px; }
+.news-body  { font-size: 11px; color: #5a6e5a; line-height: 1.5; }
+
+/* ── Risk radar ── */
+.risk-grid { display: flex; flex-direction: column; gap: 10px; }
+.risk-col { border-radius: 9px; padding: 12px 16px; }
+.risk-col.red   { background: #fff5f5; border: 1px solid #fed7d7; }
+.risk-col.amber { background: #fffbf0; border: 1px solid #fefcbf; }
+.risk-col.green { background: #f0fff4; border: 1px solid #c6f6d5; }
+.risk-col-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+.risk-col.red   .risk-col-title { color: #c53030; }
+.risk-col.amber .risk-col-title { color: #975a16; }
+.risk-col.green .risk-col-title { color: #22543d; }
+.risk-entry { font-size: 12px; color: #4a5568; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.05); line-height: 1.5; }
+.risk-entry:last-child { border-bottom: none; }
+
+/* ── Sources ── */
+.source-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f4f4f4; align-items: flex-start; }
+.source-row:last-child { border-bottom: none; }
+.src-num { width: 20px; height: 20px; flex-shrink: 0; background: #eaf2ea; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #2e8b2e; margin-top: 1px; }
+.src-link { font-size: 12px; font-weight: 600; color: #1a6b3c; text-decoration: none; }
+.src-link:hover { text-decoration: underline; }
+.src-meta { font-size: 10px; color: #aaa; margin-top: 1px; }
+
+/* ── Empty ── */
+.empty { background: #f9f9f9; border-radius: 7px; padding: 14px; text-align: center; color: #bbb; font-size: 12px; font-style: italic; }
+
+/* ── Footer ── */
+.footer { text-align: center; font-size: 10px; color: #bbb; padding: 8px 0 4px; letter-spacing: 0.2px; }
+
+/* ── 10/14 작성 기준: 근거 표시·개정 상자·표 ── */
+.lb { display:inline-block; font-size:9.5px; font-weight:700; padding:1px 6px; border-radius:4px; vertical-align:1px; white-space:nowrap; }
+.lb-fact { background:#e6f4ea; color:#137333; } .lb-prop { background:#e8f0fe; color:#1558d6; }
+.lb-ind { background:#fff3e0; color:#b45309; } .lb-anal { background:#f3e8ff; color:#6b21a8; } .lb-ai { background:#eef0f3; color:#475569; }
+.legend { font-size:11px; color:#5a6e5a; margin:0 0 12px; line-height:1.9; }
+.upd-box { background:#fffbeb; border:1px solid #fde68a; border-left:5px solid #d97706; border-radius:10px; padding:12px 15px; margin-bottom:12px; }
+.upd-title { font-weight:800; font-size:13px; color:#92400e; margin-bottom:4px; } .upd-body { font-size:12px; color:#4a3b14; line-height:1.65; }
+.upd-body a, .kv a, .item a, .short a { color:#1a6b3c; }
+ol.judge, ol.chg { margin:0 0 12px 18px; font-size:13px; color:#2d3e2d; } ol.judge li, ol.chg li { padding:4px 0; line-height:1.6; }
+table.act, table.kv { width:100%; border-collapse:collapse; font-size:12px; } .act th, .act td, .kv th, .kv td { border-bottom:1px solid #eef2ee; padding:8px 7px; vertical-align:top; text-align:left; line-height:1.6; }
+.act th { font-size:10.5px; color:#667; background:#f7faf7; } .kv th { width:96px; color:#2d3e2d; font-size:11.5px; white-space:nowrap; }
+.act.plan td:nth-child(2), .act.plan td:nth-child(3) { white-space:nowrap; }
+.act.review td:nth-child(1) { width:32%; } .act.review td:nth-child(2) { width:13%; white-space:nowrap; }
+@media (max-width:640px){ .act.plan td:nth-child(2), .act.plan td:nth-child(3), .act.review td:nth-child(2){ white-space:normal; } .kv th{ white-space:normal; width:70px; } }
+.note { font-size:11px; color:#777; margin-top:8px; line-height:1.6; }
+.item { padding:10px 0; border-bottom:1px solid #f1f1f1; } .item:last-child{ border-bottom:none; }
+.item-h { font-weight:700; font-size:12.5px; color:#1c2e1c; margin-bottom:4px; } .item p { font-size:12px; color:#4a5568; line-height:1.65; margin:4px 0; }
+ul.short { list-style:none; font-size:12px; color:#4a5568; } ul.short li { padding:6px 0; border-bottom:1px solid #f4f4f4; line-height:1.65; } ul.short li:last-child{ border-bottom:none; }
+.card { overflow-x:auto; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-left">
+    <h1>🌿 Green Oil Inc.</h1>
+    <div class="sub">주간 정책 &amp; 시장 인텔리전스 리포트 · Weekly Intelligence Report</div>
+  </div>
+  <div class="header-right">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="pdf-btn" onclick="downloadPDF()">
+        <svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><rect x="6" y="13" width="12" height="8" rx="1"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/></svg>
+        <span id="pdfBtnLabel">PDF 저장</span>
+      </button>
+      <a class="report-switch" href="../index.html">&#8592; 인덱스</a>
+      <a class="report-switch" href="../canola/2026-10-26.html"><span class="dot"></span>카놀라 리포트 →</a>
+    </div>
+    <div class="updated-badge">마지막 업데이트: 2026.10.26</div>
+  </div>
+</div>
+
+<div class="week-nav">
+  <a class="nav-btn disabled" href="#">&#8592; 최신</a>
+  <div class="nav-center">
+    <div class="nav-week-label">이번 주 · 2026년 10/19 – 10/25 주</div>
+    <div class="nav-week-sub">2026.10.26 기준</div>
+    <div class="nav-dots">
+<a class="nav-dot active" href="./2026-10-26.html" title=""></a>
+<a class="nav-dot" href="./2026-10-19.html" title=""></a>
+<a class="nav-dot" href="./2026-10-13.html" title=""></a>
+<a class="nav-dot" href="./2026-10-12.html" title=""></a>
+<a class="nav-dot" href="./2026-10-05.html" title=""></a>
+<a class="nav-dot" href="./2026-09-28.html" title=""></a>
+<a class="nav-dot" href="./2026-09-22.html" title=""></a>
+<a class="nav-dot" href="./2026-09-21.html" title=""></a>
+<a class="nav-dot" href="./2026-09-14.html" title=""></a>
+<a class="nav-dot" href="./2026-09-10.html" title=""></a>
+<a class="nav-dot" href="./2026-09-08.html" title=""></a>
+<a class="nav-dot" href="./2026-09-07.html" title=""></a>
+<a class="nav-dot" href="./2026-09-04.html" title=""></a>
+<a class="nav-dot" href="./2026-08-31.html" title=""></a>
+<a class="nav-dot" href="./2026-08-24.html" title=""></a>
+<a class="nav-dot" href="./2026-08-17.html" title=""></a>
+<a class="nav-dot" href="./2026-08-10.html" title=""></a>
+<a class="nav-dot" href="./2026-08-03.html" title=""></a>
+<a class="nav-dot" href="./2026-07-27.html" title=""></a>
+<a class="nav-dot" href="./2026-07-20.html" title=""></a>
+<a class="nav-dot" href="./2026-07-13.html" title=""></a>
+<a class="nav-dot" href="./2026-07-06.html" title=""></a>
+<a class="nav-dot" href="./2026-06-29.html" title=""></a>
+<a class="nav-dot" href="./2026-06-22.html" title=""></a>
+<a class="nav-dot" href="./2026-06-15.html" title=""></a>
+<a class="nav-dot" href="./2026-06-08.html" title=""></a>
+<a class="nav-dot" href="./2026-06-01.html" title=""></a>
+<a class="nav-dot" href="./2026-05-25.html" title=""></a>
+<a class="nav-dot" href="./2026-05-18.html" title=""></a>
+<a class="nav-dot" href="./2026-05-11.html" title=""></a>
+<a class="nav-dot" href="./2026-05-05.html" title=""></a>
+<a class="nav-dot" href="./2026-04-28.html" title=""></a>
+<a class="nav-dot" href="./2026-04-21.html" title=""></a>
+<a class="nav-dot" href="./2026-04-14.html" title=""></a>
+<a class="nav-dot" href="./2026-04-07.html" title=""></a>
+<a class="nav-dot" href="./2026-03-30.html" title=""></a>
+<a class="nav-dot" href="./2026-03-23.html" title=""></a>
+<a class="nav-dot" href="./2026-03-16.html" title=""></a>
+<a class="nav-dot" href="./2026-03-09.html" title=""></a>
+<a class="nav-dot" href="./2026-03-02.html" title=""></a>
+<a class="nav-dot" href="./2026-02-23.html" title=""></a>
+<a class="nav-dot" href="./2026-02-16.html" title=""></a>
+<a class="nav-dot" href="./2026-02-09.html" title=""></a>
+<a class="nav-dot" href="./2026-02-02.html" title=""></a>
+<a class="nav-dot" href="./2026-01-26.html" title=""></a>
+<a class="nav-dot" href="./2026-01-19.html" title=""></a>
+<a class="nav-dot" href="./2026-01-12.html" title=""></a>
+<a class="nav-dot" href="./2026-01-05.html" title=""></a>
+    </div>
+  </div>
+  <a class="nav-btn" href="./2026-10-19.html">이전 &#8594;</a>
+</div>
+
+<div class="container">
+
+  <div class="legend">근거 표시: <span class="lb lb-fact">확정</span> 공식 원문으로 확인 · <span class="lb lb-prop">제안</span> 정부 제안·초안 · <span class="lb lb-ind">업계 요구</span> 단체·기업 요청 · <span class="lb lb-anal">분석가 의견</span> 시장 해설 · <span class="lb lb-ai">AI 추론</span> 이 리포트의 판단</div>
+
+  <!-- ── 맨 위 한 줄 요약 ── -->
+  <div class="why-line down">
+    <div class="why-move">▼ −4¢ &nbsp;D4 RIN $1.86 · 10/23 주간 종가</div>
+    <div class="why-text"><strong>왜?</strong> D4 RIN은 주중 1.75달러(10/21)까지 밀렸다가 금요일 하루 10센트 반등해 주간 4센트 하락(2주 누적 −23¢)으로 마쳤고 대두유 12월물도 0.30센트 내렸지만, WTI 12월물이 배럴당 103.60달러(10/23)로 다시 올라 경유 쪽 재료는 반대로 위를 향했습니다(하락 원인은 출처에 적혀 있지 않습니다).</div>
+  </div>
+
+  <div class="alert-bar">
+    <div class="pill red">  <div class="dot red"></div>  <span>2</span> 관심 요망</div>
+    <div class="pill amber"><div class="dot amber"></div><span>4</span> 모니터링 필요</div>
+    <div class="pill green"><div class="dot green"></div><span>2</span> 기회 요인</div>
+  </div>
+
+  <!-- ── 결정 요약 ── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-summary">📋</div>
+      <div class="card-title">이번 주 결정 요약 <span>판단 · 주요 변화 · 권고 · 10/19 – 10/25</span></div>
+    </div>
+
+    <div class="sub-label">판단</div>
+    <ol class="judge">
+      <li>10/23 미국 대통령이 캐나다산 제338조 50% 관세 대상 품목을 조정했지만, <strong>UCO(HTSUS 1518.00.40)는 빠지지도 새로 들어가지도 않아 관세는 그대로</strong>입니다. <span class="lb lb-fact">확정</span> 다만 미국 쪽 요청으로 품목이 빠질 수 있다는 선례가 생겨, 미국 바이어를 통한 해제 요청이 현실적인 선택지가 됐다고 판단합니다. <span class="lb lb-ai">AI 추론</span></li>
+      <li>D4 RIN은 주간 4센트 내린 1.86달러로, 2주 동안 23센트 빠졌습니다. 미국향 UCO 가격의 <strong>하방 압력이 이어지고 있다</strong>고 봅니다. <span class="lb lb-ai">AI 추론</span></li>
+      <li>BC 총선(10/24)에서 보수당이 다수 정부를 얻었고 CleanBC 폐지를 공약했습니다. BC 저탄소연료기준(LCFS)이 함께 흔들리면 <strong>국내 재생디젤 수요처의 셈법이 바뀔 수 있어</strong>, 국내 판로 검토에 BC 변수를 더해야 합니다. <span class="lb lb-ai">AI 추론</span></li>
+    </ol>
+
+    <div class="sub-label">주요 변화</div>
+    <ol class="chg">
+      <li><span class="lb lb-fact">확정</span> <strong>제338조 대상 품목 조정 포고(10/23 서명, 10/30 0시 1분 발효)</strong> — 해초·플라스틱 포장재·합판·농기계 등 22개 품목을 50% 관세에서 빼고, 초콜릿 원료·샴푸·윤활제·카펫·폐기물(지방자치 폐기물·하수 슬러지·의료 폐기물) 등을 새로 넣었습니다. UCO와 바이오디젤은 두 목록 모두에 없습니다. → <em>영향:</em> Green Oil의 미국향 관세 부담은 바뀌지 않습니다. <span class="lb lb-ai">AI 추론</span></li>
+      <li><span class="lb lb-fact">확정</span> <strong>시세</strong> — D4 RIN US$1.86/RIN(10/23 종가, 주간 −4¢), CBOT 대두유 12월물 66.83 US¢/lb(10/23, 주간 −0.30¢), WTI 12월물 US$103.60/배럴(10/23), 미국 고속도로 경유 소매가 US$6.276/갤런(EIA 10/19 관측, 주간 +9.7¢)입니다. → <em>영향:</em> UCO 매입가 상한을 정하는 D4는 약세, 재생디젤 판매가를 받치는 경유는 강세입니다. 바이어 마진 방향은 단정하기 어렵습니다. <span class="lb lb-ai">AI 추론</span></li>
+      <li><span class="lb lb-fact">확정</span> <strong>BC 보수당 다수 정부(10/24 총선)</strong> — 93석 중 64석에서 앞서거나 당선(CBC 10/25 추계)됐고, 당 공약은 CleanBC 폐지·LNG 생산 2배·감세입니다. 이번 주 기사에서 LCFS 언급은 발견되지 않았습니다. → <em>영향:</em> 아래 「캐나다 정치」 참고. <span class="lb lb-ai">AI 추론</span></li>
+    </ol>
+
+    <div class="sub-label">권고 조치</div>
+    <table class="act plan">
+      <thead><tr><th>권고</th><th>담당 기능</th><th>기한</th><th>선행 확인</th></tr></thead>
+      <tbody>
+        <tr><td><strong>① 미국 쪽 의견 창구 두 곳 결정</strong> — EPA 재배분안 공청회 발언 여부를 10/27까지 정하시고(등록 마감 10/28), 이번 포고의 품목 해제 선례를 근거로 <strong>UCO(1518.00.40) 해제 요청</strong>을 미국 바이어·업계 단체와 함께 국제무역위원회 의견(11/9)에 넣을지 정하실 것을 권합니다. <span class="lb lb-ai">AI 추론</span></td><td>경영기획·대외협력</td><td>10/27 · 11/9</td><td>미국향 2026·2027 예상 물량 · 바이어가 공동 의견에 응할지 · 해제 요청에 쓸 미국 쪽 피해 근거(바이어 원료 대체 가능성)</td></tr>
+        <tr><td><strong>② 국내 판로 검토에 BC 변수 추가</strong> — 지난주 권고 ②(CFR 의견·국내 판로)를 이어 가되, BC 새 정부가 LCFS를 유지할지 확인될 때까지 <strong>BC 수요처와의 장기 계약 판단은 미루실 것</strong>을 권합니다. <span class="lb lb-ai">AI 추론</span></td><td>대외협력 + 영업</td><td>11/30</td><td>국내 생산자 매입 조건 · 거래처의 BC LCFS 크레딧 의존도 · BC 새 정부 첫 의회 연설 내용</td></tr>
+        <tr><td><strong>③ 미국향 가격·환급 조건 정리</strong> — 지난주 권고 ③을 유지합니다. D4가 2주 동안 23센트 내린 만큼 시세 연동분·관세 부담분·환급 귀속을 나눠 협상하시고, 재배분안 확정 전 장기 고정가는 피하시는 편이 낫다고 봅니다. <span class="lb lb-ai">AI 추론</span></td><td>영업(수출 계약) + 외부 통관·환급 전문가</td><td>11/6</td><td>바이어별 미국 수입신고 명의 · 바이어의 재생디젤 수출 여부 · 계약별 D4 연동 조건 · CUSMA 원산지 증빙</td></tr>
+      </tbody>
+    </table>
+    <div class="note">회사의 실제 미국향 물량·계약 조건·관세 부담 자료와 BC 거래처 자료가 이 리포트에는 없습니다. 그래서 금액 영향은 계산하지 않았고, 권고는 위 선행 확인 결과에 따라 달라집니다.</div>
+  </div>
+
+  <!-- ── 최대 현안 ── -->
+  <div class="card" style="border-left:5px solid #dc2626;">
+    <div class="card-header">
+      <div class="card-icon icon-risk">🔴</div>
+      <div class="card-title">최대 현안 — 미국 UCO 50% 추가관세 <span>9/15 발효 · 10/23 품목 조정에서 UCO 변화 없음</span></div>
+    </div>
+    <ul class="short">
+      <li><span class="lb lb-fact">확정</span> 10/23 포고(「Further Modifying the Scope of Products of Canada…」, 제338조, 19 U.S.C. 1338)는 Proclamation 11048 대상 목록을 고쳐 <strong>부속서 I Part A(관세 해제)</strong>와 <strong>Part B(신규 부과)</strong>를 두고, 부속서 II로 HTSUS 제99장 미국 주 51(b)(3)의 품목을 지우고 더했습니다. 세 목록에서 <strong>1518.00.40(UCO)·3826(바이오디젤)은 발견되지 않았습니다.</strong> 새로 들어간 3825.10.01·3825.20.00·3825.30.00(지방자치 폐기물·하수 슬러지·의료 폐기물)은 UCO와 다른 품목번호입니다(<a href="https://www.whitehouse.gov/presidential-actions/2026/10/further-modifying-the-scope-of-products-of-canada-subject-to-the-additional-duties-imposed-to-offset-canadian-discrimination-against-the-commerce-of-the-united-states-with-respect-to-motor-vehicles/" target="_blank" rel="noopener noreferrer">백악관 원문</a>, <a href="https://www.whitehouse.gov/wp-content/uploads/2026/10/2026ModifyingAuto338.prc_.AnnexI-3.pdf" target="_blank" rel="noopener noreferrer">부속서 I</a>, <a href="https://www.whitehouse.gov/wp-content/uploads/2026/10/2026ModifyingAuto338.prc_.AnnexII-2.pdf" target="_blank" rel="noopener noreferrer">부속서 II</a>).</li>
+      <li><span class="lb lb-fact">확정</span> CBC는 이번 해제가 메인주 콜린스 상원의원의 요청 뒤에 나왔다고 보도했습니다(<a href="https://www.cbc.ca/news/politics/trump-susan-collins-tariffs-midterms-9.7393675" target="_blank" rel="noopener noreferrer">CBC 10/23</a>). 같은 날 카니 총리는 미국과의 합의를 「서두르지 않는다」고 말했습니다. <span class="lb lb-ai">AI 추론</span> 해제된 품목은 미국 쪽에 대체 공급처가 없다는 근거가 붙은 것들이어서, UCO 해제 요청도 미국 바이어의 원료 사정을 근거로 삼아야 설득력이 있다고 봅니다.</li>
+      <li><span class="lb lb-fact">확정</span> 환급 구조(신청권자=원칙적으로 수출자, 19 CFR §190.82)와 캐나다향 상한(19 U.S.C. §1313(n)(2)), CUSMA 원산지 예외(§4534(a)(5))는 지난주와 같습니다. 상세: <a href="./2026-10-13.html">10/13 리포트</a> 「최대 현안」 ②~④.</li>
+      <li><span class="lb lb-fact">확정</span> 공식 의견 창구는 국제무역위원회 제338조 의견(11/9), EPA 재배분안(공청회 11/4·등록 10/28·의견 12/4), 무역대표부 CUSMA 공동검토(2027-01-12)입니다(지난주와 같음).</li>
+    </ul>
+  </div>
+
+  <!-- ── 이번 주 변화 상세 ── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-market">📈</div>
+      <div class="card-title">이번 주 변화 상세 <span>사실 → 사업 영향 → 권고</span></div>
+    </div>
+
+    <div class="item">
+      <div class="item-h"><span class="tag tag-market">10/19–10/23 · 시세</span> <span class="lb lb-fact">확정</span> D4 RIN 주간 −4¢, 대두유 소폭 약세, 원유 반등</div>
+      <p><strong>사실:</strong> D4 RIN 일별 종가(US$/RIN)는 1.82(10/19) → 1.85(10/20) → <strong>1.75(10/21)</strong> → 1.79(10/22) → <strong>1.86(10/23)</strong>입니다. 주간 4센트 내렸고, 금요일에 하루 10센트 올랐습니다. D6는 1.74달러(주간 −6¢), 캘리포니아 LCFS 크레딧은 US$89/t(주간 −1)입니다(<a href="https://pflpetroleum.com/reports/wp-content/uploads/2026/10/PFL_RIN_RECAP_V6_2026_10_26.pdf" target="_blank" rel="noopener noreferrer">PFL 주간 요약 10/19~10/23</a>, 중개사 시장 종가). 같은 자료의 선물 표에서 대두유 12월물은 67.05, 초저유황 경유(ULSD) 11월물은 498.42 US¢/갤런입니다(기준 시각 미표기). CBOT 대두유 12월물 종가는 <strong>66.83 US¢/lb</strong>(10/23, 주간 −0.30¢), WTI 12월물은 <strong>US$103.60/배럴</strong>(10/23, 하루 +4.13)입니다(<a href="https://brownfieldagnews.com/news/closing-grain-and-livestock-futures-october-23-2026/" target="_blank" rel="noopener noreferrer">Brownfield 10/23</a>, 선물 종가). 지난주 WTI 수치(101.41달러)는 11월물이라 월물이 달라 주간 비교는 하지 않았습니다. 미국 고속도로 경유 소매가는 <strong>US$6.276/갤런</strong>(10/19 관측, 주간 +9.7¢)입니다(<a href="https://www.eia.gov/petroleum/gasdiesel/" target="_blank" rel="noopener noreferrer">EIA 10/20 발표</a>, 주간 전국 평균). D4가 내린 이유는 출처에 적혀 있지 않습니다.</p>
+      <p><strong>사업 영향:</strong> D4는 미국 정제사가 UCO에 낼 수 있는 값의 상한을 정합니다. 2주 연속 하락은 바이어의 가격 인하 요구 근거가 됩니다. 반면 경유 소매가와 원유는 올라 재생디젤 판매가는 받쳐지고 있습니다. <span class="lb lb-ai">AI 추론</span></p>
+      <p><strong>권고:</strong> 「권고 ③」 참고.</p>
+    </div>
+
+    <div class="item">
+      <div class="item-h"><span class="tag tag-market">10/19 · 수급</span> <span class="lb lb-anal">분석가 의견</span> 중국산 UCO, 1~8월 캐나다로 26.3만 t</div>
+      <p><strong>사실:</strong> Fastmarkets 집계를 인용한 보도에 따르면 중국의 2026년 1~8월 UCO 수출은 257만 t(전년 대비 +55%)입니다. 캐나다가 <strong>26.3만 t</strong>을 사들였고, 미국향은 6월 16.8만 t에서 8월 1.2만 t으로 줄었습니다. 기사는 45Z가 2026년 초부터 미국·캐나다·멕시코 밖 원료를 빼면서 미국향 물량이 들쭉날쭉하다고 적었습니다(<a href="https://ukragroconsult.com/en/news/chinas-used-cooking-oil-exports-surge-55-with-europe-becoming-the-largest-buyer/" target="_blank" rel="noopener noreferrer">UkrAgroConsult 10/19</a>, Fastmarkets 인용). 중국 해관 원문과 캐나다 통계청 수입 통계(HS 1518)는 이 리포트에서 확인하지 못했습니다.</p>
+      <p><strong>사업 영향:</strong> 캐나다 안 UCO 수요처가 중국산으로 일부를 채우고 있다면, 국내 수거 UCO는 국내 판매에서 수입품과 가격 경쟁을 하게 됩니다. CFR 개정에서 「국내 원료」 우대가 들어가는지가 그래서 더 중요해집니다. <span class="lb lb-ai">AI 추론</span></p>
+      <p><strong>권고:</strong> 「권고 ②」 참고. 캐나다 통계청 HS 1518 수입 통계로 수입처를 맞춰 보실 것을 권합니다.</p>
+    </div>
+
+    <div class="item">
+      <div class="item-h"><span class="tag tag-us">10/23 · 45Z</span> <span class="lb lb-anal">분석가 의견</span> 독일 유지작물 단체 「미국 바이오연료 정책이 캐나다 착유를 키운다」</div>
+      <p><strong>사실:</strong> 독일 유지·단백작물협회(UFOP)는 국제곡물이사회(IGC) 전망을 들어 캐나다 카놀라 국내 소비가 2026/27년 1,450만 t(전년 1,310만 t)으로 늘고 수출은 780만 t(전년 910만 t)으로 줄 것이라고 밝혔습니다. 원인으로 45Z가 미국·멕시코·캐나다 원료만 인정하는 점을 꼽았습니다(<a href="https://www.biobased-diesel.com/post/ufop-us-biofuels-policy-causes-canada-s-oilseed-processing-to-grow" target="_blank" rel="noopener noreferrer">Biobased Diesel Daily 10/23</a>).</p>
+      <p><strong>사업 영향:</strong> 45Z가 캐나다산 원료 수요를 키운다는 해석은 UCO에도 같은 방향입니다. 다만 카놀라유 공급이 늘면 미국 바이어가 UCO 대신 카놀라유를 쓸 여지도 커집니다. <span class="lb lb-ai">AI 추론</span></p>
+    </div>
+
+    <div class="item">
+      <div class="item-h"><span class="tag tag-us">10/22 · 미국 연료</span> <span class="lb lb-fact">확정</span> 국방물자생산법으로 석유 생산·정제 지원 지정</div>
+      <p><strong>사실:</strong> 미국 대통령은 국방물자생산법(DPA) 303조에 따라 국내 석유 생산·정제·물류 능력을 국방 필수 자원으로 정하는 결정문에 서명했습니다(<a href="https://www.whitehouse.gov/presidential-actions/2026/10/presidential-determination-pursuant-to-section-303-of-the-defense-production-act-of-1950-as-amended-on-domestic-petroleum-production-refining-and-logistics-capacity-c139/" target="_blank" rel="noopener noreferrer">백악관 10/22</a>). 재생연료는 대상으로 적혀 있지 않습니다.</p>
+      <p><strong>사업 영향:</strong> 지원 규모가 정해지지 않아 당장 효과는 없습니다. 미국 연료 정책 무게가 석유 쪽으로 기우는 신호로, RFS 재배분안 확정 과정과 함께 볼 일입니다. <span class="lb lb-ai">AI 추론</span></p>
+    </div>
+
+    <div class="item">
+      <div class="item-h"><span class="tag tag-us">10/20 · 미국 수요처</span> <span class="lb lb-fact">확정</span> 캘리포니아 재생디젤·SAF 공장(연 5천만 갤런) 매각 계약</div>
+      <p><strong>사실:</strong> 캘리포니아 파라마운트의 재생디젤·SAF 공장(연 5천만 갤런)을 다른 업체가 사들이기로 계약했다고 10/20 발표했습니다. 재가동까지 9~12개월이 걸린다고 밝혔습니다(<a href="https://www.biobased-diesel.com/post/xcf-global-to-acquire-world-energy-s-paramount-california-saf-plant" target="_blank" rel="noopener noreferrer">Biobased Diesel Daily 10/20</a>). 기업 이름은 리포트 기준에 따라 적지 않았습니다.</p>
+      <p><strong>사업 영향:</strong> 재가동되면 2027년 하반기부터 미국 서부의 UCO·우지 수요가 늘 수 있습니다. <span class="lb lb-ai">AI 추론</span></p>
+    </div>
+
+    <div class="item">
+      <div class="item-h"><span class="tag tag-eu">10/20 · EU</span> <span class="lb lb-ind">업계 요구</span> 유럽 바이오디젤협회, 독일·프랑스 승용차 CO2 기준안 환영</div>
+      <p><strong>사실:</strong> 유럽 바이오디젤협회(EBB)는 독일·프랑스 정부의 승용차 CO2 기준 제안(90% 감축 목표, 재생·저탄소 연료 전용 차량 범주, 연료는 「EU 생산」)을 환영하면서, 연료 자격은 RED 원료 기준을 따라야 한다고 요구했습니다(<a href="https://www.biobased-diesel.com/post/european-biodiesel-board-applauds-proposal-on-co2-standards-by-german-french-governments" target="_blank" rel="noopener noreferrer">Biobased Diesel Daily 10/20</a>). 두 정부 제안 원문은 확인하지 못했습니다.</p>
+      <p><strong>사업 영향:</strong> 「EU 생산」 조건이 연료에만 걸리고 RED 부속서 IX 원료(UCO 포함)가 그대로 인정되면 유럽향 UCO 수요에는 우호적입니다. 아직 제안 단계입니다. <span class="lb lb-ai">AI 추론</span></p>
+    </div>
+  </div>
+
+  <!-- ── 캐나다 정치 ── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-prov">🏛️</div>
+      <div class="card-title">캐나다 정치 <span>BC 결과는 사업 영향 있음 · 나머지 기록용</span></div>
+    </div>
+    <ul class="short">
+      <li><span class="lb lb-fact">확정</span> <strong>BC</strong> — 10/24 총선에서 보수당(도어크슨 대표)이 다수 정부를 얻었고, 이비 NDP 대표는 사퇴를 밝혔습니다(<a href="https://www.cbc.ca/news/canada/british-columbia/bc-conservatives-majority-government-9.7394961" target="_blank" rel="noopener noreferrer">CBC 10/25</a>). 새 정부 공약은 CleanBC 폐지, LNG 생산 2032년까지 2배, 세금 동결·감세입니다(<a href="https://www.cbc.ca/news/canada/british-columbia/bc-conservative-lorne-doerkson-promises-what-to-expect-9.7395394" target="_blank" rel="noopener noreferrer">CBC 10/25</a>). 두 기사에서 저탄소연료기준(LCFS) 언급은 발견되지 않았습니다. <span class="lb lb-anal">배경</span> 2023년 11월 당시 BC 보수당 대표는 「BC의 저탄소 연료 요건을 없애겠다」고 말한 바 있습니다(<a href="https://www.cheknews.ca/john-rustad-releases-bc-conservative-partys-climate-plan-1178583/" target="_blank" rel="noopener noreferrer">CHEK 2023-11-22</a>). 2026년 공약에 같은 내용이 있는지는 확인하지 못했습니다. <span class="lb lb-ai">AI 추론</span> BC LCFS는 BC 안 재생디젤·바이오디젤 수요의 핵심 근거여서, 폐지·완화되면 국내 UCO 수요처 일부의 셈법이 바뀝니다.</li>
+      <li><span class="lb lb-fact">확정</span> <strong>앨버타</strong> — 10/19 주민투표에서 분리 독립 선택지는 약 25%였고, 이민 관련 5개 문항은 과반 찬성, 헌법 관련 4개 문항은 부결됐습니다. 결과 공식 확정은 10/29입니다(<a href="https://www.cbc.ca/news/canada/calgary/alberta-referendum-questions-immigration-constitution-9.7394465" target="_blank" rel="noopener noreferrer">CBC 10/25</a>, <a href="https://www.cbc.ca/news/canada/calgary/reaction-alberta-referendum-separatism-9.7392004" target="_blank" rel="noopener noreferrer">CBC 10/25</a>). CFR 관련 발언은 발견되지 않았습니다.</li>
+      <li><span class="lb lb-fact">확정</span> <strong>연방·온타리오</strong> — 10/21 카니 총리와 포드 주총리가 관세 대응 행동계획을 냈고, 승용차 온실가스 기준을 2029년까지 2026년 수준(172 g/마일)으로 묶었습니다(<a href="https://www.canada.ca/en/innovation-science-economic-development/news/2026/10/prime-minister-carney-and-premier-ford-launch-new-action-plan-to-protect-workers-from-tariffs-and-strengthen-ontario-industries.html" target="_blank" rel="noopener noreferrer">캐나다 정부 10/21</a>). 바이오연료·CFR 조치는 없었습니다. 재무부는 2026년 연방 예산을 <strong>11/5</strong> 제출한다고 밝혔습니다(<a href="https://www.canada.ca/en/department-finance/news/2026/10/government-of-canada-to-release-budget-2026-on-november-5-2026.html" target="_blank" rel="noopener noreferrer">재무부 10/20</a>). 캐나다-EU 정상회의는 이번 주(10/29~30 몬트리올)입니다(<a href="https://www.cbc.ca/news/politics/canada-eu-summit-concrete-results-9.7395409" target="_blank" rel="noopener noreferrer">CBC 10/25</a>).</li>
+      <li><strong>푸알리에브르 보수당·사스카추완·매니토바·퀘벡</strong> — CFR·카놀라·바이오연료 관련 발표는 확인한 출처(CBC 정치·지역 RSS 10/19~10/26, 웹 검색)에서 발견되지 않았습니다. 사스카추완 주의회 가을 회기가 시작된다는 보도(CBC 10/25)만 있었습니다.</li>
+    </ul>
+  </div>
+
+  <!-- ── 변화 없는 감시 항목 ── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-canada">⭐</div>
+      <div class="card-title">변화 없는 감시 항목 <span>한 줄 · 상세는 직전 리포트</span></div>
+    </div>
+    <ul class="short">
+      <li><strong>CFR 개정안 본문</strong> — 관보 Part I 제160권 제43호(10/24)와 Part II 제21호(10/21)에서 발견되지 않았습니다. 환경부의 「연내 Part I」 목표는 그대로입니다. 상세: <a href="./2026-10-19.html">10/19 리포트</a></li>
+      <li><strong>45Z 최종규칙·UCO 증빙 요건</strong> — 연방관보 10/19~10/26 발행분에 재무부·국세청의 45Z 문서는 발견되지 않았습니다. 캐나다산 UCO 적격 근거는 IRS Notice 2026-53 §4.02(2)입니다. 상세: <a href="./2026-10-13.html">10/13 리포트</a></li>
+      <li><strong>EPA 재배분안</strong> — 이번 주 새 문서는 없었습니다. 공청회 11/4(등록 10/28)·의견 12/4. 상세: <a href="./2026-10-19.html">10/19 리포트</a></li>
+      <li><strong>ISCC·UCO 공개 시세</strong> — ISCC의 UCO 관련 발표(RSS 10/19~10/26)와 UCO 자체 공개 시세는 발견되지 않았습니다. 마지막 확인치는 걸프 UCO 71 US¢/lb(9/24, 인도가 평가)입니다.</li>
+    </ul>
+  </div>
+
+  <!-- ── 리스크 레이더 ── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-risk">⚡</div>
+      <div class="card-title">리스크 &amp; 기회 레이더 <span>Action Radar · 10/19 – 10/25</span></div>
+    </div>
+    <div class="risk-grid">
+      <div class="risk-col red">
+        <div class="risk-col-title">🔴 관심 요망</div>
+        <div class="risk-entry">미국 UCO 50% 추가관세 유지 — 10/23 품목 조정에서도 UCO는 빠지지 않았습니다 → 권고 ①·③</div>
+        <div class="risk-entry">D4 RIN 1.86달러(2주 누적 −23¢)로 UCO 가격 하방 압력이 이어집니다 → 권고 ③</div>
+      </div>
+      <div class="risk-col amber">
+        <div class="risk-col-title">🟡 모니터링 필요</div>
+        <div class="risk-entry">BC 보수당 다수 정부 — CleanBC 폐지 공약, LCFS 처리 방향 미확인 → 권고 ②</div>
+        <div class="risk-entry">중국산 UCO 캐나다 유입(1~8월 26.3만 t) — 국내 판매 가격 경쟁</div>
+        <div class="risk-entry">CFR 개정안 연내 Part I 예정 · 45Z 최종규칙 미확정</div>
+        <div class="risk-entry">연방 예산 11/5 · 캐나다-EU 정상회의 10/29~30</div>
+      </div>
+      <div class="risk-col green">
+        <div class="risk-col-title">🟢 기회 요인</div>
+        <div class="risk-entry">제338조 품목이 미국 쪽 요청으로 빠진 선례 — UCO 해제 요청 근거(국제무역위원회 의견 11/9) → 권고 ①</div>
+        <div class="risk-entry">EPA 재배분안 BBD 몫 1억 8천만 RIN — 공청회 11/4(등록 10/28) → 권고 ①</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 지난주 권고 점검 ── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-summary">🔁</div>
+      <div class="card-title">지난주 권고 점검 <span>10/19 리포트 권고 기준</span></div>
+    </div>
+    <table class="act review">
+      <thead><tr><th>지난주 권고</th><th>실행 여부</th><th>판단 변경과 이유</th></tr></thead>
+      <tbody>
+        <tr><td>① EPA 재배분안 공청회·의견 참여 결정(10/27)</td><td>미확인(회사 확인 필요)</td><td><strong>확대</strong>했습니다. 기한은 그대로(등록 마감 10/28)이고, 10/23 포고로 품목 해제 선례가 생겨 국제무역위원회 의견(11/9)에 UCO 해제 요청을 넣는 안을 더했습니다 → 권고 ①</td></tr>
+        <tr><td>② CFR 개정 의견과 국내 판로 검토(11/30)</td><td>미확인(회사 확인 필요)</td><td><strong>보완</strong>했습니다. BC 정권 교체로 LCFS 향방이 불확실해져, BC 수요처와의 장기 계약 판단을 미루는 조건을 붙였습니다 → 권고 ②</td></tr>
+        <tr><td>③ 미국향 가격·환급 조건 정리(11/6)</td><td>미확인(회사 확인 필요)</td><td><strong>유지</strong>합니다. 관세·환급 제도는 바뀌지 않았고 D4는 한 주 더 내렸습니다 → 권고 ③</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── 검증 기록 ── -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-sources">🧾</div>
+      <div class="card-title">검증 기록 <span>검색 범위 · 확인 시각 · 일관성 검사</span></div>
+    </div>
+    <ul class="short">
+      <li><strong>미국 연방관보 API</strong>(10/26 오전 8시경 EDT 확인) — 발행일 10/19~10/26 범위에서 어구 '45Z'·'renewable fuel'·'used cooking oil'·'clean fuel production'·'biodiesel'·'section 338'·'drawback'·'biofuel'·'products of Canada'로 찾았습니다. 관련 문서는 0건이었습니다('drawback'·'biofuel'은 의료·투자 문서 각 1건, 무관). 10/26 공개열람 목록에도 관련 문서는 없었습니다. 10/23 제338조 포고는 아직 관보에 실리지 않아 백악관 원문과 부속서 PDF로 확인했습니다.</li>
+      <li><strong>제338조 부속서 대조</strong> — 부속서 I(271줄)·II(45줄)를 글자로 바꿔 '1518'·'1522'·'3826'·'2710'·'cooking'·'grease'를 찾았고 0건이었습니다. 'waste'는 3825.10.01·3825.20.00·3825.30.00 세 줄뿐이었습니다.</li>
+      <li><strong>캐나다 관보</strong>(10/26 확인) — Part I 제43호(10/24) 색인과 Part II 제21호(10/21) 색인을 직접 열었고 '청정연료(Clean Fuel)' 문서는 없었습니다.</li>
+      <li><strong>업계 피드</strong>(10/26 확인) — Biobased Diesel Daily(10/19~10/23 20건)·ISCC(10/19·10/23 2건, UCO 무관)·Advanced Biofuels Canada(이번 주 새 항목 없음) RSS를 모두 봤습니다. Ag Bull 주간 리뷰는 유료 전환으로 본문을 열지 못해 Brownfield 종가로 대신했습니다.</li>
+      <li><strong>시세</strong> — D4·D6·LCFS는 PFL 주간 요약 PDF(10/26 발행, 10/19~10/23 종가), 대두유·원유는 Brownfield 종가(10/23), 경유 소매가는 EIA 주간 표(10/20 발표, 10/19 관측)에서 확인했습니다. EIA 다음 발표는 10/27입니다. UCO 공개 시세는 웹 검색(10/26)에서 발견되지 않았습니다.</li>
+      <li><strong>정치</strong> — CBC 정치·지역(SK·MB·캘거리·에드먼턴·BC·토론토) RSS 10/19~10/26 항목과 웹 검색으로 확인했습니다. BC 보수당의 2026년 LCFS 공약은 웹 검색에서 발견되지 않았습니다. 곡물생산자협회 경유 환급 요청·세노버스 에탄올 공장 폐쇄 기사(Western Producer)는 자동 확인이 막혀(403) 넣지 않았습니다.</li>
+      <li><strong>발행일 확인</strong> — 기사·보도자료는 페이지 메타(<code>datePublished</code>·<code>article:published_time</code>)나 RSS 발행일·문서 날짜로 확인했습니다. 2023년 CHEK 기사는 배경으로만 쓰고 그렇게 표시했습니다.</li>
+      <li><strong>일관성 검사</strong> — 제목·파일명·날짜(2026-10-26)·주간(10/19–10/25)·단위(US$/RIN, US¢/lb, US$/배럴, US$/갤런, US$/t, 만 t)를 확인했습니다. 발행 시점에 같은 날 카놀라·FX 리포트는 아직 없어, 지난주 카놀라·FX 리포트(10/19)와 정책 상태를 대조했습니다. 제338조(UCO 50% 유지)·45Z(최종규칙 없음)·CFR(관보 미게재, 연내 Part I 목표)·RFS(재배분안 의견 12/4) 상태가 일치합니다. 10/23 품목 조정은 이 리포트가 먼저 반영했습니다.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon icon-sources">🔗</div>
+      <div class="card-title">출처 <span>Sources · 발행일 개별 확인</span></div>
+    </div>
+    <div class="source-row"><div class="src-num">1</div><div><a class="src-link" href="https://www.whitehouse.gov/presidential-actions/2026/10/further-modifying-the-scope-of-products-of-canada-subject-to-the-additional-duties-imposed-to-offset-canadian-discrimination-against-the-commerce-of-the-united-states-with-respect-to-motor-vehicles/" target="_blank" rel="noopener noreferrer">Further Modifying the Scope of Products of Canada Subject to the Additional Duties (Section 338 포고, 10/30 발효)</a><div class="src-meta">The White House (원문) · 2026-10-23</div></div></div>
+    <div class="source-row"><div class="src-num">2</div><div><a class="src-link" href="https://www.whitehouse.gov/wp-content/uploads/2026/10/2026ModifyingAuto338.prc_.AnnexI-3.pdf" target="_blank" rel="noopener noreferrer">위 포고 부속서 I (Part A 해제 · Part B 신규)</a><div class="src-meta">The White House (원문) · 2026-10-23</div></div></div>
+    <div class="source-row"><div class="src-num">3</div><div><a class="src-link" href="https://www.whitehouse.gov/wp-content/uploads/2026/10/2026ModifyingAuto338.prc_.AnnexII-2.pdf" target="_blank" rel="noopener noreferrer">위 포고 부속서 II (HTSUS 미국 주 51(b)(3) 수정)</a><div class="src-meta">The White House (원문) · 2026-10-23</div></div></div>
+    <div class="source-row"><div class="src-num">4</div><div><a class="src-link" href="https://www.cbc.ca/news/politics/trump-susan-collins-tariffs-midterms-9.7393675" target="_blank" rel="noopener noreferrer">Trump to swap some tariffs on Canadian goods amid midterm pressure</a><div class="src-meta">CBC News · 2026-10-23</div></div></div>
+    <div class="source-row"><div class="src-num">5</div><div><a class="src-link" href="https://pflpetroleum.com/reports/wp-content/uploads/2026/10/PFL_RIN_RECAP_V6_2026_10_26.pdf" target="_blank" rel="noopener noreferrer">PFL Weekly RIN Recap — October 19 to October 23, 2026</a><div class="src-meta">PFL Petroleum Services · 2026-10-26</div></div></div>
+    <div class="source-row"><div class="src-num">6</div><div><a class="src-link" href="https://brownfieldagnews.com/news/closing-grain-and-livestock-futures-october-23-2026/" target="_blank" rel="noopener noreferrer">Closing Grain and Livestock Futures: October 23, 2026 (대두유 66.83¢·WTI 103.60달러)</a><div class="src-meta">Brownfield Ag News · 2026-10-23</div></div></div>
+    <div class="source-row"><div class="src-num">7</div><div><a class="src-link" href="https://www.eia.gov/petroleum/gasdiesel/" target="_blank" rel="noopener noreferrer">Gasoline and Diesel Fuel Update (고속도로 경유 10/19 6.276달러)</a><div class="src-meta">U.S. Energy Information Administration · 2026-10-20 발표</div></div></div>
+    <div class="source-row"><div class="src-num">8</div><div><a class="src-link" href="https://ukragroconsult.com/en/news/chinas-used-cooking-oil-exports-surge-55-with-europe-becoming-the-largest-buyer/" target="_blank" rel="noopener noreferrer">China's used cooking oil exports surge 55%, with Europe becoming the largest buyer</a><div class="src-meta">UkrAgroConsult (Fastmarkets 인용) · 2026-10-19</div></div></div>
+    <div class="source-row"><div class="src-num">9</div><div><a class="src-link" href="https://www.biobased-diesel.com/post/ufop-us-biofuels-policy-causes-canada-s-oilseed-processing-to-grow" target="_blank" rel="noopener noreferrer">UFOP: US biofuels policy causes Canada's oilseed processing to grow</a><div class="src-meta">Biobased Diesel Daily · 2026-10-23</div></div></div>
+    <div class="source-row"><div class="src-num">10</div><div><a class="src-link" href="https://www.whitehouse.gov/presidential-actions/2026/10/presidential-determination-pursuant-to-section-303-of-the-defense-production-act-of-1950-as-amended-on-domestic-petroleum-production-refining-and-logistics-capacity-c139/" target="_blank" rel="noopener noreferrer">Presidential Determination Pursuant to Section 303 of the DPA on Domestic Petroleum Production, Refining, and Logistics Capacity</a><div class="src-meta">The White House (원문) · 2026-10-22</div></div></div>
+    <div class="source-row"><div class="src-num">11</div><div><a class="src-link" href="https://www.biobased-diesel.com/post/xcf-global-to-acquire-world-energy-s-paramount-california-saf-plant" target="_blank" rel="noopener noreferrer">Paramount, California renewable diesel·SAF plant acquisition agreement</a><div class="src-meta">Biobased Diesel Daily · 2026-10-20</div></div></div>
+    <div class="source-row"><div class="src-num">12</div><div><a class="src-link" href="https://www.biobased-diesel.com/post/european-biodiesel-board-applauds-proposal-on-co2-standards-by-german-french-governments" target="_blank" rel="noopener noreferrer">European Biodiesel Board applauds proposal on CO2 standards by German, French governments</a><div class="src-meta">Biobased Diesel Daily · 2026-10-20</div></div></div>
+    <div class="source-row"><div class="src-num">13</div><div><a class="src-link" href="https://www.cbc.ca/news/canada/british-columbia/bc-conservatives-majority-government-9.7394961" target="_blank" rel="noopener noreferrer">Lorne Doerkson to become next B.C. premier amid projected majority win for Conservatives</a><div class="src-meta">CBC News · 2026-10-25</div></div></div>
+    <div class="source-row"><div class="src-num">14</div><div><a class="src-link" href="https://www.cbc.ca/news/canada/british-columbia/bc-conservative-lorne-doerkson-promises-what-to-expect-9.7395394" target="_blank" rel="noopener noreferrer">What to expect from the new B.C. Conservative government</a><div class="src-meta">CBC News · 2026-10-25</div></div></div>
+    <div class="source-row"><div class="src-num">15</div><div><a class="src-link" href="https://www.cheknews.ca/john-rustad-releases-bc-conservative-partys-climate-plan-1178583/" target="_blank" rel="noopener noreferrer">John Rustad releases B.C. Conservative Party's climate plan (배경)</a><div class="src-meta">CHEK News · 2023-11-22</div></div></div>
+    <div class="source-row"><div class="src-num">16</div><div><a class="src-link" href="https://www.cbc.ca/news/canada/calgary/alberta-referendum-questions-immigration-constitution-9.7394465" target="_blank" rel="noopener noreferrer">Smith scores slim majority on immigration questions, Albertans reject constitutional changes</a><div class="src-meta">CBC News · 2026-10-25</div></div></div>
+    <div class="source-row"><div class="src-num">17</div><div><a class="src-link" href="https://www.cbc.ca/news/canada/calgary/reaction-alberta-referendum-separatism-9.7392004" target="_blank" rel="noopener noreferrer">There's disappointment and hope among Albertans who supported the idea of independence</a><div class="src-meta">CBC News · 2026-10-25</div></div></div>
+    <div class="source-row"><div class="src-num">18</div><div><a class="src-link" href="https://www.canada.ca/en/innovation-science-economic-development/news/2026/10/prime-minister-carney-and-premier-ford-launch-new-action-plan-to-protect-workers-from-tariffs-and-strengthen-ontario-industries.html" target="_blank" rel="noopener noreferrer">Prime Minister Carney and Premier Ford launch new action plan to protect workers from tariffs (Backgrounder)</a><div class="src-meta">Innovation, Science and Economic Development Canada · 2026-10-21</div></div></div>
+    <div class="source-row"><div class="src-num">19</div><div><a class="src-link" href="https://www.canada.ca/en/department-finance/news/2026/10/government-of-canada-to-release-budget-2026-on-november-5-2026.html" target="_blank" rel="noopener noreferrer">Government of Canada to release Budget 2026 on November 5, 2026</a><div class="src-meta">Department of Finance Canada · 2026-10-20</div></div></div>
+    <div class="source-row"><div class="src-num">20</div><div><a class="src-link" href="https://www.cbc.ca/news/politics/canada-eu-summit-concrete-results-9.7395409" target="_blank" rel="noopener noreferrer">Canada needs concrete results from EU summit this week, former envoy says</a><div class="src-meta">CBC News · 2026-10-25</div></div></div>
+    <div class="source-row"><div class="src-num">21</div><div><a class="src-link" href="https://gazette.gc.ca/rp-pr/p1/2026/2026-10-24/html/index-eng.html" target="_blank" rel="noopener noreferrer">Canada Gazette, Part I, Volume 160, Number 43 — Index</a><div class="src-meta">Canada Gazette · 2026-10-24</div></div></div>
+    <div class="source-row"><div class="src-num">22</div><div><a class="src-link" href="https://gazette.gc.ca/rp-pr/p2/2026/2026-10-21/html/index-eng.html" target="_blank" rel="noopener noreferrer">Canada Gazette, Part II, Volume 160, Number 21 — Index</a><div class="src-meta">Canada Gazette · 2026-10-21</div></div></div>
+  </div>
+
+  <div class="footer">Green Oil Inc. Internal Use Only &nbsp;·&nbsp; Powered by Claude AI &nbsp;·&nbsp; <a href="../index.html" style="color:#bbb;">← 인덱스</a></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+  const btn = document.getElementById('pdfBtnLabel');
+  const reset = () => { btn.textContent = 'PDF 저장'; };
+  // 라이브러리가 안 불러와졌거나(확장 프로그램·네트워크 차단) 생성이 실패·지연되면
+  // 버튼이 '생성 중...'에 멈추지 않도록 브라우저 인쇄 창(PDF로 저장)으로 넘긴다
+  let settled = false;
+  const fallback = () => { if (settled) return; settled = true; reset(); window.print(); };
+  if (typeof html2pdf !== 'function') { fallback(); return; }
+  btn.textContent = '생성 중...';
+  const timer = setTimeout(fallback, 45000);
+  try {
+    html2pdf().set({
+      margin: [8, 8, 8, 8],
+      filename: 'GreenOil-UCO-2026-10-26.pdf',
+      image: { type: 'jpeg', quality: 0.95 },
+      html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: 'avoid-all' }
+    }).from(document.body).save()
+      .then(() => { clearTimeout(timer); if (!settled) { settled = true; reset(); } })
+      .catch((e) => { clearTimeout(timer); console.error('PDF 생성 실패', e); fallback(); });
+  } catch (e) { clearTimeout(timer); console.error('PDF 생성 실패', e); fallback(); }
+}
+</script>
+</body>
+</html>
