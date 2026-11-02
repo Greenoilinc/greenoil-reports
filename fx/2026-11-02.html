@@ -214,7 +214,7 @@ body { background: #f0f4f8; color: #1a2a4a; font-family: -apple-system, BlinkMac
   letter-spacing: 0.4px; margin: 8px 0 4px;
   display: flex; align-items: center; gap: 5px;
 }
-.chart-wrap-sub { position: relative; height: 90px; margin-bottom: 16px; }
+.chart-wrap-sub { position: relative; height: 120px; margin-bottom: 16px; }
 
 /* ── Driver List ── */
 .driver-list { list-style: none; }
@@ -914,9 +914,38 @@ function makeChart(id, labels, cadData, wtiData) {
 }
 
 // ── Sub-chart: US 2Y − CA 2Y spread (bp) ──
-// 양수 = 미국 2년물이 캐나다보다 높음 → USD 강세·CAD 약세 압력 → USD/CAD 상승과 동행
+// 양수 = 미국 2년물이 캐나다보다 높음 → USD 강세·CAD 약세 압력 → USD/CAD 상승과 동행// 막대 위(음수는 아래)에 bp 숫자를 적는 작은 플러그인 — 숫자 없이는 높낮이 차이가 잘 안 보입니다
+const barValueLabels = {
+  id: 'barValueLabels',
+  afterDatasetsDraw(chart) {
+    const { ctx } = chart;
+    ctx.save();
+    ctx.font = "600 10px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+    ctx.fillStyle = '#334155';
+    ctx.textAlign = 'center';
+    chart.getDatasetMeta(0).data.forEach((bar, i) => {
+      const v = chart.data.datasets[0].data[i];
+      if (v == null) return;
+      const neg = v < 0;
+      ctx.textBaseline = neg ? 'top' : 'bottom';
+      ctx.fillText((v > 0 ? '+' : '') + v, bar.x, neg ? bar.y + 2 : bar.y - 2);
+    });
+    ctx.restore();
+  }
+};
+
+// y축을 0이 아니라 '가장 작은 값 바로 아래'에서 시작해 주간 몇 bp 차이도 막대 높이로 드러나게 합니다.
+// 음수가 섞인 구간(장기)은 범위에 0이 자연히 들어가므로 같은 식으로 둡니다.
+function spreadAxisRange(values) {
+  const v = values.filter(x => x != null);
+  const lo = Math.min(...v), hi = Math.max(...v);
+  const pad = Math.max(2, Math.round((hi - lo) * 0.25));
+  return { min: Math.floor((lo - pad) / 5) * 5, max: Math.ceil((hi + pad) / 5) * 5 };
+}
+
 function makeSubChart(id, labels, spreadData) {
   const ctx = document.getElementById(id).getContext('2d');
+  const range = spreadAxisRange(spreadData);
   return new Chart(ctx, {
     type: 'bar',
     data: {
@@ -929,8 +958,10 @@ function makeSubChart(id, labels, spreadData) {
         borderWidth: 1, borderRadius: 3
       }]
     },
+    plugins: [barValueLabels],
     options: {
       responsive: true, maintainAspectRatio: false,
+      layout: { padding: { top: 14 } },
       plugins: {
         legend: { display: false },
         tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y > 0 ? '+' : ''}${ctx.parsed.y}bp` } }
@@ -938,14 +969,16 @@ function makeSubChart(id, labels, spreadData) {
       scales: {
         x: { grid: { display: false }, ticks: { font: { size: 9 }, maxRotation: 0 } },
         y: {
+          min: range.min, max: range.max,
           grid: { color: '#f1f5f9' },
-          ticks: { callback: v => v + 'bp', font: { size: 9 } },
+          ticks: { callback: v => v + 'bp', font: { size: 9 }, maxTicksLimit: 4 },
           border: { dash: [3,3] }
         }
       }
     }
   });
 }
+
 // ══════════════════════════════════════════════════════════════
 //  CHART DATA — 전량 1차 출처 산출값 (2026-11-02 재산출, 이월 없음)
 //  USD/CAD : Bank of Canada Valet API (FXUSDCAD) — 일별·월평균·연평균 모두 자체 산출
